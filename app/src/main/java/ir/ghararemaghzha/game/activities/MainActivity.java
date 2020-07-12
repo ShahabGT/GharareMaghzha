@@ -1,8 +1,10 @@
-package ir.ghararemaghzha.game;
+package ir.ghararemaghzha.game.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import ir.ghararemaghzha.game.R;
 
 public class MainActivity extends AppCompatActivity {
 

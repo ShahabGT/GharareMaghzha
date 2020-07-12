@@ -40,4 +40,14 @@ dependencies {
 
     implementation 'io.realm:android-adapters:2.1.1'
 
+    implementation 'com.facebook.fresco:fresco:2.0.0'
+    implementation('com.alibaba.android:ultraviewpager:1.0.7.7@aar') {
+        transitive = true
+    }
+    implementation 'com.airbnb.android:lottie:3.4.1'
+    implementation "androidx.emoji:emoji:1.1.0"
+
+    implementation "com.google.android.gms:play-services-auth:18.0.0"
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
