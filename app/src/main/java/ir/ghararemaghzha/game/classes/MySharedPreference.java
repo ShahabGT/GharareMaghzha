@@ -52,11 +52,25 @@ public class MySharedPreference {
         return  sharedPreferences.getString("username","");
     }
 
+    public void setNumber(String number){
+        sharedPreferences.edit().putString("number",number).apply();
+    }
+    public String getNumber(){
+        return  sharedPreferences.getString("number","");
+    }
+
     public void setUserId(String userId){
         sharedPreferences.edit().putString("userId",userId).apply();
     }
     public String getUserId(){
         return  sharedPreferences.getString("userId","");
+    }
+
+    public void setFbToken(String fbToken){
+        sharedPreferences.edit().putString("fbToken",fbToken).apply();
+    }
+    public String getFbToken(){
+        return  sharedPreferences.getString("fbToken","");
     }
 
     public void setGotQuestions(){
