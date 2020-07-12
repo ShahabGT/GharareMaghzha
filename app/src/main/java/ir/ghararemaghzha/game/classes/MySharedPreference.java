@@ -1,0 +1,68 @@
+package ir.ghararemaghzha.game.classes;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
+
+public class MySharedPreference {
+
+    private static MySharedPreference instance;
+    private static SharedPreferences sharedPreferences;
+
+
+    public static MySharedPreference getInstance(Context context){
+        if (instance==null) {
+            instance = new MySharedPreference(context);
+        }
+
+        return instance;
+    }
+
+    private MySharedPreference(Context context){
+        try {
+            MasterKey masterKey = new MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build();
+            sharedPreferences = EncryptedSharedPreferences.create(
+                    context,
+                    "questions_preference",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setAccessToken(String accessToken){
+        sharedPreferences.edit().putString("accessToken",accessToken).apply();
+    }
+    public String getAccessToken(){
+        return  sharedPreferences.getString("accessToken","");
+    }
+
+    public void setUsername(String username){
+        sharedPreferences.edit().putString("username",username).apply();
+    }
+    public String getUsername(){
+        return  sharedPreferences.getString("username","");
+    }
+
+    public void setUserId(String userId){
+        sharedPreferences.edit().putString("userId",userId).apply();
+    }
+    public String getUserId(){
+        return  sharedPreferences.getString("userId","");
+    }
+
+    public void setGotQuestions(){
+        sharedPreferences.edit().putBoolean("GotQuestions",true).apply();
+    }
+    public boolean getGotQuestions(){
+        return  sharedPreferences.getBoolean("GotQuestions",false);
+    }
+}
