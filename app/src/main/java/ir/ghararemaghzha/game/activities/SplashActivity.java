@@ -5,6 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -25,5 +31,9 @@ public class SplashActivity extends AppCompatActivity {
             SplashActivity.this.finish();
 
         },1500);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

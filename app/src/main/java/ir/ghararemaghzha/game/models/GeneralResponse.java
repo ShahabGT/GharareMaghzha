@@ -5,10 +5,23 @@ import com.google.gson.annotations.SerializedName;
 public class GeneralResponse {
 
     private String result;
+
     private String message;
+
     private String token;
+
+    private String time;
+
     @SerializedName("user_id")
     private String userId;
+
+    @SerializedName("user_name")
+    private String userName;
+
+    private String version;
+
+    @SerializedName("version_essential")
+    private String versionEssential;
 
     public void setResult(String result) {
         this.result = result;
@@ -40,5 +53,37 @@ public class GeneralResponse {
 
     public String getToken() {
         return token;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getVersionEssential() {
+        return versionEssential;
+    }
+
+    public void setVersionEssential(String versionEssential) {
+        this.versionEssential = versionEssential;
     }
 }
