@@ -52,7 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.setAction(GHARAREHMAGHZHA_BROADCAST);
 
         if (sender.contains("admin") || sender.equals("1")) {
-            model.setRead("0");
+            model.setRead(0);
             realm.beginTransaction();
             realm.insert(model);
             realm.commitTransaction();
@@ -61,7 +61,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             createNotification("پیام جدید", "پیام جدید از طرف پشتیانی", "support");
 
         } else {
-            model.setRead("-1");
+            model.setRead(-1);
             realm.beginTransaction();
             realm.insert(model);
             realm.commitTransaction();

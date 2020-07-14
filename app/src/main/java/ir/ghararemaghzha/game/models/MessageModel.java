@@ -10,7 +10,7 @@ public class MessageModel extends RealmObject {
     @PrimaryKey
     private int messageId;
     private String id;
-    private String read;
+    private int read;
     private String message;
     private String title;
     @SerializedName("sender_user_id")
@@ -18,11 +18,11 @@ public class MessageModel extends RealmObject {
     @SerializedName("receiver_user_id")
     private String receiver;
 
-    public String getRead() {
+    public int getRead() {
         return read;
     }
 
-    public void setRead(String read) {
+    public void setRead(int read) {
         this.read = read;
     }
 

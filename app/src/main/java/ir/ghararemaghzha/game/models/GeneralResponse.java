@@ -18,10 +18,7 @@ public class GeneralResponse {
     @SerializedName("user_name")
     private String userName;
 
-    private String version;
 
-    @SerializedName("version_essential")
-    private String versionEssential;
 
     public void setResult(String result) {
         this.result = result;
@@ -71,19 +68,4 @@ public class GeneralResponse {
         this.time = time;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getVersionEssential() {
-        return versionEssential;
-    }
-
-    public void setVersionEssential(String versionEssential) {
-        this.versionEssential = versionEssential;
-    }
 }
