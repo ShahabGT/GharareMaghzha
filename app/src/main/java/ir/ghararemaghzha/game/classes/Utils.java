@@ -1,6 +1,7 @@
 package ir.ghararemaghzha.game.classes;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Utils {
@@ -93,4 +95,17 @@ public class Utils {
             return text;
         }
     }
+
+    public static String convertToTimeFormat(long millisecond){
+        Date date = new Date(millisecond);
+        DateFormat formatter = new SimpleDateFormat("mm:ss", Locale.ENGLISH);
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return formatter.format(date);
+    }
+
+
+    public static void removeNotification(Context context){
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(Const.NOTIFICATION_ID);
+    }
+
 }
