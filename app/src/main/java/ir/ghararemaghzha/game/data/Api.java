@@ -1,6 +1,8 @@
 package ir.ghararemaghzha.game.data;
 
+import ir.ghararemaghzha.game.models.ChatResponse;
 import ir.ghararemaghzha.game.models.GeneralResponse;
+import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -15,7 +17,8 @@ public interface Api {
     @FormUrlEncoded
     @POST("verify")
     Call<VerifyResponse> verify(
-            @Header("Authorization") String Token
+            @Header("Authorization") String Token,
+            @Field("number") String number
     );
 
 
@@ -41,8 +44,21 @@ public interface Api {
     );
 
     @GET("time")
-    Call<GeneralResponse> getServerTime();
+    Call<TimeResponse> getServerTime();
 
+    @FormUrlEncoded
+    @POST("chat")
+    Call<TimeResponse> sendMessage(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("message") String message
+    );
+
+    @FormUrlEncoded
+    @POST("messages")
+    Call<ChatResponse> getMessages(
+            @Header("Authorization") String Token,
+            @Field("number") String number);
 
 }
 
