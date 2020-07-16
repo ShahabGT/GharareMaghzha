@@ -1,5 +1,13 @@
 <resources>
-    <string name="app_name">Gharare Maghzha</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">قرار مغزها</string>
+
+    <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
+
+    <string name="loginfragment_nouser">شماره وارد شده ثبت نشده لطفا ابتدا ثبت نام کنید</string>
+    <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
+
+    <string name="registerfragment_conflict">شماره وارد شده قبلا ثبت شده!</string>
+
+    <string name="verify_wrong_code">کد وارد شده صحیح نیست!</string>
+    <string name="verify_welcome">%s خوش آمدید</string>
 </resources>

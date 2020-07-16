@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -15,8 +17,14 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.Credentials;
 import com.google.android.gms.auth.api.credentials.HintRequest;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
 
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.data.RetrofitClient;
+import ir.ghararemaghzha.game.models.GeneralResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,7 +46,6 @@ public class RegisterFragment extends Fragment {
         activity = getActivity();
         init(v);
 
-        //listen to sms reciver
         //SmsRetriever.getClient(getActivity()).startSmsUserConsent("98300077");
 
 
@@ -78,5 +85,37 @@ public class RegisterFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void doRegister(String name, String number) {
+        RetrofitClient.getInstance().getApi()
+                .registerUser(name, number)
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            SmsRetriever.getClient(activity).startSmsUserConsent("98300077");
+                            VerifyFragment verifyFragment = new VerifyFragment();
+                            verifyFragment.setNumber(number);
+                            activity.getSupportFragmentManager().popBackStack();
+                            activity.getSupportFragmentManager().beginTransaction()
+                                    .setCustomAnimations(R.anim.enter_right, R.anim.exit_left)
+                                    .replace(R.id.register_container, verifyFragment)
+                                    .commit();
+
+                        } else if (response.code() == 409) {
+                            Toast.makeText(context, context.getResources().getText(R.string.registerfragment_conflict), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+                        Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 }
