@@ -42,6 +42,11 @@ public interface Api {
     Call<GeneralResponse> login(
             @Field("number") String number
     );
+    @FormUrlEncoded
+    @POST("resend")
+    Call<GeneralResponse> resend(
+            @Field("number") String number
+    );
 
     @GET("time")
     Call<TimeResponse> getServerTime();

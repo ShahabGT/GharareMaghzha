@@ -2,11 +2,13 @@
     <string name="app_name">قرار مغزها</string>
 
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
+    <string name="general_send">با موفقیت ارسال شد</string>
     <string name="general_internet_error">خطا! لطفا اتصال به اینترنت را بررسی کنید</string>
     <string name="general_number_error">خطا! لطفا شماره تلفن را بررسی کنید</string>
     <string name="general_name_error">خطا! نام و نام خانوادگی خود را بررسی کنید</string>
-    <string name="general_phone">شماره تلفن همراه</string>
+    <string name="general_number">شماره تلفن همراه</string>
     <string name="general_name">نام و نام خانوادگی</string>
+    <string name="general_code">کد تایید</string>
 
     <string name="loginfragment_nouser">شماره وارد شده ثبت نشده لطفا ابتدا ثبت نام کنید</string>
     <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
@@ -26,4 +28,9 @@
 
     <string name="verify_wrong_code">کد وارد شده صحیح نیست!</string>
     <string name="verify_welcome">%s خوش آمدید</string>
+    <string name="verify_title">کد تایید ارسال شد!</string>
+    <string name="verify_text">لطفا کد دریافت شده از طریق پیامک را وارد کنید</string>
+    <string name="verify_resend">ارسال مجدد کد تایید</string>
+    <string name="verify_verify">ورود به حساب</string>
+
 </resources>

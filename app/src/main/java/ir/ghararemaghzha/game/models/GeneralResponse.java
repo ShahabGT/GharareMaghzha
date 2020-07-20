@@ -18,7 +18,16 @@ public class GeneralResponse {
     @SerializedName("user_name")
     private String userName;
 
+    @SerializedName("user_code")
+    private String userCode;
 
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
 
     public void setResult(String result) {
         this.result = result;
@@ -39,6 +48,7 @@ public class GeneralResponse {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 
     public String getResult() {
         return result;

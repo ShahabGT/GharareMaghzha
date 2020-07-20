@@ -65,6 +65,13 @@ public class MySharedPreference {
         return  sharedPreferences.getString("userId","");
     }
 
+    public void setUserCode(String userCode){
+        sharedPreferences.edit().putString("userCode",userCode).apply();
+    }
+    public String getUserCode(){
+        return  sharedPreferences.getString("userCode","");
+    }
+
     public void setFbToken(String fbToken){
         sharedPreferences.edit().putString("fbToken",fbToken).apply();
     }
