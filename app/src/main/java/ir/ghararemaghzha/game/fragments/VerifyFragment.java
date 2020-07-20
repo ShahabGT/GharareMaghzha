@@ -19,6 +19,8 @@ import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
@@ -30,6 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static ir.ghararemaghzha.game.classes.Const.FCM_TOPIC;
 import static ir.ghararemaghzha.game.classes.Utils.convertToTimeFormat;
 
 
@@ -164,6 +167,7 @@ public class VerifyFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            FirebaseMessaging.getInstance().subscribeToTopic(FCM_TOPIC);
                             String userId = response.body().getUserId();
                             String userName = response.body().getUserName();
                             String accessToken = response.body().getToken();

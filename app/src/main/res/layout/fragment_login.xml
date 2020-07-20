@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/vazir"
             android:inputType="phone"
+            android:imeOptions="actionDone"
             android:maxLength="11"
             android:padding="16dp"
             android:singleLine="true" />

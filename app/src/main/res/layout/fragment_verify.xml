@@ -66,6 +66,7 @@
             android:fontFamily="@font/vazir"
             android:inputType="number"
             android:maxLength="6"
+            android:imeOptions="actionDone"
             android:padding="16dp"
             android:singleLine="true" />
 

@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent"
     tools:context=".activities.SplashActivity">
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

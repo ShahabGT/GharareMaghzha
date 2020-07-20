@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">قرار مغزها</string>
 
+    <string name="access_error">حساب کاربری شما جای دیگر آنلاین شده لطفا دوباره وارد شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
     <string name="general_send">با موفقیت ارسال شد</string>
     <string name="general_internet_error">خطا! لطفا اتصال به اینترنت را بررسی کنید</string>
@@ -12,7 +13,7 @@
 
     <string name="loginfragment_nouser">شماره وارد شده ثبت نشده لطفا ابتدا ثبت نام کنید</string>
     <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
-    <string name="loginfragment_title">به قرار مغز ها خوش آمدید.</string>
+    <string name="loginfragment_title">به قرار مغز ها خوش آمدید</string>
     <string name="loginfragment_text">لطفا برای ورود شماره تلفن همراه تان را وارد کنید تا
 کد فعالسازی برای شما ارسال گردد.</string>
     <string name="loginfragment_register">حساب کاربری ندارید؟  ثبت نام کنید!</string>
@@ -32,5 +33,8 @@
     <string name="verify_text">لطفا کد دریافت شده از طریق پیامک را وارد کنید</string>
     <string name="verify_resend">ارسال مجدد کد تایید</string>
     <string name="verify_verify">ورود به حساب</string>
+
+    <string name="time_error">ساعت/تاریخ دستگاه شما به روز نیست. لطفا تاریخ و ساعت دستگاه خود را تنظیم کنید.</string>
+    <string name="time_set">تنظیم</string>
 
 </resources>

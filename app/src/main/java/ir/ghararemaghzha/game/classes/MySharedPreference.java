@@ -37,6 +37,10 @@ public class MySharedPreference {
 
     }
 
+    public void clear(){
+        sharedPreferences.edit().clear().apply();
+    }
+
     public void setAccessToken(String accessToken){
         sharedPreferences.edit().putString("accessToken",accessToken).apply();
     }
