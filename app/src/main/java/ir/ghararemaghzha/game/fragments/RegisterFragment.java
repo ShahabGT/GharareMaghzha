@@ -18,8 +18,12 @@ import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.Credentials;
 import com.google.android.gms.auth.api.credentials.HintRequest;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import retrofit2.Call;
@@ -33,6 +37,9 @@ public class RegisterFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private static final int RESOLVE_HINT = 521;
+    private MaterialTextView login;
+    private TextInputEditText number, name;
+    private MaterialButton verify;
 
 
     public RegisterFragment() {
@@ -53,11 +60,45 @@ public class RegisterFragment extends Fragment {
     }
 
     private void init(View v) {
+        name = v.findViewById(R.id.reg_name);
+        number = v.findViewById(R.id.reg_number);
+        verify = v.findViewById(R.id.reg_verify);
+        login = v.findViewById(R.id.reg_login);
+
         try {
             requestHint();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        onClicks();
+
+    }
+
+    private void onClicks() {
+        verify.setOnClickListener(v -> {
+            String nu = number.getText().toString();
+            String na = name.getText().toString();
+
+            if (nu.length() < 11 || !nu.startsWith("09")) {
+                Toast.makeText(context, context.getString(R.string.general_number_error), Toast.LENGTH_SHORT).show();
+            } else if (na.length() < 6) {
+                Toast.makeText(context, context.getString(R.string.general_name_error), Toast.LENGTH_SHORT).show();
+            } else {
+                if (Utils.checkInternet(context))
+                    doRegister(na, nu);
+                else
+                    Toast.makeText(context, context.getString(R.string.general_internet_error), Toast.LENGTH_SHORT).show();
+
+
+            }
+
+        });
+
+        login.setOnClickListener(view -> {
+            activity.getSupportFragmentManager().popBackStack();
+        });
+
 
     }
 
@@ -76,23 +117,29 @@ public class RegisterFragment extends Fragment {
             if (resultCode == RESULT_OK && data != null) {
                 Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
                 if (credential != null) {
-                    String number = credential.getId();
-                    if (number.startsWith("+98"))
-                        number = "0" + number.substring(3);
-                    else if (number.startsWith("0098"))
-                        number = "0" + number.substring(4);
-                    // fNumber.setText(number);
+                    String n = credential.getId();
+                    if (n.startsWith("+98"))
+                        n = "0" + n.substring(3);
+                    else if (n.startsWith("0098"))
+                        n = "0" + n.substring(4);
+                    number.setText(n);
                 }
             }
         }
     }
 
     private void doRegister(String name, String number) {
+        verify.setEnabled(false);
+        verify.setText("...");
+        login.setEnabled(false);
         RetrofitClient.getInstance().getApi()
                 .registerUser(name, number)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                        verify.setEnabled(true);
+                        verify.setText(context.getString(R.string.loginfragment_verify));
+                        login.setEnabled(true);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             SmsRetriever.getClient(activity).startSmsUserConsent("98300077");
                             VerifyFragment verifyFragment = new VerifyFragment();
@@ -113,6 +160,9 @@ public class RegisterFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+                        verify.setEnabled(true);
+                        verify.setText(context.getString(R.string.loginfragment_verify));
+                        login.setEnabled(true);
                         Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                     }
                 });

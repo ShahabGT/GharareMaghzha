@@ -2,11 +2,27 @@
     <string name="app_name">قرار مغزها</string>
 
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
+    <string name="general_internet_error">خطا! لطفا اتصال به اینترنت را بررسی کنید</string>
+    <string name="general_number_error">خطا! لطفا شماره تلفن را بررسی کنید</string>
+    <string name="general_name_error">خطا! نام و نام خانوادگی خود را بررسی کنید</string>
+    <string name="general_phone">شماره تلفن همراه</string>
+    <string name="general_name">نام و نام خانوادگی</string>
 
     <string name="loginfragment_nouser">شماره وارد شده ثبت نشده لطفا ابتدا ثبت نام کنید</string>
     <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
+    <string name="loginfragment_title">به قرار مغز ها خوش آمدید.</string>
+    <string name="loginfragment_text">لطفا برای ورود شماره تلفن همراه تان را وارد کنید تا
+کد فعالسازی برای شما ارسال گردد.</string>
+    <string name="loginfragment_register">حساب کاربری ندارید؟  ثبت نام کنید!</string>
+    <string name="loginfragment_verify">ارسال کد تایید</string>
 
     <string name="registerfragment_conflict">شماره وارد شده قبلا ثبت شده!</string>
+    <string name="registerfragment_title">ثبت نام در قرار مغز ها</string>
+    <string name="registerfragment_text">لطفا اطلاعات زیر را تکمیل نمایید تا کد
+فعالسازی ثبت نام برای شما ارسال گردد.</string>
+    <string name="registerfragment_login">حساب کاربری دارید؟  وارد شوید!</string>
+
+
 
     <string name="verify_wrong_code">کد وارد شده صحیح نیست!</string>
     <string name="verify_welcome">%s خوش آمدید</string>
