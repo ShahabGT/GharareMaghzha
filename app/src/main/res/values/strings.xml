@@ -26,7 +26,6 @@
     <string name="registerfragment_login">حساب کاربری دارید؟  وارد شوید!</string>
 
 
-
     <string name="verify_wrong_code">کد وارد شده صحیح نیست!</string>
     <string name="verify_welcome">%s خوش آمدید</string>
     <string name="verify_title">کد تایید ارسال شد!</string>
@@ -36,5 +35,7 @@
 
     <string name="time_error">ساعت/تاریخ دستگاه شما به روز نیست. لطفا تاریخ و ساعت دستگاه خود را تنظیم کنید.</string>
     <string name="time_set">تنظیم</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

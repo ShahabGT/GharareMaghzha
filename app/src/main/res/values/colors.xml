@@ -12,6 +12,7 @@
 
     <color name="dark_background">#FF424242</color>
     <color name="light_background">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
 
 
 </resources>

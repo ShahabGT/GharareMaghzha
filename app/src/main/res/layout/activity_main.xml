@@ -130,7 +130,7 @@
         app:srcCompat="@drawable/supermarket" />
 
     <ImageView
-        android:id="@+id/main_chat"
+        android:id="@+id/main_messages"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clickable="true"
