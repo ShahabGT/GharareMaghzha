@@ -35,7 +35,15 @@
 
     <string name="time_error">ساعت/تاریخ دستگاه شما به روز نیست. لطفا تاریخ و ساعت دستگاه خود را تنظیم کنید.</string>
     <string name="time_set">تنظیم</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="profile_question_card">تعداد کل سوالات</string>
+    <string name="profile_score_card">امتیاز من</string>
+    <string name="profile_time_card">زمان باقی مانده مسابقه</string>
+    <string name="profile_remaining_card">سوالات بدون پاسخ</string>
+    <string name="profile_edit_title">ویرایش مشخصات</string>
+    <string name="profile_edit_subtitle">ویرایش اطلاعات حساب</string>
+    <string name="profile_buy_title">خرید سوال</string>
+    <string name="profile_buy_subtitle">خرید بسته سوالات</string>
+    <string name="profile_code">کد کاربری: %s</string>
 
 </resources>

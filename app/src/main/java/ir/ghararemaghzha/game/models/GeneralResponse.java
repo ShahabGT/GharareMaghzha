@@ -21,6 +21,17 @@ public class GeneralResponse {
     @SerializedName("user_code")
     private String userCode;
 
+    @SerializedName("user_score")
+    private String userScore;
+
+    public String getUserScore() {
+        return userScore;
+    }
+
+    public void setUserScore(String userScore) {
+        this.userScore = userScore;
+    }
+
     public String getUserCode() {
         return userCode;
     }

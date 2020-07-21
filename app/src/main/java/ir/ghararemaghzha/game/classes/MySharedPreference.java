@@ -83,6 +83,13 @@ public class MySharedPreference {
         return  sharedPreferences.getString("fbToken","");
     }
 
+    public void setScore(String score){
+        sharedPreferences.edit().putString("score",score).apply();
+    }
+    public String getScore(){
+        return  sharedPreferences.getString("score","0");
+    }
+
     public void setGotQuestions(){
         sharedPreferences.edit().putBoolean("GotQuestions",true).apply();
     }

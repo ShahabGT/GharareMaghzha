@@ -172,11 +172,13 @@ public class VerifyFragment extends Fragment {
                             String userName = response.body().getUserName();
                             String accessToken = response.body().getToken();
                             String userCode = response.body().getUserCode();
+                            String score = response.body().getUserScore();
                             MySharedPreference.getInstance(context).setNumber(number);
                             MySharedPreference.getInstance(context).setUserId(userId);
                             MySharedPreference.getInstance(context).setUsername(userName);
                             MySharedPreference.getInstance(context).setAccessToken(accessToken);
                             MySharedPreference.getInstance(context).setUserCode(userCode);
+                            MySharedPreference.getInstance(context).setScore(score);
                             Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(activity, MainActivity.class));
                             activity.overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
