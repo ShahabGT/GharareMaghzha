@@ -1,7 +1,10 @@
 package ir.ghararemaghzha.game.activities;
 
+import android.app.AlarmManager;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -10,6 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -29,8 +37,9 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
-    private ImageView profile, messages, highscore, buy;
-    private int whichFragment = 1;
+    public static ImageView profile, messages, highscore, buy;
+    public static int whichFragment = 1;
+    private boolean doubleBackToExitPressedOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        doubleBackToExitPressedOnce=false;
         profile = findViewById(R.id.main_profile);
         messages = findViewById(R.id.main_messages);
         highscore = findViewById(R.id.main_highscore);
@@ -163,8 +173,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            if (!Utils.isTimeAcceptable(response.body().getTime()))
+                            if (!Utils.isTimeAcceptable(response.body().getTime())) {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
+                            }else{
+                                MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
+                                if(!response.body().getPassed().equals("10")) {
+                                    updateDatabase();
+                                }
+                            }
                         }
                     }
 
@@ -174,5 +190,35 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void updateDatabase(){
+        Date d = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+
+        int lastUpdate=MySharedPreference.getInstance(this).getLastUpdate();
+        int nowDate = Integer.parseInt(dateFormat.format(d));
+        int passed=Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+
+        if(passed==0 && nowDate>lastUpdate){
+            // TODO: 7/21/2020 make more questions visible
+             //   int remaining =  get from database
+                // int range = remaining/(10-passed);
+                // alter database to show range
+            MySharedPreference.getInstance(this).setLastUpdate(nowDate);
+        }
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            finishAffinity();
+            return;
+        }
+        doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, getString(R.string.general_exit), Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 }

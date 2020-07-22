@@ -8,6 +8,7 @@ public class TimeResponse {
     private String result;
     private String message;
     private String time;
+    private String passed;
 
     public String getResult() {
         return result;
@@ -31,5 +32,13 @@ public class TimeResponse {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getPassed() {
+        return passed;
+    }
+
+    public void setPassed(String passed) {
+        this.passed = passed;
     }
 }

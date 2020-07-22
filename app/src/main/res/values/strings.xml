@@ -10,6 +10,7 @@
     <string name="general_number">شماره تلفن همراه</string>
     <string name="general_name">نام و نام خانوادگی</string>
     <string name="general_code">کد تایید</string>
+    <string name="general_exit">برای خروج کلید بازگشت رو دوباره بفشارید</string>
 
     <string name="loginfragment_nouser">شماره وارد شده ثبت نشده لطفا ابتدا ثبت نام کنید</string>
     <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
@@ -45,5 +46,6 @@
     <string name="profile_buy_title">خرید سوال</string>
     <string name="profile_buy_subtitle">خرید بسته سوالات</string>
     <string name="profile_code">کد کاربری: %s</string>
+    <string name="profile_time">%s روز</string>
 
 </resources>

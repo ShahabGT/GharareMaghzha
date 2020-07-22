@@ -144,5 +144,18 @@
         app:layout_constraintTop_toTopOf="@id/guide90"
         app:srcCompat="@drawable/comment" />
 
+    <ImageView
+        android:foreground="?attr/selectableItemBackground"
+        android:soundEffectsEnabled="true"
+        android:focusable="true"
+        android:clickable="true"
+        android:id="@+id/main_menu"
+        android:layout_margin="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/menu"
+        android:layout_width="35dp"
+        android:layout_height="35dp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

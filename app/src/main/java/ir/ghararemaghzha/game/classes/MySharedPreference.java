@@ -90,6 +90,20 @@ public class MySharedPreference {
         return  sharedPreferences.getString("score","0");
     }
 
+    public void setDaysPassed(String daysPassed){
+        sharedPreferences.edit().putString("daysPassed",daysPassed).apply();
+    }
+    public String getDaysPassed(){
+        return  sharedPreferences.getString("daysPassed","-1");
+    }
+
+    public void setLastUpdate(int lastUpdate){
+        sharedPreferences.edit().putInt("lastUpdate",lastUpdate).apply();
+    }
+    public int getLastUpdate(){
+        return  sharedPreferences.getInt("lastUpdate",0);
+    }
+
     public void setGotQuestions(){
         sharedPreferences.edit().putBoolean("GotQuestions",true).apply();
     }
