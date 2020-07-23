@@ -1,9 +1,12 @@
 package ir.ghararemaghzha.game.activities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
@@ -28,6 +32,7 @@ import ir.ghararemaghzha.game.fragments.BuyFragment;
 import ir.ghararemaghzha.game.fragments.HighscoreFragment;
 import ir.ghararemaghzha.game.fragments.MessagesFragment;
 import ir.ghararemaghzha.game.fragments.ProfileFragment;
+import ir.ghararemaghzha.game.fragments.StartFragment;
 import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
@@ -40,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
-    public static ImageView profile, messages, highscore, buy;
+    public static ImageView profile, messages, highscore, buy, start;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
@@ -48,13 +53,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_main);
-
-        findViewById(R.id.main_menu).setOnClickListener(v->Utils.logout(this));
-
-
         init();
 
+        updateDatabase();
+        findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
+
+
+    }
+
+    private void animate() {
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(start, "scaleX", 1f, 1.1f, 1f);
+        scaleX.setDuration(1500);
+        scaleX.setRepeatCount(ValueAnimator.INFINITE);
+        scaleX.setRepeatMode(ValueAnimator.RESTART);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(start, "scaleY", 1f, 1.1f, 1f);
+        scaleY.setDuration(1500);
+        scaleY.setRepeatCount(ValueAnimator.INFINITE);
+        scaleY.setRepeatMode(ValueAnimator.RESTART);
+        scaleX.start();
+        scaleY.start();
     }
 
     private void init() {
@@ -64,9 +83,11 @@ public class MainActivity extends AppCompatActivity {
         messages = findViewById(R.id.main_messages);
         highscore = findViewById(R.id.main_highscore);
         buy = findViewById(R.id.main_buy);
+        start = findViewById(R.id.main_start);
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
         changeFragment(new ProfileFragment());
 
+        animate();
         onClicks();
     }
 
@@ -114,6 +135,16 @@ public class MainActivity extends AppCompatActivity {
                 whichFragment = 4;
             }
         });
+        start.setOnClickListener(v -> {
+            if (whichFragment != 5) {
+                ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+                ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+                ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+                ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+                changeFragment(new StartFragment());
+                whichFragment = 5;
+            }
+        });
 
 
     }
@@ -150,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                             int newPlan = Integer.parseInt(response.body().getUserPlan());
                             int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
                             if (newPlan > oldPlan) {
+                                MySharedPreference.getInstance(MainActivity.this).setPlan(String.valueOf(newPlan));
                                 getQuestions();
                             }
                             int myVersion = Utils.getVersionCode(MainActivity.this);
@@ -212,15 +244,16 @@ public class MainActivity extends AppCompatActivity {
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
 
-        if (passed == 0 && nowDate > lastUpdate) {
-            // TODO: 7/21/2020 make more questions visible
-            //   int remaining =  get from database
-            // int range = remaining/(10-passed);
-            // alter database to show range
+        if (passed >= 0 && nowDate > lastUpdate) {
+            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
+            int range = remaining / (10 - passed);
+            if(range>0)
+            db.executeTransaction(realm -> {
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
+                questions.setBoolean("visible", true);
+            });
             MySharedPreference.getInstance(this).setLastUpdate(nowDate);
         }
-
-
     }
 
     private void getQuestions() {
@@ -230,10 +263,10 @@ public class MainActivity extends AppCompatActivity {
             Utils.logout(MainActivity.this);
             return;
         }
-        int questions = db.where(QuestionModel.class).findAll().size();
-        int plan = Integer.parseInt(MySharedPreference.getInstance(this).getPlan());
-        int start = 0;
-        int size = 0;
+        int questions = db.where(QuestionModel.class).findAll().size();  //3
+        int plan = Integer.parseInt(MySharedPreference.getInstance(this).getPlan());  //5
+        int start = questions + 100;
+        int size = (plan * 1000) + 100;
         if (questions == 0) {
             RetrofitClient.getInstance().getApi()
                     .getQuestions("Bearer " + token, number, String.valueOf(start), String.valueOf(size))
@@ -247,7 +280,9 @@ public class MainActivity extends AppCompatActivity {
                                         model.setUploaded(false);
                                     else
                                         model.setUploaded(true);
+                                    model.setVisible(false);
                                     db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
+                                    updateDatabase();
                                 }
                             }
                         }

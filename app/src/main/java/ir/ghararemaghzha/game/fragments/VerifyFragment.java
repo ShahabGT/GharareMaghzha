@@ -239,10 +239,12 @@ public class VerifyFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
                             MySharedPreference.getInstance(context).setGotQuestions();
                             for (QuestionModel model : response.body().getData()) {
-                                if (model.getUserAnswer().equals("-1"))
+                                if (model.getUserAnswer().equals("-1")) {
                                     model.setUploaded(false);
-                                else
+                                } else {
                                     model.setUploaded(true);
+                                }
+                                model.setVisible(false);
                                 db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             }
                             Date d = new Date();

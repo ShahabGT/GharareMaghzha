@@ -27,7 +27,7 @@ public class ProfileFragment extends Fragment {
 
     private Context context;
     private FragmentActivity activity;
-    private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, myCode, myName;
+    private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, remainingTimeTitle, myCode, myName;
     private MaterialCardView buy, edit;
 
     private Realm db;
@@ -52,6 +52,7 @@ public class ProfileFragment extends Fragment {
         totalQuestions = v.findViewById(R.id.profile_questions);
         remainingQuestion = v.findViewById(R.id.profile_remaining);
         remainingTime = v.findViewById(R.id.profile_time);
+        remainingTimeTitle = v.findViewById(R.id.profile_time_title);
         myCode = v.findViewById(R.id.profile_code);
         myName = v.findViewById(R.id.profile_name);
 
@@ -61,13 +62,24 @@ public class ProfileFragment extends Fragment {
         myName.setText(MySharedPreference.getInstance(context).getUsername());
         myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
         myScore.setText(MySharedPreference.getInstance(context).getScore());
-        remainingTime.setText(context.getString(R.string.profile_time, MySharedPreference.getInstance(context).getDaysPassed()));
+        int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
+
+        if (passed < 0) {
+            remainingTimeTitle.setText(context.getString(R.string.profile_time_card_tostart));
+            remainingTime.setText(context.getString(R.string.profile_time,
+                    String.valueOf(Math.abs(passed))));
+
+        } else {
+            remainingTimeTitle.setText(context.getString(R.string.profile_time_card));
+            remainingTime.setText(context.getString(R.string.profile_time, String.valueOf(10 - passed)));
+
+        }
 
 
         int total = db.where(QuestionModel.class).findAll().size();
-        totalQuestions.setText(String.valueOf(total));
+        totalQuestions.setText(String.valueOf(db.where(QuestionModel.class).findAll().size()));
         int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
-        remainingQuestion.setText(String.valueOf(remain));
+        remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size()));
 
 
         onClicks();

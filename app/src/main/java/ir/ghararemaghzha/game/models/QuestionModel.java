@@ -48,6 +48,16 @@ public class QuestionModel extends RealmObject {
     @SerializedName("user_answer")
     private String userAnswer;
 
+    private boolean visible;
+
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 
     public boolean isUploaded() {
         return uploaded;

@@ -42,6 +42,7 @@
     <string name="profile_question_card">تعداد کل سوالات</string>
     <string name="profile_score_card">امتیاز من</string>
     <string name="profile_time_card">زمان باقی مانده مسابقه</string>
+    <string name="profile_time_card_tostart">زمان باقی مانده تا شروع مسابقه</string>
     <string name="profile_remaining_card">سوالات بدون پاسخ</string>
     <string name="profile_edit_title">ویرایش مشخصات</string>
     <string name="profile_edit_subtitle">ویرایش اطلاعات حساب</string>
@@ -49,5 +50,14 @@
     <string name="profile_buy_subtitle">خرید بسته سوالات</string>
     <string name="profile_code">کد کاربری: %s</string>
     <string name="profile_time">%s روز</string>
+
+    <string name="start_profile_title">حساب کاربری من</string>
+    <string name="start_profile_subtitle">مشاهده امتیازات کسب شده</string>
+    <string name="start_start_title">شروع مسابقه</string>
+    <string name="start_start_subtitle">پاسخ به سوالات باقیمانده</string>
+    <string name="start_highscore_title">برترین کاربران</string>
+    <string name="start_highscore_subtitle">مشاهده لیست 10 کاربر برتر</string>
+    <string name="start_info">شما دارای %s سوال بدون پاسخ هستید!</string>
+
 
 </resources>

@@ -46,6 +46,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        unregisterReceiver(smsVerificationReceiver);
+        super.onDestroy();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SMS_CONSENT_REQUEST) {
