@@ -24,6 +24,17 @@ public class GeneralResponse {
     @SerializedName("user_score")
     private String userScore;
 
+    @SerializedName("user_plan")
+    private String userPlan;
+
+    public String getUserPlan() {
+        return userPlan;
+    }
+
+    public void setUserPlan(String userPlan) {
+        this.userPlan = userPlan;
+    }
+
     public String getUserScore() {
         return userScore;
     }

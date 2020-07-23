@@ -13,6 +13,8 @@ public class VerifyResponse {
     @SerializedName("version_essential")
     private String versionEssential;
     private String message;
+    @SerializedName("user_plan")
+    private String userPlan;
 
     public String getResult() {
         return result;
@@ -44,5 +46,13 @@ public class VerifyResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getUserPlan() {
+        return userPlan;
+    }
+
+    public void setUserPlan(String userPlan) {
+        this.userPlan = userPlan;
     }
 }

@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.SplashActivity;
+import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
 
 import static ir.ghararemaghzha.game.classes.Const.FCM_TOPIC;
@@ -126,6 +127,19 @@ public class Utils {
 
     public static TimeDialog showTimeError(Context context) {
         TimeDialog dialog = new TimeDialog(context);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        return dialog;
+    }
+
+    public static GetDataDialog showGetDataLoading(Context context) {
+        GetDataDialog dialog = new GetDataDialog(context);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

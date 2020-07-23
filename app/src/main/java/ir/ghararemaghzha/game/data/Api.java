@@ -2,6 +2,7 @@ package ir.ghararemaghzha.game.data;
 
 import ir.ghararemaghzha.game.models.ChatResponse;
 import ir.ghararemaghzha.game.models.GeneralResponse;
+import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
 import retrofit2.Call;
@@ -64,6 +65,15 @@ public interface Api {
     Call<ChatResponse> getMessages(
             @Header("Authorization") String Token,
             @Field("number") String number);
+
+    @FormUrlEncoded
+    @POST("questions")
+    Call<QuestionResponse> getQuestions(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("start") String start,
+            @Field("size") String size
+    );
 
 }
 

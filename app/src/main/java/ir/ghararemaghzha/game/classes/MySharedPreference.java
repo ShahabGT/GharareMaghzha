@@ -90,6 +90,13 @@ public class MySharedPreference {
         return  sharedPreferences.getString("score","0");
     }
 
+    public void setPlan(String plan){
+        sharedPreferences.edit().putString("plan",plan).apply();
+    }
+    public String getPlan(){
+        return  sharedPreferences.getString("plan","");
+    }
+
     public void setDaysPassed(String daysPassed){
         sharedPreferences.edit().putString("daysPassed",daysPassed).apply();
     }

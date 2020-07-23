@@ -1,5 +1,6 @@
 package ir.ghararemaghzha.game.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,16 +16,25 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.classes.MySharedPreference;
+import ir.ghararemaghzha.game.classes.Utils;
+import ir.ghararemaghzha.game.data.RetrofitClient;
+import ir.ghararemaghzha.game.dialogs.TimeDialog;
 import ir.ghararemaghzha.game.fragments.LoginFragment;
+import ir.ghararemaghzha.game.models.TimeResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final int SMS_CONSENT_REQUEST = 325;
+    private TimeDialog timeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        checkTime();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.register_container,new LoginFragment())
@@ -69,4 +79,29 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void checkTime() {
+        if (timeDialog != null)
+            timeDialog.dismiss();
+        RetrofitClient.getInstance().getApi()
+                .getServerTime()
+                .enqueue(new Callback<TimeResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            if (!Utils.isTimeAcceptable(response.body().getTime())) {
+                                timeDialog = Utils.showTimeError(RegisterActivity.this);
+                            } else {
+                                MySharedPreference.getInstance(RegisterActivity.this).setDaysPassed(response.body().getPassed());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
+
+                    }
+                });
+
+    }
 }

@@ -37,6 +37,8 @@
     <string name="time_error">ساعت/تاریخ دستگاه شما به روز نیست. لطفا تاریخ و ساعت دستگاه خود را تنظیم کنید.</string>
     <string name="time_set">تنظیم</string>
 
+    <string name="getdata_text">در حال دریافت اطلاعات حساب کاربری شما…</string>
+
     <string name="profile_question_card">تعداد کل سوالات</string>
     <string name="profile_score_card">امتیاز من</string>
     <string name="profile_time_card">زمان باقی مانده مسابقه</string>

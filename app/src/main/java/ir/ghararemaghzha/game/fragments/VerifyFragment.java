@@ -20,14 +20,22 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
+import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.models.GeneralResponse;
+import ir.ghararemaghzha.game.models.QuestionModel;
+import ir.ghararemaghzha.game.models.QuestionResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +54,11 @@ public class VerifyFragment extends Fragment {
     private CountDownTimer timer;
     private long timerTime = 120000;
 
+    private String userName;
+    private String accessToken;
     private String number;
+
+    private GetDataDialog dialog;
 
     public VerifyFragment() {
     }
@@ -160,6 +172,8 @@ public class VerifyFragment extends Fragment {
     }
 
     private void doVerify(String code) {
+        verify.setEnabled(false);
+        verify.setText("...");
         String fbToken = Utils.getFbToken(context);
         RetrofitClient.getInstance().getApi()
                 .verification(number, code, fbToken)
@@ -169,34 +183,94 @@ public class VerifyFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             FirebaseMessaging.getInstance().subscribeToTopic(FCM_TOPIC);
                             String userId = response.body().getUserId();
-                            String userName = response.body().getUserName();
-                            String accessToken = response.body().getToken();
+                            userName = response.body().getUserName();
+                            accessToken = response.body().getToken();
                             String userCode = response.body().getUserCode();
                             String score = response.body().getUserScore();
+                            String plan = response.body().getUserPlan();
                             MySharedPreference.getInstance(context).setNumber(number);
                             MySharedPreference.getInstance(context).setUserId(userId);
                             MySharedPreference.getInstance(context).setUsername(userName);
                             MySharedPreference.getInstance(context).setAccessToken(accessToken);
                             MySharedPreference.getInstance(context).setUserCode(userCode);
                             MySharedPreference.getInstance(context).setScore(score);
-                            Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(activity, MainActivity.class));
-                            activity.overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
-                            activity.finish();
+                            MySharedPreference.getInstance(context).setPlan(plan);
+                            dialog = Utils.showGetDataLoading(context);
+                            getQuestions();
+
 
                         } else if (response.code() == 401) {
+                            verify.setEnabled(true);
+                            verify.setText(context.getString(R.string.verify_verify));
                             Toast.makeText(context, context.getString(R.string.verify_wrong_code), Toast.LENGTH_SHORT).show();
                         } else {
+                            verify.setEnabled(true);
+                            verify.setText(context.getString(R.string.verify_verify));
                             Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+                        verify.setEnabled(true);
+                        verify.setText(context.getString(R.string.verify_verify));
                         Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+    private void getQuestions() {
+        Toast.makeText(context, "get data from database", Toast.LENGTH_SHORT).show();
+        Realm db = Realm.getDefaultInstance();
+
+
+        if (number.isEmpty() || accessToken.isEmpty()) {
+            Utils.logout(activity);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .getQuestions("Bearer " + accessToken, number, "0", "0")
+                .enqueue(new Callback<QuestionResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
+                        verify.setEnabled(true);
+                        verify.setText(context.getString(R.string.verify_verify));
+                        dialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
+                            MySharedPreference.getInstance(context).setGotQuestions();
+                            for (QuestionModel model : response.body().getData()) {
+                                if (model.getUserAnswer().equals("-1"))
+                                    model.setUploaded(false);
+                                else
+                                    model.setUploaded(true);
+                                db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
+                            }
+                            Date d = new Date();
+                            DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+                            MySharedPreference.getInstance(context).setLastUpdate(Integer.parseInt(dateFormat.format(d)));
+
+                            Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(activity, MainActivity.class));
+                            activity.overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
+                            activity.finish();
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
+                        Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        verify.setEnabled(true);
+                        verify.setText(context.getString(R.string.verify_verify));
+                    }
+                });
+
+
+    }
+
 
     @Override
     public void onDestroy() {

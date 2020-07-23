@@ -1,7 +1,6 @@
 package ir.ghararemaghzha.game.activities;
 
-import android.app.AlarmManager;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
@@ -28,6 +28,8 @@ import ir.ghararemaghzha.game.fragments.BuyFragment;
 import ir.ghararemaghzha.game.fragments.HighscoreFragment;
 import ir.ghararemaghzha.game.fragments.MessagesFragment;
 import ir.ghararemaghzha.game.fragments.ProfileFragment;
+import ir.ghararemaghzha.game.models.QuestionModel;
+import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
 import retrofit2.Call;
@@ -37,14 +39,18 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
+    @SuppressLint("StaticFieldLeak")
     public static ImageView profile, messages, highscore, buy;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
+    private Realm db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        findViewById(R.id.main_menu).setOnClickListener(v->Utils.logout(this));
 
 
         init();
@@ -52,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        doubleBackToExitPressedOnce=false;
+        db = Realm.getDefaultInstance();
+        doubleBackToExitPressedOnce = false;
         profile = findViewById(R.id.main_profile);
         messages = findViewById(R.id.main_messages);
         highscore = findViewById(R.id.main_highscore);
@@ -140,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<VerifyResponse> call, @NonNull Response<VerifyResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            int newPlan = Integer.parseInt(response.body().getUserPlan());
+                            int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
+                            if (newPlan > oldPlan) {
+                                getQuestions();
+                            }
                             int myVersion = Utils.getVersionCode(MainActivity.this);
                             int newVersion = Integer.parseInt(response.body().getVersion());
                             if (newVersion > myVersion) {
@@ -175,9 +187,9 @@ public class MainActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             if (!Utils.isTimeAcceptable(response.body().getTime())) {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
-                            }else{
+                            } else {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
-                                if(!response.body().getPassed().equals("10")) {
+                                if (!response.body().getPassed().equals("10")) {
                                     updateDatabase();
                                 }
                             }
@@ -192,23 +204,61 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void updateDatabase(){
+    private void updateDatabase() {
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 
-        int lastUpdate=MySharedPreference.getInstance(this).getLastUpdate();
+        int lastUpdate = MySharedPreference.getInstance(this).getLastUpdate();
         int nowDate = Integer.parseInt(dateFormat.format(d));
-        int passed=Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
 
-        if(passed==0 && nowDate>lastUpdate){
+        if (passed == 0 && nowDate > lastUpdate) {
             // TODO: 7/21/2020 make more questions visible
-             //   int remaining =  get from database
-                // int range = remaining/(10-passed);
-                // alter database to show range
+            //   int remaining =  get from database
+            // int range = remaining/(10-passed);
+            // alter database to show range
             MySharedPreference.getInstance(this).setLastUpdate(nowDate);
         }
 
 
+    }
+
+    private void getQuestions() {
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(MainActivity.this);
+            return;
+        }
+        int questions = db.where(QuestionModel.class).findAll().size();
+        int plan = Integer.parseInt(MySharedPreference.getInstance(this).getPlan());
+        int start = 0;
+        int size = 0;
+        if (questions == 0) {
+            RetrofitClient.getInstance().getApi()
+                    .getQuestions("Bearer " + token, number, String.valueOf(start), String.valueOf(size))
+                    .enqueue(new Callback<QuestionResponse>() {
+                        @Override
+                        public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
+                                MySharedPreference.getInstance(MainActivity.this).setGotQuestions();
+                                for (QuestionModel model : response.body().getData()) {
+                                    if (model.getUserAnswer().equals("-1"))
+                                        model.setUploaded(false);
+                                    else
+                                        model.setUploaded(true);
+                                    db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
+
+                        }
+                    });
+
+        }
     }
 
     @Override

@@ -21,14 +21,16 @@ import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.ProfileActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
+import ir.ghararemaghzha.game.models.QuestionModel;
 
 public class ProfileFragment extends Fragment {
 
     private Context context;
     private FragmentActivity activity;
-    private Realm realm;
     private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, myCode, myName;
     private MaterialCardView buy, edit;
+
+    private Realm db;
 
     public ProfileFragment() {
     }
@@ -45,7 +47,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void init(View v) {
-        realm = Realm.getDefaultInstance();
+        db = Realm.getDefaultInstance();
         myScore = v.findViewById(R.id.profile_score);
         totalQuestions = v.findViewById(R.id.profile_questions);
         remainingQuestion = v.findViewById(R.id.profile_remaining);
@@ -60,6 +62,13 @@ public class ProfileFragment extends Fragment {
         myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
         myScore.setText(MySharedPreference.getInstance(context).getScore());
         remainingTime.setText(context.getString(R.string.profile_time, MySharedPreference.getInstance(context).getDaysPassed()));
+
+
+        int total = db.where(QuestionModel.class).findAll().size();
+        totalQuestions.setText(String.valueOf(total));
+        int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
+        remainingQuestion.setText(String.valueOf(remain));
+
 
         onClicks();
     }
@@ -77,6 +86,6 @@ public class ProfileFragment extends Fragment {
             MainActivity.whichFragment = 4;
 
         });
-        edit.setOnClickListener(v->startActivity(new Intent(context, ProfileActivity.class)));
+        edit.setOnClickListener(v -> startActivity(new Intent(context, ProfileActivity.class)));
     }
 }
