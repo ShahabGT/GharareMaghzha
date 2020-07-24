@@ -225,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
                                     updateDatabase();
                                 }
                             }
+                        } else if (response.code() == 401) {
+                            Utils.logout(MainActivity.this);
                         }
                     }
 
@@ -284,6 +286,8 @@ public class MainActivity extends AppCompatActivity {
                                     db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                                     updateDatabase();
                                 }
+                            } else if (response.code() == 401) {
+                                Utils.logout(MainActivity.this);
                             }
                         }
 

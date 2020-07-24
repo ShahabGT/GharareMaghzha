@@ -2,6 +2,7 @@ package ir.ghararemaghzha.game.data;
 
 import ir.ghararemaghzha.game.models.ChatResponse;
 import ir.ghararemaghzha.game.models.GeneralResponse;
+import ir.ghararemaghzha.game.models.HighscoreResponse;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
@@ -73,6 +74,13 @@ public interface Api {
             @Field("number") String number,
             @Field("start") String start,
             @Field("size") String size
+    );
+
+    @FormUrlEncoded
+    @POST("highscore")
+    Call<HighscoreResponse> getHighscoreList(
+            @Header("Authorization") String Token,
+            @Field("number") String number
     );
 
 }
