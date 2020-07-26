@@ -3,9 +3,14 @@ package ir.ghararemaghzha.game.activities;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -33,22 +38,32 @@ import ir.ghararemaghzha.game.fragments.HighscoreFragment;
 import ir.ghararemaghzha.game.fragments.MessagesFragment;
 import ir.ghararemaghzha.game.fragments.ProfileFragment;
 import ir.ghararemaghzha.game.fragments.StartFragment;
+import ir.ghararemaghzha.game.models.MessageModel;
 import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 
 public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
-    public static ImageView profile, messages, highscore, buy, start;
+    public static ImageView profile, messages, highscore, buy, start,newMessage;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
+    private BroadcastReceiver notificationBroadCast= new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateMessages();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +96,14 @@ public class MainActivity extends AppCompatActivity {
         doubleBackToExitPressedOnce = false;
         profile = findViewById(R.id.main_profile);
         messages = findViewById(R.id.main_messages);
+        newMessage = findViewById(R.id.main_messages_new);
         highscore = findViewById(R.id.main_highscore);
         buy = findViewById(R.id.main_buy);
         start = findViewById(R.id.main_start);
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
         changeFragment(new ProfileFragment());
+
+
 
         animate();
         onClicks();
@@ -160,8 +178,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Utils.removeNotification(this);
+        registerReceiver(notificationBroadCast,new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
+        updateMessages();
         checkTime();
-        verify();
+    }
+
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(notificationBroadCast);
+        super.onStop();
+    }
+
+    private void updateMessages(){
+        if(db.where(MessageModel.class).equalTo("read",0).findAll().size()>0){
+            newMessage.setVisibility(View.VISIBLE);
+        }else{
+            newMessage.setVisibility(View.GONE);
+        }
     }
 
     private void verify() {
@@ -203,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<VerifyResponse> call, @NonNull Throwable t) {
+                        Utils.showInternetError(MainActivity.this,()->verify());
 
                     }
                 });
@@ -217,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            verify();
+
                             if (!Utils.isTimeAcceptable(response.body().getTime())) {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
                             } else {
@@ -232,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
-
+                        Utils.showInternetError(MainActivity.this,()->checkTime());
                     }
                 });
 
@@ -293,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
-
+                            Utils.showInternetError(MainActivity.this,()->getQuestions());
                         }
                     });
 

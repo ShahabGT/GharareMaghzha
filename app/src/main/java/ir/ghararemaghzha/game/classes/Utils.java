@@ -29,6 +29,7 @@ import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.SplashActivity;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
+import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
 
 import static ir.ghararemaghzha.game.classes.Const.FCM_TOPIC;
@@ -149,6 +150,17 @@ public class Utils {
         Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         return dialog;
+    }
+    public static void showInternetError(Context context, RetryInterface retry) {
+        NoInternetDialog dialog = new NoInternetDialog(context,retry);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     public static int getVersionCode(Context context) {

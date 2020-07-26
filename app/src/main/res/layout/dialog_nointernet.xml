@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -23,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/clock"
+            app:lottie_rawRes="@raw/nointernet"
             app:lottie_speed="1" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -34,7 +32,7 @@
             android:fontFamily="@font/vazir"
             android:gravity="right"
             android:padding="8dp"
-            android:text="@string/time_error"
+            android:text="@string/internet_error"
             android:textColor="@android:color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -42,14 +40,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/alert_dialog_set"
-            android:layout_width="0dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/vazir"
             android:padding="8dp"
-            android:text="@string/time_set"
+            android:text="@string/internet_retry"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/alert_dialog_description" />

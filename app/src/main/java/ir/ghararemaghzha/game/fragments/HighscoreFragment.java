@@ -91,7 +91,7 @@ public class HighscoreFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Call<HighscoreResponse> call, @NonNull Throwable t) {
                         refreshLayout.setRefreshing(false);
-                        Toast.makeText(context, "failed", Toast.LENGTH_SHORT).show();
+                        Utils.showInternetError(context,()->getData());
 
                     }
                 });
