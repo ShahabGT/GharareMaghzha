@@ -89,9 +89,10 @@ public interface Api {
             @Header("Authorization") String Token,
             @Field("number") String number
     );
+
     @FormUrlEncoded
     @POST("/buy/initbuy")
-    Call<HighscoreResponse> InitBuy(
+    Call<HighscoreResponse> initBuy(
             @Header("Authorization") String Token,
             @Field("number") String number,
             @Field("plan") String plan,
@@ -107,6 +108,22 @@ public interface Api {
             @Field("number") String number,
             @Field("influencer_code") String code
     );
+
+    @FormUrlEncoded
+    @POST("answer")
+    Call<GeneralResponse> answerQuestion(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("question_id") String questionId,
+            @Field("user_answer") String userAnswer
+    );
+
+    @FormUrlEncoded
+    @POST("score")
+    Call<GeneralResponse> sendScore(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("score") String score);
 }
 
 
