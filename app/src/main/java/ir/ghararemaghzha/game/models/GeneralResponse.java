@@ -27,6 +27,12 @@ public class GeneralResponse {
     @SerializedName("user_plan")
     private String userPlan;
 
+    @SerializedName("influencer_id")
+    private String influencerId;
+
+    @SerializedName("influencer_amount")
+    private String influencerAmount;
+
     public String getUserPlan() {
         return userPlan;
     }
@@ -100,4 +106,19 @@ public class GeneralResponse {
         this.time = time;
     }
 
+    public String getInfluencerId() {
+        return influencerId;
+    }
+
+    public void setInfluencerId(String influencerId) {
+        this.influencerId = influencerId;
+    }
+
+    public String getInfluencerAmount() {
+        return influencerAmount;
+    }
+
+    public void setInfluencerAmount(String influencerAmount) {
+        this.influencerAmount = influencerAmount;
+    }
 }

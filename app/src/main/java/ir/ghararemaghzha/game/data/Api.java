@@ -83,6 +83,30 @@ public interface Api {
             @Field("number") String number
     );
 
+    @FormUrlEncoded
+    @POST("buyhistory")
+    Call<HighscoreResponse> getBuyHistory(
+            @Header("Authorization") String Token,
+            @Field("number") String number
+    );
+    @FormUrlEncoded
+    @POST("/buy/initbuy")
+    Call<HighscoreResponse> InitBuy(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("plan") String plan,
+            @Field("influencer_id") String influencerId,
+            @Field("influencer_amount") String influencerAmount,
+            @Field("amount") String amount
+    );
+
+    @FormUrlEncoded
+    @POST("influencer")
+    Call<GeneralResponse> searchInfluencer(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("influencer_code") String code
+    );
 }
 
 

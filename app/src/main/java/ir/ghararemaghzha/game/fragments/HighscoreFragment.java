@@ -82,7 +82,6 @@ public class HighscoreFragment extends Fragment {
                             adapter = new HighscoreAdapter(context,response.body().getData());
                             recyclerView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
-                            Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
                         } else if (response.code() == 401) {
                             Utils.logout(activity);
                         }
