@@ -43,7 +43,6 @@ import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
-import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
-    public static ImageView profile, messages, highscore, buy, start,newMessage;
+    public static ImageView profile, messages, highscore, buy, start, newMessage;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
-    private BroadcastReceiver notificationBroadCast= new BroadcastReceiver() {
+    private BroadcastReceiver notificationBroadCast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateMessages();
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         start = findViewById(R.id.main_start);
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
         changeFragment(new ProfileFragment());
-
 
 
         animate();
@@ -179,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Utils.removeNotification(this);
-        registerReceiver(notificationBroadCast,new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
+        registerReceiver(notificationBroadCast, new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
         updateMessages();
         checkTime();
     }
@@ -191,10 +189,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void updateMessages(){
-        if(db.where(MessageModel.class).equalTo("read",0).findAll().size()>0){
+    private void updateMessages() {
+        if (db.where(MessageModel.class).equalTo("read", 0).findAll().size() > 0) {
             newMessage.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             newMessage.setVisibility(View.GONE);
         }
     }
@@ -238,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<VerifyResponse> call, @NonNull Throwable t) {
-                        Utils.showInternetError(MainActivity.this,()->verify());
+                        Utils.showInternetError(MainActivity.this, () -> verify());
 
                     }
                 });
@@ -259,9 +257,8 @@ public class MainActivity extends AppCompatActivity {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
                             } else {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
-                                if (!response.body().getPassed().equals("10")) {
-                                    updateDatabase();
-                                }
+                                updateDatabase();
+
                             }
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this);
@@ -270,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
-                        Utils.showInternetError(MainActivity.this,()->checkTime());
+                        Utils.showInternetError(MainActivity.this, () -> checkTime());
                     }
                 });
 
@@ -284,14 +281,14 @@ public class MainActivity extends AppCompatActivity {
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
 
-        if (passed >= 0 && nowDate > lastUpdate) {
+        if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
             int range = remaining / (10 - passed);
-            if(range>0)
-            db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
-                questions.setBoolean("visible", true);
-            });
+            if (range > 0)
+                db.executeTransaction(realm -> {
+                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
+                    questions.setBoolean("visible", true);
+                });
             MySharedPreference.getInstance(this).setLastUpdate(nowDate);
         }
     }
@@ -331,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
-                            Utils.showInternetError(MainActivity.this,()->getQuestions());
+                            Utils.showInternetError(MainActivity.this, () -> getQuestions());
                         }
                     });
 

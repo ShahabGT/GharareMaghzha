@@ -57,6 +57,7 @@ public class VerifyFragment extends Fragment {
     private String userName;
     private String accessToken;
     private String number;
+    private String userId;
 
     private GetDataDialog dialog;
 
@@ -182,14 +183,13 @@ public class VerifyFragment extends Fragment {
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             FirebaseMessaging.getInstance().subscribeToTopic(FCM_TOPIC);
-                            String userId = response.body().getUserId();
+                            userId = response.body().getUserId();
                             userName = response.body().getUserName();
                             accessToken = response.body().getToken();
                             String userCode = response.body().getUserCode();
                             String score = response.body().getUserScore();
                             String plan = response.body().getUserPlan();
                             MySharedPreference.getInstance(context).setNumber(number);
-                            MySharedPreference.getInstance(context).setUserId(userId);
                             MySharedPreference.getInstance(context).setUsername(userName);
                             MySharedPreference.getInstance(context).setAccessToken(accessToken);
                             MySharedPreference.getInstance(context).setUserCode(userCode);
@@ -250,6 +250,7 @@ public class VerifyFragment extends Fragment {
                             Date d = new Date();
                             DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
                             MySharedPreference.getInstance(context).setLastUpdate(Integer.parseInt(dateFormat.format(d)));
+                            MySharedPreference.getInstance(context).setUserId(userId);
 
                             Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(activity, MainActivity.class));

@@ -38,7 +38,9 @@ public class MySharedPreference {
     }
 
     public void clear(){
+        String fbToken = getFbToken();
         sharedPreferences.edit().clear().apply();
+        setFbToken(fbToken);
     }
 
     public void setAccessToken(String accessToken){
