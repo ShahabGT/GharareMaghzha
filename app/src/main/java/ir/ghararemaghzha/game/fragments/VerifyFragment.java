@@ -249,7 +249,7 @@ public class VerifyFragment extends Fragment {
                             }
                             Date d = new Date();
                             DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-                            MySharedPreference.getInstance(context).setLastUpdate(Integer.parseInt(dateFormat.format(d)));
+                       //     MySharedPreference.getInstance(context).setLastUpdate(Integer.parseInt(dateFormat.format(d)));
                             MySharedPreference.getInstance(context).setUserId(userId);
 
                             Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();

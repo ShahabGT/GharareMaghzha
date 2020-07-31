@@ -70,21 +70,17 @@ public class Utils {
     }
 
     public static String getFbToken(Context context) {
-        if (!MySharedPreference.getInstance(context).getFbToken().isEmpty()) {
-            return MySharedPreference.getInstance(context).getFbToken();
-        } else {
-//            FirebaseInstanceId.getInstance().getInstanceId()
-//                    .addOnCompleteListener(task -> {
-//                        if (task.isSuccessful()) {
-//                            assert task.getResult() != null;
-//                            token[0] = task.getResult().getToken();
-//                            MySharedPreference.getInstance(context).setFbToken(token[0]);
-//                        }
-//                    });
-            String token = FirebaseInstanceId.getInstance().getInstanceId().getResult().getToken();
-            MySharedPreference.getInstance(context).setFbToken(token);
-            return token;
+        if (MySharedPreference.getInstance(context).getFbToken().isEmpty()) {
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            assert task.getResult() != null;
+                            String token = task.getResult().getToken();
+                            MySharedPreference.getInstance(context).setFbToken(token);
+                        }
+                    });
         }
+        return MySharedPreference.getInstance(context).getFbToken();
     }
 
     public static void hideKeyboard(Activity activity) {

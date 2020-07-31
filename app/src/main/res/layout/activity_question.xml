@@ -80,7 +80,7 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:progress="100" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/question_progress_text"
         style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="wrap_content"

@@ -63,7 +63,7 @@ public class StartFragment extends Fragment {
         //  int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
         int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
         if (passed >= 0 && passed < 10)
-            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size())));
+            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size())));
         else if (passed < 0)
             info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size())));
         else {

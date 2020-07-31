@@ -18,7 +18,6 @@ public class QuestionModel extends RealmObject {
 //            "user_answer": "-1"
 //    }
 
-    private boolean uploaded;
 
     @PrimaryKey
     @SerializedName("question_id")
@@ -49,6 +48,8 @@ public class QuestionModel extends RealmObject {
     private String userAnswer;
 
     private boolean visible;
+    private boolean uploaded;
+
 
 
     public boolean isVisible() {
