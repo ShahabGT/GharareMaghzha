@@ -1,6 +1,7 @@
 package ir.ghararemaghzha.game.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.google.android.material.textview.MaterialTextView;
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
+import ir.ghararemaghzha.game.activities.QuestionActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.models.QuestionModel;
 
@@ -27,7 +29,7 @@ public class StartFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private MaterialTextView info, myCode, myName;
-    private MaterialCardView profile, highscore,start;
+    private MaterialCardView profile, highscore, start;
 
     private Realm db;
 
@@ -62,13 +64,12 @@ public class StartFragment extends Fragment {
         int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
         if (passed >= 0 && passed < 10)
             info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size())));
-        else if(passed<0)
+        else if (passed < 0)
             info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size())));
         else {
             info.setText(context.getString(R.string.start_info_passed));
             start.setEnabled(false);
         }
-
 
 
         onClicks();
@@ -97,6 +98,7 @@ public class StartFragment extends Fragment {
                     .commit();
             MainActivity.whichFragment = 3;
         });
+        start.setOnClickListener(v -> startActivity(new Intent(activity, QuestionActivity.class)));
 
     }
 }

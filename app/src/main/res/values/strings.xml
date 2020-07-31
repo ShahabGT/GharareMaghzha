@@ -86,5 +86,7 @@
     <string name="instagrampicker_multi_select_title">ویرایش عکس</string>
     <string name="instagrampicker_filter_title">فیلترها</string>
 
+    <string name="question_next">سوال بعدی</string>
+
 
 </resources>

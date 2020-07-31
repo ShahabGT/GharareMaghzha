@@ -16,8 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup,android:supportsRtl"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup,android:supportsRtl">
+        <activity android:name=".activities.QuestionActivity"></activity>
         <activity
             android:name="ir.shahabazimi.instagrampicker.gallery.SelectActivity"
             android:screenOrientation="portrait" />
@@ -32,8 +33,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat"
             tools:ignore="MissingClass" />
-
-
         <activity
             android:name=".activities.ProfileActivity"
             android:screenOrientation="portrait" />
@@ -71,6 +70,7 @@
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="ghararehmaghzha.app"
                     android:pathPrefix="/buy"
