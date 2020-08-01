@@ -1,17 +1,21 @@
 package ir.ghararemaghzha.game.activities;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -37,14 +41,16 @@ public class QuestionActivity extends AppCompatActivity {
     private int time = 20;
     private CountDownTimer downTimer;
     private ProgressBar progressBar;
-    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4,next;
-    private MaterialCardView answer1c, answer2c, answer3c, answer4c;
+    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, next;
+    private MaterialCardView answer1c, answer2c, answer3c, answer4c, questionc;
     private RealmResults<QuestionModel> data;
     private List<Integer> randomAnswers;
-    private List<String> answers;
-    private String correctAnswer="";
+    private String correctAnswer = "";
     private QuestionModel model;
     private Realm db;
+    private SoundPool soundPool;
+    private MediaPlayer mediaPlayer;
+    private int correctSound, wrongSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,7 @@ public class QuestionActivity extends AppCompatActivity {
         next = findViewById(R.id.question_next);
 
         question = findViewById(R.id.question_question);
+        questionc = findViewById(R.id.question_question_card);
         answer1 = findViewById(R.id.question_answer1);
         answer1c = findViewById(R.id.question_answer1_card);
         answer2 = findViewById(R.id.question_answer2);
@@ -90,6 +97,23 @@ public class QuestionActivity extends AppCompatActivity {
         };
         onClicks();
         nextQuestion();
+
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool.Builder().setMaxStreams(2).setAudioAttributes(attributes).build();
+        correctSound = soundPool.load(this, R.raw.correct, 1);
+        wrongSound = soundPool.load(this, R.raw.wrong, 1);
+        mediaPlayer = MediaPlayer.create(this, R.raw.game);
+        mediaPlayer.setLooping(true);
+    }
+
+
+
+
+    private void playSound(int sound) {
+        soundPool.play(sound, 1, 1, 2, 0, 1);
     }
 
     private void onClicks() {
@@ -101,16 +125,21 @@ public class QuestionActivity extends AppCompatActivity {
             answer2c.setEnabled(false);
             answer3c.setEnabled(false);
             answer4c.setEnabled(false);
-            String answerId = String.valueOf(randomAnswers.get(0)+1);
+            String answerId = String.valueOf(randomAnswers.get(0) + 1);
             setAnswer(answerId);
             uploadAnswer(answerId);
             if (answer1.getText().toString().equals(correctAnswer)) {
-              //  currentPoints += Integer.parseInt(model.getQuestionPoints());
-              //  points.setText("points: " + currentPoints);
+                //  currentPoints += Integer.parseInt(model.getQuestionPoints());
+                //  points.setText("points: " + currentPoints);
                 answer1c.setCardBackgroundColor(getResources().getColor(R.color.green));
+                YoYo.with(Techniques.Tada).duration(500).playOn(answer1c);
+                playSound(correctSound);
 
-            }else{
+            } else {
                 answer1c.setCardBackgroundColor(getResources().getColor(R.color.red));
+                YoYo.with(Techniques.Shake).duration(500).playOn(answer1c);
+                playSound(wrongSound);
+
             }
         });
         answer2c.setOnClickListener(v -> {
@@ -122,16 +151,19 @@ public class QuestionActivity extends AppCompatActivity {
             answer2c.setEnabled(false);
             answer3c.setEnabled(false);
             answer4c.setEnabled(false);
-            String answerId = String.valueOf(randomAnswers.get(1)+1);
+            String answerId = String.valueOf(randomAnswers.get(1) + 1);
             setAnswer(answerId);
             uploadAnswer(answerId);
             if (answer2.getText().toString().equals(correctAnswer)) {
                 //  currentPoints += Integer.parseInt(model.getQuestionPoints());
                 //  points.setText("points: " + currentPoints);
                 answer2c.setCardBackgroundColor(getResources().getColor(R.color.green));
-
-            }else{
+                YoYo.with(Techniques.Tada).duration(500).playOn(answer2c);
+                playSound(correctSound);
+            } else {
                 answer2c.setCardBackgroundColor(getResources().getColor(R.color.red));
+                YoYo.with(Techniques.Shake).duration(500).playOn(answer2c);
+                playSound(wrongSound);
             }
         });
         answer3c.setOnClickListener(v -> {
@@ -142,16 +174,19 @@ public class QuestionActivity extends AppCompatActivity {
             answer2c.setEnabled(false);
             answer3c.setEnabled(false);
             answer4c.setEnabled(false);
-            String answerId = String.valueOf(randomAnswers.get(2)+1);
+            String answerId = String.valueOf(randomAnswers.get(2) + 1);
             setAnswer(answerId);
             uploadAnswer(answerId);
             if (answer3.getText().toString().equals(correctAnswer)) {
                 //  currentPoints += Integer.parseInt(model.getQuestionPoints());
                 //  points.setText("points: " + currentPoints);
                 answer3c.setCardBackgroundColor(getResources().getColor(R.color.green));
-
-            }else{
+                YoYo.with(Techniques.Tada).duration(500).playOn(answer3c);
+                playSound(correctSound);
+            } else {
                 answer3c.setCardBackgroundColor(getResources().getColor(R.color.red));
+                YoYo.with(Techniques.Shake).duration(500).playOn(answer3c);
+                playSound(wrongSound);
             }
         });
         answer4c.setOnClickListener(v -> {
@@ -162,22 +197,39 @@ public class QuestionActivity extends AppCompatActivity {
             answer2c.setEnabled(false);
             answer3c.setEnabled(false);
             answer4c.setEnabled(false);
-            String answerId = String.valueOf(randomAnswers.get(3)+1);
+            String answerId = String.valueOf(randomAnswers.get(3) + 1);
             setAnswer(answerId);
             uploadAnswer(answerId);
             if (answer4.getText().toString().equals(correctAnswer)) {
                 //  currentPoints += Integer.parseInt(model.getQuestionPoints());
                 //  points.setText("points: " + currentPoints);
                 answer4c.setCardBackgroundColor(getResources().getColor(R.color.green));
-
-            }else{
+                YoYo.with(Techniques.Tada).duration(500).playOn(answer4c);
+                playSound(correctSound);
+            } else {
                 answer4c.setCardBackgroundColor(getResources().getColor(R.color.red));
+                YoYo.with(Techniques.Shake).duration(500).playOn(answer4c);
+                playSound(wrongSound);
             }
         });
-        next.setOnClickListener(v->nextQuestion());
+        next.setOnClickListener(v -> nextQuestion());
+
+        questionc.setOnClickListener(v -> {
+            YoYo.with(Techniques.Shake).duration(500).playOn(questionc);
+            playSound(wrongSound);
+        });
+    }
+
+    private void enterAnimations() {
+        YoYo.with(Techniques.FlipInX).duration(1500).playOn(questionc);
+        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer1c);
+        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer2c);
+        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer3c);
+        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer4c);
     }
 
     private void nextQuestion() {
+        enterAnimations();
         answer1c.setEnabled(true);
         answer1c.setCardBackgroundColor(getResources().getColor(R.color.white));
         answer2c.setEnabled(true);
@@ -200,13 +252,13 @@ public class QuestionActivity extends AppCompatActivity {
         randomAnswers = randomNumbers();
         question.setText(model.getQuestionText());
 
-        answers = new ArrayList<String>() {{
+        List<String> answers = new ArrayList<String>() {{
             add(model.getQuestionA1());
             add(model.getQuestionA2());
             add(model.getQuestionA3());
             add(model.getQuestionA4());
         }};
-        correctAnswer= answers.get(Integer.parseInt(model.getQuestionCorrect())-1);
+        correctAnswer = answers.get(Integer.parseInt(model.getQuestionCorrect()) - 1);
         answer1.setText(answers.get(randomAnswers.get(0)));
         answer2.setText(answers.get(randomAnswers.get(1)));
         answer3.setText(answers.get(randomAnswers.get(2)));
@@ -235,7 +287,7 @@ public class QuestionActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer "+token, number, model.getQuestionId(), userAnswer)
+                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -279,5 +331,28 @@ public class QuestionActivity extends AppCompatActivity {
         Random rand = new Random();
         int currentQuestion = rand.nextInt(data.size());
         return data.get(currentQuestion);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mediaPlayer!=null)
+            mediaPlayer.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mediaPlayer!=null)
+            mediaPlayer.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        soundPool.release();
+        soundPool = null;
+        mediaPlayer.release();
+        mediaPlayer=null;
+
     }
 }
