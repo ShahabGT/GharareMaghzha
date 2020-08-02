@@ -1,5 +1,7 @@
 package ir.ghararemaghzha.game.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class TimeResponse {
 //    "result": "success",
 //            "message": "ok",
@@ -9,6 +11,8 @@ public class TimeResponse {
     private String message;
     private String time;
     private String passed;
+    @SerializedName("last_update")
+    private String lastUpdate;
 
     public String getResult() {
         return result;
@@ -40,5 +44,13 @@ public class TimeResponse {
 
     public void setPassed(String passed) {
         this.passed = passed;
+    }
+
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

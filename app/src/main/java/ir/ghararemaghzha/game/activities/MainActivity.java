@@ -38,6 +38,7 @@ import ir.ghararemaghzha.game.fragments.HighscoreFragment;
 import ir.ghararemaghzha.game.fragments.MessagesFragment;
 import ir.ghararemaghzha.game.fragments.ProfileFragment;
 import ir.ghararemaghzha.game.fragments.StartFragment;
+import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
 import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
@@ -243,10 +244,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkTime() {
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(MainActivity.this);
+            return;
+        }
         if (timeDialog != null)
             timeDialog.dismiss();
         RetrofitClient.getInstance().getApi()
-                .getServerTime()
+                .getServerTime("Bearer " + token, number)
                 .enqueue(new Callback<TimeResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
@@ -257,6 +264,10 @@ public class MainActivity extends AppCompatActivity {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
                             } else {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
+                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty()) {
+                                    int lastUpdate = Integer.parseInt(response.body().getLastUpdate());
+                                    MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
+                                }
                                 updateDatabase();
 
                             }
@@ -284,13 +295,38 @@ public class MainActivity extends AppCompatActivity {
         if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
             int range = remaining / (10 - passed);
-            if (range > 0)
+            if (range > 0) {
                 db.executeTransaction(realm -> {
                     RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
                     questions.setBoolean("visible", true);
                 });
-            MySharedPreference.getInstance(this).setLastUpdate(nowDate);
+                updateTime(nowDate);
+            }
         }
+    }
+
+    private void updateTime(int lastUpdate){
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(MainActivity.this);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .updateLastUpdate("Bearer "+token,number,String.valueOf(lastUpdate))
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call,@NonNull  Response<GeneralResponse> response) {
+                        if(response.isSuccessful() && response.body()!=null && response.body().getResult().equals("success")){
+                            MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull  Throwable t) {
+
+                    }
+                });
     }
 
     private void getQuestions() {

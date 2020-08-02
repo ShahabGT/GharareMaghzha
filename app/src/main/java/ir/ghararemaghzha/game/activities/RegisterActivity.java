@@ -35,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         Utils.getFbToken(this);
-        checkTime();
+      //  checkTime();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.register_container,new LoginFragment())
@@ -87,28 +87,28 @@ public class RegisterActivity extends AppCompatActivity {
         }
     };
 
-    private void checkTime() {
-        if (timeDialog != null)
-            timeDialog.dismiss();
-        RetrofitClient.getInstance().getApi()
-                .getServerTime()
-                .enqueue(new Callback<TimeResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            if (!Utils.isTimeAcceptable(response.body().getTime())) {
-                                timeDialog = Utils.showTimeError(RegisterActivity.this);
-                            } else {
-                                MySharedPreference.getInstance(RegisterActivity.this).setDaysPassed(response.body().getPassed());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
-
-                    }
-                });
-
-    }
+//    private void checkTime() {
+//        if (timeDialog != null)
+//            timeDialog.dismiss();
+//        RetrofitClient.getInstance().getApi()
+//                .getServerTime()
+//                .enqueue(new Callback<TimeResponse>() {
+//                    @Override
+//                    public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
+//                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+//                            if (!Utils.isTimeAcceptable(response.body().getTime())) {
+//                                timeDialog = Utils.showTimeError(RegisterActivity.this);
+//                            } else {
+//                                MySharedPreference.getInstance(RegisterActivity.this).setDaysPassed(response.body().getPassed());
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
+//
+//                    }
+//                });
+//
+//    }
 }

@@ -236,7 +236,8 @@ public class VerifyFragment extends Fragment {
                         verify.setEnabled(true);
                         verify.setText(context.getString(R.string.verify_verify));
                         dialog.dismiss();
-                        if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
+                  //      if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             MySharedPreference.getInstance(context).setGotQuestions();
                             for (QuestionModel model : response.body().getData()) {
                                 if (model.getUserAnswer().equals("-1")) {

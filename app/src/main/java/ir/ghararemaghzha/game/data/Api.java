@@ -50,9 +50,19 @@ public interface Api {
             @Field("number") String number
     );
 
-    @GET("time")
-    Call<TimeResponse> getServerTime();
-
+    @FormUrlEncoded
+    @POST("time")
+    Call<TimeResponse> getServerTime(
+            @Header("Authorization") String Token,
+            @Field("number") String number
+    );
+    @FormUrlEncoded
+    @POST("updatetime")
+    Call<GeneralResponse> updateLastUpdate(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("last_update") String lastUpdate
+    );
     @FormUrlEncoded
     @POST("chat")
     Call<TimeResponse> sendMessage(
