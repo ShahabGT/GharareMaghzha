@@ -32,6 +32,7 @@ import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
+import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
 import ir.ghararemaghzha.game.fragments.BuyFragment;
 import ir.ghararemaghzha.game.fragments.HighscoreFragment;
@@ -44,6 +45,7 @@ import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
+    private GetDataDialog dataDialog;
     private BroadcastReceiver notificationBroadCast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -68,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_main);
         init();
 
@@ -216,10 +218,19 @@ public class MainActivity extends AppCompatActivity {
                             int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
                             if (newPlan > oldPlan) {
                                 MySharedPreference.getInstance(MainActivity.this).setPlan(String.valueOf(newPlan));
+                                dataDialog = Utils.showGetDataLoading(MainActivity.this);
                                 getQuestions();
                             }
                             int myVersion = Utils.getVersionCode(MainActivity.this);
                             int newVersion = Integer.parseInt(response.body().getVersion());
+                            int newScore = Integer.parseInt(response.body().getScoreCount());
+                            int oldScore = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getScore());
+
+                            if(newScore>oldScore)
+                                MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
+                            else if(oldScore>newScore)
+                                uploadScore(String.valueOf(oldScore));
+
                             if (newVersion > myVersion) {
                                 if (response.body().getVersionEssential().equals("1")) {
                                     Toast.makeText(MainActivity.this, "version " + newVersion + " available ESSENTIAL", Toast.LENGTH_SHORT).show();
@@ -291,8 +302,13 @@ public class MainActivity extends AppCompatActivity {
         int lastUpdate = MySharedPreference.getInstance(this).getLastUpdate();
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-
-        if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
+        if (passed == 9) {
+            db.executeTransaction(realm -> {
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll();
+                questions.setBoolean("visible", true);
+            });
+            updateTime(nowDate);
+        } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
             int range = remaining / (10 - passed);
             if (range > 0) {
@@ -305,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateTime(int lastUpdate){
+    private void updateTime(int lastUpdate) {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
@@ -313,17 +329,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .updateLastUpdate("Bearer "+token,number,String.valueOf(lastUpdate))
+                .updateLastUpdate("Bearer " + token, number, String.valueOf(lastUpdate))
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call,@NonNull  Response<GeneralResponse> response) {
-                        if(response.isSuccessful() && response.body()!=null && response.body().getResult().equals("success")){
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull  Throwable t) {
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
 
                     }
                 });
@@ -346,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
                     .enqueue(new Callback<QuestionResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
+                            if(dataDialog!=null) dataDialog.dismiss();
                             if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
                                 MySharedPreference.getInstance(MainActivity.this).setGotQuestions();
                                 for (QuestionModel model : response.body().getData()) {
@@ -364,11 +381,36 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
+                            if(dataDialog!=null) dataDialog.dismiss();
                             Utils.showInternetError(MainActivity.this, () -> getQuestions());
                         }
                     });
 
         }
+    }
+
+    private void uploadScore(String score){
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(MainActivity.this);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .sendScore("Bearer "+token,number,score)
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call,@NonNull  Response<GeneralResponse> response) {
+                        if (response.code() == 401) {
+                            Utils.logout(MainActivity.this);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull  Throwable t) {
+
+                    }
+                });
     }
 
     @Override

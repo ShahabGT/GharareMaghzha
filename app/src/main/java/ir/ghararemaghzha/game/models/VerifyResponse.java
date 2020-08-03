@@ -16,6 +16,9 @@ public class VerifyResponse {
     @SerializedName("user_plan")
     private String userPlan;
 
+    @SerializedName("score_count")
+    private String scoreCount;
+
     public String getResult() {
         return result;
     }
@@ -54,5 +57,13 @@ public class VerifyResponse {
 
     public void setUserPlan(String userPlan) {
         this.userPlan = userPlan;
+    }
+
+    public String getScoreCount() {
+        return scoreCount;
+    }
+
+    public void setScoreCount(String scoreCount) {
+        this.scoreCount = scoreCount;
     }
 }

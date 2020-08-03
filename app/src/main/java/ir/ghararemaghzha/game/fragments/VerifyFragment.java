@@ -220,10 +220,7 @@ public class VerifyFragment extends Fragment {
     }
 
     private void getQuestions() {
-        Toast.makeText(context, "get data from database", Toast.LENGTH_SHORT).show();
         Realm db = Realm.getDefaultInstance();
-
-
         if (number.isEmpty() || accessToken.isEmpty()) {
             Utils.logout(activity);
             return;
@@ -236,8 +233,9 @@ public class VerifyFragment extends Fragment {
                         verify.setEnabled(true);
                         verify.setText(context.getString(R.string.verify_verify));
                         dialog.dismiss();
-                  //      if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                        if (response.isSuccessful() && response.body() != null
+                                && response.body().getResult().equals("success")
+                                && !response.body().getMessage().equals("empty")) {
                             MySharedPreference.getInstance(context).setGotQuestions();
                             for (QuestionModel model : response.body().getData()) {
                                 if (model.getUserAnswer().equals("-1")) {
@@ -248,9 +246,6 @@ public class VerifyFragment extends Fragment {
                                 model.setVisible(false);
                                 db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             }
-                            Date d = new Date();
-                            DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-                       //     MySharedPreference.getInstance(context).setLastUpdate(Integer.parseInt(dateFormat.format(d)));
                             MySharedPreference.getInstance(context).setUserId(userId);
 
                             Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();

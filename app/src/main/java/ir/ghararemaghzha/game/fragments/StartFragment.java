@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
@@ -48,6 +49,25 @@ public class StartFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateInfo();
+    }
+
+    private void updateInfo(){
+        //  int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
+        int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
+        if (passed >= 0 && passed < 10)
+            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size())));
+        else if (passed < 0)
+            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size())));
+        else {
+            info.setText(context.getString(R.string.start_info_passed));
+            start.setEnabled(false);
+        }
+    }
+
     private void init(View v) {
         db = Realm.getDefaultInstance();
 
@@ -60,16 +80,7 @@ public class StartFragment extends Fragment {
 
         myName.setText(MySharedPreference.getInstance(context).getUsername());
         myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
-        //  int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
-        int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
-        if (passed >= 0 && passed < 10)
-            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size())));
-        else if (passed < 0)
-            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size())));
-        else {
-            info.setText(context.getString(R.string.start_info_passed));
-            start.setEnabled(false);
-        }
+
 
 
         onClicks();
