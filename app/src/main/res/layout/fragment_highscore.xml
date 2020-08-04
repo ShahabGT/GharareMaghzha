@@ -156,7 +156,6 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/highscore_second_card"
-            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
@@ -195,10 +194,10 @@
                     android:text="@string/highscore_second_title"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/highscore_second_avatar"
+                    app:layout_constraintRight_toLeftOf="@id/highscore_second_avatar"
+                    app:layout_constraintTop_toTopOf="@id/highscore_second_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_second_score"
@@ -208,9 +207,9 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/highscore_second_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/highscore_second_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_second_name"
@@ -227,8 +226,8 @@
 
 
         </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.card.MaterialCardView
-            android:visibility="gone"
             android:id="@+id/highscore_third_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -262,16 +261,16 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_third_title"
                     style="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_third_title"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/highscore_third_avatar"
+                    app:layout_constraintRight_toLeftOf="@id/highscore_third_avatar"
+                    app:layout_constraintTop_toTopOf="@id/highscore_third_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_third_score"
@@ -281,9 +280,9 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/highscore_third_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/highscore_third_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_third_name"
@@ -302,7 +301,6 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:visibility="gone"
             android:id="@+id/highscore_fourth_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -342,10 +340,10 @@
                     android:text="@string/highscore_fourth_title"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/highscore_fourth_avatar"
+                    app:layout_constraintRight_toLeftOf="@+id/highscore_fourth_avatar"
+                    app:layout_constraintTop_toTopOf="@+id/highscore_fourth_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fourth_score"
@@ -355,9 +353,9 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/highscore_fourth_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/highscore_fourth_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fourth_name"
@@ -374,8 +372,8 @@
 
 
         </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.card.MaterialCardView
-            android:visibility="gone"
             android:id="@+id/highscore_fifth_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -409,16 +407,16 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fifth_title"
                     style="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_fifth_title"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/highscore_fifth_avatar"
+                    app:layout_constraintRight_toLeftOf="@+id/highscore_fifth_avatar"
+                    app:layout_constraintTop_toTopOf="@+id/highscore_fifth_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fifth_score"
@@ -428,9 +426,9 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/highscore_fifth_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/highscore_fifth_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fifth_name"
@@ -457,8 +455,8 @@
             android:layout_marginRight="20dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="12dp"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/highscore_fourth_card">
 
@@ -481,7 +479,7 @@
                     app:roundAsCircle="true" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_user_title"
+                    android:id="@+id/highscore_user_rank"
                     style="@style/TextAppearance.AppCompat.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

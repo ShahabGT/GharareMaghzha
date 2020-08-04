@@ -34,9 +34,10 @@ public class HighscoreFragment extends Fragment {
     private FragmentActivity activity;
     private SwipeRefreshLayout refreshLayout;
     private MaterialCardView firstCard, secondCard, thirdCard, fourthCard, fifthCard, userCard;
-    private MaterialTextView firstName, secondName, thirdName, fourthName, fifthName, userName;
+    private MaterialTextView firstName, secondName, thirdName, fourthName, fifthName, userName,userRank;
     private MaterialTextView firstScore, secondScore, thirdScore, fourthScore, fifthScore, userScore;
     private SimpleDraweeView firstAvatar, secondAvatar, thirdAvatar, fourthAvatar, fifthAvatar, userAvatar;
+    private MaterialTextView myCode, myName;
 
 
     public HighscoreFragment() {
@@ -55,6 +56,11 @@ public class HighscoreFragment extends Fragment {
     }
 
     private void init(View v) {
+        myName = v.findViewById(R.id.highscore_name);
+        myCode = v.findViewById(R.id.highscore_code);
+        myName.setText(MySharedPreference.getInstance(context).getUsername());
+        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
+
         refreshLayout = v.findViewById(R.id.highscore_refresh);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
 
@@ -87,6 +93,7 @@ public class HighscoreFragment extends Fragment {
         userScore = v.findViewById(R.id.highscore_user_score);
         userName = v.findViewById(R.id.highscore_user_name);
         userAvatar = v.findViewById(R.id.highscore_user_avatar);
+        userRank = v.findViewById(R.id.highscore_user_rank);
 
         getData();
         onClicks();
@@ -148,7 +155,7 @@ public class HighscoreFragment extends Fragment {
                             userName.setText(response.body().getUser().getUserName());
                             userScore.setText(context.getString(R.string.highscore_score,response.body().getUser().getScoreCount()));
                             userAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())));
-
+                            userRank.setText(context.getString(R.string.highscore_user_rank,response.body().getUser().getUserRank()));
 
                         } else if (response.code() == 401) {
                             Utils.logout(activity);

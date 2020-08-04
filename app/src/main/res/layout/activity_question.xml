@@ -397,7 +397,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:drawableTint="@color/colorPrimaryDark"
-        android:drawableLeft="@drawable/vector_left"
+        android:drawableLeft="@drawable/vector_arrow_left"
         android:text="@string/question_next"
         android:layout_height="wrap_content"/>
 

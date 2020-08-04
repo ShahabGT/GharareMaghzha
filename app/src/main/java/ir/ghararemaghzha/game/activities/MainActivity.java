@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -20,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private SimpleDraweeView avatar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
         messages = findViewById(R.id.main_messages);
         newMessage = findViewById(R.id.main_messages_new);
         highscore = findViewById(R.id.main_highscore);
+        avatar = findViewById(R.id.main_avatar);
+        avatar.setImageURI(Uri.parse(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId())));
         buy = findViewById(R.id.main_buy);
         start = findViewById(R.id.main_start);
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
