@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">قرار مغزها</string>
+    <string name="avatar_url">https://ghararehmaghzha.ir/api/avatars/%s.jpg</string>
 
     <string name="access_error">حساب کاربری شما جای دیگر آنلاین شده لطفا دوباره وارد شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
@@ -87,6 +88,15 @@
     <string name="instagrampicker_filter_title">فیلترها</string>
 
     <string name="question_next">سوال بعدی</string>
+
+    <string name="highscore_title">کاربران برتر</string>
+    <string name="highscore_user_rank">نفر %s</string>
+    <string name="highscore_first_title">نفر اول</string>
+    <string name="highscore_second_title">نفر دوم</string>
+    <string name="highscore_third_title">نفر سوم</string>
+    <string name="highscore_fourth_title">نفر چهارم</string>
+    <string name="highscore_fifth_title">نفر پنجم</string>
+    <string name="highscore_score">%s امتیاز</string>
 
 
 </resources>

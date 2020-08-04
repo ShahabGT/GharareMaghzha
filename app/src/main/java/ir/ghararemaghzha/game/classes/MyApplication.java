@@ -2,6 +2,8 @@ package ir.ghararemaghzha.game.classes;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
@@ -14,6 +16,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fresco.initialize(this);
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder().name("myRealm.realm").build();
         byte[] dbKey = new byte[64];

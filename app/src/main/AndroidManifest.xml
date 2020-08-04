@@ -10,6 +10,7 @@
         android:name=".classes.MyApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
+        android:isGame="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -18,7 +19,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:supportsRtl">
-        <activity android:name=".activities.QuestionActivity"></activity>
+        <activity android:name=".activities.QuestionActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name="ir.shahabazimi.instagrampicker.gallery.SelectActivity"
             android:screenOrientation="portrait" />

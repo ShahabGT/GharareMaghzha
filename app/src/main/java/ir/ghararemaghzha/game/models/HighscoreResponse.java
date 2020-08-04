@@ -7,7 +7,16 @@ public class HighscoreResponse {
     private String result;
     private String message;
     private List<HighscoreModel> data;
+    private UserRankModel user;
 
+
+    public UserRankModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserRankModel user) {
+        this.user = user;
+    }
 
     public String getResult() {
         return result;

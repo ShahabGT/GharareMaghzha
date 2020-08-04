@@ -1,24 +1,28 @@
 package ir.ghararemaghzha.game.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textview.MaterialTextView;
+
+import java.util.List;
+
 import ir.ghararemaghzha.game.R;
-import ir.ghararemaghzha.game.adapters.HighscoreAdapter;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
+import ir.ghararemaghzha.game.models.HighscoreModel;
 import ir.ghararemaghzha.game.models.HighscoreResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,8 +33,10 @@ public class HighscoreFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private SwipeRefreshLayout refreshLayout;
-    private RecyclerView recyclerView;
-    private HighscoreAdapter adapter;
+    private MaterialCardView firstCard, secondCard, thirdCard, fourthCard, fifthCard, userCard;
+    private MaterialTextView firstName, secondName, thirdName, fourthName, fifthName, userName;
+    private MaterialTextView firstScore, secondScore, thirdScore, fourthScore, fifthScore, userScore;
+    private SimpleDraweeView firstAvatar, secondAvatar, thirdAvatar, fourthAvatar, fifthAvatar, userAvatar;
 
 
     public HighscoreFragment() {
@@ -50,17 +56,44 @@ public class HighscoreFragment extends Fragment {
 
     private void init(View v) {
         refreshLayout = v.findViewById(R.id.highscore_refresh);
-        refreshLayout.setColorSchemeResources(R.color.colorPrimary,R.color.colorPrimaryDark);
-        recyclerView = v.findViewById(R.id.highscore_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+
+        firstCard = v.findViewById(R.id.highscore_first_card);
+        firstScore = v.findViewById(R.id.highscore_first_score);
+        firstName = v.findViewById(R.id.highscore_first_name);
+        firstAvatar = v.findViewById(R.id.highscore_first_avatar);
+
+        secondCard = v.findViewById(R.id.highscore_second_card);
+        secondScore = v.findViewById(R.id.highscore_second_score);
+        secondName = v.findViewById(R.id.highscore_second_name);
+        secondAvatar = v.findViewById(R.id.highscore_second_avatar);
+
+        thirdCard = v.findViewById(R.id.highscore_third_card);
+        thirdScore = v.findViewById(R.id.highscore_third_score);
+        thirdName = v.findViewById(R.id.highscore_third_name);
+        thirdAvatar = v.findViewById(R.id.highscore_third_avatar);
+
+        fourthCard = v.findViewById(R.id.highscore_fourth_card);
+        fourthScore = v.findViewById(R.id.highscore_fourth_score);
+        fourthName = v.findViewById(R.id.highscore_fourth_name);
+        fourthAvatar = v.findViewById(R.id.highscore_fourth_avatar);
+
+        fifthCard = v.findViewById(R.id.highscore_fifth_card);
+        fifthScore = v.findViewById(R.id.highscore_fifth_score);
+        fifthName = v.findViewById(R.id.highscore_fifth_name);
+        fifthAvatar = v.findViewById(R.id.highscore_fifth_avatar);
+
+        userCard = v.findViewById(R.id.highscore_user_card);
+        userScore = v.findViewById(R.id.highscore_user_score);
+        userName = v.findViewById(R.id.highscore_user_name);
+        userAvatar = v.findViewById(R.id.highscore_user_avatar);
 
         getData();
-
         onClicks();
     }
 
-    private void onClicks(){
-        refreshLayout.setOnRefreshListener(()->{
+    private void onClicks() {
+        refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(true);
             getData();
         });
@@ -79,9 +112,44 @@ public class HighscoreFragment extends Fragment {
                     public void onResponse(@NonNull Call<HighscoreResponse> call, @NonNull Response<HighscoreResponse> response) {
                         refreshLayout.setRefreshing(false);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            adapter = new HighscoreAdapter(context,response.body().getData());
-                            recyclerView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
+                            for (HighscoreModel m : response.body().getData())
+                                if (m.getUserId().equals(response.body().getUser().getUserId())) {
+                                    userCard.setVisibility(View.GONE);
+                                    break;
+                                }
+                            List<HighscoreModel> data = response.body().getData();
+                            switch (data.size()) {
+                                case 5:
+                                    fifthCard.setVisibility(View.VISIBLE);
+                                    fifthName.setText(data.get(4).getUserName());
+                                    fifthScore.setText(context.getString(R.string.highscore_score, data.get(4).getScoreCount()));
+                                    fifthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserId())));
+                                case 4:
+                                    fourthCard.setVisibility(View.VISIBLE);
+                                    fourthName.setText(data.get(3).getUserName());
+                                    fourthScore.setText(context.getString(R.string.highscore_score, data.get(3).getScoreCount()));
+                                    fourthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserId())));
+                                case 3:
+                                    thirdCard.setVisibility(View.VISIBLE);
+                                    thirdName.setText(data.get(2).getUserName());
+                                    thirdScore.setText(context.getString(R.string.highscore_score, data.get(2).getScoreCount()));
+                                    thirdAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserId())));
+                                case 2:
+                                    secondCard.setVisibility(View.VISIBLE);
+                                    secondName.setText(data.get(1).getUserName());
+                                    secondScore.setText(context.getString(R.string.highscore_score, data.get(1).getScoreCount()));
+                                    secondAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserId())));
+                                case 1:
+                                    firstName.setText(data.get(0).getUserName());
+                                    firstScore.setText(context.getString(R.string.highscore_score, data.get(0).getScoreCount()));
+                                    firstAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserId())));
+                            }
+
+                            userName.setText(response.body().getUser().getUserName());
+                            userScore.setText(context.getString(R.string.highscore_score,response.body().getUser().getScoreCount()));
+                            userAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())));
+
+
                         } else if (response.code() == 401) {
                             Utils.logout(activity);
                         }
@@ -90,7 +158,7 @@ public class HighscoreFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Call<HighscoreResponse> call, @NonNull Throwable t) {
                         refreshLayout.setRefreshing(false);
-                        Utils.showInternetError(context,()->getData());
+                        Utils.showInternetError(context, () -> getData());
 
                     }
                 });

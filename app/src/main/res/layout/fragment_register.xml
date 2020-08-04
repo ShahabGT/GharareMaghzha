@@ -17,6 +17,7 @@
         app:layout_constraintGuide_percent="0.4" />
 
     <View
+        android:id="@+id/reg_header"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/login_header"
@@ -24,6 +25,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:tint="@color/white"
+        app:srcCompat="@drawable/logo"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/reg_guide"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="150dp"
+        android:layout_height="150dp"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/reg_title"
