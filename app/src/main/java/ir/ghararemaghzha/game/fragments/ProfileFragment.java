@@ -1,7 +1,9 @@
 package ir.ghararemaghzha.game.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +25,8 @@ import ir.ghararemaghzha.game.activities.ProfileActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.models.QuestionModel;
 
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
+
 public class ProfileFragment extends Fragment {
 
     private Context context;
@@ -32,7 +36,26 @@ public class ProfileFragment extends Fragment {
 
     private Realm db;
 
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+                updateUI();
+        }
+    };
+
     public ProfileFragment() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        context.registerReceiver(br,new IntentFilter(GHARAREHMAGHZHA_BROADCAST_REFRESH));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        context.unregisterReceiver(br);
     }
 
     @Override
@@ -59,6 +82,12 @@ public class ProfileFragment extends Fragment {
         buy = v.findViewById(R.id.profile_buy_card);
         edit = v.findViewById(R.id.profile_edit_card);
 
+        updateUI();
+
+        onClicks();
+    }
+
+    private void updateUI(){
         myName.setText(MySharedPreference.getInstance(context).getUsername());
         myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
         myScore.setText(MySharedPreference.getInstance(context).getScore());
@@ -86,8 +115,6 @@ public class ProfileFragment extends Fragment {
         int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
         remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size()));
 
-
-        onClicks();
     }
 
     private void onClicks() {

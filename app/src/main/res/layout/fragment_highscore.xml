@@ -77,7 +77,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="12dp"
@@ -99,9 +99,9 @@
                     app:layout_constraintBottom_toTopOf="@id/highscore_first_name"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@color/colorPrimaryDark"
-                    app:placeholderImageScaleType="fitXY"
-                    app:roundAsCircle="true" />
+                    app:placeholderImage="@drawable/placeholder"
+                    app:roundAsCircle="true"
+                    />
 
                 <ImageView
                     android:layout_width="0dp"
@@ -172,30 +172,46 @@
                 android:layout_height="match_parent"
                 android:padding="8dp">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/highscore_second_title"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="@font/vazir"
+                    android:text="@string/highscore_second_title"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/highscore_second_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
                     android:src="@drawable/user"
-                    app:layout_constraintBottom_toTopOf="@id/highscore_second_name"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@color/colorPrimaryDark"
+                    app:layout_constraintTop_toBottomOf="@id/highscore_second_title"
+                    app:placeholderImage="@drawable/avatar"
                     app:placeholderImageScaleType="fitXY"
                     app:roundAsCircle="true" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_second_title"
-                    style="@style/TextAppearance.AppCompat.Small"
+                    android:id="@+id/highscore_second_name"
+                    style="@style/TextAppearance.AppCompat.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:text="@string/highscore_second_title"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:layout_marginRight="8dp"
-                    app:layout_constraintBottom_toBottomOf="@id/highscore_second_avatar"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/vazir"
+                    android:maxEms="10"
+                    android:maxLength="18"
+                    android:singleLine="true"
+                    android:text="نام و نام خانوادگی"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/highscore_second_avatar"
                     app:layout_constraintRight_toLeftOf="@id/highscore_second_avatar"
                     app:layout_constraintTop_toTopOf="@id/highscore_second_avatar" />
 
@@ -207,21 +223,11 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@id/highscore_second_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/highscore_second_avatar" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_second_name"
-                    style="@style/TextAppearance.AppCompat.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:maxLength="18"
-                    android:text="نام و نام خانوادگی"
-                    android:textColor="@color/black"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/highscore_second_avatar" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -231,9 +237,9 @@
             android:id="@+id/highscore_third_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="4dp"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginRight="8dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="12dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -245,30 +251,47 @@
                 android:layout_height="match_parent"
                 android:padding="8dp">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/highscore_third_title"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="@font/vazir"
+                    android:text="@string/highscore_third_title"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/highscore_third_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
                     android:src="@drawable/user"
-                    app:layout_constraintBottom_toTopOf="@id/highscore_third_name"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@color/colorPrimaryDark"
-                    app:placeholderImageScaleType="fitXY"
-                    app:roundAsCircle="true" />
+                    app:layout_constraintTop_toBottomOf="@id/highscore_third_title"
+                    app:roundAsCircle="true"
+                    app:placeholderImage="@drawable/placeholder"
+                    app:placeholderImageScaleType="centerCrop"
+                    />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_third_title"
-                    style="@style/TextAppearance.AppCompat.Small"
+                    android:id="@+id/highscore_third_name"
+                    style="@style/TextAppearance.AppCompat.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:text="@string/highscore_third_title"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:layout_marginRight="8dp"
-                    app:layout_constraintBottom_toBottomOf="@id/highscore_third_avatar"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/vazir"
+                    android:maxEms="10"
+                    android:maxLength="18"
+                    android:singleLine="true"
+                    android:text="نام و نام خانوادگی"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/highscore_third_avatar"
                     app:layout_constraintRight_toLeftOf="@id/highscore_third_avatar"
                     app:layout_constraintTop_toTopOf="@id/highscore_third_avatar" />
 
@@ -280,21 +303,11 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/highscore_third_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/highscore_third_avatar" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_third_name"
-                    style="@style/TextAppearance.AppCompat.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:maxLength="18"
-                    android:text="نام و نام خانوادگی"
-                    android:textColor="@color/black"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/highscore_third_avatar" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -318,32 +331,48 @@
                 android:layout_height="match_parent"
                 android:padding="8dp">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/highscore_fourth_title"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="@font/vazir"
+                    android:text="@string/highscore_fourth_title"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/highscore_fourth_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
                     android:src="@drawable/user"
-                    app:layout_constraintBottom_toTopOf="@id/highscore_fourth_name"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@color/colorPrimaryDark"
+                    app:layout_constraintTop_toBottomOf="@id/highscore_fourth_title"
+                    app:placeholderImage="@drawable/avatar"
                     app:placeholderImageScaleType="fitXY"
                     app:roundAsCircle="true" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_fourth_title"
-                    style="@style/TextAppearance.AppCompat.Small"
+                    android:id="@+id/highscore_fourth_name"
+                    style="@style/TextAppearance.AppCompat.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:text="@string/highscore_fourth_title"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:layout_marginRight="8dp"
-                    app:layout_constraintBottom_toBottomOf="@id/highscore_fourth_avatar"
-                    app:layout_constraintRight_toLeftOf="@+id/highscore_fourth_avatar"
-                    app:layout_constraintTop_toTopOf="@+id/highscore_fourth_avatar" />
+                    android:ellipsize="end"
+                    android:fontFamily="@font/vazir"
+                    android:maxEms="10"
+                    android:maxLength="18"
+                    android:singleLine="true"
+                    android:text="نام و نام خانوادگی"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/highscore_fourth_avatar"
+                    app:layout_constraintRight_toLeftOf="@id/highscore_fourth_avatar"
+                    app:layout_constraintTop_toTopOf="@id/highscore_fourth_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fourth_score"
@@ -353,21 +382,11 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/highscore_fourth_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/highscore_fourth_avatar" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_fourth_name"
-                    style="@style/TextAppearance.AppCompat.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:maxLength="18"
-                    android:text="نام و نام خانوادگی"
-                    android:textColor="@color/black"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/highscore_fourth_avatar" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -377,9 +396,9 @@
             android:id="@+id/highscore_fifth_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="4dp"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginRight="8dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="12dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -391,32 +410,48 @@
                 android:layout_height="match_parent"
                 android:padding="8dp">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/highscore_fifth_title"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="@font/vazir"
+                    android:text="@string/highscore_fifth_title"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/highscore_fifth_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
                     android:src="@drawable/user"
-                    app:layout_constraintBottom_toTopOf="@id/highscore_fifth_name"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@color/colorPrimaryDark"
+                    app:layout_constraintTop_toBottomOf="@id/highscore_fifth_title"
+                    app:placeholderImage="@drawable/avatar"
                     app:placeholderImageScaleType="fitXY"
                     app:roundAsCircle="true" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_fifth_title"
-                    style="@style/TextAppearance.AppCompat.Small"
+                    android:id="@+id/highscore_fifth_name"
+                    style="@style/TextAppearance.AppCompat.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:text="@string/highscore_fifth_title"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:layout_marginRight="8dp"
-                    app:layout_constraintBottom_toBottomOf="@id/highscore_fifth_avatar"
-                    app:layout_constraintRight_toLeftOf="@+id/highscore_fifth_avatar"
-                    app:layout_constraintTop_toTopOf="@+id/highscore_fifth_avatar" />
+                    android:ellipsize="end"
+                    android:fontFamily="@font/vazir"
+                    android:maxEms="10"
+                    android:maxLength="18"
+                    android:singleLine="true"
+                    android:text="نام و نام خانوادگی"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/highscore_fifth_avatar"
+                    app:layout_constraintRight_toLeftOf="@id/highscore_fifth_avatar"
+                    app:layout_constraintTop_toTopOf="@id/highscore_fifth_avatar" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fifth_score"
@@ -426,25 +461,16 @@
                     android:fontFamily="@font/vazir"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/highscore_fifth_avatar"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/highscore_fifth_avatar" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/highscore_fifth_name"
-                    style="@style/TextAppearance.AppCompat.Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/vazir"
-                    android:maxLength="18"
-                    android:text="نام و نام خانوادگی"
-                    android:textColor="@color/black"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/highscore_fifth_avatar" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </com.google.android.material.card.MaterialCardView>
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/highscore_user_card"
@@ -474,7 +500,7 @@
                     app:layout_constraintBottom_toTopOf="@id/highscore_user_name"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@color/colorPrimaryDark"
+                    app:placeholderImage="@drawable/avatar"
                     app:placeholderImageScaleType="fitXY"
                     app:roundAsCircle="true" />
 

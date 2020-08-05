@@ -54,6 +54,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         updateDatabase();
-        findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
+       // findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
 
 
     }
@@ -115,6 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
         animate();
         onClicks();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        whichFragment=1;
     }
 
     private void onClicks() {
@@ -248,6 +255,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                             }
+                            Intent i = new Intent(GHARAREHMAGHZHA_BROADCAST_REFRESH);
+                            sendBroadcast(i);
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this);
                         }
