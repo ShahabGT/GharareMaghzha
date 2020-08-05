@@ -11,8 +11,12 @@ public class TimeResponse {
     private String message;
     private String time;
     private String passed;
+
     @SerializedName("last_update")
     private String lastUpdate;
+
+    @SerializedName("user_questions")
+    private String userQuestions;
 
     public String getResult() {
         return result;
@@ -52,5 +56,13 @@ public class TimeResponse {
 
     public void setLastUpdate(String lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public String getUserQuestions() {
+        return userQuestions;
+    }
+
+    public void setUserQuestions(String userQuestions) {
+        this.userQuestions = userQuestions;
     }
 }

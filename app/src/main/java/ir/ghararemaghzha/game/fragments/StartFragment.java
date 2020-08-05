@@ -22,6 +22,7 @@ import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.QuestionActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
+import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.models.QuestionModel;
 
 
@@ -55,17 +56,18 @@ public class StartFragment extends Fragment {
         updateInfo();
     }
 
-    private void updateInfo(){
+    private void updateInfo() {
         //  int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
         int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
         if (passed >= 0 && passed < 10)
             info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size())));
         else if (passed < 0)
-            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size())));
+            info.setText(context.getString(R.string.start_info, String.valueOf(0)));
         else {
             info.setText(context.getString(R.string.start_info_passed));
             start.setEnabled(false);
         }
+        Utils.updateServerQuestions(activity, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
     }
 
     private void init(View v) {
@@ -80,7 +82,6 @@ public class StartFragment extends Fragment {
 
         myName.setText(MySharedPreference.getInstance(context).getUsername());
         myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
-
 
 
         onClicks();
@@ -109,7 +110,15 @@ public class StartFragment extends Fragment {
                     .commit();
             MainActivity.whichFragment = 3;
         });
-        start.setOnClickListener(v -> startActivity(new Intent(activity, QuestionActivity.class)));
+        start.setOnClickListener(v -> {
+            int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
+            if (size > 0)
+                startActivity(new Intent(activity, QuestionActivity.class));
+            else
+                Toast.makeText(context, context.getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+        });
 
     }
+
+
 }

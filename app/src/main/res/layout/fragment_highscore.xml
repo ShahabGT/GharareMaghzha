@@ -72,6 +72,9 @@
             app:layout_constraintRight_toRightOf="parent" />
 
 
+
+
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/highscore_first_card"
             android:layout_width="0dp"
@@ -546,6 +549,17 @@
 
 
         </com.google.android.material.card.MaterialCardView>
+
+        <ProgressBar
+            android:elevation="20dp"
+            android:id="@+id/highscore_loading"
+            app:layout_constraintTop_toBottomOf="@id/highscore_guide30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:indeterminateTint="@color/colorPrimaryDark"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

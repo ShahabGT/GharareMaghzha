@@ -15,6 +15,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.pm.PackageInfoCompat;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -28,9 +30,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.SplashActivity;
+import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
+import ir.ghararemaghzha.game.models.GeneralResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static ir.ghararemaghzha.game.classes.Const.FCM_TOPIC;
 
@@ -183,6 +190,29 @@ public class Utils {
         realm.commitTransaction();
         context.startActivity(new Intent(context, SplashActivity.class));
         context.finish();
+    }
+
+    public static void updateServerQuestions(Activity context,String questionCount){
+        String number = MySharedPreference.getInstance(context).getNumber();
+        String token = MySharedPreference.getInstance(context).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(context);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .sendQuestionCount("Bearer "+token,number,questionCount)
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull Throwable t) {
+
+                    }
+                });
+
     }
 
 }

@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,12 @@ public class RegisterFragment extends Fragment {
     private TextInputEditText number, name;
     private MaterialButton verify;
 
+    private String loginNumber;
+
+    public void setLoginNumber(String loginNumber) {
+        this.loginNumber = loginNumber;
+    }
+
 
     public RegisterFragment() {
     }
@@ -65,12 +73,35 @@ public class RegisterFragment extends Fragment {
         verify = v.findViewById(R.id.reg_verify);
         login = v.findViewById(R.id.reg_login);
 
-        try {
-            requestHint();
+        if(loginNumber==null || loginNumber.isEmpty()) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            try {
+                requestHint();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else
+            number.setText(loginNumber);
+
+        number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length()==11)
+                    Utils.hideKeyboard(activity);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length()==11)
+                    Utils.hideKeyboard(activity);
+            }
+        });
         onClicks();
 
     }
@@ -129,6 +160,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void doRegister(String name, String number) {
+        Utils.hideKeyboard(activity);
         verify.setEnabled(false);
         verify.setText("...");
         login.setEnabled(false);

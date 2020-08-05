@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -55,6 +56,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -85,7 +87,6 @@ public class QuestionActivity extends AppCompatActivity {
         gameScore = Integer.parseInt(MySharedPreference.getInstance(this).getScore());
         score.setText(String.valueOf(gameScore));
 
-        findViewById(R.id.question_close).setOnClickListener(v -> QuestionActivity.this.finish());
 
         progressBar = findViewById(R.id.question_progress_bar);
         progressBar.setProgress(progress);
@@ -243,11 +244,8 @@ public class QuestionActivity extends AppCompatActivity {
             }
         });
         next.setOnClickListener(v -> nextQuestion());
+        findViewById(R.id.question_close).setOnClickListener(v -> QuestionActivity.this.finish());
 
-        questionc.setOnClickListener(v -> {
-            YoYo.with(Techniques.Shake).duration(500).playOn(questionc);
-            playSound(wrongSound);
-        });
     }
 
     private void enterAnimations() {
@@ -276,8 +274,8 @@ public class QuestionActivity extends AppCompatActivity {
         progressBar.setProgress(100);
 
         if (data.isEmpty()) {
-            Toast.makeText(this, "no questions for now!", Toast.LENGTH_SHORT).show();
-            return;
+            Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+            QuestionActivity.this.finish();
         }
         model = getRandom();
         randomAnswers = randomNumbers();
@@ -312,6 +310,7 @@ public class QuestionActivity extends AppCompatActivity {
         downTimer.start();
         setAnswer("0");
         uploadAnswer("0");
+        Utils.updateServerQuestions(this,String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
 
     }
 

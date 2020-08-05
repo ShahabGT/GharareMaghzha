@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -39,6 +40,7 @@ public class HighscoreFragment extends Fragment {
     private SimpleDraweeView firstAvatar, secondAvatar, thirdAvatar, fourthAvatar, fifthAvatar, userAvatar;
     private MaterialTextView myCode, myName;
 
+    private ProgressBar loading;
 
     public HighscoreFragment() {
     }
@@ -56,6 +58,7 @@ public class HighscoreFragment extends Fragment {
     }
 
     private void init(View v) {
+        loading = v.findViewById(R.id.highscore_loading);
         myName = v.findViewById(R.id.highscore_name);
         myCode = v.findViewById(R.id.highscore_code);
         myName.setText(MySharedPreference.getInstance(context).getUsername());
@@ -95,6 +98,12 @@ public class HighscoreFragment extends Fragment {
         userAvatar = v.findViewById(R.id.highscore_user_avatar);
         userRank = v.findViewById(R.id.highscore_user_rank);
 
+        firstCard.setVisibility(View.INVISIBLE);
+        secondCard.setVisibility(View.INVISIBLE);
+        thirdCard.setVisibility(View.INVISIBLE);
+        fourthCard.setVisibility(View.INVISIBLE);
+        fifthCard.setVisibility(View.INVISIBLE);
+
         getData();
         onClicks();
     }
@@ -113,12 +122,21 @@ public class HighscoreFragment extends Fragment {
             Utils.logout(activity);
             return;
         }
+        loading.setVisibility(View.VISIBLE);
+
         RetrofitClient.getInstance().getApi().getHighscoreList("Bearer " + token, number)
                 .enqueue(new Callback<HighscoreResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<HighscoreResponse> call, @NonNull Response<HighscoreResponse> response) {
                         refreshLayout.setRefreshing(false);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            loading.setVisibility(View.GONE);
+                            firstCard.setVisibility(View.VISIBLE);
+                            secondCard.setVisibility(View.VISIBLE);
+                            thirdCard.setVisibility(View.VISIBLE);
+                            fourthCard.setVisibility(View.VISIBLE);
+                            fifthCard.setVisibility(View.VISIBLE);
+
                             for (HighscoreModel m : response.body().getData())
                                 if (m.getUserId().equals(response.body().getUser().getUserId())) {
                                     userCard.setVisibility(View.GONE);

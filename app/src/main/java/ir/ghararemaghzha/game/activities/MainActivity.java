@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
@@ -76,12 +77,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-
-        updateDatabase();
-       // findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
+        findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
 
 
     }
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
         changeFragment(new ProfileFragment());
 
-
+        updateDatabase(0);
         animate();
         onClicks();
     }
@@ -214,6 +214,51 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void checkTime() {
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(MainActivity.this);
+            return;
+        }
+        if (timeDialog != null)
+            timeDialog.dismiss();
+        RetrofitClient.getInstance().getApi()
+                .getServerTime("Bearer " + token, number)
+                .enqueue(new Callback<TimeResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            verify();
+
+
+                            int serverCount = Integer.parseInt(response.body().getUserQuestions());
+
+                            if (!Utils.isTimeAcceptable(response.body().getTime())) {
+                                timeDialog = Utils.showTimeError(MainActivity.this);
+                            } else {
+                                MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
+                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty()) {
+                                    int lastUpdate = Integer.parseInt(response.body().getLastUpdate());
+                                    MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
+                                }
+                                updateDatabase(serverCount);
+
+                            }
+                        } else if (response.code() == 401) {
+                            Utils.logout(MainActivity.this);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
+                        Utils.showInternetError(MainActivity.this, () -> checkTime());
+                    }
+                });
+
+    }
+
+
     private void verify() {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
@@ -270,48 +315,9 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void checkTime() {
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this);
-            return;
-        }
-        if (timeDialog != null)
-            timeDialog.dismiss();
-        RetrofitClient.getInstance().getApi()
-                .getServerTime("Bearer " + token, number)
-                .enqueue(new Callback<TimeResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            verify();
 
-                            if (!Utils.isTimeAcceptable(response.body().getTime())) {
-                                timeDialog = Utils.showTimeError(MainActivity.this);
-                            } else {
-                                MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
-                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty()) {
-                                    int lastUpdate = Integer.parseInt(response.body().getLastUpdate());
-                                    MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
-                                }
-                                updateDatabase();
-
-                            }
-                        } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
-                        Utils.showInternetError(MainActivity.this, () -> checkTime());
-                    }
-                });
-
-    }
-
-    private void updateDatabase() {
+    private void updateDatabase(int serverCount) {
+        int userCount = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 
@@ -324,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
                 questions.setBoolean("visible", true);
             });
             updateTime(nowDate);
+            Utils.updateServerQuestions(this,String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
+
         } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
             int range = remaining / (10 - passed);
@@ -333,7 +341,13 @@ public class MainActivity extends AppCompatActivity {
                     questions.setBoolean("visible", true);
                 });
                 updateTime(nowDate);
+                Utils.updateServerQuestions(this,String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
             }
+        }else if (nowDate == lastUpdate && serverCount>userCount){
+            db.executeTransaction(realm -> {
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(serverCount).findAll();
+                questions.setBoolean("visible", true);
+            });
         }
     }
 
@@ -388,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
                                         model.setUploaded(true);
                                     model.setVisible(false);
                                     db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
-                                    updateDatabase();
+                                    updateDatabase(0);
                                 }
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this);

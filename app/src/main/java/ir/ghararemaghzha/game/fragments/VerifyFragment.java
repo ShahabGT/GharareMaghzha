@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +105,25 @@ public class VerifyFragment extends Fragment {
         initTimer();
         onClicks();
 
+        code.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length()==6)
+                    Utils.hideKeyboard(activity);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length()==6)
+                    Utils.hideKeyboard(activity);
+            }
+        });
+
     }
 
     private void onClicks() {
@@ -173,6 +194,7 @@ public class VerifyFragment extends Fragment {
     }
 
     private void doVerify(String code) {
+        Utils.hideKeyboard(activity);
         verify.setEnabled(false);
         verify.setText("...");
         String fbToken = Utils.getFbToken(context);

@@ -134,6 +134,13 @@ public interface Api {
             @Header("Authorization") String Token,
             @Field("number") String number,
             @Field("score") String score);
+
+    @FormUrlEncoded
+    @POST("serverquestions")
+    Call<GeneralResponse> sendQuestionCount(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("count") String count);
 }
 
 

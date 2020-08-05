@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,7 @@ public class LoginFragment extends Fragment {
     private MaterialButton verify;
 
 
+
     public LoginFragment() {
     }
 
@@ -63,13 +66,32 @@ public class LoginFragment extends Fragment {
         number = v.findViewById(R.id.login_number);
         verify = v.findViewById(R.id.login_verify);
 
-        try {
-            requestHint();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+            try {
+                requestHint();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         onClicks();
+
+        number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 11)
+                    Utils.hideKeyboard(activity);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() == 11)
+                    Utils.hideKeyboard(activity);
+            }
+        });
     }
 
     private void onClicks() {
@@ -99,6 +121,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void doLogin(String number) {
+        Utils.hideKeyboard(activity);
         verify.setEnabled(false);
         verify.setText("...");
         register.setEnabled(false);
@@ -122,6 +145,13 @@ public class LoginFragment extends Fragment {
 
                         } else if (response.code() == 401) {
                             Toast.makeText(context, context.getResources().getText(R.string.loginfragment_nouser), Toast.LENGTH_SHORT).show();
+                            RegisterFragment registerFragment = new RegisterFragment();
+                            registerFragment.setLoginNumber(number);
+                            activity.getSupportFragmentManager().beginTransaction()
+                                    .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
+                                    .add(R.id.register_container, registerFragment)
+                                    .addToBackStack("register")
+                                    .commit();
                         } else if (response.code() == 403) {
                             Toast.makeText(context, context.getResources().getText(R.string.loginfragment_blocked), Toast.LENGTH_LONG).show();
                         } else {

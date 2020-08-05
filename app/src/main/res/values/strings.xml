@@ -12,6 +12,7 @@
     <string name="general_name">نام و نام خانوادگی</string>
     <string name="general_code">کد تایید</string>
     <string name="general_exit">برای خروج کلید بازگشت رو دوباره بفشارید</string>
+    <string name="general_noquestions">سوالی برای پاسخ دادن وجود ندارد!</string>
 
     <string name="loginfragment_nouser">شماره وارد شده ثبت نشده لطفا ابتدا ثبت نام کنید</string>
     <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
