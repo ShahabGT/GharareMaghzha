@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/highscore_refresh"
@@ -9,7 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/light_background">
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -72,9 +71,6 @@
             app:layout_constraintRight_toRightOf="parent" />
 
 
-
-
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/highscore_first_card"
             android:layout_width="0dp"
@@ -91,20 +87,17 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp">
+                android:padding="4dp">
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/highscore_first_avatar"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/user"
+                    android:layout_marginRight="6dp"
                     app:layout_constraintBottom_toTopOf="@id/highscore_first_name"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@drawable/placeholder"
-                    app:roundAsCircle="true"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:layout_width="0dp"
@@ -135,6 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/vazir"
+                    android:layout_marginLeft="6dp"
                     android:text="@string/highscore_score"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -147,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/vazir"
-                    android:maxLength="18"
+                    android:layout_marginRight="6dp"
                     android:text="نام و نام خانوادگی"
                     android:textColor="@color/black"
                     app:layout_constraintRight_toRightOf="parent"
@@ -173,7 +167,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp">
+                android:padding="4dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_second_title"
@@ -189,17 +183,13 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/highscore_second_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/user"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/highscore_second_title"
-                    app:placeholderImage="@drawable/avatar"
-                    app:placeholderImageScaleType="fitXY"
-                    app:roundAsCircle="true" />
+                    app:layout_constraintTop_toBottomOf="@id/highscore_second_title" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_second_name"
@@ -252,7 +242,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp">
+                android:padding="4dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_third_title"
@@ -268,17 +258,14 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/highscore_third_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/user"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/highscore_third_title"
-                    app:roundAsCircle="true"
-                    app:placeholderImage="@drawable/placeholder"
-                    app:placeholderImageScaleType="centerCrop"
+
                     />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -332,7 +319,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp">
+                android:padding="4dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fourth_title"
@@ -348,17 +335,13 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/highscore_fourth_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/user"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/highscore_fourth_title"
-                    app:placeholderImage="@drawable/avatar"
-                    app:placeholderImageScaleType="fitXY"
-                    app:roundAsCircle="true" />
+                    app:layout_constraintTop_toBottomOf="@id/highscore_fourth_title" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fourth_name"
@@ -411,7 +394,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp">
+                android:padding="4dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fifth_title"
@@ -427,17 +410,13 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/highscore_fifth_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/user"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/highscore_fifth_title"
-                    app:placeholderImage="@drawable/avatar"
-                    app:placeholderImageScaleType="fitXY"
-                    app:roundAsCircle="true" />
+                    app:layout_constraintTop_toBottomOf="@id/highscore_fifth_title" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_fifth_name"
@@ -492,20 +471,16 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp">
+                android:padding="4dp">
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/highscore_user_avatar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/user"
                     app:layout_constraintBottom_toTopOf="@id/highscore_user_name"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderImage="@drawable/avatar"
-                    app:placeholderImageScaleType="fitXY"
-                    app:roundAsCircle="true" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/highscore_user_rank"
@@ -551,15 +526,15 @@
         </com.google.android.material.card.MaterialCardView>
 
         <ProgressBar
-            android:elevation="20dp"
             android:id="@+id/highscore_loading"
-            app:layout_constraintTop_toBottomOf="@id/highscore_guide30"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:indeterminateTint="@color/colorPrimaryDark"
             android:layout_width="100dp"
-            android:layout_height="100dp"/>
+            android:layout_height="100dp"
+            android:elevation="20dp"
+            android:indeterminateTint="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/highscore_guide30" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

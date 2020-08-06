@@ -17,6 +17,8 @@ public class MessageModel extends RealmObject {
     private String sender;
     @SerializedName("receiver_user_id")
     private String receiver;
+    private String date;
+
 
     public int getRead() {
         return read;
@@ -38,7 +40,6 @@ public class MessageModel extends RealmObject {
         this.receiver = receiver;
     }
 
-    private String date;
 
     public String getReceiver() {
         return receiver;

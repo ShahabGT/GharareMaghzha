@@ -20,6 +20,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.adapters.IncomingAdapter;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -57,7 +58,7 @@ public class MessagesFragment extends Fragment {
             RealmResults<MessageModel> results = realm.where(MessageModel.class).equalTo("sender","admin").equalTo("read",0).findAll();
             results.setInt("read",1);
         });
-        incomingData = db.where(MessageModel.class).equalTo("sender","admin").findAll();
+        incomingData = db.where(MessageModel.class).equalTo("sender","admin").sort("date", Sort.DESCENDING).findAll();
         Intent intent = new Intent();
         intent.setAction(GHARAREHMAGHZHA_BROADCAST);
         context.sendBroadcast(intent);

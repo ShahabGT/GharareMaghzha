@@ -18,6 +18,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.pm.PackageInfoCompat;
+
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import java.text.DateFormat;
@@ -213,6 +217,11 @@ public class Utils {
                     }
                 });
 
+    }
+
+    public static RequestOptions RoundCorners() {
+        RequestOptions requestOptions = new RequestOptions();
+        return requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
     }
 
 }

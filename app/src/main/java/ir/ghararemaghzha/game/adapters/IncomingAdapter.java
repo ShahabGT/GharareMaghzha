@@ -49,7 +49,7 @@ public class IncomingAdapter extends RecyclerView.Adapter<IncomingAdapter.ViewHo
             DateConverter dateConverter = new DateConverter();
 
             dateConverter.gregorianToPersian(Integer.parseInt(date.substring(0,4)),Integer.parseInt(date.substring(5,7)),Integer.parseInt(date.substring(8,10)));
-            h.date.setText(dateConverter.getYear()+"/"+dateConverter.getMonth()+"/"+dateConverter.getDay());
+            h.date.setText(dateConverter.getMonth()+"/"+dateConverter.getDay());
 
             h.itemView.setOnClickListener(v->{
                 IncomingDialog dialog = new IncomingDialog(context,model);

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -37,7 +38,7 @@ public class HighscoreFragment extends Fragment {
     private MaterialCardView firstCard, secondCard, thirdCard, fourthCard, fifthCard, userCard;
     private MaterialTextView firstName, secondName, thirdName, fourthName, fifthName, userName,userRank;
     private MaterialTextView firstScore, secondScore, thirdScore, fourthScore, fifthScore, userScore;
-    private SimpleDraweeView firstAvatar, secondAvatar, thirdAvatar, fourthAvatar, fifthAvatar, userAvatar;
+    private ImageView firstAvatar, secondAvatar, thirdAvatar, fourthAvatar, fifthAvatar, userAvatar;
     private MaterialTextView myCode, myName;
 
     private ProgressBar loading;
@@ -148,31 +149,61 @@ public class HighscoreFragment extends Fragment {
                                     fifthCard.setVisibility(View.VISIBLE);
                                     fifthName.setText(data.get(4).getUserName());
                                     fifthScore.setText(context.getString(R.string.highscore_score, data.get(4).getScoreCount()));
-                                    fifthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserId())));
+                                    Glide.with(context)
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserId())))
+                                            .circleCrop()
+                                            .placeholder(R.drawable.placeholder)
+                                            .into(fifthAvatar);
+                                  //  fifthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserId())));
                                 case 4:
                                     fourthCard.setVisibility(View.VISIBLE);
                                     fourthName.setText(data.get(3).getUserName());
                                     fourthScore.setText(context.getString(R.string.highscore_score, data.get(3).getScoreCount()));
-                                    fourthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserId())));
+                                    Glide.with(context)
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserId())))
+                                            .circleCrop()
+                                            .placeholder(R.drawable.placeholder)
+                                            .into(fourthAvatar);
+                                   // fourthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserId())));
                                 case 3:
                                     thirdCard.setVisibility(View.VISIBLE);
                                     thirdName.setText(data.get(2).getUserName());
                                     thirdScore.setText(context.getString(R.string.highscore_score, data.get(2).getScoreCount()));
-                                    thirdAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserId())));
+                                    Glide.with(context)
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserId())))
+                                            .circleCrop()
+                                            .placeholder(R.drawable.placeholder)
+                                            .into(thirdAvatar);
+                              //      thirdAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserId())));
                                 case 2:
                                     secondCard.setVisibility(View.VISIBLE);
                                     secondName.setText(data.get(1).getUserName());
                                     secondScore.setText(context.getString(R.string.highscore_score, data.get(1).getScoreCount()));
-                                    secondAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserId())));
+                                    Glide.with(context)
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserId())))
+                                            .circleCrop()
+                                            .placeholder(R.drawable.placeholder)
+                                            .into(secondAvatar);
+                                 //   secondAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserId())));
                                 case 1:
                                     firstName.setText(data.get(0).getUserName());
                                     firstScore.setText(context.getString(R.string.highscore_score, data.get(0).getScoreCount()));
-                                    firstAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserId())));
+                                    Glide.with(context)
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserId())))
+                                            .circleCrop()
+                                            .placeholder(R.drawable.placeholder)
+                                            .into(firstAvatar);
+                                  //  firstAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserId())));
                             }
 
                             userName.setText(response.body().getUser().getUserName());
                             userScore.setText(context.getString(R.string.highscore_score,response.body().getUser().getScoreCount()));
-                            userAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())));
+                            Glide.with(context)
+                                    .load(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())))
+                                    .circleCrop()
+                                    .placeholder(R.drawable.placeholder)
+                                    .into(userAvatar);
+                        //    userAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())));
                             userRank.setText(context.getString(R.string.highscore_user_rank,response.body().getUser().getUserRank()));
 
                         } else if (response.code() == 401) {

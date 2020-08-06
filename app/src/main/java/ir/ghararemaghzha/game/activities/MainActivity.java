@@ -8,28 +8,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
-
-import com.facebook.drawee.view.SimpleDraweeView;
-
+import com.bumptech.glide.Glide;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
@@ -49,7 +43,6 @@ import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
-import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private SimpleDraweeView avatar;
+    private ImageView avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +100,12 @@ public class MainActivity extends AppCompatActivity {
         newMessage = findViewById(R.id.main_messages_new);
         highscore = findViewById(R.id.main_highscore);
         avatar = findViewById(R.id.main_avatar);
-        avatar.setImageURI(Uri.parse(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId())));
+        Glide.with(this)
+                .load(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId()))
+                .circleCrop()
+                .placeholder(R.drawable.placeholder)
+                .into(avatar);
+       // avatar.setImageURI(Uri.parse(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId())));
         buy = findViewById(R.id.main_buy);
         start = findViewById(R.id.main_start);
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
