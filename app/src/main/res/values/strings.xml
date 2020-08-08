@@ -89,6 +89,8 @@
     <string name="instagrampicker_filter_title">فیلترها</string>
 
     <string name="question_next">سوال بعدی</string>
+    <string name="question_points">امتیاز سوال: %s</string>
+    <string name="question_remaining">سوالات باقی مانده: %s</string>
 
     <string name="highscore_title">کاربران برتر</string>
     <string name="highscore_user_rank">نفر %s</string>
@@ -103,6 +105,12 @@
     <string name="message_outgoing">پیام های ارسالی</string>
     <string name="message_empty">شما هیچ پیامی در صندوق ورودی خود ندارید</string>
     <string name="message_back">بازگشت</string>
+
+    <string name="newversion_dialog_title">نسخه جدید</string>
+    <string name="newversion_dialog_show">دانلود</string>
+    <string name="newversion_dialog_cancel">بستن</string>
+    <string name="newversion_dialog_text">کاربر عزیز نسخه جدید قرار مغزها منتشر شده، لطفا با استفاده از گزینه های زیر برنامه خود را بروزرسانی کنید.</string>
+
 
 
 </resources>

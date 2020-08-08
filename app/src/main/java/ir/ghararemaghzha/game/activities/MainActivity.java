@@ -8,9 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -24,6 +29,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
@@ -31,6 +38,7 @@ import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
+import ir.ghararemaghzha.game.dialogs.NewVersionDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
 import ir.ghararemaghzha.game.fragments.BuyFragment;
 import ir.ghararemaghzha.game.fragments.HighscoreFragment;
@@ -70,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
         init();
         findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
@@ -290,10 +298,9 @@ public class MainActivity extends AppCompatActivity {
 
                             if (newVersion > myVersion) {
                                 if (response.body().getVersionEssential().equals("1")) {
-                                    Toast.makeText(MainActivity.this, "version " + newVersion + " available ESSENTIAL", Toast.LENGTH_SHORT).show();
+                                    showNewVersionDialog("1");
                                 } else {
-                                    Toast.makeText(MainActivity.this, "version " + newVersion + " available", Toast.LENGTH_SHORT).show();
-
+                                    showNewVersionDialog("0");
                                 }
 
 
@@ -450,5 +457,33 @@ public class MainActivity extends AppCompatActivity {
         doubleBackToExitPressedOnce = true;
         Toast.makeText(this, getString(R.string.general_exit), Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+    }
+
+    private void showNewVersionDialog(String urgent) {
+
+        NewVersionDialog dialog = new NewVersionDialog(this, urgent);
+//        if (urgent.equals("0"))
+//            newVersionDialog.setCancelable(true);
+//        else
+//            newVersionDialog.setCancelable(false);
+//        Objects.requireNonNull(newVersionDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        newVersionDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//
+//        newVersionDialog.show();
+//        Window window = newVersionDialog.getWindow();
+//        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        if(urgent.equals("0")){
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+        }else{
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+        }
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 }

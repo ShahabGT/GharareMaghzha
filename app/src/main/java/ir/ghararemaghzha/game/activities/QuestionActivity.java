@@ -41,7 +41,7 @@ public class QuestionActivity extends AppCompatActivity {
     private int time = 20;
     private CountDownTimer downTimer,nextTimer;
     private ProgressBar progressBar;
-    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, next, score;
+    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, next, score,questionPoints,questionRemain;
     private MaterialCardView answer1c, answer2c, answer3c, answer4c, questionc;
     private RealmResults<QuestionModel> data;
     private List<Integer> randomAnswers;
@@ -56,12 +56,12 @@ public class QuestionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Window window = getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_question);
         init();
     }
@@ -71,6 +71,8 @@ public class QuestionActivity extends AppCompatActivity {
         data = db.where(QuestionModel.class).equalTo("visible", true).findAll();
 
         next = findViewById(R.id.question_next);
+        questionPoints = findViewById(R.id.question_points);
+        questionRemain = findViewById(R.id.question_remaining);
 
         question = findViewById(R.id.question_question);
         questionc = findViewById(R.id.question_question_card);
@@ -104,7 +106,7 @@ public class QuestionActivity extends AppCompatActivity {
             public void onFinish() {
             }
         };
-        nextTimer = new CountDownTimer(3000, 1000) {
+        nextTimer = new CountDownTimer(2500, 1000) {
             @Override
             public void onTick(long l) {
             }
@@ -249,14 +251,21 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void enterAnimations() {
-        YoYo.with(Techniques.FlipInX).duration(1500).playOn(questionc);
-        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer1c);
-        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer2c);
-        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer3c);
-        YoYo.with(Techniques.FlipInX).duration(1500).playOn(answer4c);
+        YoYo.with(Techniques.Landing).duration(1500).playOn(questionc);
+        YoYo.with(Techniques.Landing).duration(1500).playOn(answer1c);
+        YoYo.with(Techniques.Landing).duration(1500).playOn(answer2c);
+        YoYo.with(Techniques.Landing).duration(1500).playOn(answer3c);
+        YoYo.with(Techniques.Landing).duration(1500).playOn(answer4c);
     }
 
     private void nextQuestion() {
+        if (data.isEmpty()) {
+            Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+            QuestionActivity.this.finish();
+        }
+        questionRemain.setText(getString(R.string.question_remaining,String.valueOf(data.size())));
+        model = getRandom();
+        downTimer.cancel();
         nextTimer.start();
         enterAnimations();
         answer1c.setEnabled(true);
@@ -267,17 +276,10 @@ public class QuestionActivity extends AppCompatActivity {
         answer3c.setCardBackgroundColor(getResources().getColor(R.color.white));
         answer4c.setEnabled(true);
         answer4c.setCardBackgroundColor(getResources().getColor(R.color.white));
-        downTimer.cancel();
         time = 20;
         progress = 100;
         timeText.setText(String.valueOf(time));
         progressBar.setProgress(100);
-
-        if (data.isEmpty()) {
-            Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
-            QuestionActivity.this.finish();
-        }
-        model = getRandom();
         randomAnswers = randomNumbers();
         question.setText(model.getQuestionText());
 
@@ -306,7 +308,7 @@ public class QuestionActivity extends AppCompatActivity {
             answer3.setText(answers.get(2));
             answer4.setText(answers.get(3));
         }
-
+        questionPoints.setText(getString(R.string.question_points,model.getQuestionPoints()));
         downTimer.start();
         setAnswer("0");
         uploadAnswer("0");
