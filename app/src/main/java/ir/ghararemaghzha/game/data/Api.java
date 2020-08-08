@@ -3,6 +3,7 @@ package ir.ghararemaghzha.game.data;
 import ir.ghararemaghzha.game.models.ChatResponse;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.HighscoreResponse;
+import ir.ghararemaghzha.game.models.MessageModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;

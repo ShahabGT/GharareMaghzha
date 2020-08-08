@@ -111,6 +111,7 @@
     <string name="newversion_dialog_cancel">بستن</string>
     <string name="newversion_dialog_text">کاربر عزیز نسخه جدید قرار مغزها منتشر شده، لطفا با استفاده از گزینه های زیر برنامه خود را بروزرسانی کنید.</string>
 
+    <string name="chat_text">متن مورد نظر</string>
 
 
 </resources>

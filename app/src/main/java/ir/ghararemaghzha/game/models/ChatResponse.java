@@ -18,7 +18,7 @@ public class ChatResponse {
 
     private String result;
     private String message;
-    private List<ChatModel> data;
+    private List<MessageModel> data;
 
 
     public String getResult() {
@@ -37,11 +37,11 @@ public class ChatResponse {
         this.message = message;
     }
 
-    public List<ChatModel> getData() {
+    public List<MessageModel> getData() {
         return data;
     }
 
-    public void setData(List<ChatModel> data) {
+    public void setData(List<MessageModel> data) {
         this.data = data;
     }
 }

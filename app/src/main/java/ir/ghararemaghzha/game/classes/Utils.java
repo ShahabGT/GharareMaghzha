@@ -58,6 +58,11 @@ public class Utils {
         }
 
     }
+    public static String currentDate(){
+        Date d = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        return dateFormat.format(d);
+    }
 
     public static boolean isTimeAcceptable(String serverDate) {
         boolean res = false;
