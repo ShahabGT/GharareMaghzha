@@ -213,8 +213,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMessages() {
-        if (db.where(MessageModel.class).equalTo("read", 0).and().equalTo("sender","0").or()
-                .equalTo("sender","admin").or().equalTo("sender","support").findAll().size() > 0) {
+        if (db.where(MessageModel.class).equalTo("read", 0).findAll().size() > 0) {
             newMessage.setVisibility(View.VISIBLE);
         } else {
             newMessage.setVisibility(View.GONE);

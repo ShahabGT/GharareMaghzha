@@ -22,10 +22,12 @@ import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
+import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.models.MessageModel;
 
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA;
+import static ir.ghararemaghzha.game.classes.Utils.getNextKey;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -47,14 +49,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Realm db = Realm.getDefaultInstance();
         Intent intent = new Intent();
         intent.setAction(GHARAREHMAGHZHA_BROADCAST);
-        int messageId;
-        Number num = db.where(MessageModel.class).max("messageId");
-        if (num == null)
-            messageId = 0;
-        else
-            messageId = num.intValue() + 1;
-
-        model.setMessageId(messageId);
+        model.setMessageId(getNextKey(db));
         model.setRead(0);
         db.beginTransaction();
         db.insert(model);
@@ -66,7 +61,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        } else {
 //            createNotification(title, body, "notification");
 //        }
-            createNotification(title, body, "notification");
+            createNotification(title, body);
 
     }
 
@@ -79,10 +74,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void createNotification(String title, String message, String intentValue) {
+    private void createNotification(String title, String message) {
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("notidata", intentValue);
+        intent.putExtra("notidata", "notification");
         //do not use
         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -95,11 +90,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentText(message);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setPriority(NotificationCompat.PRIORITY_HIGH);
         builder.setAutoCancel(true);
         builder.setContentIntent(pendingIntent);
         //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
-        builder.setVibrate(new long[]{1000, 1000});
+        builder.setVibrate(new long[]{1000, 1000,1000});
         builder.setLights(Color.YELLOW, 1000, 1000);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(Const.NOTIFICATION_ID, builder.build());

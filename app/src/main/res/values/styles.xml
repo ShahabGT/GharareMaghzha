@@ -9,6 +9,9 @@
 
     </style>
 
+    <style name="MyRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radio</item>
+    </style>
 
     <style name="DialogAnimation">
 

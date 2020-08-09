@@ -76,21 +76,18 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/message_guide30">
 
-        <RadioButton
+        <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/message_radio_outgoing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:drawableRight="@drawable/radio"
-            android:gravity="right|center"
             android:text="@string/message_outgoing" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/message_radio_incoming"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:gravity="right|center"
             android:text="@string/message_incoming" />
     </RadioGroup>
 

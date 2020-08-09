@@ -36,13 +36,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
+import static ir.ghararemaghzha.game.classes.Utils.getNextKey;
 
 
 public class MessagesFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private Realm db;
-    private MaterialTextView myCode, myName, empty;
+    private MaterialTextView myCode, myName, empty,title;
     private MaterialRadioButton incoming, outgoing;
     private RealmResults<MessageModel> incomingData;
     private RealmResults<MessageModel> outgoingData;
@@ -93,7 +94,7 @@ public class MessagesFragment extends Fragment {
         myName.setText(MySharedPreference.getInstance(context).getUsername());
         myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
         empty = v.findViewById(R.id.message_empty);
-
+        title = v.findViewById(R.id.message_title);
 
         incoming = v.findViewById(R.id.message_radio_incoming);
         outgoing = v.findViewById(R.id.message_radio_outgoing);
@@ -125,6 +126,7 @@ public class MessagesFragment extends Fragment {
 
         incoming.setOnCheckedChangeListener((c, b) -> {
             if (b) {
+                title.setText(context.getString(R.string.message_incoming));
                 incomingRecyclerView.setVisibility(View.VISIBLE);
                 chatLayout.setVisibility(View.GONE);
                 if (incomingData.isEmpty())
@@ -138,8 +140,13 @@ public class MessagesFragment extends Fragment {
         });
         outgoing.setOnCheckedChangeListener((c, b) -> {
             if (b) {
+                title.setText(context.getString(R.string.message_outgoing));
+                db.executeTransaction(realm -> {
+                    RealmResults<MessageModel> results = realm.where(MessageModel.class).notEqualTo("sender", "admin").equalTo("read", 0).findAll();
+                    results.setInt("read", 1);
+                    context.sendBroadcast(intent);
+                });
                 empty.setVisibility(View.GONE);
-
                 chatLayout.setVisibility(View.VISIBLE);
                 incomingRecyclerView.setVisibility(View.GONE);
             }
@@ -165,7 +172,7 @@ public class MessagesFragment extends Fragment {
                     model.setReceiver("1");
                     model.setSender(userId);
                     model.setTitle("new");
-                    model.setMessageId(getNextKey());
+                    model.setMessageId(getNextKey(db));
                     model.setDate(Utils.currentDate());
                     db.executeTransaction(realm1 -> realm1.insert(model));
                     //layoutManager.scrollToPosition(outgoingAdapter.getItemCount()-1);
@@ -233,16 +240,5 @@ public class MessagesFragment extends Fragment {
                 });
     }
 
-    public int getNextKey() {
-        try {
-            Number number = db.where(MessageModel.class).max("messageId");
-            if (number != null) {
-                return number.intValue() + 1;
-            } else {
-                return 0;
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return 0;
-        }
-    }
+
 }

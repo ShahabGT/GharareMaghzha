@@ -39,6 +39,7 @@ import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
 import ir.ghararemaghzha.game.models.GeneralResponse;
+import ir.ghararemaghzha.game.models.MessageModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -224,9 +225,17 @@ public class Utils {
 
     }
 
-    public static RequestOptions RoundCorners() {
-        RequestOptions requestOptions = new RequestOptions();
-        return requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+    public static int getNextKey(Realm db) {
+        try {
+            Number number = db.where(MessageModel.class).max("messageId");
+            if (number != null) {
+                return number.intValue() + 1;
+            } else {
+                return 0;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return 0;
+        }
     }
 
 }

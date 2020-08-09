@@ -101,8 +101,8 @@
     <string name="highscore_fifth_title">نفر پنجم</string>
     <string name="highscore_score">%s امتیاز</string>
 
-    <string name="message_incoming">پیام های دریافتی</string>
-    <string name="message_outgoing">پیام های ارسالی</string>
+    <string name="message_incoming">پیام ها</string>
+    <string name="message_outgoing">پشتیبانی</string>
     <string name="message_empty">شما هیچ پیامی در صندوق ورودی خود ندارید</string>
     <string name="message_back">بازگشت</string>
 
