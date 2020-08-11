@@ -8,21 +8,21 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+
 import java.util.Map;
+
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
-import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.models.MessageModel;
 
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
@@ -33,15 +33,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-       // String date = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss", Locale.ENGLISH).format(new Date(remoteMessage.getSentTime()));
         Map<String, String> data = remoteMessage.getData();
-
         String title = data.get("title");
         String body = data.get("body");
         String sender = data.get("sender");
         String date = data.get("time");
-
         MessageModel model = new MessageModel();
+        model.setStat(1);
         model.setMessage(body);
         model.setTitle(title);
         model.setSender(sender);
@@ -56,12 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         db.commitTransaction();
         intent.putExtra(GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA, "new");
         sendBroadcast(intent);
-//        if (sender.contains("support")) {
-//            createNotification(title, body, "support");
-//        } else {
-//            createNotification(title, body, "notification");
-//        }
-            createNotification(title, body);
+        createNotification(title, body);
 
     }
 
@@ -94,7 +87,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setAutoCancel(true);
         builder.setContentIntent(pendingIntent);
         //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
-        builder.setVibrate(new long[]{1000, 1000,1000});
+        builder.setVibrate(new long[]{1000, 1000, 1000});
         builder.setLights(Color.YELLOW, 1000, 1000);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(Const.NOTIFICATION_ID, builder.build());

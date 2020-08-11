@@ -18,7 +18,15 @@ public class MessageModel extends RealmObject {
     @SerializedName("receiver_user_id")
     private String receiver;
     private String date;
+    private int stat;
 
+    public int getStat() {
+        return stat;
+    }
+
+    public void setStat(int stat) {
+        this.stat = stat;
+    }
 
     public int getRead() {
         return read;

@@ -112,13 +112,12 @@ public class MessagesFragment extends Fragment {
             incomingAdapter.notifyDataSetChanged();
         }
 
-        outgoingAdapter = new ChatAdapter(context, outgoingData, true);
+        outgoingAdapter = new ChatAdapter(activity, db.where(MessageModel.class).notEqualTo("sender", "admin").sort("date", Sort.DESCENDING).findAll(), true);
         outgoingRecyclerView.setAdapter(outgoingAdapter);
         outgoingRecyclerView.addOnLayoutChangeListener((v1, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if (bottom < oldBottom) {
                 outgoingRecyclerView.post(() -> {
                     if (outgoingAdapter != null)
-                      //  outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount() - 1);
                         outgoingRecyclerView.scrollToPosition(0);
 
                 });
@@ -164,31 +163,29 @@ public class MessagesFragment extends Fragment {
     private void onClicks() {
         send.setOnClickListener(v -> {
             String txt = message.getText().toString().trim();
-            if (Utils.checkInternet(context)) {
                 if (!txt.isEmpty()) {
                     message.setText("");
                     String userId = MySharedPreference.getInstance(context).getUserId();
-                    sendMessage(txt);
                     MessageModel model = new MessageModel();
+                    model.setStat(0);
                     model.setMessage(txt);
                     model.setReceiver("1");
                     model.setSender(userId);
                     model.setTitle("new");
+                    int key= getNextKey(db);
                     model.setMessageId(getNextKey(db));
                     model.setDate(Utils.currentDate());
                     db.executeTransaction(realm1 -> realm1.insert(model));
-                    //layoutManager.scrollToPosition(outgoingAdapter.getItemCount()-1);
-                    outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount() - 1);
+                    sendMessage(txt,key);
+
+                    outgoingRecyclerView.scrollToPosition(0);
 
                 }
-            } else {
-                Toast.makeText(context, context.getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
-            }
 
         });
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(String message,int key) {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
@@ -200,12 +197,25 @@ public class MessagesFragment extends Fragment {
                 .enqueue(new Callback<TimeResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
-
+                        if(response.isSuccessful() && response.body()!=null && response.body().getResult().equals("success")) {
+                            db.beginTransaction();
+                            RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
+                            models.first().setStat(1);
+                            db.commitTransaction();
+                        }else{
+                            db.beginTransaction();
+                            RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
+                            models.first().setStat(-1);
+                            db.commitTransaction();
+                        }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
-
+                        db.beginTransaction();
+                        RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
+                        models.first().setStat(-1);
+                        db.commitTransaction();
                     }
                 });
     }
@@ -223,12 +233,13 @@ public class MessagesFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")
-                                && response.body().getResult().equals("ok")) {
+                                && response.body().getMessage().equals("ok")) {
 
-                            for (MessageModel model : response.body().getData())
-                                db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
-                            //layoutManager.scrollToPosition(outgoingAdapter.getItemCount()-1);
-                            outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount() - 1);
+                            for (MessageModel model : response.body().getData()) {
+                                model.setStat(1);
+                                model.setMessageId(Utils.getNextKey(db));
+                                db.executeTransaction(realm -> realm.insertOrUpdate(model));
+                            }
 
 
                         }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/shape_me">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/chat_row_message"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:gravity="right"
+            android:maxWidth="240dp"
+            android:padding="8dp"
+            android:shadowColor="#ffffff"
+            android:text="متن پیasdasdasdasdwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwام"
+            android:textColor="#ffffff"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_marginRight="4dp"
+            android:src="@drawable/vector_sent"
+            android:id="@+id/chat_row_stat"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/chat_row_date" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/chat_row_date"
+            style="@style/Base.TextAppearance.AppCompat.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="تاریخ"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/chat_row_stat"
+            app:layout_constraintTop_toBottomOf="@id/chat_row_message" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
