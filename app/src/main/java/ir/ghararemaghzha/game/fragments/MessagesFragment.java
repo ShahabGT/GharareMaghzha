@@ -43,7 +43,7 @@ public class MessagesFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private Realm db;
-    private MaterialTextView myCode, myName, empty,title;
+    private MaterialTextView myCode, myName, empty, title;
     private MaterialRadioButton incoming, outgoing;
     private RealmResults<MessageModel> incomingData;
     private RealmResults<MessageModel> outgoingData;
@@ -115,10 +115,11 @@ public class MessagesFragment extends Fragment {
         outgoingAdapter = new ChatAdapter(context, outgoingData, true);
         outgoingRecyclerView.setAdapter(outgoingAdapter);
         outgoingRecyclerView.addOnLayoutChangeListener((v1, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            if ( bottom < oldBottom) {
+            if (bottom < oldBottom) {
                 outgoingRecyclerView.post(() -> {
-                    if(outgoingAdapter!=null)
-                        outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount()-1);
+                    if (outgoingAdapter != null)
+                      //  outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount() - 1);
+                        outgoingRecyclerView.scrollToPosition(0);
 
                 });
             }
@@ -126,6 +127,7 @@ public class MessagesFragment extends Fragment {
 
         incoming.setOnCheckedChangeListener((c, b) -> {
             if (b) {
+                Utils.hideKeyboard(activity);
                 title.setText(context.getString(R.string.message_incoming));
                 incomingRecyclerView.setVisibility(View.VISIBLE);
                 chatLayout.setVisibility(View.GONE);
@@ -159,11 +161,11 @@ public class MessagesFragment extends Fragment {
         onClicks();
     }
 
-    private void onClicks(){
-        send.setOnClickListener(v->{
+    private void onClicks() {
+        send.setOnClickListener(v -> {
             String txt = message.getText().toString().trim();
-            if(Utils.checkInternet(context)){
-                if(!txt.isEmpty()) {
+            if (Utils.checkInternet(context)) {
+                if (!txt.isEmpty()) {
                     message.setText("");
                     String userId = MySharedPreference.getInstance(context).getUserId();
                     sendMessage(txt);
@@ -176,10 +178,10 @@ public class MessagesFragment extends Fragment {
                     model.setDate(Utils.currentDate());
                     db.executeTransaction(realm1 -> realm1.insert(model));
                     //layoutManager.scrollToPosition(outgoingAdapter.getItemCount()-1);
-                    outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount()-1);
+                    outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount() - 1);
 
                 }
-            }else{
+            } else {
                 Toast.makeText(context, context.getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
             }
 
@@ -194,7 +196,7 @@ public class MessagesFragment extends Fragment {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .sendMessage("Bearer "+token, number, message)
+                .sendMessage("Bearer " + token, number, message)
                 .enqueue(new Callback<TimeResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
@@ -226,8 +228,7 @@ public class MessagesFragment extends Fragment {
                             for (MessageModel model : response.body().getData())
                                 db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             //layoutManager.scrollToPosition(outgoingAdapter.getItemCount()-1);
-                            outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount()-1);
-
+                            outgoingRecyclerView.scrollToPosition(outgoingAdapter.getItemCount() - 1);
 
 
                         }

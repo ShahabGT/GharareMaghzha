@@ -102,8 +102,8 @@ public interface Api {
     );
 
     @FormUrlEncoded
-    @POST("/buy/initbuy")
-    Call<HighscoreResponse> initBuy(
+    @POST("buy/initbuy")
+    Call<GeneralResponse> initBuy(
             @Header("Authorization") String Token,
             @Field("number") String number,
             @Field("plan") String plan,

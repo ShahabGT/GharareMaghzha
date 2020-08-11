@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView avatar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

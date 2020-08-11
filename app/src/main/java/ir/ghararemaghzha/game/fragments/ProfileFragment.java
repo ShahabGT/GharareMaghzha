@@ -102,7 +102,7 @@ public class ProfileFragment extends Fragment {
             remainingTimeTitle.setText(context.getString(R.string.profile_time_card));
             if (passed == 0)
                 remainingTime.setText(context.getString(R.string.profile_time_lastday));
-            if (passed == 10)
+            if (passed >= 10)
                 remainingTime.setText(context.getString(R.string.profile_time_end));
             else
                 remainingTime.setText(context.getString(R.string.profile_time, String.valueOf(10 - passed)));
