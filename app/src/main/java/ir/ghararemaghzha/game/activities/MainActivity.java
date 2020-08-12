@@ -18,12 +18,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -112,13 +114,13 @@ public class MainActivity extends AppCompatActivity {
         highscore = findViewById(R.id.main_highscore);
         avatar = findViewById(R.id.main_avatar);
         Glide.with(this)
-                .load(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId()))
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
                 .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
 
                 .placeholder(R.drawable.placeholder)
                 .into(avatar);
-       // avatar.setImageURI(Uri.parse(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId())));
+        // avatar.setImageURI(Uri.parse(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId())));
         buy = findViewById(R.id.main_buy);
         start = findViewById(R.id.main_start);
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        whichFragment=1;
+        whichFragment = 1;
     }
 
     private void onClicks() {
@@ -258,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this);
-                        }else
+                        } else
                             Utils.showInternetError(MainActivity.this, () -> checkTime());
 
                     }
@@ -298,9 +300,9 @@ public class MainActivity extends AppCompatActivity {
                             int newScore = Integer.parseInt(response.body().getScoreCount());
                             int oldScore = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getScore());
 
-                            if(newScore>oldScore)
+                            if (newScore > oldScore)
                                 MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
-                            else if(oldScore>newScore)
+                            else if (oldScore > newScore)
                                 uploadScore(String.valueOf(oldScore));
 
                             if (newVersion > myVersion) {
@@ -316,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
                             sendBroadcast(i);
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this);
-                        }else
+                        } else
                             Utils.showInternetError(MainActivity.this, () -> verify());
                     }
 
@@ -343,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
                 questions.setBoolean("visible", true);
             });
             updateTime(nowDate);
-            Utils.updateServerQuestions(this,String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
+            Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
 
         } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
@@ -354,9 +356,9 @@ public class MainActivity extends AppCompatActivity {
                     questions.setBoolean("visible", true);
                 });
                 updateTime(nowDate);
-                Utils.updateServerQuestions(this,String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
+                Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
             }
-        }else if (nowDate == lastUpdate && serverCount>userCount){
+        } else if (nowDate == lastUpdate && serverCount > userCount) {
             db.executeTransaction(realm -> {
                 RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(serverCount).findAll();
                 questions.setBoolean("visible", true);
@@ -405,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
                     .enqueue(new Callback<QuestionResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
-                            if(dataDialog!=null) dataDialog.dismiss();
+                            if (dataDialog != null) dataDialog.dismiss();
                             if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
                                 MySharedPreference.getInstance(MainActivity.this).setGotQuestions();
                                 for (QuestionModel model : response.body().getData()) {
@@ -419,14 +421,14 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this);
-                            }else
+                            } else
                                 Utils.showInternetError(MainActivity.this, () -> getQuestions());
 
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
-                            if(dataDialog!=null) dataDialog.dismiss();
+                            if (dataDialog != null) dataDialog.dismiss();
                             Utils.showInternetError(MainActivity.this, () -> getQuestions());
                         }
                     });
@@ -434,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadScore(String score){
+    private void uploadScore(String score) {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
@@ -442,17 +444,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .sendScore("Bearer "+token,number,score)
+                .sendScore("Bearer " + token, number, score)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call,@NonNull  Response<GeneralResponse> response) {
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.code() == 401) {
                             Utils.logout(MainActivity.this);
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull  Throwable t) {
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
 
                     }
                 });
@@ -470,22 +472,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNewVersionDialog(String urgent) {
-
         NewVersionDialog dialog = new NewVersionDialog(this, urgent);
-//        if (urgent.equals("0"))
-//            newVersionDialog.setCancelable(true);
-//        else
-//            newVersionDialog.setCancelable(false);
-//        Objects.requireNonNull(newVersionDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        newVersionDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//
-//        newVersionDialog.show();
-//        Window window = newVersionDialog.getWindow();
-//        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        if(urgent.equals("0")){
+        if (urgent.equals("0")) {
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(true);
-        }else{
+        } else {
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
         }

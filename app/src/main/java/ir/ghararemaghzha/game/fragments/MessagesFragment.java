@@ -170,6 +170,7 @@ public class MessagesFragment extends Fragment {
                     model.setStat(0);
                     model.setMessage(txt);
                     model.setReceiver("1");
+                    model.setRead(1);
                     model.setSender(userId);
                     model.setTitle("new");
                     int key= getNextKey(db);

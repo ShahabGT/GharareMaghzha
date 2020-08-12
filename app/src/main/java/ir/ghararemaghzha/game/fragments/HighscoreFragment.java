@@ -23,6 +23,7 @@ import java.util.List;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
+import ir.ghararemaghzha.game.classes.NumberToTextKt;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.HighscoreModel;
@@ -209,7 +210,7 @@ public class HighscoreFragment extends Fragment {
                                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                                         .placeholder(R.drawable.placeholder)
                                         .into(userAvatar);
-                                userRank.setText(context.getString(R.string.highscore_user_rank, response.body().getUser().getUserRank()));
+                                userRank.setText(context.getString(R.string.highscore_user_rank, NumberToTextKt.toEnglishFormat(Integer.parseInt(response.body().getUser().getUserRank())).trim()));
                             }
 
                         } else if (response.code() == 401) {
