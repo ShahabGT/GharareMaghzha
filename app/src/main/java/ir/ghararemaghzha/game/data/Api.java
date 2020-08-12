@@ -142,6 +142,25 @@ public interface Api {
             @Header("Authorization") String Token,
             @Field("number") String number,
             @Field("count") String count);
+
+    @FormUrlEncoded
+    @POST("avatar")
+    Call<GeneralResponse> alterAvatar(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("option") String option,
+            @Field("image") String image);
+
+    @FormUrlEncoded
+    @POST("profile")
+    Call<GeneralResponse> updateProfile(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("user_name") String userName,
+            @Field("user_email") String userEmail,
+            @Field("user_bday") String userBday,
+            @Field("user_sex") String userSex);
+
 }
 
 

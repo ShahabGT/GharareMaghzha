@@ -25,6 +25,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -112,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId()))
                 .circleCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+
                 .placeholder(R.drawable.placeholder)
                 .into(avatar);
        // avatar.setImageURI(Uri.parse(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId())));
@@ -254,7 +258,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this);
-                        }
+                        }else
+                            Utils.showInternetError(MainActivity.this, () -> checkTime());
+
                     }
 
                     @Override
@@ -310,7 +316,8 @@ public class MainActivity extends AppCompatActivity {
                             sendBroadcast(i);
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this);
-                        }
+                        }else
+                            Utils.showInternetError(MainActivity.this, () -> verify());
                     }
 
                     @Override
@@ -412,7 +419,9 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this);
-                            }
+                            }else
+                                Utils.showInternetError(MainActivity.this, () -> getQuestions());
+
                         }
 
                         @Override

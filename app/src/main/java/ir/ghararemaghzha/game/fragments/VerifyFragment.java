@@ -23,11 +23,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
@@ -113,13 +108,13 @@ public class VerifyFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length()==6)
+                if (charSequence.length() == 6)
                     Utils.hideKeyboard(activity);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length()==6)
+                if (editable.length() == 6)
                     Utils.hideKeyboard(activity);
             }
         });
@@ -254,7 +249,6 @@ public class VerifyFragment extends Fragment {
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
                         verify.setEnabled(true);
                         verify.setText(context.getString(R.string.verify_verify));
-                        dialog.dismiss();
                         if (response.isSuccessful() && response.body() != null
                                 && response.body().getResult().equals("success")
                                 && !response.body().getMessage().equals("empty")) {
@@ -268,6 +262,8 @@ public class VerifyFragment extends Fragment {
                                 model.setVisible(false);
                                 db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             }
+                            dialog.dismiss();
+
                             MySharedPreference.getInstance(context).setUserId(userId);
 
                             Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();
@@ -276,6 +272,7 @@ public class VerifyFragment extends Fragment {
                             activity.finish();
                         } else {
                             Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
 
                         }
                     }

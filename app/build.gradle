@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.0'
 
-    implementation 'com.github.ShahabGT:InstagramPicker:1.0.6'
+    implementation 'com.github.ShahabGT:InstagramPicker:1.0.7'
 
     implementation 'com.daimajia.easing:library:2.1@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
@@ -67,6 +67,9 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    implementation 'com.mohamadamin:persianmaterialdatetimepicker:1.2.1'
+
 }
 repositories {
     mavenCentral()

@@ -9,6 +9,7 @@
     android:focusable="true"
     tools:context=".fragments.ProfileFragment">
 
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/profile_guide20"
         android:layout_width="wrap_content"
@@ -64,9 +65,9 @@
         android:text="نام من"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/profile_code"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/profile_code"
@@ -77,9 +78,9 @@
         android:fontFamily="@font/vazir"
         android:text="کد من"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/profile_questions_card"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profile_questions_card"
@@ -189,9 +190,9 @@
                 android:id="@+id/profile_time_title"
                 style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
-                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:gravity="center"
                 android:text="@string/profile_time_card"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -272,14 +273,14 @@
             android:padding="8dp">
 
             <ImageView
-                android:tint="@color/green"
                 android:id="@+id/profile_edit_left"
-                app:srcCompat="@drawable/vector_left"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"/>
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/vector_left"
+                app:tint="@color/green" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/profile_edit_title"
@@ -337,15 +338,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp">
+
             <ImageView
-                android:tint="@color/red"
                 android:id="@+id/profile_buy_left"
-                app:srcCompat="@drawable/vector_left"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"/>
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/vector_left"
+                app:tint="@color/red" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/profile_buy_title"

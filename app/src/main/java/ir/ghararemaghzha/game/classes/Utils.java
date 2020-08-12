@@ -19,18 +19,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.pm.PackageInfoCompat;
 
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.SplashActivity;
@@ -59,7 +59,8 @@ public class Utils {
         }
 
     }
-    public static String currentDate(){
+
+    public static String currentDate() {
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         return dateFormat.format(d);
@@ -166,8 +167,9 @@ public class Utils {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         return dialog;
     }
+
     public static void showInternetError(Context context, RetryInterface retry) {
-        NoInternetDialog dialog = new NoInternetDialog(context,retry);
+        NoInternetDialog dialog = new NoInternetDialog(context, retry);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -202,7 +204,7 @@ public class Utils {
         context.finish();
     }
 
-    public static void updateServerQuestions(Activity context,String questionCount){
+    public static void updateServerQuestions(Activity context, String questionCount) {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
@@ -210,7 +212,7 @@ public class Utils {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .sendQuestionCount("Bearer "+token,number,questionCount)
+                .sendQuestionCount("Bearer " + token, number, questionCount)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -218,7 +220,7 @@ public class Utils {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
 
                     }
                 });
@@ -236,6 +238,22 @@ public class Utils {
         } catch (ArrayIndexOutOfBoundsException e) {
             return 0;
         }
+    }
+
+    public static boolean isEmailValid(String email) {
+        Pattern pattern;
+        boolean res;
+        Matcher matcher;
+        String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(emailPattern);
+        matcher = pattern.matcher(email);
+        if (matcher.matches()) {
+            email = email.toLowerCase();
+            res = email.contains("@yahoo.") || email.contains("@gmail.") || email.contains("@aol.") || email.contains("@hotmail.") || email.contains("@ymail.") || email.contains("@live.");
+        } else {
+            res = false;
+        }
+        return res;
     }
 
 }

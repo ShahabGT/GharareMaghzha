@@ -119,4 +119,25 @@ public class MySharedPreference {
     public boolean getGotQuestions(){
         return  sharedPreferences.getBoolean("GotQuestions",false);
     }
+
+    public void setUserBday(String UserBday){
+        sharedPreferences.edit().putString("UserBday",UserBday).apply();
+    }
+    public String getUserBday(){
+        return  sharedPreferences.getString("UserBday","");
+    }
+
+    public void setUserSex(String UserSex){
+        sharedPreferences.edit().putString("UserSex",UserSex).apply();
+    }
+    public String getUserSex(){
+        return  sharedPreferences.getString("UserSex","");
+    }
+
+    public void setUserEmail(String Email){
+        sharedPreferences.edit().putString("Email",Email).apply();
+    }
+    public String getEmail(){
+        return  sharedPreferences.getString("Email","");
+    }
 }

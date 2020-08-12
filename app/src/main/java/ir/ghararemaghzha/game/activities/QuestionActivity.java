@@ -259,61 +259,65 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void nextQuestion() {
-        if (data.isEmpty()) {
-            Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
-            QuestionActivity.this.finish();
-        }
-        questionRemain.setText(getString(R.string.question_remaining,String.valueOf(data.size())));
-        model = getRandom();
-        downTimer.cancel();
-        nextTimer.start();
-        enterAnimations();
-        answer1c.setEnabled(true);
-        answer1c.setCardBackgroundColor(getResources().getColor(R.color.white));
-        answer2c.setEnabled(true);
-        answer2c.setCardBackgroundColor(getResources().getColor(R.color.white));
-        answer3c.setEnabled(true);
-        answer3c.setCardBackgroundColor(getResources().getColor(R.color.white));
-        answer4c.setEnabled(true);
-        answer4c.setCardBackgroundColor(getResources().getColor(R.color.white));
-        time = 20;
-        progress = 100;
-        timeText.setText(String.valueOf(time));
-        progressBar.setProgress(100);
-        randomAnswers = randomNumbers();
-        question.setText(model.getQuestionText());
-
-        List<String> answers = new ArrayList<String>() {{
-            add(model.getQuestionA1());
-            add(model.getQuestionA2());
-            add(model.getQuestionA3());
-            add(model.getQuestionA4());
-        }};
-        correctAnswer = answers.get(Integer.parseInt(model.getQuestionCorrect()) - 1);
-        shouldRandomize = true;
-        for (String s : answers) {
-            if (s.contains("گزینه ")) {
-                shouldRandomize = false;
-                break;
+        if(Utils.checkInternet(this)) {
+            if (data.isEmpty()) {
+                Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+                QuestionActivity.this.finish();
             }
-        }
-        if (shouldRandomize) {
-            answer1.setText(answers.get(randomAnswers.get(0)));
-            answer2.setText(answers.get(randomAnswers.get(1)));
-            answer3.setText(answers.get(randomAnswers.get(2)));
-            answer4.setText(answers.get(randomAnswers.get(3)));
-        } else {
-            answer1.setText(answers.get(0));
-            answer2.setText(answers.get(1));
-            answer3.setText(answers.get(2));
-            answer4.setText(answers.get(3));
-        }
-        questionPoints.setText(getString(R.string.question_points,model.getQuestionPoints()));
-        downTimer.start();
-        setAnswer("0");
-        uploadAnswer("0");
-        Utils.updateServerQuestions(this,String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
+            questionRemain.setText(getString(R.string.question_remaining, String.valueOf(data.size())));
+            model = getRandom();
+            downTimer.cancel();
+            nextTimer.start();
+            enterAnimations();
+            answer1c.setEnabled(true);
+            answer1c.setCardBackgroundColor(getResources().getColor(R.color.white));
+            answer2c.setEnabled(true);
+            answer2c.setCardBackgroundColor(getResources().getColor(R.color.white));
+            answer3c.setEnabled(true);
+            answer3c.setCardBackgroundColor(getResources().getColor(R.color.white));
+            answer4c.setEnabled(true);
+            answer4c.setCardBackgroundColor(getResources().getColor(R.color.white));
+            time = 20;
+            progress = 100;
+            timeText.setText(String.valueOf(time));
+            progressBar.setProgress(100);
+            randomAnswers = randomNumbers();
+            question.setText(model.getQuestionText());
 
+            List<String> answers = new ArrayList<String>() {{
+                add(model.getQuestionA1());
+                add(model.getQuestionA2());
+                add(model.getQuestionA3());
+                add(model.getQuestionA4());
+            }};
+            correctAnswer = answers.get(Integer.parseInt(model.getQuestionCorrect()) - 1);
+            shouldRandomize = true;
+            for (String s : answers) {
+                if (s.contains("گزینه ")) {
+                    shouldRandomize = false;
+                    break;
+                }
+            }
+            if (shouldRandomize) {
+                answer1.setText(answers.get(randomAnswers.get(0)));
+                answer2.setText(answers.get(randomAnswers.get(1)));
+                answer3.setText(answers.get(randomAnswers.get(2)));
+                answer4.setText(answers.get(randomAnswers.get(3)));
+            } else {
+                answer1.setText(answers.get(0));
+                answer2.setText(answers.get(1));
+                answer3.setText(answers.get(2));
+                answer4.setText(answers.get(3));
+            }
+            questionPoints.setText(getString(R.string.question_points, model.getQuestionPoints()));
+            downTimer.start();
+            setAnswer("0");
+            uploadAnswer("0");
+            Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
+        }else{
+            Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
     }
 
     private void setAnswer(String userAnswer) {
@@ -343,6 +347,8 @@ public class QuestionActivity extends AppCompatActivity {
                             Objects.requireNonNull(result.first()).setUploaded(true);
                             db.commitTransaction();
 
+                        }else if (response.code() == 401) {
+                            Utils.logout(QuestionActivity.this);
                         }
                     }
 

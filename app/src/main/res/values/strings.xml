@@ -5,10 +5,14 @@
     <string name="access_error">حساب کاربری شما جای دیگر آنلاین شده لطفا دوباره وارد شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
     <string name="general_send">با موفقیت ارسال شد</string>
+    <string name="general_save">با موفقیت ثبت شد</string>
     <string name="general_internet_error">خطا! لطفا اتصال به اینترنت را بررسی کنید</string>
     <string name="general_number_error">خطا! لطفا شماره تلفن را بررسی کنید</string>
-    <string name="general_name_error">خطا! نام و نام خانوادگی خود را بررسی کنید</string>
+    <string name="general_name_error">خطا! لطفا نام و نام خانوادگی خود را بررسی کنید</string>
+    <string name="general_form_error">خطا! لطفا اطلاعات وارد شده را بررسی کنید</string>
     <string name="general_number">شماره تلفن همراه</string>
+    <string name="general_email">ایمیل</string>
+    <string name="general_bday">تاریخ تولد</string>
     <string name="general_name">نام و نام خانوادگی</string>
     <string name="general_code">کد تایید</string>
     <string name="general_exit">برای خروج کلید بازگشت رو دوباره بفشارید</string>
@@ -57,6 +61,12 @@
     <string name="profile_time">%s روز</string>
     <string name="profile_time_lastday">روز آخر</string>
     <string name="profile_time_end">تمام شد!</string>
+    <string name="profile_avatar_change">انتخاب تصویر</string>
+    <string name="profile_avatar_remove">حذف</string>
+    <string name="profile_sex">جنسیت</string>
+    <string name="profile_male">مذکر</string>
+    <string name="profile_female">مونث</string>
+    <string name="profile_save">ثبت اطلاعات</string>
 
     <string name="start_profile_title">حساب کاربری من</string>
     <string name="start_profile_subtitle">مشاهده امتیازات کسب شده</string>
@@ -87,6 +97,17 @@
 
     <string name="instagrampicker_multi_select_title">ویرایش عکس</string>
     <string name="instagrampicker_filter_title">فیلترها</string>
+
+    <string name="crop_image_activity_title"></string>
+    <string name="crop_image_menu_rotate_left">چرخواندن پادساعت گرد</string>
+    <string name="crop_image_menu_rotate_right">چرخواندن</string>
+    <string name="crop_image_menu_crop">بریدن</string>
+    <string name="crop_image_menu_flip">آینه</string>
+    <string name="crop_image_menu_flip_horizontally">آینه افقی</string>
+    <string name="crop_image_menu_flip_vertically">آینه عمودی</string>
+
+    <string name="pick_image_intent_chooser_title">منبع را انتخاب کنید</string>
+    <string name="Next">بعدی</string>
 
     <string name="question_next">سوال بعدی</string>
     <string name="question_points">امتیاز سوال: %s</string>

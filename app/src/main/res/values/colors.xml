@@ -18,5 +18,8 @@
     <color name="light_background">#F3ECFE</color>
     <color name="transparent">#00000000</color>
 
+    <color name="mdtp_accent_color">#ffc308</color>
+    <color name="mdtp_accent_color_dark">#fb8c05</color>
+
 
 </resources>

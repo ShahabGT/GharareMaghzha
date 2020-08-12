@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -137,10 +138,11 @@ public class HighscoreFragment extends Fragment {
                             thirdCard.setVisibility(View.VISIBLE);
                             fourthCard.setVisibility(View.VISIBLE);
                             fifthCard.setVisibility(View.VISIBLE);
+                            boolean showUser=true;
 
                             for (HighscoreModel m : response.body().getData())
                                 if (m.getUserId().equals(response.body().getUser().getUserId())) {
-                                    userCard.setVisibility(View.GONE);
+                                    showUser=false;
                                     break;
                                 }
                             List<HighscoreModel> data = response.body().getData();
@@ -152,9 +154,9 @@ public class HighscoreFragment extends Fragment {
                                     Glide.with(context)
                                             .load(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserId())))
                                             .circleCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(fifthAvatar);
-                                  //  fifthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserId())));
                                 case 4:
                                     fourthCard.setVisibility(View.VISIBLE);
                                     fourthName.setText(data.get(3).getUserName());
@@ -162,9 +164,9 @@ public class HighscoreFragment extends Fragment {
                                     Glide.with(context)
                                             .load(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserId())))
                                             .circleCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(fourthAvatar);
-                                   // fourthAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserId())));
                                 case 3:
                                     thirdCard.setVisibility(View.VISIBLE);
                                     thirdName.setText(data.get(2).getUserName());
@@ -172,9 +174,9 @@ public class HighscoreFragment extends Fragment {
                                     Glide.with(context)
                                             .load(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserId())))
                                             .circleCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(thirdAvatar);
-                              //      thirdAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserId())));
                                 case 2:
                                     secondCard.setVisibility(View.VISIBLE);
                                     secondName.setText(data.get(1).getUserName());
@@ -182,29 +184,33 @@ public class HighscoreFragment extends Fragment {
                                     Glide.with(context)
                                             .load(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserId())))
                                             .circleCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+
                                             .placeholder(R.drawable.placeholder)
                                             .into(secondAvatar);
-                                 //   secondAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserId())));
                                 case 1:
                                     firstName.setText(data.get(0).getUserName());
                                     firstScore.setText(context.getString(R.string.highscore_score, data.get(0).getScoreCount()));
                                     Glide.with(context)
                                             .load(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserId())))
                                             .circleCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(firstAvatar);
-                                  //  firstAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserId())));
+                                    break;
                             }
-
-                            userName.setText(response.body().getUser().getUserName());
-                            userScore.setText(context.getString(R.string.highscore_score,response.body().getUser().getScoreCount()));
-                            Glide.with(context)
-                                    .load(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())))
-                                    .circleCrop()
-                                    .placeholder(R.drawable.placeholder)
-                                    .into(userAvatar);
-                        //    userAvatar.setImageURI(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())));
-                            userRank.setText(context.getString(R.string.highscore_user_rank,response.body().getUser().getUserRank()));
+                            if(showUser) {
+                                userCard.setVisibility(View.VISIBLE);
+                                userName.setText(response.body().getUser().getUserName());
+                                userScore.setText(context.getString(R.string.highscore_score, response.body().getUser().getScoreCount()));
+                                Glide.with(context)
+                                        .load(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())))
+                                        .circleCrop()
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .placeholder(R.drawable.placeholder)
+                                        .into(userAvatar);
+                                userRank.setText(context.getString(R.string.highscore_user_rank, response.body().getUser().getUserRank()));
+                            }
 
                         } else if (response.code() == 401) {
                             Utils.logout(activity);
