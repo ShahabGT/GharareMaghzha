@@ -215,6 +215,8 @@ public class HighscoreFragment extends Fragment {
 
                         } else if (response.code() == 401) {
                             Utils.logout(activity);
+                        }else{
+                            Utils.showInternetError(context, () -> getData());
                         }
                     }
 

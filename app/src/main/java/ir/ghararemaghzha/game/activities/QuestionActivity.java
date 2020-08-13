@@ -264,7 +264,7 @@ public class QuestionActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
                 QuestionActivity.this.finish();
             }
-            questionRemain.setText(getString(R.string.question_remaining, String.valueOf(data.size())));
+            questionRemain.setText(getString(R.string.question_remaining, String.valueOf(data.size()-1)));
             model = getRandom();
             downTimer.cancel();
             nextTimer.start();

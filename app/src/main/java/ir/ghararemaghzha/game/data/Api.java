@@ -4,6 +4,7 @@ import ir.ghararemaghzha.game.models.ChatResponse;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.HighscoreResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
+import ir.ghararemaghzha.game.models.PlanResponse;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
@@ -160,6 +161,12 @@ public interface Api {
             @Field("user_email") String userEmail,
             @Field("user_bday") String userBday,
             @Field("user_sex") String userSex);
+
+    @FormUrlEncoded
+    @POST("plans")
+    Call<PlanResponse> getPlans(
+            @Header("Authorization") String Token,
+            @Field("number") String number);
 
 }
 
