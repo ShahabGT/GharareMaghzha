@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">قرار مغزها</string>
     <string name="avatar_url">https://ghararehmaghzha.ir/api/avatars/%s.jpg</string>
+    <string name="en_digits">abcdefghijklmnopqrstuvwxyz1234567890</string>
 
     <string name="access_error">حساب کاربری شما جای دیگر آنلاین شده لطفا دوباره وارد شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
@@ -17,6 +18,8 @@
     <string name="general_code">کد تایید</string>
     <string name="general_exit">برای خروج کلید بازگشت رو دوباره بفشارید</string>
     <string name="general_noquestions">سوالی برای پاسخ دادن وجود ندارد!</string>
+    <string name="amount_model">%s تومان</string>
+    <string name="discount_model">%s %</string>
 
     <string name="loginfragment_nouser">شماره وارد شده ثبت نشده لطفا ابتدا ثبت نام کنید</string>
     <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
@@ -143,6 +146,15 @@
     <string name="buy_five_count">5000 \n سوال</string>
     <string name="buy_price">%s تومان</string>
     <string name="buy_buy">خرید</string>
+
+    <string name="buy_dialog_text">مبلغ قابل پرداخت:</string>
+    <string name="buy_dialog_discount_text">مبلغ قابل پرداخت با %d درصد تخفیف:</string>
+    <string name="buy_dialog_buy">پرداخت</string>
+    <string name="buy_dialog_cancel">انصراف</string>
+    <string name="buy_dialog_giftcode">کد معرف</string>
+    <string name="buy_dialog_check">بررسی</string>
+    <string name="buy_dialog_giftcode_btn">کد معرف دارم!</string>
+    <string name="buy_dialog_giftcode_invalid">کد معرف وارد شده معتبر نیست</string>
 
 
 </resources>

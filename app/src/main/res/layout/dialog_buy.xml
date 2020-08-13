@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:animateLayoutChanges="true"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/buy_anim"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/money" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buy_dialog_title"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/vazir"
+            android:gravity="right"
+            android:padding="8dp"
+            android:text="@string/buy_dialog_text"
+            android:textColor="@android:color/black"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@+id/buy_dialog_amount"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buy_anim" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buy_dialog_discount_title"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/vazir"
+            android:gravity="right"
+            android:padding="8dp"
+            android:text="@string/buy_dialog_discount_text"
+            android:textColor="@color/green"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buy_dialog_amount" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buy_dialog_discount_amount"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/vazir"
+            android:gravity="right"
+            android:padding="8dp"
+            android:text="0"
+            android:textColor="@color/green"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buy_dialog_discount_title" />
+
+        <TextView
+            android:id="@+id/buy_dialog_amount"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/vazir"
+            android:gravity="right"
+            android:padding="8dp"
+            android:text="0"
+            android:textColor="@android:color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/buy_dialog_title"
+            app:layout_constraintTop_toBottomOf="@id/buy_anim" />
+
+        <LinearLayout
+            android:id="@+id/buy_dialog_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/buy_dialog_cancel"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buy_dialog_discount_amount">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buy_dialog_giftcode_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:fontFamily="@font/vazir"
+                android:text="@string/buy_dialog_check"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/buy_dialog_giftcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:digits="@string/en_digits"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:hint="@string/buy_dialog_giftcode"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="15"
+                android:padding="8dp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buy_dialog_giftcode_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/vazir"
+            android:padding="8dp"
+            android:text="@string/buy_dialog_giftcode_btn"
+            app:layout_constraintBottom_toTopOf="@id/buy_dialog_cancel"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buy_dialog_discount_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buy_dialog_buy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/vazir"
+            android:padding="8dp"
+            android:text="@string/buy_dialog_buy"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@+id/buy_dialog_cancel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buy_dialog_giftcode_btn" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buy_dialog_cancel"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/vazir"
+            android:padding="8dp"
+            android:text="@string/buy_dialog_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/buy_dialog_buy"
+            app:layout_constraintTop_toBottomOf="@id/buy_dialog_giftcode_btn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

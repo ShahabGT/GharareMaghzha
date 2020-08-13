@@ -40,7 +40,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/buy_name"
-        style="@style/TextAppearance.AppCompat.Display1"
+        style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -79,6 +79,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
+
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/buy_one_layout"
         android:layout_width="0dp"
@@ -87,7 +89,6 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@id/buy_two_layout"
         app:layout_constraintLeft_toLeftOf="@id/buy_guide15"
@@ -144,7 +145,7 @@
                 android:fontFamily="@font/vazir"
                 android:text="@string/buy_buy"
                 android:textColor="@color/black"
-                app:drawableTint="#0a8d00"
+                app:drawableTint="@color/green"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -152,6 +153,19 @@
 
 
     </com.google.android.material.card.MaterialCardView>
+    <View
+        android:visibility="gone"
+        android:id="@+id/buy_one_disable"
+        android:focusable="true"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:background="#4D000000"
+        app:layout_constraintBottom_toBottomOf="@+id/buy_one_layout"
+        app:layout_constraintTop_toTopOf="@+id/buy_one_layout"
+        app:layout_constraintRight_toRightOf="@+id/buy_one_layout"
+        app:layout_constraintLeft_toLeftOf="@+id/buy_one_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/buy_two_layout"
@@ -161,7 +175,6 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@id/buy_three_layout"
         app:layout_constraintLeft_toLeftOf="@id/buy_guide15"
@@ -226,6 +239,19 @@
 
 
     </com.google.android.material.card.MaterialCardView>
+    <View
+        android:id="@+id/buy_two_disable"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:background="#4D000000"
+        app:layout_constraintBottom_toBottomOf="@+id/buy_two_layout"
+        app:layout_constraintTop_toTopOf="@+id/buy_two_layout"
+        app:layout_constraintRight_toRightOf="@+id/buy_two_layout"
+        app:layout_constraintLeft_toLeftOf="@+id/buy_two_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/buy_three_layout"
@@ -235,7 +261,6 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@id/buy_four_layout"
 
@@ -301,6 +326,19 @@
 
 
     </com.google.android.material.card.MaterialCardView>
+    <View
+        android:id="@+id/buy_three_disable"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:background="#4D000000"
+        app:layout_constraintBottom_toBottomOf="@+id/buy_three_layout"
+        app:layout_constraintTop_toTopOf="@+id/buy_three_layout"
+        app:layout_constraintRight_toRightOf="@+id/buy_three_layout"
+        app:layout_constraintLeft_toLeftOf="@+id/buy_three_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/buy_four_layout"
@@ -310,7 +348,6 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@id/buy_five_layout"
 
@@ -376,6 +413,19 @@
 
 
     </com.google.android.material.card.MaterialCardView>
+    <View
+        android:id="@+id/buy_four_disable"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:background="#4D000000"
+        app:layout_constraintBottom_toBottomOf="@+id/buy_four_layout"
+        app:layout_constraintTop_toTopOf="@+id/buy_four_layout"
+        app:layout_constraintRight_toRightOf="@+id/buy_four_layout"
+        app:layout_constraintLeft_toLeftOf="@+id/buy_four_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/buy_five_layout"
@@ -385,7 +435,6 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/buy_guide15"
@@ -451,6 +500,19 @@
 
 
     </com.google.android.material.card.MaterialCardView>
+    <View
+        android:id="@+id/buy_five_disable"
+        android:visibility="gone"
+        android:focusable="true"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:background="#4D000000"
+        app:layout_constraintBottom_toBottomOf="@+id/buy_five_layout"
+        app:layout_constraintTop_toTopOf="@+id/buy_five_layout"
+        app:layout_constraintRight_toRightOf="@+id/buy_five_layout"
+        app:layout_constraintLeft_toLeftOf="@+id/buy_five_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
 
     <ProgressBar
