@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<ConstraintSet android:id="@+id/start"/>
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/main_container" />
+        <Constraint
+            android:id="@id/main_content"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="1"
+            android:layout_height="match_parent"
+            android:layout_marginRight="50dp"
+            android:scaleY="0.9"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/main_drawer"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/main_drawer"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/start"
+        app:duration="500"
+        app:motionInterpolator="linear" >
+        <OnSwipe
+            app:touchAnchorId="@+id/main_content"
+            app:dragDirection="dragLeft"
+            app:touchAnchorSide="left" />
+        <OnClick app:targetId="@+id/main_menu" />
+    </Transition>
+</MotionScene>

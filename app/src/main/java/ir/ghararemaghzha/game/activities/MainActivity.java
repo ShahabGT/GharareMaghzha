@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
         init();
-        findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
+     //   findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
 
 
     }
