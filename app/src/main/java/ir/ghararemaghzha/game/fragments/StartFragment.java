@@ -119,6 +119,10 @@ public class StartFragment extends Fragment {
         });
 
     }
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(db!=null)db.close();
+    }
 
 }

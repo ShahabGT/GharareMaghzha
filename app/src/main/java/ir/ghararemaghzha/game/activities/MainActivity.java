@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -66,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
-    public static ImageView profile, messages, highscore, buy, start, newMessage;
+    public static ImageView profile, messages, highscore, buy, start;
+    public static MaterialTextView newMessage;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
@@ -131,11 +133,13 @@ public class MainActivity extends AppCompatActivity {
         updateDatabase(0);
         animate();
         onClicks();
+        uploadAnswers();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(db!=null) db.close();
         whichFragment = 1;
     }
 
@@ -222,8 +226,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMessages() {
-        if (db.where(MessageModel.class).equalTo("read", 0).findAll().size() > 0) {
+        int size = db.where(MessageModel.class).equalTo("read", 0).findAll().size();
+        if (size > 0) {
             newMessage.setVisibility(View.VISIBLE);
+            if (size > 99)
+                newMessage.setText("99");
+            else
+                newMessage.setText(size);
         } else {
             newMessage.setVisibility(View.GONE);
         }
@@ -402,47 +411,44 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         int questions = db.where(QuestionModel.class).findAll().size();  //3
-        //int plan = Integer.parseInt(MySharedPreference.getInstance(this).getPlan());  //5
         int plan = Integer.parseInt(newPlan);  //5
-        //int start = questions + 100;
-        int start = questions;
         int size = (plan * 1000) + 100;
-            RetrofitClient.getInstance().getApi()
-                    .getQuestions("Bearer " + token, number, String.valueOf(start), String.valueOf(size))
-                    .enqueue(new Callback<QuestionResponse>() {
-                        @Override
-                        public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
-                            if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
-                                MySharedPreference.getInstance(MainActivity.this).setGotQuestions();
-                                for (QuestionModel model : response.body().getData()) {
-                                    if (model.getUserAnswer().equals("-1"))
-                                        model.setUploaded(false);
-                                    else
-                                        model.setUploaded(true);
-                                    model.setVisible(false);
-                                    db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
-                                }
-                                updateDatabase(0);
-                                MySharedPreference.getInstance(MainActivity.this).setPlan(newPlan);
-                                sendBroadcast(refreshIntent);
-                                if (dataDialog != null) dataDialog.dismiss();
+        RetrofitClient.getInstance().getApi()
+                .getQuestions("Bearer " + token, number, String.valueOf(questions), String.valueOf(size))
+                .enqueue(new Callback<QuestionResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
+                            MySharedPreference.getInstance(MainActivity.this).setGotQuestions();
 
-                            } else if (response.code() == 401) {
-                                if (dataDialog != null) dataDialog.dismiss();
-                                Utils.logout(MainActivity.this);
-                            } else {
-                                if (dataDialog != null) dataDialog.dismiss();
-                                Utils.showInternetError(MainActivity.this, () -> getQuestions(newPlan));
+                            for (QuestionModel model : response.body().getData()) {
+                                if (model.getUserAnswer().equals("-1"))
+                                    model.setUploaded(false);
+                                else
+                                    model.setUploaded(true);
+                                model.setVisible(false);
+                                db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             }
-
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
+                            updateDatabase(0);
+                            MySharedPreference.getInstance(MainActivity.this).setPlan(newPlan);
+                            sendBroadcast(refreshIntent);
+                            if (dataDialog != null) dataDialog.dismiss();
+                        } else if (response.code() == 401) {
+                            if (dataDialog != null) dataDialog.dismiss();
+                            Utils.logout(MainActivity.this);
+                        } else {
                             if (dataDialog != null) dataDialog.dismiss();
                             Utils.showInternetError(MainActivity.this, () -> getQuestions(newPlan));
                         }
-                    });
+
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
+                        if (dataDialog != null) dataDialog.dismiss();
+                        Utils.showInternetError(MainActivity.this, () -> getQuestions(newPlan));
+                    }
+                });
     }
 
     private void uploadScore(String score) {
@@ -465,6 +471,42 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
 
+                    }
+                });
+    }
+
+    private void uploadAnswers() {
+        RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", true).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
+        for (QuestionModel model : models)
+            uploadAnswer(model.getQuestionId(), model.getUserAnswer());
+    }
+
+    private void uploadAnswer(String questionId, String userAnswer) {
+
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(MainActivity.this);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .answerQuestion("Bearer " + token, number, questionId, userAnswer)
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            db.beginTransaction();
+                            RealmResults<QuestionModel> result = db.where(QuestionModel.class).equalTo("questionId", questionId).findAll();
+                            Objects.requireNonNull(result.first()).setUploaded(true);
+                            db.commitTransaction();
+
+                        } else if (response.code() == 401) {
+                            Utils.logout(MainActivity.this);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
                     }
                 });
     }

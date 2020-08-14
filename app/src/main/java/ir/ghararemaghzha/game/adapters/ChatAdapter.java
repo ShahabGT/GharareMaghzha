@@ -1,6 +1,5 @@
 package ir.ghararemaghzha.game.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
     public long getItemId(int position) {
         //return super.getItemId(position);
         return position;
-      //  return getItem(position).getMessageId();
+        //  return getItem(position).getMessageId();
     }
 
     @Override
@@ -94,10 +93,10 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
                             break;
                     }
 
-                    h.stat.setOnClickListener(v->{
-                        if(model.getStat()==-1){
+                    h.stat.setOnClickListener(v -> {
+                        if (model.getStat() == -1) {
                             h.stat.setImageResource(R.drawable.vector_sending);
-                            sendMessage(model.getMessage(),model.getMessageId(),position);
+                            sendMessage(model.getMessage(), model.getMessageId(), position);
                         }
                     });
 
@@ -117,31 +116,6 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
                 e.printStackTrace();
             }
     }
-
-//    @Override
-//    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        final MessageModel model = getItem(position);
-//        if(model!=null)
-//        try {
-//        //    if (model.getSender().equals("1")||model.getSender().equals("admin")) {
-//            if (model.getSender().equals("1")||model.getSender().equals("support")) {
-//                holder.main.setGravity(Gravity.LEFT);
-//                holder.message.setBackground(context.getResources().getDrawable(R.drawable.shape_other));
-//            } else {
-//                holder.main.setGravity(Gravity.RIGHT);
-//                holder.message.setBackground(context.getResources().getDrawable(R.drawable.shape_me));
-//            }
-//
-//            holder.message.setText(model.getMessage());
-//            String date = model.getDate();
-//            DateConverter dateConverter = new DateConverter();
-//
-//            dateConverter.gregorianToPersian(Integer.parseInt(date.substring(0,4)),Integer.parseInt(date.substring(5,7)),Integer.parseInt(date.substring(8,10)));
-//            holder.date.setText(date.substring(11,16));
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
 
     static class OtherViewHolder extends RecyclerView.ViewHolder {
         private MaterialTextView message, date;
@@ -165,7 +139,7 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
         }
     }
 
-    private void sendMessage(String message,int key,int pos) {
+    private void sendMessage(String message, int key, int pos) {
         Realm db = Realm.getDefaultInstance();
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
@@ -178,13 +152,13 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
                 .enqueue(new Callback<TimeResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
-                        if(response.isSuccessful() && response.body()!=null && response.body().getResult().equals("success")) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             db.beginTransaction();
                             RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
                             models.first().setStat(1);
                             db.commitTransaction();
 
-                        }else{
+                        } else {
                             db.beginTransaction();
                             RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
                             models.first().setStat(-1);

@@ -430,6 +430,7 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(db!=null) db.close();
         soundPool.release();
         soundPool = null;
         mediaPlayer.release();

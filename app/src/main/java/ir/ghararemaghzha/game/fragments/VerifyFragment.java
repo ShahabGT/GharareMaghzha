@@ -212,6 +212,9 @@ public class VerifyFragment extends Fragment {
                             MySharedPreference.getInstance(context).setUserCode(userCode);
                             MySharedPreference.getInstance(context).setScore(score);
                             MySharedPreference.getInstance(context).setPlan(plan);
+                            MySharedPreference.getInstance(context).setUserSex(response.body().getUserSex());
+                            MySharedPreference.getInstance(context).setUserBday(response.body().getUserBday());
+                            MySharedPreference.getInstance(context).setUserEmail(response.body().getUserEmail());
                             dialog = Utils.showGetDataLoading(context);
                             getQuestions();
 
@@ -268,6 +271,7 @@ public class VerifyFragment extends Fragment {
 
                             Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(activity, MainActivity.class));
+                            db.close();
                             activity.overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
                             activity.finish();
                         } else {

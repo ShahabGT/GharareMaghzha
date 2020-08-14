@@ -200,4 +200,5 @@ public class RegisterFragment extends Fragment {
                 });
 
     }
+
 }

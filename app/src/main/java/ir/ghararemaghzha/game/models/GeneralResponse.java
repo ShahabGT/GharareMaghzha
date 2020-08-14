@@ -36,6 +36,15 @@ public class GeneralResponse {
     @SerializedName("merchant_id")
     private String merchantId;
 
+    @SerializedName("user_sex")
+    private String userSex;
+
+    @SerializedName("user_bday")
+    private String userBday;
+
+    @SerializedName("user_email")
+    private String userEmail;
+
     public String getUserPlan() {
         return userPlan;
     }
@@ -131,5 +140,29 @@ public class GeneralResponse {
 
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public String getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(String userSex) {
+        this.userSex = userSex;
+    }
+
+    public String getUserBday() {
+        return userBday;
+    }
+
+    public void setUserBday(String userBday) {
+        this.userBday = userBday;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

@@ -132,4 +132,10 @@ public class ProfileFragment extends Fragment {
         });
         edit.setOnClickListener(v -> startActivity(new Intent(context, ProfileActivity.class)));
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(db!=null)db.close();
+    }
 }

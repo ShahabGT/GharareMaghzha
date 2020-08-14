@@ -206,12 +206,6 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                     loading.setVisibility(View.GONE);
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
                     avatar.setImageURI(Uri.parse(image));
-                    Glide.with(ProfileActivity.this)
-                            .load(getString(R.string.avatar_url, MySharedPreference.getInstance(ProfileActivity.this).getUserId()))
-                            .circleCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .placeholder(R.drawable.placeholder)
-                            .into(avatar);
                 }else if (response.code() == 401) {
                     Utils.logout(ProfileActivity.this);
                 } else {

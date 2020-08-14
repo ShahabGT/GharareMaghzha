@@ -158,6 +158,7 @@ public class MessagesFragment extends Fragment {
         message = v.findViewById(R.id.chat_text);
 
         onClicks();
+       // uploadMessages();
     }
 
     private void onClicks() {
@@ -184,6 +185,14 @@ public class MessagesFragment extends Fragment {
                 }
 
         });
+    }
+
+    private void uploadMessages(){
+        String userId = MySharedPreference.getInstance(context).getUserId();
+
+        RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("sender",userId).equalTo("stat",-1).findAll();
+        for(MessageModel model : models)
+            sendMessage(model.getMessage(),model.getMessageId());
     }
 
     private void sendMessage(String message,int key) {
@@ -238,6 +247,7 @@ public class MessagesFragment extends Fragment {
 
                             for (MessageModel model : response.body().getData()) {
                                 model.setStat(1);
+                                model.setRead(1);
                                 model.setMessageId(Utils.getNextKey(db));
                                 db.executeTransaction(realm -> realm.insertOrUpdate(model));
                             }
@@ -251,6 +261,12 @@ public class MessagesFragment extends Fragment {
 
                     }
                 });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(db!=null)db.close();
     }
 
 

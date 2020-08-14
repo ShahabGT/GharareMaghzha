@@ -240,4 +240,6 @@ public class BuyFragment extends Fragment {
                     }
                 });
     }
+
+
 }

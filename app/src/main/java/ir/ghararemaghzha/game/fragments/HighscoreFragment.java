@@ -228,4 +228,5 @@ public class HighscoreFragment extends Fragment {
                     }
                 });
     }
+
 }
