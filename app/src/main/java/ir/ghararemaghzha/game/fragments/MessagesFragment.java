@@ -179,11 +179,8 @@ public class MessagesFragment extends Fragment {
                     model.setDate(Utils.currentDate());
                     db.executeTransaction(realm1 -> realm1.insert(model));
                     sendMessage(txt,key);
-
                     outgoingRecyclerView.scrollToPosition(0);
-
                 }
-
         });
     }
 

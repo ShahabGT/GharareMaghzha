@@ -198,6 +198,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        avatar.setOnClickListener(v->{
+            startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+
+        });
+
 
     }
 
