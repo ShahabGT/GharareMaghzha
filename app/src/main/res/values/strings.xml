@@ -156,5 +156,10 @@
     <string name="buy_dialog_giftcode_btn">کد معرف دارم!</string>
     <string name="buy_dialog_giftcode_invalid">کد معرف وارد شده معتبر نیست</string>
 
+    <string name="navigation_support">پشتیبانی</string>
+    <string name="navigation_help">راهنما</string>
+    <string name="navigation_about">درباره</string>
+    <string name="navigation_exit">خروج</string>
+
 
 </resources>

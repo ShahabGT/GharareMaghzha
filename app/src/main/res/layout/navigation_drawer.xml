@@ -1,8 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
-    android:background="@drawable/bg2"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:background="@color/dark_background">
+
+
+    <ImageView
+        android:id="@+id/navigation_avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_name"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/vazir"
+        android:gravity="center"
+        android:text="نام و نام خانوادگی"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_avatar" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_code"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/vazir"
+        android:gravity="center"
+        android:text="کد کاربری"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_name" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_score"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/vazir"
+        android:gravity="center"
+        android:text="امتیاز"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_code" />
+
+    <View
+        android:id="@+id/navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="16dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/navigation_score" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_support"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:drawableTop="@drawable/vector_support"
+        android:focusable="true"
+        android:fontFamily="@font/vazir"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:soundEffectsEnabled="true"
+        android:text="@string/navigation_support"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:drawableTint="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_view" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_help"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:drawableTop="@drawable/vector_help"
+        android:focusable="true"
+        android:fontFamily="@font/vazir"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:soundEffectsEnabled="true"
+        android:text="@string/navigation_help"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:drawableTint="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_support" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_about"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:drawableTop="@drawable/vector_about"
+        android:focusable="true"
+        android:fontFamily="@font/vazir"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:soundEffectsEnabled="true"
+        android:text="@string/navigation_about"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:drawableTint="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_help" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_exit"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:drawableTop="@drawable/vector_exit"
+        android:focusable="true"
+        android:fontFamily="@font/vazir"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:soundEffectsEnabled="true"
+        android:text="@string/navigation_exit"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:drawableTint="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_about" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

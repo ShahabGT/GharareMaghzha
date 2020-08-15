@@ -94,6 +94,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private void navigationDrawer(){
+        ((MaterialTextView)findViewById(R.id.navigation_name)).setText(MySharedPreference.getInstance(this).getUsername());
+        ((MaterialTextView)findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode()));
+        ((MaterialTextView)findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore()));
+        Glide.with(this)
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
+                .circleCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+
+                .placeholder(R.drawable.placeholder)
+                .into((ImageView)findViewById(R.id.navigation_avatar));
+    }
 
     private void animate() {
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(start, "scaleX", 1f, 1.1f, 1f);
@@ -134,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         animate();
         onClicks();
         uploadAnswers();
+        navigationDrawer();
     }
 
     @Override
