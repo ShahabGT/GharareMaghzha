@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -42,7 +43,7 @@ public class BuyFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private MaterialTextView myCode, myName;
-    private ProgressBar loading;
+    private ConstraintLayout loading;
     private MaterialCardView one, two, three, four, five;
     private MaterialTextView onePrice, twoPrice, threePrice, fourPrice, fivePrice;
     private View oneView, twoView, threeView, fourView, fiveView;
@@ -73,23 +74,23 @@ public class BuyFragment extends Fragment {
 
         one = v.findViewById(R.id.buy_one_layout);
         onePrice = v.findViewById(R.id.buy_one_price);
-        oneView = v.findViewById(R.id.buy_one_view);
+        oneView = v.findViewById(R.id.buy_one_disable);
 
         two = v.findViewById(R.id.buy_two_layout);
         twoPrice = v.findViewById(R.id.buy_two_price);
-        twoView = v.findViewById(R.id.buy_two_view);
+        twoView = v.findViewById(R.id.buy_two_disable);
 
         three = v.findViewById(R.id.buy_three_layout);
         threePrice = v.findViewById(R.id.buy_three_price);
-        threeView = v.findViewById(R.id.buy_three_view);
+        threeView = v.findViewById(R.id.buy_three_disable);
 
         four = v.findViewById(R.id.buy_four_layout);
         fourPrice = v.findViewById(R.id.buy_four_price);
-        fourView = v.findViewById(R.id.buy_four_view);
+        fourView = v.findViewById(R.id.buy_four_disable);
 
         five = v.findViewById(R.id.buy_five_layout);
         fivePrice = v.findViewById(R.id.buy_five_price);
-        fiveView = v.findViewById(R.id.buy_five_view);
+        fiveView = v.findViewById(R.id.buy_five_disable);
 
         int userPlan = Integer.parseInt(MySharedPreference.getInstance(context).getPlan());
         switch (userPlan){

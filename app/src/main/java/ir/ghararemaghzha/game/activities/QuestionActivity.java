@@ -293,7 +293,7 @@ public class QuestionActivity extends AppCompatActivity {
             correctAnswer = answers.get(Integer.parseInt(model.getQuestionCorrect()) - 1);
             shouldRandomize = true;
             for (String s : answers) {
-                if (s.contains("گزینه ")) {
+                if (s.contains("گزینه ")||s.contains("هیچکدام") ||s.contains("همه موارد") ) {
                     shouldRandomize = false;
                     break;
                 }
