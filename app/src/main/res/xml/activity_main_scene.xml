@@ -27,7 +27,7 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
-        app:duration="500"
+        app:duration="250"
         app:motionInterpolator="linear" >
         <OnSwipe
             app:touchAnchorId="@+id/main_content"

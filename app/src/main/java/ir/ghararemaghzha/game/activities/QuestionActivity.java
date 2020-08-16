@@ -39,9 +39,9 @@ import retrofit2.Response;
 public class QuestionActivity extends AppCompatActivity {
     private int progress = 100;
     private int time = 20;
-    private CountDownTimer downTimer,nextTimer;
+    private CountDownTimer downTimer, nextTimer;
     private ProgressBar progressBar;
-    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, next, score,questionPoints,questionRemain;
+    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, next, score, questionPoints, questionRemain;
     private MaterialCardView answer1c, answer2c, answer3c, answer4c, questionc;
     private RealmResults<QuestionModel> data;
     private List<Integer> randomAnswers;
@@ -61,7 +61,7 @@ public class QuestionActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_question);
         init();
     }
@@ -259,12 +259,12 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void nextQuestion() {
-        if(Utils.checkInternet(this)) {
+        if (Utils.checkInternet(this)) {
             if (data.isEmpty()) {
                 Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
-                QuestionActivity.this.finish();
+                onBackPressed();
             }
-            questionRemain.setText(getString(R.string.question_remaining, String.valueOf(data.size()-1)));
+            questionRemain.setText(getString(R.string.question_remaining, String.valueOf(data.size() - 1)));
             model = getRandom();
             downTimer.cancel();
             nextTimer.start();
@@ -293,7 +293,7 @@ public class QuestionActivity extends AppCompatActivity {
             correctAnswer = answers.get(Integer.parseInt(model.getQuestionCorrect()) - 1);
             shouldRandomize = true;
             for (String s : answers) {
-                if (s.contains("گزینه ")||s.contains("هیچکدام") ||s.contains("همه موارد") ) {
+                if (s.contains("گزینه ") || s.contains("هیچکدام") || s.contains("همه موارد")) {
                     shouldRandomize = false;
                     break;
                 }
@@ -314,7 +314,7 @@ public class QuestionActivity extends AppCompatActivity {
             setAnswer("0");
             uploadAnswer("0");
             Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
-        }else{
+        } else {
             Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
@@ -347,7 +347,7 @@ public class QuestionActivity extends AppCompatActivity {
                             Objects.requireNonNull(result.first()).setUploaded(true);
                             db.commitTransaction();
 
-                        }else if (response.code() == 401) {
+                        } else if (response.code() == 401) {
                             Utils.logout(QuestionActivity.this);
                         }
                     }
@@ -430,7 +430,7 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(db!=null) db.close();
+        if (db != null) db.close();
         soundPool.release();
         soundPool = null;
         mediaPlayer.release();
