@@ -46,21 +46,19 @@
             android:text="@string/start_title"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/start_info_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="12dp"
         android:layout_marginTop="12dp"
+        app:cardElevation="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/start_header">
@@ -102,6 +100,13 @@
             android:layout_height="match_parent"
             android:padding="8dp">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/icon_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
+
             <ImageView
                 android:id="@+id/start_start_left"
                 android:layout_width="wrap_content"
@@ -115,24 +120,26 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_start_title"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:gravity="center"
                 android:text="@string/start_start_title"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/start_start_left"
+                app:layout_constraintRight_toRightOf="@id/icon_guide"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_start_subtitle"
                 style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:gravity="center"
                 android:text="@string/start_start_subtitle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/start_start_left"
+                app:layout_constraintRight_toRightOf="@id/icon_guide"
                 app:layout_constraintTop_toBottomOf="@id/start_start_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -171,6 +178,13 @@
             android:layout_height="match_parent"
             android:padding="8dp">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/icon_guide2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
+
             <ImageView
                 android:id="@+id/start_highscore_left"
                 android:layout_width="wrap_content"
@@ -184,24 +198,26 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_highscore_title"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:gravity="center"
                 android:text="@string/start_highscore_title"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/start_highscore_left"
+                app:layout_constraintRight_toRightOf="@id/icon_guide2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_highscore_subtitle"
                 style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:gravity="center"
                 android:text="@string/start_start_subtitle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/start_highscore_left"
+                app:layout_constraintRight_toRightOf="@id/icon_guide2"
                 app:layout_constraintTop_toBottomOf="@id/start_highscore_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -240,6 +256,13 @@
             android:layout_height="match_parent"
             android:padding="8dp">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/icon_guide3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
+
             <ImageView
                 android:id="@+id/start_profile_left"
                 android:layout_width="wrap_content"
@@ -253,24 +276,26 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_profile_title"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:gravity="center"
                 android:text="@string/start_profile_title"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/start_profile_left"
+                app:layout_constraintRight_toRightOf="@id/icon_guide3"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_profile_subtitle"
                 style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:gravity="center"
                 android:text="@string/start_profile_subtitle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/start_profile_left"
+                app:layout_constraintRight_toRightOf="@id/icon_guide3"
                 app:layout_constraintTop_toBottomOf="@id/start_profile_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

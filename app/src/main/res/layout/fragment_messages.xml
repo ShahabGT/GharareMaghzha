@@ -52,36 +52,11 @@
             android:text="@string/message_incoming"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <RadioGroup
-        android:id="@+id/message_radio_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right|center"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message_header">
-
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/message_radio_outgoing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="@string/message_outgoing" />
-
-        <RadioButton
-            android:id="@+id/message_radio_incoming"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/message_incoming" />
-    </RadioGroup>
 
     <ImageView
         android:id="@+id/message_background"
@@ -90,7 +65,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message_radio_group"
+        app:layout_constraintTop_toBottomOf="@id/message_header"
         app:srcCompat="@drawable/message_bg" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -100,7 +75,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message_radio_group" />
+        app:layout_constraintTop_toBottomOf="@id/message_header" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/message_empty"
@@ -114,16 +89,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message_radio_group" />
+        app:layout_constraintTop_toBottomOf="@id/message_header" />
 
-    <include
-        android:id="@+id/message_chat_layout"
-        layout="@layout/layout_chat"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message_radio_group" />
 </androidx.constraintlayout.widget.ConstraintLayout>

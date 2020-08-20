@@ -167,7 +167,7 @@
 
     <string name="buyhistory_title">تاریخچه خرید</string>
     <string name="buyhistory_empty">تاکنون خریدی انجام نداده اید!</string>
-    <string name="buyhistory_row_title">نوع پکیج: %s</string>
+    <string name="buyhistory_row_title">نوع پکیج: %s سوالی</string>
     <string name="buyhistory_row_date">تاریخ: %s</string>
     <string name="buyhistory_row_price">مبلغ: %s تومان</string>
     <string name="buyhistory_row_influencer">کد معرف: %s</string>
