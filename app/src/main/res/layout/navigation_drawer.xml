@@ -108,6 +108,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/navigation_buyhistory" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/main_chat_new"
+        android:layout_width="25dp"
+        android:visibility="gone"
+        android:layout_height="25dp"
+        android:background="@drawable/new_message"
+        android:elevation="12dp"
+        android:fontFamily="@font/vazir"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@+id/navigation_support"
+        app:layout_constraintRight_toRightOf="@+id/navigation_support"
+        app:layout_constraintTop_toTopOf="@+id/navigation_support" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/navigation_help"

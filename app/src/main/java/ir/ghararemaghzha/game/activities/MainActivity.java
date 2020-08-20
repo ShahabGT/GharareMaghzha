@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
     public static ImageView profile, messages, highscore, buy, start;
-    public static MaterialTextView newMessage;
+    public static MaterialTextView newMessage,newChat;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.navigation_exit).setOnClickListener(v->Utils.logout(this,false));
         findViewById(R.id.navigation_buyhistory).setOnClickListener(v->startActivity(new Intent(this,BuyHistoryActivity.class)));
+        findViewById(R.id.navigation_support).setOnClickListener(v->startActivity(new Intent(this,SupportActivity.class)));
     }
 
     private void animate() {
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         profile = findViewById(R.id.main_profile);
         messages = findViewById(R.id.main_messages);
         newMessage = findViewById(R.id.main_messages_new);
+        newChat = findViewById(R.id.main_chat_new);
         highscore = findViewById(R.id.main_highscore);
         avatar = findViewById(R.id.main_avatar);
         Glide.with(this)
@@ -245,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMessages() {
-        int size = db.where(MessageModel.class).equalTo("read", 0).findAll().size();
+        int size = db.where(MessageModel.class).equalTo("sender", "admin").equalTo("read", 0).findAll().size();
         if (size > 0) {
             newMessage.setVisibility(View.VISIBLE);
             if (size > 99)
@@ -254,6 +256,16 @@ public class MainActivity extends AppCompatActivity {
                 newMessage.setText(String.valueOf(size));
         } else {
             newMessage.setVisibility(View.GONE);
+        }
+        int chatSize = db.where(MessageModel.class).notEqualTo("sender", "admin").equalTo("read", 0).findAll().size();
+        if (chatSize > 0) {
+            newChat.setVisibility(View.VISIBLE);
+            if (size > 99)
+                newChat.setText("99");
+            else
+                newChat.setText(String.valueOf(size));
+        } else {
+            newChat.setVisibility(View.GONE);
         }
     }
 
