@@ -192,8 +192,9 @@ public class Utils {
         return version;
     }
 
-    public static void logout(Activity context) {
-        Toast.makeText(context, context.getString(R.string.access_error), Toast.LENGTH_LONG).show();
+    public static void logout(Activity context,boolean showMessage) {
+        if(showMessage)
+            Toast.makeText(context, context.getString(R.string.access_error), Toast.LENGTH_LONG).show();
         MySharedPreference.getInstance(context).clear();
         FirebaseMessaging.getInstance().unsubscribeFromTopic(FCM_TOPIC);
         Realm realm = Realm.getDefaultInstance();
@@ -208,7 +209,7 @@ public class Utils {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(context);
+            Utils.logout(context,true);
             return;
         }
         RetrofitClient.getInstance().getApi()

@@ -34,6 +34,9 @@ public class BuyHistoryModel {
     @SerializedName("influencer_id")
     private String influencerId;
 
+    @SerializedName("influencer_code")
+    private String influencerCode;
+
     @SerializedName("influencer_name")
     private String influencerName;
 
@@ -154,5 +157,13 @@ public class BuyHistoryModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getInfluencerCode() {
+        return influencerCode;
+    }
+
+    public void setInfluencerCode(String influencerCode) {
+        this.influencerCode = influencerCode;
     }
 }

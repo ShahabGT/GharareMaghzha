@@ -69,6 +69,26 @@
         app:layout_constraintTop_toBottomOf="@id/navigation_score" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/navigation_buyhistory"
+        style="@style/TextAppearance.AppCompat.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:drawableTop="@drawable/vector_cart2"
+        android:focusable="true"
+        android:fontFamily="@font/vazir"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:soundEffectsEnabled="true"
+        android:text="@string/navigation_buyhistory"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:drawableTint="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_view" />
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/navigation_support"
         style="@style/TextAppearance.AppCompat.Small"
         android:layout_width="0dp"
@@ -87,7 +107,7 @@
         app:drawableTint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/navigation_view" />
+        app:layout_constraintTop_toBottomOf="@id/navigation_buyhistory" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/navigation_help"

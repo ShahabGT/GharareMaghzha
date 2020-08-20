@@ -242,7 +242,7 @@ public class VerifyFragment extends Fragment {
     private void getQuestions() {
         Realm db = Realm.getDefaultInstance();
         if (number.isEmpty() || accessToken.isEmpty()) {
-            Utils.logout(activity);
+            Utils.logout(activity,true);
             return;
         }
         RetrofitClient.getInstance().getApi()

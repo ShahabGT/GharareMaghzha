@@ -73,15 +73,17 @@ public class StartFragment extends Fragment {
     private void init(View v) {
         db = Realm.getDefaultInstance();
 
+        //        myName = v.findViewById(R.id.start_name);
+//        myCode = v.findViewById(R.id.start_code);
+//        myName.setText(MySharedPreference.getInstance(context).getUsername());
+//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
+
         info = v.findViewById(R.id.start_info);
-        myName = v.findViewById(R.id.start_name);
-        myCode = v.findViewById(R.id.start_code);
         profile = v.findViewById(R.id.start_profile_card);
         highscore = v.findViewById(R.id.start_highscore_card);
         start = v.findViewById(R.id.start_start_card);
 
-        myName.setText(MySharedPreference.getInstance(context).getUsername());
-        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
+
 
 
         onClicks();

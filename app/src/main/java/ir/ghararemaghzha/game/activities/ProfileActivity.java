@@ -137,7 +137,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                     persianCalendar.getPersianDay()
             );
             PersianCalendar maxDate = new PersianCalendar();
-            maxDate.setPersianDate(1398, 12, 29);
+            maxDate.setPersianDate(1390, 1, 1);
 
             PersianCalendar minDate = new PersianCalendar();
             minDate.setPersianDate(1300, 1, 1);
@@ -192,7 +192,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this);
+            Utils.logout(this,true);
             return;
         }
 
@@ -207,7 +207,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
                     avatar.setImageURI(Uri.parse(image));
                 }else if (response.code() == 401) {
-                    Utils.logout(ProfileActivity.this);
+                    Utils.logout(ProfileActivity.this,true);
                 } else {
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                 }
@@ -232,7 +232,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this);
+            Utils.logout(this,true);
             return;
         }
 
@@ -247,7 +247,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
 
                 }else if (response.code() == 401) {
-                    Utils.logout(ProfileActivity.this);
+                    Utils.logout(ProfileActivity.this,true);
                 } else {
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                 }
@@ -273,7 +273,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this);
+            Utils.logout(this,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -293,7 +293,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                             MySharedPreference.getInstance(ProfileActivity.this).setUserBday(bday);
 
                         }else if (response.code() == 401) {
-                            Utils.logout(ProfileActivity.this);
+                            Utils.logout(ProfileActivity.this,true);
                         } else {
                             Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                         }

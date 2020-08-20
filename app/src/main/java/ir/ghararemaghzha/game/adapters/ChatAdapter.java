@@ -144,7 +144,7 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(context);
+            Utils.logout(context,true);
             return;
         }
         RetrofitClient.getInstance().getApi()

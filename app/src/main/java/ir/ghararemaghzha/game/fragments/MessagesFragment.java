@@ -89,10 +89,10 @@ public class MessagesFragment extends Fragment {
 
         chatLayout = v.findViewById(R.id.message_chat_layout);
 
-        myName = v.findViewById(R.id.message_name);
-        myCode = v.findViewById(R.id.message_code);
-        myName.setText(MySharedPreference.getInstance(context).getUsername());
-        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
+//        myName = v.findViewById(R.id.message_name);
+//        myCode = v.findViewById(R.id.message_code);
+//        myName.setText(MySharedPreference.getInstance(context).getUsername());
+//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
         empty = v.findViewById(R.id.message_empty);
         title = v.findViewById(R.id.message_title);
 
@@ -196,7 +196,7 @@ public class MessagesFragment extends Fragment {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(activity);
+            Utils.logout(activity,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -209,6 +209,9 @@ public class MessagesFragment extends Fragment {
                             RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
                             models.first().setStat(1);
                             db.commitTransaction();
+                        }if(response.code()==401){
+                            Utils.logout(activity,true);
+
                         }else{
                             db.beginTransaction();
                             RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
@@ -231,7 +234,7 @@ public class MessagesFragment extends Fragment {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(activity);
+            Utils.logout(activity,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -250,6 +253,8 @@ public class MessagesFragment extends Fragment {
                             }
 
 
+                        }else if (response.code() == 401) {
+                            Utils.logout(activity,true);
                         }
                     }
 

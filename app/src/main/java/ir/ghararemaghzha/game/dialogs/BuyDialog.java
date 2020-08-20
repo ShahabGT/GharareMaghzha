@@ -110,7 +110,7 @@ public class BuyDialog extends Dialog {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(context);
+            Utils.logout(context,true);
             return;
         }
         giftcode.setEnabled(false);
@@ -134,7 +134,7 @@ public class BuyDialog extends Dialog {
                             tDiscountAmount.setVisibility(View.VISIBLE);
                             tDiscountAmount.setText(context.getString(R.string.amount_model,Utils.moneySeparator(amount)));
                         }else if (response.code() == 401) {
-                            Utils.logout(context);
+                            Utils.logout(context,true);
                         }else if (response.code()==404){
                             Toast.makeText(context, context.getString(R.string.buy_dialog_giftcode_invalid), Toast.LENGTH_SHORT).show();
                             giftcode.setEnabled(true);

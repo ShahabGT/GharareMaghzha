@@ -62,10 +62,10 @@ public class HighscoreFragment extends Fragment {
 
     private void init(View v) {
         loading = v.findViewById(R.id.highscore_loading);
-        myName = v.findViewById(R.id.highscore_name);
-        myCode = v.findViewById(R.id.highscore_code);
-        myName.setText(MySharedPreference.getInstance(context).getUsername());
-        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
+//        myName = v.findViewById(R.id.highscore_name);
+//        myCode = v.findViewById(R.id.highscore_code);
+//        myName.setText(MySharedPreference.getInstance(context).getUsername());
+//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
 
         refreshLayout = v.findViewById(R.id.highscore_refresh);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -122,7 +122,7 @@ public class HighscoreFragment extends Fragment {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(activity);
+            Utils.logout(activity,true);
             return;
         }
         loading.setVisibility(View.VISIBLE);
@@ -214,7 +214,7 @@ public class HighscoreFragment extends Fragment {
                             }
 
                         } else if (response.code() == 401) {
-                            Utils.logout(activity);
+                            Utils.logout(activity,true);
                         }else{
                             Utils.showInternetError(context, () -> getData());
                         }

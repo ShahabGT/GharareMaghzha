@@ -67,10 +67,10 @@ public class BuyFragment extends Fragment {
 
     private void init(View v) {
         loading = v.findViewById(R.id.buy_loading);
-        myName = v.findViewById(R.id.buy_name);
-        myCode = v.findViewById(R.id.buy_code);
-        myName.setText(MySharedPreference.getInstance(context).getUsername());
-        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
+//        myName = v.findViewById(R.id.buy_name);
+//        myCode = v.findViewById(R.id.buy_code);
+//        myName.setText(MySharedPreference.getInstance(context).getUsername());
+//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
 
         one = v.findViewById(R.id.buy_one_layout);
         onePrice = v.findViewById(R.id.buy_one_price);
@@ -137,7 +137,7 @@ public class BuyFragment extends Fragment {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(activity);
+            Utils.logout(activity,true);
             return;
         }
         loading.setVisibility(View.VISIBLE);
@@ -167,7 +167,7 @@ public class BuyFragment extends Fragment {
                             fivePrice.setText(context.getString(R.string.buy_price, Utils.moneySeparator(models.get(5).getPlanPrice())));
 
                         } else if (response.code() == 401) {
-                            Utils.logout(activity);
+                            Utils.logout(activity,true);
                         } else {
                             Utils.showInternetError(context, () -> getData());
                         }
@@ -192,7 +192,7 @@ public class BuyFragment extends Fragment {
         String number = MySharedPreference.getInstance(activity).getNumber();
         String token = MySharedPreference.getInstance(activity).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(activity);
+            Utils.logout(activity,true);
             return;
         }
         loading.setVisibility(View.VISIBLE);
@@ -221,7 +221,7 @@ public class BuyFragment extends Fragment {
                             context.startActivity(i);
 
                         } else if (response.code() == 401) {
-                            Utils.logout(activity);
+                            Utils.logout(activity,true);
                         } else {
                             Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                         }

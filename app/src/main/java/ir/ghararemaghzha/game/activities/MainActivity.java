@@ -90,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
         init();
-     //   findViewById(R.id.main_menu).setOnClickListener(v -> Utils.logout(this));
-
 
     }
     private void navigationDrawer(){
@@ -105,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
 
                 .placeholder(R.drawable.placeholder)
                 .into((ImageView)findViewById(R.id.navigation_avatar));
+
+        findViewById(R.id.navigation_exit).setOnClickListener(v->Utils.logout(this,false));
+        findViewById(R.id.navigation_buyhistory).setOnClickListener(v->startActivity(new Intent(this,BuyHistoryActivity.class)));
     }
 
     private void animate() {
@@ -250,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             if (size > 99)
                 newMessage.setText("99");
             else
-                newMessage.setText(size);
+                newMessage.setText(String.valueOf(size));
         } else {
             newMessage.setVisibility(View.GONE);
         }
@@ -260,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this);
+            Utils.logout(MainActivity.this,true);
             return;
         }
         if (timeDialog != null)
@@ -288,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this);
+                            Utils.logout(MainActivity.this,true);
                         } else
                             Utils.showInternetError(MainActivity.this, () -> checkTime());
 
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this);
+            Utils.logout(MainActivity.this,true);
             return;
         }
 
@@ -345,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
 
                             sendBroadcast(refreshIntent);
                         } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this);
+                            Utils.logout(MainActivity.this,true);
                         } else
                             Utils.showInternetError(MainActivity.this, () -> verify());
                     }
@@ -401,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this);
+            Utils.logout(MainActivity.this,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -425,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this);
+            Utils.logout(MainActivity.this,true);
             return;
         }
         int questions = db.where(QuestionModel.class).findAll().size();  //3
@@ -453,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
                             if (dataDialog != null) dataDialog.dismiss();
                         } else if (response.code() == 401) {
                             if (dataDialog != null) dataDialog.dismiss();
-                            Utils.logout(MainActivity.this);
+                            Utils.logout(MainActivity.this,true);
                         } else {
                             if (dataDialog != null) dataDialog.dismiss();
                             Utils.showInternetError(MainActivity.this, () -> getQuestions(newPlan));
@@ -473,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this);
+            Utils.logout(MainActivity.this,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -482,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.code() == 401) {
-                            Utils.logout(MainActivity.this);
+                            Utils.logout(MainActivity.this,true);
                         }
                     }
 
@@ -504,7 +505,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this);
+            Utils.logout(MainActivity.this,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -519,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
                             db.commitTransaction();
 
                         } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this);
+                            Utils.logout(MainActivity.this,true);
                         }
                     }
 

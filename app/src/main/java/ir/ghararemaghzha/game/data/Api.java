@@ -1,5 +1,6 @@
 package ir.ghararemaghzha.game.data;
 
+import ir.ghararemaghzha.game.models.BuyHistoryResponse;
 import ir.ghararemaghzha.game.models.ChatResponse;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.HighscoreResponse;
@@ -97,7 +98,7 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("buyhistory")
-    Call<HighscoreResponse> getBuyHistory(
+    Call<BuyHistoryResponse> getBuyHistory(
             @Header("Authorization") String Token,
             @Field("number") String number
     );

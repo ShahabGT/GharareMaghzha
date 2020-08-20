@@ -259,11 +259,12 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void nextQuestion() {
+        if (data.isEmpty()) {
+            Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+            onBackPressed();
+            return;
+        }
         if (Utils.checkInternet(this)) {
-            if (data.isEmpty()) {
-                Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
-                onBackPressed();
-            }
             questionRemain.setText(getString(R.string.question_remaining, String.valueOf(data.size() - 1)));
             model = getRandom();
             downTimer.cancel();
@@ -333,7 +334,7 @@ public class QuestionActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(QuestionActivity.this);
+            Utils.logout(QuestionActivity.this,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -348,7 +349,7 @@ public class QuestionActivity extends AppCompatActivity {
                             db.commitTransaction();
 
                         } else if (response.code() == 401) {
-                            Utils.logout(QuestionActivity.this);
+                            Utils.logout(QuestionActivity.this,true);
                         }
                     }
 
@@ -393,7 +394,7 @@ public class QuestionActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(QuestionActivity.this);
+            Utils.logout(QuestionActivity.this,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -402,7 +403,7 @@ public class QuestionActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.code() == 401) {
-                            Utils.logout(QuestionActivity.this);
+                            Utils.logout(QuestionActivity.this,true);
                         }
                     }
 

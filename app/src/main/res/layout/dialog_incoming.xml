@@ -63,6 +63,7 @@
             app:layout_constraintTop_toBottomOf="@id/incoming_back" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:autoLink="all"
             android:id="@+id/incoming_title"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"

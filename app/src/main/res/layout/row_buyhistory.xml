@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/receipt_payment_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="8dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/buyhistory_row_logo"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:src="@drawable/logo_re"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buyhistory_row_description"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:gravity="right"
+            android:padding="5dp"
+            android:text="اسم طرح"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/buyhistory_row_logo"
+            app:layout_constraintTop_toTopOf="@+id/buyhistory_row_logo" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buyhistory_row_date"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:padding="5dp"
+            android:text="تاریخ خرید"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/buyhistory_row_logo"
+            app:layout_constraintTop_toBottomOf="@+id/buyhistory_row_description" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buyhistory_row_price"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:padding="5dp"
+            android:text="مبلغ:"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/buyhistory_row_logo"
+            app:layout_constraintTop_toBottomOf="@id/buyhistory_row_date" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buyhistory_row_influencer"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:padding="5dp"
+            android:text="کد معرف:"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/buyhistory_row_logo"
+            app:layout_constraintTop_toBottomOf="@id/buyhistory_row_price" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buyhistory_row_stat"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:padding="5dp"
+            android:text="وضعیت:"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/buyhistory_row_logo"
+            app:layout_constraintTop_toBottomOf="@id/buyhistory_row_influencer" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:visibility="gone"
+            android:id="@+id/buyhistory_row_rescode"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:padding="5dp"
+            android:text="کد پیگیری:"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/buyhistory_row_logo"
+            app:layout_constraintTop_toBottomOf="@id/buyhistory_row_stat" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
+
+
