@@ -113,6 +113,13 @@ public class MySharedPreference {
         return  sharedPreferences.getInt("lastUpdate",0);
     }
 
+    public void setLastUpdateChat(String lastUpdate){
+        sharedPreferences.edit().putString("lastUpdateChat",lastUpdate).apply();
+    }
+    public String getLastUpdateChat(){
+        return  sharedPreferences.getString("lastUpdateChat","0");
+    }
+
     public void setGotQuestions(){
         sharedPreferences.edit().putBoolean("GotQuestions",true).apply();
     }

@@ -82,6 +82,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setContentTitle(title);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentText(message);
+        builder.setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL);
+        builder.setNumber(1);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
         builder.setPriority(NotificationCompat.PRIORITY_HIGH);
         builder.setAutoCancel(true);
@@ -103,6 +105,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel notificationChannel = new NotificationChannel(Const.CHANNEL_CODE, name, importance);
             notificationChannel.setDescription(description);
+            notificationChannel.setShowBadge(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
         }

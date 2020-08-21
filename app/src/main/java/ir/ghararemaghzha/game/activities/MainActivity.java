@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
     public static ImageView profile, messages, highscore, buy, start;
-    public static MaterialTextView newMessage,newChat;
+    public static MaterialTextView newMessage, newChat;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
@@ -92,21 +92,22 @@ public class MainActivity extends AppCompatActivity {
         init();
 
     }
-    private void navigationDrawer(){
-        ((MaterialTextView)findViewById(R.id.navigation_name)).setText(MySharedPreference.getInstance(this).getUsername());
-        ((MaterialTextView)findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode()));
-        ((MaterialTextView)findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore()));
+
+    private void navigationDrawer() {
+        ((MaterialTextView) findViewById(R.id.navigation_name)).setText(MySharedPreference.getInstance(this).getUsername());
+        ((MaterialTextView) findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode()));
+        ((MaterialTextView) findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore()));
         Glide.with(this)
                 .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
                 .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
 
                 .placeholder(R.drawable.placeholder)
-                .into((ImageView)findViewById(R.id.navigation_avatar));
+                .into((ImageView) findViewById(R.id.navigation_avatar));
 
-        findViewById(R.id.navigation_exit).setOnClickListener(v->Utils.logout(this,false));
-        findViewById(R.id.navigation_buyhistory).setOnClickListener(v->startActivity(new Intent(this,BuyHistoryActivity.class)));
-        findViewById(R.id.navigation_support).setOnClickListener(v->startActivity(new Intent(this,SupportActivity.class)));
+        findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
+        findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> startActivity(new Intent(this, BuyHistoryActivity.class)));
+        findViewById(R.id.navigation_support).setOnClickListener(v -> startActivity(new Intent(this, SupportActivity.class)));
     }
 
     private void animate() {
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
         changeFragment(new ProfileFragment());
 
-        updateDatabase(0);
+        //  updateDatabase(0);
         animate();
         onClicks();
         uploadAnswers();
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(db!=null) db.close();
+        if (db != null) db.close();
         whichFragment = 1;
     }
 
@@ -214,8 +215,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        avatar.setOnClickListener(v->{
-            startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+        avatar.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
 
         });
 
@@ -273,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this,true);
+            Utils.logout(MainActivity.this, true);
             return;
         }
         if (timeDialog != null)
@@ -293,15 +294,18 @@ public class MainActivity extends AppCompatActivity {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
                             } else {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
-                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty()) {
-                                    int lastUpdate = Integer.parseInt(response.body().getLastUpdate());
-                                    MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
-                                }
-                                updateDatabase(serverCount);
+//                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty()) {
+//                                    int lastUpdate = Integer.parseInt(response.body().getLastUpdate());
+//                                    MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
+//                                }
+                                int lastUpdate = 0;
+                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty())
+                                    lastUpdate = Integer.parseInt(response.body().getLastUpdate());
+                                updateDatabase(serverCount, lastUpdate);
 
                             }
                         } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this,true);
+                            Utils.logout(MainActivity.this, true);
                         } else
                             Utils.showInternetError(MainActivity.this, () -> checkTime());
 
@@ -320,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this,true);
+            Utils.logout(MainActivity.this, true);
             return;
         }
 
@@ -358,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
                             sendBroadcast(refreshIntent);
                         } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this,true);
+                            Utils.logout(MainActivity.this, true);
                         } else
                             Utils.showInternetError(MainActivity.this, () -> verify());
                     }
@@ -371,13 +375,32 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    private void updateDatabase() {
+        Date d = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+        int nowDate = Integer.parseInt(dateFormat.format(d));
+        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
+        int range = remaining / (10 - passed);
+        if (range > 0) {
+            db.executeTransaction(realm -> {
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
+                questions.setBoolean("visible", true);
+            });
+            updateTime(nowDate);
+            Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
+            sendBroadcast(refreshIntent);
+            //   MySharedPreference.getInstance(this).setLastUpdate(nowDate);
 
-    private void updateDatabase(int serverCount) {
+        }
+    }
+
+    private void updateDatabase(int serverCount, int lastUpdate) {
         int userCount = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 
-        int lastUpdate = MySharedPreference.getInstance(this).getLastUpdate();
+        //   int lastUpdate = MySharedPreference.getInstance(this).getLastUpdate();
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
         if (passed == 9) {
@@ -388,6 +411,7 @@ public class MainActivity extends AppCompatActivity {
             updateTime(nowDate);
             Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
             sendBroadcast(refreshIntent);
+            //   MySharedPreference.getInstance(this).setLastUpdate(lastUpdate);
         } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
             int range = remaining / (10 - passed);
@@ -399,6 +423,7 @@ public class MainActivity extends AppCompatActivity {
                 updateTime(nowDate);
                 Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
                 sendBroadcast(refreshIntent);
+                //      MySharedPreference.getInstance(this).setLastUpdate(lastUpdate);
 
             }
         } else if (nowDate == lastUpdate && serverCount > userCount) {
@@ -407,6 +432,7 @@ public class MainActivity extends AppCompatActivity {
                 questions.setBoolean("visible", true);
             });
             sendBroadcast(refreshIntent);
+            //   MySharedPreference.getInstance(this).setLastUpdate(lastUpdate);
         }
     }
 
@@ -414,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this,true);
+            Utils.logout(MainActivity.this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -422,9 +448,11 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
-                        }
+                        //    if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                        //     MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
+                        //    }
+                        if (response.code() == 401)
+                            Utils.logout(MainActivity.this, true);
                     }
 
                     @Override
@@ -438,7 +466,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this,true);
+            Utils.logout(MainActivity.this, true);
             return;
         }
         int questions = db.where(QuestionModel.class).findAll().size();  //3
@@ -460,13 +488,13 @@ public class MainActivity extends AppCompatActivity {
                                 model.setVisible(false);
                                 db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             }
-                            updateDatabase(0);
+                            updateDatabase();
                             MySharedPreference.getInstance(MainActivity.this).setPlan(newPlan);
                             sendBroadcast(refreshIntent);
                             if (dataDialog != null) dataDialog.dismiss();
                         } else if (response.code() == 401) {
                             if (dataDialog != null) dataDialog.dismiss();
-                            Utils.logout(MainActivity.this,true);
+                            Utils.logout(MainActivity.this, true);
                         } else {
                             if (dataDialog != null) dataDialog.dismiss();
                             Utils.showInternetError(MainActivity.this, () -> getQuestions(newPlan));
@@ -486,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this,true);
+            Utils.logout(MainActivity.this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -495,7 +523,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.code() == 401) {
-                            Utils.logout(MainActivity.this,true);
+                            Utils.logout(MainActivity.this, true);
                         }
                     }
 
@@ -517,7 +545,7 @@ public class MainActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this,true);
+            Utils.logout(MainActivity.this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -532,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
                             db.commitTransaction();
 
                         } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this,true);
+                            Utils.logout(MainActivity.this, true);
                         }
                     }
 

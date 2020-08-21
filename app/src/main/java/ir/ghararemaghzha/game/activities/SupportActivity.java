@@ -75,9 +75,8 @@ public class SupportActivity extends AppCompatActivity {
             }
         });
 
-        if (adapter.getData()==null || adapter.getData().size()==0) {
             getChatData();
-        }
+
 
         send = findViewById(R.id.chat_send);
         message = findViewById(R.id.chat_text);
@@ -151,24 +150,31 @@ public class SupportActivity extends AppCompatActivity {
     private void getChatData() {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
+        String lastUpdate = MySharedPreference.getInstance(this).getLastUpdateChat();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(this,true);
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .getMessages("Bearer " + token, number)
+                .getMessages("Bearer " + token, number,lastUpdate)
                 .enqueue(new Callback<ChatResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")
-                                && response.body().getMessage().equals("ok")) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
 
-                            for (MessageModel model : response.body().getData()) {
-                                model.setStat(1);
-                                model.setRead(1);
-                                model.setMessageId(Utils.getNextKey(db));
-                                db.executeTransaction(realm -> realm.insertOrUpdate(model));
+                            if(response.body().getMessage().equals("ok")) {
+
+                                for (MessageModel model : response.body().getData()) {
+                                    model.setStat(1);
+                                    model.setRead(1);
+                                    model.setMessageId(Utils.getNextKey(db));
+                                    db.executeTransaction(realm -> realm.insertOrUpdate(model));
+                                }
+                                recyclerView.scrollToPosition(0);
+
                             }
+
+                            MySharedPreference.getInstance(SupportActivity.this).setLastUpdateChat(Utils.currentDate());
 
 
                         }else if (response.code() == 401) {
