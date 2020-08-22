@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <meta-data
+        android:name="fontProviderRequests"
+        android:value="Noto Color Emoji Compat" />
+
     <application
         android:name=".classes.MyApplication"
         android:allowBackup="false"

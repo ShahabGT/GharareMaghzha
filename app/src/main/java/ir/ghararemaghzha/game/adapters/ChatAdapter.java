@@ -1,5 +1,6 @@
 package ir.ghararemaghzha.game.adapters;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,11 +8,13 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.emoji.widget.EmojiTextView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import io.realm.OrderedRealmCollection;
@@ -43,9 +46,7 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
 
     @Override
     public long getItemId(int position) {
-        //return super.getItemId(position);
         return position;
-        //  return getItem(position).getMessageId();
     }
 
     @Override
@@ -74,12 +75,15 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
             try {
                 if (getItemViewType(position) == TYPE_ME) {
                     MeViewHolder h = (MeViewHolder) holder;
-                    h.message.setText(model.getMessage());
+                    byte[] data = Base64.decode(model.getMessage(), Base64.DEFAULT);
+                    String text = new String(data, StandardCharsets.UTF_8);
+                    h.message.setText( text);
                     String date = model.getDate();
                     DateConverter dateConverter = new DateConverter();
 
                     dateConverter.gregorianToPersian(Integer.parseInt(date.substring(0, 4)), Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)));
-                    h.date.setText(date.substring(11, 16));
+                    h.time.setText(date.substring(11, 16));
+                    h.date.setText(dateConverter.getYear()+"/"+dateConverter.getMonth()+"/"+dateConverter.getDay());
 
                     switch (model.getStat()) {
                         case 0:
@@ -96,19 +100,27 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
                     h.stat.setOnClickListener(v -> {
                         if (model.getStat() == -1) {
                             h.stat.setImageResource(R.drawable.vector_sending);
-                            sendMessage(model.getMessage(), model.getMessageId(), position);
+                            byte[] data2 = model.getMessage().getBytes(StandardCharsets.UTF_8);
+                            String body = Base64.encodeToString(data2, Base64.DEFAULT);
+
+                            sendMessage(body, model.getMessageId(), position);
                         }
                     });
 
 
                 } else {
                     OtherViewHolder h = (OtherViewHolder) holder;
-                    h.message.setText(model.getMessage());
+                    byte[] data = Base64.decode(model.getMessage(), Base64.DEFAULT);
+                    String text = new String(data, StandardCharsets.UTF_8);
+                    h.message.setText( text);
+
                     String date = model.getDate();
                     DateConverter dateConverter = new DateConverter();
 
                     dateConverter.gregorianToPersian(Integer.parseInt(date.substring(0, 4)), Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)));
-                    h.date.setText(date.substring(11, 16));
+                    h.time.setText(date.substring(11, 16));
+                    h.date.setText(dateConverter.getYear()+"/"+dateConverter.getMonth()+"/"+dateConverter.getDay());
+
                 }
 
 
@@ -118,17 +130,20 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
     }
 
     static class OtherViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView message, date;
+        private MaterialTextView date,time;
+        private EmojiTextView message;
 
         public OtherViewHolder(@NonNull View v) {
             super(v);
             message = v.findViewById(R.id.chat_row_message);
             date = v.findViewById(R.id.chat_row_date);
+            time = v.findViewById(R.id.chat_row_time);
         }
     }
 
     static class MeViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView message, date;
+        private MaterialTextView  date,time;
+        private EmojiTextView message;
         private ImageView stat;
 
         public MeViewHolder(@NonNull View v) {
@@ -136,6 +151,8 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
             message = v.findViewById(R.id.chat_row_message);
             date = v.findViewById(R.id.chat_row_date);
             stat = v.findViewById(R.id.chat_row_stat);
+            time = v.findViewById(R.id.chat_row_time);
+
         }
     }
 

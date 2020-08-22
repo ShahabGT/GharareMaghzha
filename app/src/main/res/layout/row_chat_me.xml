@@ -11,11 +11,23 @@
         android:layout_margin="4dp"
         android:background="@drawable/shape_me">
 
-
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/chat_row_date"
+            style="@style/Base.TextAppearance.AppCompat.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="تاریخ"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+
+        <androidx.emoji.widget.EmojiTextView
             android:id="@+id/chat_row_message"
             android:autoLink="all"
-
             style="@style/Base.TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +40,7 @@
             android:textColor="#ffffff"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/chat_row_date" />
 
         <ImageView
             android:id="@+id/chat_row_stat"
@@ -38,16 +50,16 @@
             android:src="@drawable/vector_sent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/chat_row_date" />
+            app:layout_constraintTop_toTopOf="@id/chat_row_time" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/chat_row_date"
+            android:id="@+id/chat_row_time"
             style="@style/Base.TextAppearance.AppCompat.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/vazir"
             android:gravity="center"
-            android:padding="8dp"
+            android:padding="4dp"
             android:text="تاریخ"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

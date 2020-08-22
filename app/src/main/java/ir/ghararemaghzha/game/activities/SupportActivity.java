@@ -2,14 +2,18 @@ package ir.ghararemaghzha.game.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.emoji.widget.EmojiEditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.nio.charset.StandardCharsets;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -36,7 +40,7 @@ public class SupportActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private ChatAdapter adapter;
-    private EditText message;
+    private EmojiEditText message;
     private ImageView send;
 
     @Override
@@ -75,7 +79,7 @@ public class SupportActivity extends AppCompatActivity {
             }
         });
 
-            getChatData();
+        getChatData();
 
 
         send = findViewById(R.id.chat_send);
@@ -90,21 +94,24 @@ public class SupportActivity extends AppCompatActivity {
 
         send.setOnClickListener(v -> {
             String txt = message.getText().toString().trim();
+            byte[] data = txt.getBytes(StandardCharsets.UTF_8);
+            String body = Base64.encodeToString(data, Base64.DEFAULT);
+
             if (!txt.isEmpty()) {
                 message.setText("");
                 String userId = MySharedPreference.getInstance(SupportActivity.this).getUserId();
                 MessageModel model = new MessageModel();
+                model.setDate(Utils.currentDate());
                 model.setStat(0);
-                model.setMessage(txt);
+                model.setMessage(body);
                 model.setReceiver("1");
                 model.setRead(1);
                 model.setSender(userId);
                 model.setTitle("new");
                 int key= getNextKey(db);
                 model.setMessageId(getNextKey(db));
-                model.setDate(Utils.currentDate());
                 db.executeTransaction(realm1 -> realm1.insert(model));
-                sendMessage(txt,key);
+                sendMessage(body,key);
                 recyclerView.scrollToPosition(0);
             }
         });
@@ -151,6 +158,7 @@ public class SupportActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         String lastUpdate = MySharedPreference.getInstance(this).getLastUpdateChat();
+        String nowDate= Utils.currentDate();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(this,true);
             return;
@@ -161,9 +169,8 @@ public class SupportActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-
+                            MySharedPreference.getInstance(SupportActivity.this).setLastUpdateChat(nowDate);
                             if(response.body().getMessage().equals("ok")) {
-
                                 for (MessageModel model : response.body().getData()) {
                                     model.setStat(1);
                                     model.setRead(1);
@@ -171,10 +178,8 @@ public class SupportActivity extends AppCompatActivity {
                                     db.executeTransaction(realm -> realm.insertOrUpdate(model));
                                 }
                                 recyclerView.scrollToPosition(0);
-
                             }
 
-                            MySharedPreference.getInstance(SupportActivity.this).setLastUpdateChat(Utils.currentDate());
 
 
                         }else if (response.code() == 401) {
@@ -192,6 +197,7 @@ public class SupportActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        MySharedPreference.getInstance(this).setLastUpdateChat(Utils.currentDate());
         if(db!=null)db.close();
     }
 }
