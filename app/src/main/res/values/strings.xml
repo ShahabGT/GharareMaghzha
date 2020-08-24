@@ -14,6 +14,8 @@
     <string name="general_number">شماره تلفن همراه</string>
     <string name="general_email">ایمیل</string>
     <string name="general_bday">تاریخ تولد</string>
+    <string name="general_share">اشتراک از طریق</string>
+
     <string name="general_name">نام و نام خانوادگی</string>
     <string name="general_code">کد تایید</string>
     <string name="general_exit">برای خروج کلید بازگشت رو دوباره بفشارید</string>
@@ -162,6 +164,7 @@
 
     <string name="navigation_buyhistory">تاریخچه خرید</string>
     <string name="navigation_support">پشتیبانی</string>
+    <string name="navigation_invite">معرفی به دوستان</string>
     <string name="navigation_help">راهنما</string>
     <string name="navigation_about">درباره</string>
     <string name="navigation_exit">خروج</string>
@@ -174,6 +177,21 @@
     <string name="buyhistory_row_influencer">کد معرف: %s</string>
     <string name="buyhistory_row_stat">وضعیت: %s</string>
     <string name="buyhistory_row_rescode">کد پیگیری: %s</string>
+
+    <string name="invite_title">معرفی به دوستان</string>
+    <string name="invite_info_title">با معرفی دوستان خود به قرار مغزها بصورت رایگان امتیاز خود را افزایش دهید</string>
+    <string name="invite_info_text1">با معرفی هر نفر %s امتیاز دریافت کنید</string>
+    <string name="invite_info_text2">سقف معرفی دوستان 10 نفر می باشد</string>
+    <string name="invite_invite_title">کد معرفی شما:</string>
+    <string name="invite_star_title">فقط %d نفر مانده!</string>
+    <string name="invite_count">%s نفر</string>
+    <string name="invite_share_title">اشتراک گذاری</string>
+    <string name="invite_share">اپلیکیشن قرار مغزها رو دیدی؟ حتما نصبش کن \n
+کد معرف من: %s \n
+دانلود از: \n
+https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
+\n
+</string>
 
 
 </resources>

@@ -129,8 +129,8 @@ public class HighscoreFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<HighscoreResponse> call, @NonNull Response<HighscoreResponse> response) {
                         refreshLayout.setRefreshing(false);
+                        loading.setVisibility(View.GONE);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            loading.setVisibility(View.GONE);
                             firstCard.setVisibility(View.VISIBLE);
                             secondCard.setVisibility(View.VISIBLE);
                             thirdCard.setVisibility(View.VISIBLE);
@@ -219,6 +219,7 @@ public class HighscoreFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<HighscoreResponse> call, @NonNull Throwable t) {
+                        loading.setVisibility(View.GONE);
                         refreshLayout.setRefreshing(false);
                         Utils.showInternetError(context, () -> getData());
 

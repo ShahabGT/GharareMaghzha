@@ -45,6 +45,25 @@ public class GeneralResponse {
     @SerializedName("user_email")
     private String userEmail;
 
+    private String count;
+    private String value;
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getUserPlan() {
         return userPlan;
     }

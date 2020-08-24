@@ -256,4 +256,12 @@ public class Utils {
         return res;
     }
 
+    public static void shareCode(Context context,String title){
+        Intent intent= new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,title);
+        context.startActivity(Intent.createChooser(intent,context.getString(R.string.general_share)));
+
+    }
+
 }

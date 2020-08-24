@@ -71,6 +71,7 @@ dependencies {
     implementation 'com.mohamadamin:persianmaterialdatetimepicker:1.2.1'
 
     implementation 'androidx.emoji:emoji:1.1.0'
+    implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
 
 
 }

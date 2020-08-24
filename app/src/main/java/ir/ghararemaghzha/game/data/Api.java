@@ -176,6 +176,13 @@ public interface Api {
             @Header("Authorization") String Token,
             @Field("number") String number);
 
+
+    @FormUrlEncoded
+    @POST("invites")
+    Call<GeneralResponse> getInvites(
+            @Header("Authorization") String Token,
+            @Field("number") String number);
+
 }
 
 

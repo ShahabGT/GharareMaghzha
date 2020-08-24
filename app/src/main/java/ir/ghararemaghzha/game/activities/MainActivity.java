@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
         findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> startActivity(new Intent(this, BuyHistoryActivity.class)));
         findViewById(R.id.navigation_support).setOnClickListener(v -> startActivity(new Intent(this, SupportActivity.class)));
+        findViewById(R.id.navigation_invite).setOnClickListener(v -> startActivity(new Intent(this, InviteActivity.class)));
     }
 
     private void animate() {
