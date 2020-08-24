@@ -30,7 +30,7 @@ public class StartFragment extends Fragment {
 
     private Context context;
     private FragmentActivity activity;
-    private MaterialTextView info, myCode, myName;
+    private MaterialTextView info;
     private MaterialCardView profile, highscore, start;
 
     private Realm db;
@@ -71,12 +71,10 @@ public class StartFragment extends Fragment {
     }
 
     private void init(View v) {
-        db = Realm.getDefaultInstance();
+        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.start_title);
 
-        //        myName = v.findViewById(R.id.start_name);
-//        myCode = v.findViewById(R.id.start_code);
-//        myName.setText(MySharedPreference.getInstance(context).getUsername());
-//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
+
+        db = Realm.getDefaultInstance();
 
         info = v.findViewById(R.id.start_info);
         profile = v.findViewById(R.id.start_profile_card);

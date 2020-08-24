@@ -31,7 +31,7 @@ public class ProfileFragment extends Fragment {
 
     private Context context;
     private FragmentActivity activity;
-    private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, remainingTimeTitle, myCode, myName;
+    private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, remainingTimeTitle;
     private MaterialCardView buy, edit;
 
     private Realm db;
@@ -70,14 +70,16 @@ public class ProfileFragment extends Fragment {
     }
 
     private void init(View v) {
+        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.profile_title);
+
+
         db = Realm.getDefaultInstance();
         myScore = v.findViewById(R.id.profile_score);
         totalQuestions = v.findViewById(R.id.profile_questions);
         remainingQuestion = v.findViewById(R.id.profile_remaining);
         remainingTime = v.findViewById(R.id.profile_time);
         remainingTimeTitle = v.findViewById(R.id.profile_time_title);
-//        myCode = v.findViewById(R.id.profile_code);
-//        myName = v.findViewById(R.id.profile_name);
+
 
         buy = v.findViewById(R.id.profile_buy_card);
         edit = v.findViewById(R.id.profile_edit_card);
@@ -88,8 +90,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateUI(){
-//        myName.setText(MySharedPreference.getInstance(context).getUsername());
-//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
         myScore.setText(MySharedPreference.getInstance(context).getScore());
         int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
 

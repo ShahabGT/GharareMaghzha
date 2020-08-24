@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         init();
 
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         newMessage = findViewById(R.id.main_messages_new);
         newChat = findViewById(R.id.main_chat_new);
         highscore = findViewById(R.id.main_highscore);
-        avatar = findViewById(R.id.main_avatar);
+        avatar = findViewById(R.id.toolbar_avatar);
         Glide.with(this)
                 .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
                 .circleCrop()
@@ -215,10 +218,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        avatar.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-
-        });
+        avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
 
 
     }
@@ -535,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void uploadAnswers() {
-        RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", true).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
+        RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
         for (QuestionModel model : models)
             uploadAnswer(model.getQuestionId(), model.getUserAnswer());
     }

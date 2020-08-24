@@ -138,9 +138,7 @@ public class Utils {
     }
 
     public static void removeNotification(Context context) {
-      //  ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(Const.NOTIFICATION_ID);
-        NotificationManager notificationManager=  ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
-        notificationManager.cancel(Const.NOTIFICATION_ID);
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(Const.NOTIFICATION_ID);
     }
 
     public static TimeDialog showTimeError(Context context) {

@@ -12,20 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
-
 import java.util.List;
 import java.util.Objects;
-
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.BuyInterface;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -42,7 +37,6 @@ import retrofit2.Response;
 public class BuyFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
-    private MaterialTextView myCode, myName;
     private ConstraintLayout loading;
     private MaterialCardView one, two, three, four, five;
     private MaterialTextView onePrice, twoPrice, threePrice, fourPrice, fivePrice;
@@ -66,11 +60,9 @@ public class BuyFragment extends Fragment {
     }
 
     private void init(View v) {
+        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.buy_title);
+
         loading = v.findViewById(R.id.buy_loading);
-//        myName = v.findViewById(R.id.buy_name);
-//        myCode = v.findViewById(R.id.buy_code);
-//        myName.setText(MySharedPreference.getInstance(context).getUsername());
-//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
 
         one = v.findViewById(R.id.buy_one_layout);
         onePrice = v.findViewById(R.id.buy_one_price);

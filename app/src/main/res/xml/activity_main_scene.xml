@@ -27,12 +27,12 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
-        app:duration="250"
+        app:duration="200"
         app:motionInterpolator="linear" >
         <OnSwipe
             app:touchAnchorId="@+id/main_content"
             app:dragDirection="dragLeft"
             app:touchAnchorSide="left" />
-        <OnClick app:targetId="@+id/main_menu" />
+        <OnClick app:targetId="@+id/toolbar_menu" />
     </Transition>
 </MotionScene>

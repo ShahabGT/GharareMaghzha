@@ -28,7 +28,7 @@ public class MessagesFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private Realm db;
-    private MaterialTextView myCode, myName, empty, title;
+    private MaterialTextView empty;
     private RealmResults<MessageModel> data;
     private RecyclerView recyclerView;
     private IncomingAdapter adapter;
@@ -47,6 +47,9 @@ public class MessagesFragment extends Fragment {
     }
 
     private void init(View v) {
+        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.message_incoming);
+
+
         db = Realm.getDefaultInstance();
 
         db.executeTransaction(realm -> {
@@ -59,14 +62,7 @@ public class MessagesFragment extends Fragment {
         intent.setAction(GHARAREHMAGHZHA_BROADCAST);
         context.sendBroadcast(intent);
 
-
-//        myName = v.findViewById(R.id.message_name);
-//        myCode = v.findViewById(R.id.message_code);
-//        myName.setText(MySharedPreference.getInstance(context).getUsername());
-//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
         empty = v.findViewById(R.id.message_empty);
-        title = v.findViewById(R.id.message_title);
-
 
         recyclerView = v.findViewById(R.id.message_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

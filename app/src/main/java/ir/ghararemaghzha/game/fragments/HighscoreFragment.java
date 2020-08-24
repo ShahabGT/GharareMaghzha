@@ -41,8 +41,6 @@ public class HighscoreFragment extends Fragment {
     private MaterialTextView firstName, secondName, thirdName, fourthName, fifthName, userName,userRank;
     private MaterialTextView firstScore, secondScore, thirdScore, fourthScore, fifthScore, userScore;
     private ImageView firstAvatar, secondAvatar, thirdAvatar, fourthAvatar, fifthAvatar, userAvatar;
-    private MaterialTextView myCode, myName;
-
     private ProgressBar loading;
 
     public HighscoreFragment() {
@@ -61,11 +59,10 @@ public class HighscoreFragment extends Fragment {
     }
 
     private void init(View v) {
+        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.highscore_title);
+
+
         loading = v.findViewById(R.id.highscore_loading);
-//        myName = v.findViewById(R.id.highscore_name);
-//        myCode = v.findViewById(R.id.highscore_code);
-//        myName.setText(MySharedPreference.getInstance(context).getUsername());
-//        myCode.setText(context.getString(R.string.profile_code, MySharedPreference.getInstance(context).getUserCode()));
 
         refreshLayout = v.findViewById(R.id.highscore_refresh);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);

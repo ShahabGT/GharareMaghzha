@@ -15,6 +15,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <include
+            android:id="@+id/main_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            layout="@layout/toolbar"/>
 
         <FrameLayout
             android:id="@+id/main_container"
@@ -23,7 +29,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide90"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/main_toolbar" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide20"
@@ -34,13 +40,6 @@
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide90"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.92" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide95"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -84,7 +83,7 @@
             android:elevation="12dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:padding="16dp"
+            android:padding="14dp"
             android:soundEffectsEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -115,7 +114,7 @@
             android:elevation="12dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:padding="12dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/guide40"
             app:layout_constraintRight_toRightOf="@id/guide60"
@@ -130,7 +129,7 @@
             android:elevation="12dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:padding="14dp"
+            android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/guide60"
             app:layout_constraintRight_toRightOf="@id/guide80"
@@ -160,38 +159,15 @@
             android:elevation="12dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:padding="16dp"
+            android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/guide80"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/guide90"
             app:srcCompat="@drawable/comment" />
 
-        <ImageView
-            android:id="@+id/main_menu"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:soundEffectsEnabled="true"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menu"
-            app:tint="@color/white" />
 
-        <ImageView
-            android:id="@+id/main_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:soundEffectsEnabled="true"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include

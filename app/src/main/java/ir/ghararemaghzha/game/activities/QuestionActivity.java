@@ -104,6 +104,10 @@ public class QuestionActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                answer1c.setEnabled(false);
+                answer2c.setEnabled(false);
+                answer3c.setEnabled(false);
+                answer4c.setEnabled(false);
             }
         };
         nextTimer = new CountDownTimer(2500, 1000) {
