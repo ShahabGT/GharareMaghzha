@@ -6,9 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <meta-data
-        android:name="fontProviderRequests"
-        android:value="Noto Color Emoji Compat" />
+
 
     <application
         android:name=".classes.MyApplication"
@@ -23,8 +21,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:supportsRtl">
-        <activity android:name=".activities.SupportActivity"></activity>
-        <activity android:name=".activities.BuyHistoryActivity" />
+        <meta-data
+            android:name="fontProviderRequests"
+            android:value="Noto Color Emoji Compat" />
+        <activity android:name=".activities.SupportActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="ir.ghararemaghzha.game.TARGET_NOTIFICATION_CHAT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.BuyHistoryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".activities.QuestionActivity"
             android:hardwareAccelerated="true"
@@ -46,7 +57,8 @@
             tools:ignore="MissingClass" />
         <activity
             android:name=".activities.ProfileActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <service
             android:name=".firebase.MyFirebaseMessagingService"
@@ -58,7 +70,8 @@
 
         <activity
             android:name=".activities.RegisterActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"

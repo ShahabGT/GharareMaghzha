@@ -6,7 +6,10 @@ import androidx.emoji.widget.EmojiEditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
@@ -30,7 +33,6 @@ import ir.ghararemaghzha.game.models.TimeResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Utils.getNextKey;
 
@@ -78,8 +80,8 @@ public class SupportActivity extends AppCompatActivity {
                 });
             }
         });
-
-        getChatData();
+        if(db.where(MessageModel.class).notEqualTo("sender", "admin").findAll().size()==0)
+            getChatData();
 
 
         send = findViewById(R.id.chat_send);
@@ -164,7 +166,7 @@ public class SupportActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .getMessages("Bearer " + token, number,lastUpdate)
+                .getMessages("Bearer " + token, number)
                 .enqueue(new Callback<ChatResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {

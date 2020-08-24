@@ -111,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
             in.show('1', '1', address -> {
                 try {
                     if (Utils.checkInternet(ProfileActivity.this))
-                        changeAvatar(toBase64(Uri.parse(address)));
+                        changeAvatar(Uri.parse(address));
                     else
                         Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -185,7 +185,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
-    private void changeAvatar(String image) {
+    private void changeAvatar(Uri image) {
         canGoBack = false;
         save.setEnabled(false);
         loading.setVisibility(View.VISIBLE);
@@ -195,9 +195,20 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
             Utils.logout(this,true);
             return;
         }
+        String pic;
+
+        try {
+            pic = toBase64(image);
+        } catch (Exception e) {
+            save.setEnabled(true);
+            canGoBack = true;
+            loading.setVisibility(View.GONE);
+            Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         RetrofitClient.getInstance().getApi()
-                .alterAvatar("Bearer " + token, number, "change", image).enqueue(new Callback<GeneralResponse>() {
+                .alterAvatar("Bearer " + token, number, "change", pic).enqueue(new Callback<GeneralResponse>() {
             @Override
             public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
@@ -205,7 +216,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                     canGoBack = true;
                     loading.setVisibility(View.GONE);
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
-                    avatar.setImageURI(Uri.parse(image));
+                    avatar.setImageURI(image);
                 }else if (response.code() == 401) {
                     Utils.logout(ProfileActivity.this,true);
                 } else {

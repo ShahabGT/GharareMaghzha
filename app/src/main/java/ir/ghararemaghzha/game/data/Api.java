@@ -82,6 +82,12 @@ public interface Api {
             @Field("date") String lastUpdate);
 
     @FormUrlEncoded
+    @POST("messages")
+    Call<ChatResponse> getMessages(
+            @Header("Authorization") String Token,
+            @Field("number") String number);
+
+    @FormUrlEncoded
     @POST("questions")
     Call<QuestionResponse> getQuestions(
             @Header("Authorization") String Token,

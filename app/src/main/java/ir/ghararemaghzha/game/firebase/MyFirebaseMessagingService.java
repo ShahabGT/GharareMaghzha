@@ -8,23 +8,21 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
-
+import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
+import ir.ghararemaghzha.game.activities.SupportActivity;
 import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.models.MessageModel;
-
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA;
 import static ir.ghararemaghzha.game.classes.Utils.getNextKey;
@@ -34,27 +32,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         Map<String, String> data = remoteMessage.getData();
-        String title = data.get("title");
-        String body = data.get("body");
+        String title = data.get("title")+"";
+        String body = data.get("body")+"";
+        String clickAction = data.get("click_action")+"";
+
+        byte[] byteData = body.getBytes(StandardCharsets.UTF_8);
+        String text = Base64.encodeToString(byteData, Base64.DEFAULT);
+
+
         String sender = data.get("sender");
         String date = data.get("time");
         MessageModel model = new MessageModel();
         model.setStat(1);
-        model.setMessage(body);
+        model.setMessage(text);
         model.setTitle(title);
         model.setSender(sender);
         model.setDate(date);
-        Realm db = Realm.getDefaultInstance();
-        Intent intent = new Intent();
-        intent.setAction(GHARAREHMAGHZHA_BROADCAST);
-        model.setMessageId(getNextKey(db));
         model.setRead(0);
+        Realm db = Realm.getDefaultInstance();
+        model.setMessageId(getNextKey(db));
         db.beginTransaction();
         db.insert(model);
         db.commitTransaction();
+
+        Intent intent = new Intent();
+        intent.setAction(GHARAREHMAGHZHA_BROADCAST);
         intent.putExtra(GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA, "new");
         sendBroadcast(intent);
-        createNotification(title, body);
+
+        createNotification(title, body,clickAction);
 
     }
 
@@ -67,14 +73,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void createNotification(String title, String message) {
+    private void createNotification(String title, String message,String clickAction) {
+        Intent intent;
+        if(clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
+            intent = new Intent(this, MainActivity.class);
+        else
+            intent = new Intent(this, SupportActivity.class);
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("notidata", "notification");
-        //do not use
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Const.CHANNEL_CODE);
 
@@ -83,11 +90,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentText(message);
         builder.setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL);
-        builder.setNumber(1);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
         builder.setPriority(NotificationCompat.PRIORITY_HIGH);
         builder.setAutoCancel(true);
         builder.setContentIntent(pendingIntent);
+        //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);
         //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
         builder.setVibrate(new long[]{1000, 1000, 1000});
         builder.setLights(Color.YELLOW, 1000, 1000);
@@ -105,7 +112,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel notificationChannel = new NotificationChannel(Const.CHANNEL_CODE, name, importance);
             notificationChannel.setDescription(description);
-            notificationChannel.setShowBadge(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
         }
