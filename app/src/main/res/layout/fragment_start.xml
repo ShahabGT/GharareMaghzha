@@ -9,6 +9,16 @@
     android:focusable="true"
     tools:context=".fragments.StartFragment">
 
+    <com.tmall.ultraviewpager.UltraViewPager
+        android:id="@+id/start_slider"
+        android:background="@color/light_background"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/start_info_card"
         android:layout_width="wrap_content"
@@ -17,7 +27,7 @@
         app:cardElevation="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/start_slider">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/start_info"

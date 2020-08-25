@@ -7,6 +7,7 @@ import ir.ghararemaghzha.game.models.HighscoreResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
 import ir.ghararemaghzha.game.models.PlanResponse;
 import ir.ghararemaghzha.game.models.QuestionResponse;
+import ir.ghararemaghzha.game.models.SliderResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
 import retrofit2.Call;
@@ -183,6 +184,9 @@ public interface Api {
     Call<GeneralResponse> getInvites(
             @Header("Authorization") String Token,
             @Field("number") String number);
+
+    @GET("ad")
+    Call<SliderResponse> getSlider();
 
 }
 
