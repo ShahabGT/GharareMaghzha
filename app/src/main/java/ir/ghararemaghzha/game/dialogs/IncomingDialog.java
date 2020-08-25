@@ -40,6 +40,6 @@ public class IncomingDialog extends Dialog {
         DateConverter dateConverter = new DateConverter();
 
         dateConverter.gregorianToPersian(Integer.parseInt(d.substring(0,4)),Integer.parseInt(d.substring(5,7)),Integer.parseInt(d.substring(8,10)));
-        date.setText(dateConverter.getYear()+"/"+dateConverter.getMonth()+"/"+dateConverter.getDay());
+        date.setText(dateConverter.getYear()+"/"+dateConverter.getMonth()+"/"+dateConverter.getDay()+" "+d.substring(11, 16));
     }
 }

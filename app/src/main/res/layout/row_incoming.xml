@@ -39,6 +39,7 @@
             app:srcCompat="@drawable/vector_left" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:visibility="gone"
             android:id="@+id/incoming_date"
             style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="wrap_content"

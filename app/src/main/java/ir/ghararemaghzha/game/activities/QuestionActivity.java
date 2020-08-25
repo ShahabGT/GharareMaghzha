@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import java.util.Random;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.classes.MySettingsPreference;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
@@ -53,6 +55,8 @@ public class QuestionActivity extends AppCompatActivity {
     private int correctSound, wrongSound;
     private int gameScore = 0;
     private boolean shouldRandomize;
+    private ImageView music;
+    private boolean musicSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,11 @@ public class QuestionActivity extends AppCompatActivity {
     private void init() {
         db = Realm.getDefaultInstance();
         data = db.where(QuestionModel.class).equalTo("visible", true).findAll();
+
+        music = findViewById(R.id.question_music);
+        musicSetting = MySettingsPreference.getInstance(this).getMusic();
+        music.setImageResource(musicSetting ? R.drawable.vector_music_on : R.drawable.vector_music_off);
+
 
         next = findViewById(R.id.question_next);
         questionPoints = findViewById(R.id.question_points);
@@ -104,6 +113,8 @@ public class QuestionActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                timeText.setText(String.valueOf(0));
+                progressBar.setProgress(0);
                 answer1c.setEnabled(false);
                 answer2c.setEnabled(false);
                 answer3c.setEnabled(false);
@@ -141,6 +152,20 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
+        music.setOnClickListener(v -> {
+            musicSetting = !musicSetting;
+            music.setImageResource(musicSetting ? R.drawable.vector_music_on : R.drawable.vector_music_off);
+            if (musicSetting) {
+                mediaPlayer = MediaPlayer.create(this, R.raw.game);
+                mediaPlayer.setLooping(true);
+                mediaPlayer.start();
+            } else {
+                mediaPlayer.pause();
+                mediaPlayer.stop();
+            }
+        });
+
+
         answer1c.setOnClickListener(v -> {
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
@@ -338,7 +363,7 @@ public class QuestionActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(QuestionActivity.this,true);
+            Utils.logout(QuestionActivity.this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -353,7 +378,7 @@ public class QuestionActivity extends AppCompatActivity {
                             db.commitTransaction();
 
                         } else if (response.code() == 401) {
-                            Utils.logout(QuestionActivity.this,true);
+                            Utils.logout(QuestionActivity.this, true);
                         }
                     }
 
@@ -398,7 +423,7 @@ public class QuestionActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(QuestionActivity.this,true);
+            Utils.logout(QuestionActivity.this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -407,7 +432,7 @@ public class QuestionActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.code() == 401) {
-                            Utils.logout(QuestionActivity.this,true);
+                            Utils.logout(QuestionActivity.this, true);
                         }
                     }
 
@@ -421,14 +446,14 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mediaPlayer != null)
+        if (mediaPlayer != null && musicSetting)
             mediaPlayer.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mediaPlayer != null)
+        if (mediaPlayer != null && musicSetting)
             mediaPlayer.start();
     }
 

@@ -43,12 +43,14 @@
 
     <ImageView
         android:id="@+id/buyhistory_close"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_margin="12dp"
+        android:background="@drawable/round"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
+        android:padding="6dp"
         android:soundEffectsEnabled="true"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
