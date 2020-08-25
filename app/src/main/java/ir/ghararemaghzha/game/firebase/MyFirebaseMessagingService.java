@@ -35,16 +35,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String title = data.get("title")+"";
         String body = data.get("body")+"";
         String clickAction = data.get("click_action")+"";
+        String sender = data.get("sender")+"";
 
-        byte[] byteData = body.getBytes(StandardCharsets.UTF_8);
-        String text = Base64.encodeToString(byteData, Base64.DEFAULT);
+        if(sender.equals("support")) {
+            byte[] byteData = body.getBytes(StandardCharsets.UTF_8);
+            body = Base64.encodeToString(byteData, Base64.DEFAULT);
+        }
 
-
-        String sender = data.get("sender");
         String date = data.get("time");
         MessageModel model = new MessageModel();
         model.setStat(1);
-        model.setMessage(text);
+        model.setMessage(body);
         model.setTitle(title);
         model.setSender(sender);
         model.setDate(date);

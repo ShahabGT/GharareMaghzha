@@ -45,6 +45,9 @@ public class GeneralResponse {
     @SerializedName("user_email")
     private String userEmail;
 
+    @SerializedName("user_invite")
+    private String userInvite;
+
     private String count;
     private String value;
 
@@ -183,5 +186,13 @@ public class GeneralResponse {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserInvite() {
+        return userInvite;
+    }
+
+    public void setUserInvite(String userInvite) {
+        this.userInvite = userInvite;
     }
 }

@@ -10,7 +10,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
@@ -42,7 +42,8 @@ import retrofit2.Response;
 public class ProfileActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private ImageView avatar;
-    private TextInputEditText name, number, email, bday;
+    private TextInputEditText name, number, email, bday, invite;
+    private TextInputLayout inviteLayout;
     private View bdayView;
     private MaterialTextView avatarChange, avatarRemove;
     private boolean canGoBack;
@@ -67,6 +68,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         findViewById(R.id.profile_close).setOnClickListener(v -> onBackPressed());
 
         name = findViewById(R.id.profile_name);
+        invite = findViewById(R.id.profile_invite);
+        inviteLayout = findViewById(R.id.profile_invite_layout);
         number = findViewById(R.id.profile_number);
         email = findViewById(R.id.profile_email);
         bday = findViewById(R.id.profile_bday);
@@ -85,13 +88,19 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         number.setText(MySharedPreference.getInstance(this).getNumber());
         bday.setText(MySharedPreference.getInstance(this).getUserBday());
         email.setText(MySharedPreference.getInstance(this).getEmail());
-        String sex=MySharedPreference.getInstance(this).getUserSex();
-        if(sex.equals("male")) {
+        String sex = MySharedPreference.getInstance(this).getUserSex();
+        if (sex.equals("male")) {
             male.setChecked(true);
             female.setChecked(false);
-        }else if(sex.equals("female")){
+        } else if (sex.equals("female")) {
             male.setChecked(false);
             female.setChecked(true);
+        }
+
+        if (!MySharedPreference.getInstance(this).getUserInvite().isEmpty()) {
+            invite.setText(MySharedPreference.getInstance(this).getUserInvite());
+            invite.setEnabled(false);
+            inviteLayout.setEnabled(false);
         }
 
 
@@ -157,6 +166,9 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         });
 
         save.setOnClickListener(v -> {
+            String i = "";
+            if (invite.isEnabled() && !invite.getText().toString().trim().isEmpty())
+                i = invite.getText().toString();
             String n = name.getText().toString();
             String e = email.getText().toString();
             String b = bday.getText().toString();
@@ -168,7 +180,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
             if (n.isEmpty() || e.isEmpty() || b.isEmpty() || s.isEmpty() || n.length() < 6 || !Utils.isEmailValid(e))
                 Toast.makeText(this, getString(R.string.general_form_error), Toast.LENGTH_SHORT).show();
             else if (Utils.checkInternet(ProfileActivity.this))
-                updateProfile(n, e, b, s);
+                updateProfile(n, e, b, s, i);
             else
                 Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
 
@@ -192,7 +204,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this,true);
+            Utils.logout(this, true);
             return;
         }
         String pic;
@@ -217,8 +229,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                     loading.setVisibility(View.GONE);
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
                     avatar.setImageURI(image);
-                }else if (response.code() == 401) {
-                    Utils.logout(ProfileActivity.this,true);
+                } else if (response.code() == 401) {
+                    Utils.logout(ProfileActivity.this, true);
                 } else {
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                 }
@@ -243,7 +255,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this,true);
+            Utils.logout(this, true);
             return;
         }
 
@@ -257,8 +269,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                 if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
 
-                }else if (response.code() == 401) {
-                    Utils.logout(ProfileActivity.this,true);
+                } else if (response.code() == 401) {
+                    Utils.logout(ProfileActivity.this, true);
                 } else {
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                 }
@@ -276,7 +288,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
     }
 
-    private void updateProfile(String name,String email, String bday , String sex){
+    private void updateProfile(String name, String email, String bday, String sex, String inviteCode) {
         save.setEnabled(false);
         canGoBack = false;
         loading.setVisibility(View.VISIBLE);
@@ -284,14 +296,14 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this,true);
+            Utils.logout(this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .updateProfile("Bearer "+token,number,name,email,bday,sex)
+                .updateProfile("Bearer " + token, number, name, email, bday, sex, inviteCode)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call,@NonNull  Response<GeneralResponse> response) {
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         save.setEnabled(true);
                         save.setText(getString(R.string.profile_save));
                         canGoBack = true;
@@ -303,15 +315,30 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                             MySharedPreference.getInstance(ProfileActivity.this).setUserSex(sex);
                             MySharedPreference.getInstance(ProfileActivity.this).setUserBday(bday);
 
-                        }else if (response.code() == 401) {
-                            Utils.logout(ProfileActivity.this,true);
+                            switch (response.body().getMessage()) {
+                                case "invite not found":
+                                    Toast.makeText(ProfileActivity.this, getString(R.string.profile_invite_notfound), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case "invite failed":
+                                    Toast.makeText(ProfileActivity.this, getString(R.string.profile_invite_failed), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case "invite ok":
+                                    MySharedPreference.getInstance(ProfileActivity.this).setUserInvite(inviteCode);
+                                    invite.setEnabled(false);
+                                    inviteLayout.setEnabled(false);
+
+                                    break;
+                            }
+
+                        } else if (response.code() == 401) {
+                            Utils.logout(ProfileActivity.this, true);
                         } else {
                             Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull  Throwable t) {
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
                         save.setEnabled(true);
                         save.setText(getString(R.string.profile_save));
                         canGoBack = true;

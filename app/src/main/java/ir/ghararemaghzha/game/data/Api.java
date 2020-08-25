@@ -168,7 +168,8 @@ public interface Api {
             @Field("user_name") String userName,
             @Field("user_email") String userEmail,
             @Field("user_bday") String userBday,
-            @Field("user_sex") String userSex);
+            @Field("user_sex") String userSex,
+            @Field("invite") String invite);
 
     @FormUrlEncoded
     @POST("plans")

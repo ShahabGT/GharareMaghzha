@@ -161,6 +161,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+
         android:gravity="center"
         android:hint="@string/general_email"
         app:layout_constraintLeft_toLeftOf="@id/profile_guide50"
@@ -222,13 +223,12 @@
         style="@style/TextAppearance.AppCompat.Small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:fontFamily="@font/vazir"
         android:text="@string/profile_sex"
         app:layout_constraintLeft_toLeftOf="@id/profile_guide50"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_email_layout" />
+        app:layout_constraintTop_toTopOf="@id/profile_invite_layout" />
 
     <CheckBox
         android:id="@+id/profile_male"
@@ -250,16 +250,44 @@
         app:layout_constraintRight_toLeftOf="@id/profile_male"
         app:layout_constraintTop_toBottomOf="@id/profile_sex_layout" />
 
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_invite_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:hint="@string/general_invite"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/profile_guide50"
+        app:layout_constraintTop_toBottomOf="@id/profile_bday_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/profile_invite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="@string/numbers"
+            android:fontFamily="@font/vazir"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="11"
+            android:padding="16dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <com.google.android.material.button.MaterialButton
+        android:fontFamily="@font/vazir"
         android:id="@+id/profile_save"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_margin="16dp"
         android:text="@string/profile_save"
-        app:layout_constraintBottom_toBottomOf="@id/profile_female"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="@id/profile_guide50" />
+        app:layout_constraintRight_toRightOf="@id/profile_guide50"
+        app:layout_constraintTop_toBottomOf="@id/profile_invite_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_loading"

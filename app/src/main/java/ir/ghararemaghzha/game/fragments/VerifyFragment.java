@@ -215,6 +215,7 @@ public class VerifyFragment extends Fragment {
                             MySharedPreference.getInstance(context).setUserSex(response.body().getUserSex());
                             MySharedPreference.getInstance(context).setUserBday(response.body().getUserBday());
                             MySharedPreference.getInstance(context).setUserEmail(response.body().getUserEmail());
+                            MySharedPreference.getInstance(context).setUserInvite(response.body().getUserInvite());
                             dialog = Utils.showGetDataLoading(context);
                             getQuestions();
 
@@ -265,13 +266,13 @@ public class VerifyFragment extends Fragment {
                                 model.setVisible(false);
                                 db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             }
-                            dialog.dismiss();
+                            db.close();
+
 
                             MySharedPreference.getInstance(context).setUserId(userId);
-
                             Toast.makeText(context, context.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                             startActivity(new Intent(activity, MainActivity.class));
-                            db.close();
                             activity.overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
                             activity.finish();
                         } else {

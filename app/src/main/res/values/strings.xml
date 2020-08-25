@@ -2,6 +2,7 @@
     <string name="app_name">قرار مغزها</string>
     <string name="avatar_url">https://ghararehmaghzha.ir/api/avatars/%s.jpg</string>
     <string name="en_digits">abcdefghijklmnopqrstuvwxyz1234567890</string>
+    <string name="numbers">1234567980</string>
 
     <string name="access_error">حساب کاربری شما جای دیگر آنلاین شده لطفا دوباره وارد شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
@@ -12,6 +13,7 @@
     <string name="general_name_error">خطا! لطفا نام و نام خانوادگی خود را بررسی کنید</string>
     <string name="general_form_error">خطا! لطفا اطلاعات وارد شده را بررسی کنید</string>
     <string name="general_number">شماره تلفن همراه</string>
+    <string name="general_invite">کد معرف</string>
     <string name="general_email">ایمیل</string>
     <string name="general_bday">تاریخ تولد</string>
     <string name="general_share">اشتراک از طریق</string>
@@ -74,6 +76,8 @@
     <string name="profile_male">مذکر</string>
     <string name="profile_female">مونث</string>
     <string name="profile_save">ثبت اطلاعات</string>
+    <string name="profile_invite_notfound">کد معرف وارد شده معتبر نیست!</string>
+    <string name="profile_invite_failed">خطا در ثبت کد معرف، لطفا دوباره امتحان کنید</string>
 
     <string name="start_title">شروع مسابقه</string>
     <string name="start_profile_title">حساب کاربری من</string>
@@ -192,6 +196,7 @@
 https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
 \n
 </string>
+
 
 
 </resources>

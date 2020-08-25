@@ -147,4 +147,11 @@ public class MySharedPreference {
     public String getEmail(){
         return  sharedPreferences.getString("Email","");
     }
+
+    public void setUserInvite(String invite){
+        sharedPreferences.edit().putString("invite",invite).apply();
+    }
+    public String getUserInvite(){
+        return  sharedPreferences.getString("invite","");
+    }
 }
