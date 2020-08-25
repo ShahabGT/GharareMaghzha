@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat
+        android:summary="@string/settings_music_summery"
+        app:allowDividerBelow="true"
+        app:icon="@drawable/vector_music_on"
+        app:key="music"
+        app:title="@string/settings_music" />
+
+    <SwitchPreferenceCompat
+        android:summary="@string/settings_auto_next_summery"
+        app:allowDividerBelow="true"
+        app:icon="@drawable/vector_next"
+        app:key="next"
+        app:title="@string/settings_auto_next" />
+
+</PreferenceScreen>

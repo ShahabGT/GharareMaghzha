@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -43,7 +44,8 @@ public class QuestionActivity extends AppCompatActivity {
     private int time = 20;
     private CountDownTimer downTimer, nextTimer;
     private ProgressBar progressBar;
-    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, next, score, questionPoints, questionRemain;
+    private MaterialButton next;
+    private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, score, questionPoints, questionRemain;
     private MaterialCardView answer1c, answer2c, answer3c, answer4c, questionc;
     private RealmResults<QuestionModel> data;
     private List<Integer> randomAnswers;
@@ -57,6 +59,7 @@ public class QuestionActivity extends AppCompatActivity {
     private boolean shouldRandomize;
     private ImageView music;
     private boolean musicSetting;
+    private boolean autoNextSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class QuestionActivity extends AppCompatActivity {
         music = findViewById(R.id.question_music);
         musicSetting = MySettingsPreference.getInstance(this).getMusic();
         music.setImageResource(musicSetting ? R.drawable.vector_music_on : R.drawable.vector_music_off);
+
+        autoNextSetting = MySettingsPreference.getInstance(this).getAutoNext();
 
 
         next = findViewById(R.id.question_next);
@@ -119,6 +124,8 @@ public class QuestionActivity extends AppCompatActivity {
                 answer2c.setEnabled(false);
                 answer3c.setEnabled(false);
                 answer4c.setEnabled(false);
+                if (autoNextSetting)
+                    nextQuestion();
             }
         };
         nextTimer = new CountDownTimer(2500, 1000) {
@@ -194,6 +201,7 @@ public class QuestionActivity extends AppCompatActivity {
                 playSound(wrongSound);
 
             }
+            if (autoNextSetting) nextQuestion();
         });
         answer2c.setOnClickListener(v -> {
             downTimer.cancel();
@@ -221,6 +229,8 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer2c);
                 playSound(wrongSound);
             }
+            if (autoNextSetting) nextQuestion();
+
         });
         answer3c.setOnClickListener(v -> {
             downTimer.cancel();
@@ -247,6 +257,8 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer3c);
                 playSound(wrongSound);
             }
+            if (autoNextSetting) nextQuestion();
+
         });
         answer4c.setOnClickListener(v -> {
             downTimer.cancel();
@@ -273,6 +285,8 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer4c);
                 playSound(wrongSound);
             }
+            if (autoNextSetting) nextQuestion();
+
         });
         next.setOnClickListener(v -> nextQuestion());
         findViewById(R.id.question_close).setOnClickListener(v -> QuestionActivity.this.finish());

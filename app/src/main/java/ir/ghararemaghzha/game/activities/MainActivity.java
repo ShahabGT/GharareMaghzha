@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
@@ -49,6 +50,7 @@ import ir.ghararemaghzha.game.fragments.BuyFragment;
 import ir.ghararemaghzha.game.fragments.HighscoreFragment;
 import ir.ghararemaghzha.game.fragments.MessagesFragment;
 import ir.ghararemaghzha.game.fragments.ProfileFragment;
+import ir.ghararemaghzha.game.fragments.SettingsFragment;
 import ir.ghararemaghzha.game.fragments.StartFragment;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView avatar;
     private Intent refreshIntent;
+    private MotionLayout motionLayout;
 
 
     @Override
@@ -108,10 +111,30 @@ public class MainActivity extends AppCompatActivity {
                 .placeholder(R.drawable.placeholder)
                 .into((ImageView) findViewById(R.id.navigation_avatar));
 
+        motionLayout.transitionToStart();
+
         findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
-        findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> startActivity(new Intent(this, BuyHistoryActivity.class)));
-        findViewById(R.id.navigation_support).setOnClickListener(v -> startActivity(new Intent(this, SupportActivity.class)));
-        findViewById(R.id.navigation_invite).setOnClickListener(v -> startActivity(new Intent(this, InviteActivity.class)));
+        findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> {
+            startActivity(new Intent(this, BuyHistoryActivity.class));
+            motionLayout.transitionToStart();
+        });
+        findViewById(R.id.navigation_support).setOnClickListener(v -> {
+            startActivity(new Intent(this, SupportActivity.class));
+            motionLayout.transitionToStart();
+        });
+        findViewById(R.id.navigation_invite).setOnClickListener(v -> {
+            startActivity(new Intent(this, InviteActivity.class));
+            motionLayout.transitionToStart();
+        });
+        findViewById(R.id.navigation_setting).setOnClickListener(v -> {
+            ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+            ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+            ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+            ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
+            changeFragment(new SettingsFragment());
+            motionLayout.transitionToStart();
+            whichFragment = -1;
+        });
     }
 
     private void animate() {
@@ -128,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        motionLayout = findViewById(R.id.main_motion);
         refreshIntent = new Intent(GHARAREHMAGHZHA_BROADCAST_REFRESH);
         db = Realm.getDefaultInstance();
         doubleBackToExitPressedOnce = false;

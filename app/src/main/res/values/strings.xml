@@ -169,6 +169,7 @@
     <string name="navigation_buyhistory">تاریخچه خرید</string>
     <string name="navigation_support">پشتیبانی</string>
     <string name="navigation_invite">معرفی به دوستان</string>
+    <string name="navigation_setting">تنظیمات</string>
     <string name="navigation_help">راهنما</string>
     <string name="navigation_about">درباره</string>
     <string name="navigation_exit">خروج</string>
@@ -197,6 +198,10 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
 \n
 </string>
 
+    <string name="settings_music">پخش موسیقی</string>
+    <string name="settings_music_summery">پخش موسیقی در هنگام پاسخگویی به سوالات</string>
+    <string name="settings_auto_next">نمایش سوال بعدی</string>
+    <string name="settings_auto_next_summery">نمایش سوال بعدی به صورت خودکار در صورت پاسخگویی به سوال و یا تمام شدن زمان پاسخگویی</string>
 
 
 </resources>

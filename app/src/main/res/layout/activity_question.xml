@@ -434,9 +434,10 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-    <com.google.android.material.textview.MaterialTextView
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/question_next"
-        style="@style/TextAppearance.AppCompat.Large"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
@@ -448,7 +449,7 @@
         android:gravity="center"
         android:soundEffectsEnabled="true"
         android:text="@string/question_next"
-        app:drawableTint="@color/colorPrimaryDark"
+        app:drawableTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 

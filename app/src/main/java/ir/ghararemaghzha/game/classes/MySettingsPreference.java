@@ -13,6 +13,8 @@ public class MySettingsPreference {
     private static SharedPreferences sharedPreferences;
 
 
+
+
     public static MySettingsPreference getInstance(Context context){
         if (instance==null) {
             instance = new MySettingsPreference(context);
@@ -39,6 +41,13 @@ public class MySettingsPreference {
     }
     public boolean getMusic(){
         return  sharedPreferences.getBoolean("music",true);
+    }
+
+    public void setAutoNext(boolean state){
+        sharedPreferences.edit().putBoolean("AutoNext",state).apply();
+    }
+    public boolean getAutoNext(){
+        return  sharedPreferences.getBoolean("AutoNext",false);
     }
 
 }
