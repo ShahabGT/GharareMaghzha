@@ -14,19 +14,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.3" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/question_10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.1" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/question_90"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9" />
 
     <ImageView
         android:layout_width="0dp"
@@ -37,83 +24,135 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/login_header" />
 
-    <ImageView
-        android:id="@+id/question_close"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_margin="12dp"
-        android:background="@drawable/round"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:padding="6dp"
-        android:soundEffectsEnabled="true"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vector_close"
-        app:tint="@color/red" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/question_score_card"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/question_top_menu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="4dp">
+        <ImageView
+            android:id="@+id/question_close"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/round"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="6dp"
+            android:soundEffectsEnabled="true"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/vector_close"
+            app:tint="@color/red" />
+
+        <ImageView
+            android:id="@+id/question_music"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/round"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="6dp"
+            android:soundEffectsEnabled="true"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/question_score_card"
+            app:layout_constraintRight_toLeftOf="@+id/question_autonext"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/vector_music_on"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/question_autonext"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/round"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="6dp"
+            android:soundEffectsEnabled="true"
+            app:layout_constraintLeft_toRightOf="@id/question_music"
+            app:layout_constraintRight_toLeftOf="@id/question_close"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/auto_next_off"
+            app:tint="@color/black" />
 
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/question_score"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/question_score_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                android:text="score"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/question_score_img"
-                app:layout_constraintLeft_toRightOf="@id/question_score_img"
-                app:layout_constraintTop_toTopOf="@id/question_score_img" />
-
-            <ImageView
-                android:id="@+id/question_score_img"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_star"
-                app:tint="@color/colorPrimary" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp">
 
 
-    </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/question_score"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/vazir"
+
+                    android:text="score"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/question_score_img"
+                    app:layout_constraintLeft_toRightOf="@id/question_score_img"
+                    app:layout_constraintTop_toTopOf="@id/question_score_img" />
+
+                <ImageView
+                    android:id="@+id/question_score_img"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/vector_star"
+                    app:tint="@color/colorPrimary" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <ImageView
-        android:id="@+id/question_music"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_margin="12dp"
-        android:background="@drawable/round"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:padding="6dp"
-        android:soundEffectsEnabled="true"
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/question_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/question_90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <ProgressBar
+        android:id="@+id/question_progress_bar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:indeterminateOnly="false"
+        android:progressDrawable="@drawable/circle"
+        app:layout_constraintBottom_toTopOf="@id/question_question_card"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vector_music_on"
-        app:tint="@color/black" />
-
+        tools:progress="100" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/question_question_card"
@@ -184,17 +223,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <ProgressBar
-        android:id="@+id/question_progress_bar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:indeterminateOnly="false"
-        android:progressDrawable="@drawable/circle"
-        app:layout_constraintBottom_toTopOf="@id/question_question_card"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:progress="100" />
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/question_progress_text"
         style="@style/TextAppearance.AppCompat.Large"
@@ -207,7 +235,6 @@
         app:layout_constraintLeft_toLeftOf="@id/question_progress_bar"
         app:layout_constraintRight_toRightOf="@id/question_progress_bar"
         app:layout_constraintTop_toTopOf="@id/question_progress_bar" />
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/question_answer1_card"
@@ -433,8 +460,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/question_next"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -449,8 +474,10 @@
         android:gravity="center"
         android:soundEffectsEnabled="true"
         android:text="@string/question_next"
-        app:drawableTint="@color/colorPrimary"
+        android:textColor="@color/black"
+        app:drawableTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

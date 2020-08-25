@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -57,7 +58,7 @@ public class QuestionActivity extends AppCompatActivity {
     private int correctSound, wrongSound;
     private int gameScore = 0;
     private boolean shouldRandomize;
-    private ImageView music;
+    private ImageView music, autoNext;
     private boolean musicSetting;
     private boolean autoNextSetting;
 
@@ -81,7 +82,9 @@ public class QuestionActivity extends AppCompatActivity {
         musicSetting = MySettingsPreference.getInstance(this).getMusic();
         music.setImageResource(musicSetting ? R.drawable.vector_music_on : R.drawable.vector_music_off);
 
+        autoNext = findViewById(R.id.question_autonext);
         autoNextSetting = MySettingsPreference.getInstance(this).getAutoNext();
+        autoNext.setImageResource(autoNextSetting ? R.drawable.auto_next_on : R.drawable.auto_next_off);
 
 
         next = findViewById(R.id.question_next);
@@ -172,6 +175,13 @@ public class QuestionActivity extends AppCompatActivity {
             }
         });
 
+        autoNext.setOnClickListener(v -> {
+            autoNextSetting = !autoNextSetting;
+            autoNext.setImageResource(autoNextSetting ? R.drawable.auto_next_on : R.drawable.auto_next_off);
+
+            MySettingsPreference.getInstance(this).setAutoNext(autoNextSetting);
+        });
+
 
         answer1c.setOnClickListener(v -> {
             downTimer.cancel();
@@ -201,7 +211,8 @@ public class QuestionActivity extends AppCompatActivity {
                 playSound(wrongSound);
 
             }
-            if (autoNextSetting) nextQuestion();
+            if (autoNextSetting)
+                new Handler().postDelayed(this::nextQuestion, 1000);
         });
         answer2c.setOnClickListener(v -> {
             downTimer.cancel();
@@ -229,7 +240,8 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer2c);
                 playSound(wrongSound);
             }
-            if (autoNextSetting) nextQuestion();
+            if (autoNextSetting) new Handler().postDelayed(this::nextQuestion, 1000);
+
 
         });
         answer3c.setOnClickListener(v -> {
@@ -257,7 +269,8 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer3c);
                 playSound(wrongSound);
             }
-            if (autoNextSetting) nextQuestion();
+            if (autoNextSetting) new Handler().postDelayed(this::nextQuestion, 1000);
+
 
         });
         answer4c.setOnClickListener(v -> {
@@ -285,7 +298,8 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer4c);
                 playSound(wrongSound);
             }
-            if (autoNextSetting) nextQuestion();
+            if (autoNextSetting) new Handler().postDelayed(this::nextQuestion, 1000);
+
 
         });
         next.setOnClickListener(v -> nextQuestion());

@@ -44,7 +44,6 @@ public class StartFragment extends Fragment {
     private MaterialTextView info;
     private MaterialCardView profile, highscore, start;
     private UltraViewPager ultraViewPager;
-    private MainViewPager pagerAdapter;
 
     private Realm db;
 

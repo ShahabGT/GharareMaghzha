@@ -14,4 +14,11 @@
         app:key="next"
         app:title="@string/settings_auto_next" />
 
+    <SwitchPreferenceCompat
+        android:summary="@string/settings_notification_summery"
+        app:allowDividerBelow="true"
+        app:icon="@drawable/vector_notification"
+        app:key="notification"
+        app:title="@string/settings_notification" />
+
 </PreferenceScreen>

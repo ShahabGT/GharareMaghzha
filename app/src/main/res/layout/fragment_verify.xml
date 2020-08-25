@@ -90,8 +90,7 @@
         android:fontFamily="@font/vazir"
         android:soundEffectsEnabled="true"
         android:text="@string/verify_verify"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textColor="@color/black"        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/verify_code_layout" />
 

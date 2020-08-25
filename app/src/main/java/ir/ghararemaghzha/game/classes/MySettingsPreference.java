@@ -43,6 +43,13 @@ public class MySettingsPreference {
         return  sharedPreferences.getBoolean("music",true);
     }
 
+    public void setNotification(boolean state){
+        sharedPreferences.edit().putBoolean("Notification",state).apply();
+    }
+    public boolean getNotification(){
+        return  sharedPreferences.getBoolean("Notification",true);
+    }
+
     public void setAutoNext(boolean state){
         sharedPreferences.edit().putBoolean("AutoNext",state).apply();
     }

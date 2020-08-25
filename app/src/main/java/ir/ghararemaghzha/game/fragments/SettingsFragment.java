@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -18,13 +17,13 @@ import ir.ghararemaghzha.game.classes.MySettingsPreference;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private SwitchPreferenceCompat music, next;
+    private SwitchPreferenceCompat music, next, notification;
     private Context context;
     private FragmentActivity activity;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v= super.onCreateView(inflater, container, savedInstanceState);
+        View v = super.onCreateView(inflater, container, savedInstanceState);
         v.setBackgroundResource(R.color.light_background);
         v.setClickable(true);
         v.setFocusable(true);
@@ -39,23 +38,33 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         music = findPreference("music");
         next = findPreference("next");
+        notification = findPreference("notification");
 
         if (music != null)
             music.setChecked(MySettingsPreference.getInstance(getContext()).getMusic());
+        if (music != null)
+            music.setOnPreferenceChangeListener((preference, newValue) -> {
+                MySettingsPreference.getInstance(context).setMusic((boolean) newValue);
+                return true;
+            });
+
+        if (notification != null)
+            notification.setChecked(MySettingsPreference.getInstance(getContext()).getNotification());
+        if (notification != null)
+            notification.setOnPreferenceChangeListener((preference, newValue) -> {
+                MySettingsPreference.getInstance(context).setNotification((boolean) newValue);
+                return true;
+            });
 
         if (next != null)
             next.setChecked(MySettingsPreference.getInstance(getContext()).getAutoNext());
         if (next != null)
-        next.setOnPreferenceChangeListener((preference, newValue) -> {
-            MySettingsPreference.getInstance(context).setAutoNext((boolean)newValue);
-            return true;
-        });
-
-        if (music != null)
-            music.setOnPreferenceChangeListener((preference, newValue) -> {
-                MySettingsPreference.getInstance(context).setMusic((boolean)newValue);
+            next.setOnPreferenceChangeListener((preference, newValue) -> {
+                MySettingsPreference.getInstance(context).setAutoNext((boolean) newValue);
                 return true;
             });
+
+
     }
 
 }

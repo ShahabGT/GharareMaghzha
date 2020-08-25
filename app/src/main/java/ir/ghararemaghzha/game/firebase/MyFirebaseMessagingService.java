@@ -9,20 +9,26 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.SupportActivity;
 import ir.ghararemaghzha.game.classes.Const;
+import ir.ghararemaghzha.game.classes.MySettingsPreference;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.models.MessageModel;
+
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA;
 import static ir.ghararemaghzha.game.classes.Utils.getNextKey;
@@ -32,12 +38,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         Map<String, String> data = remoteMessage.getData();
-        String title = data.get("title")+"";
-        String body = data.get("body")+"";
-        String clickAction = data.get("click_action")+"";
-        String sender = data.get("sender")+"";
+        String title = data.get("title") + "";
+        String body = data.get("body") + "";
+        String clickAction = data.get("click_action") + "";
+        String sender = data.get("sender") + "";
 
-        if(sender.equals("support")) {
+        if (sender.equals("support")) {
             byte[] byteData = body.getBytes(StandardCharsets.UTF_8);
             body = Base64.encodeToString(byteData, Base64.DEFAULT);
         }
@@ -61,7 +67,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtra(GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA, "new");
         sendBroadcast(intent);
 
-        createNotification(title, body,clickAction);
+        if (MySettingsPreference.getInstance(this).getNotification())
+            createNotification(title, body, clickAction);
 
     }
 
@@ -74,9 +81,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void createNotification(String title, String message,String clickAction) {
+    private void createNotification(String title, String message, String clickAction) {
         Intent intent;
-        if(clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
+        if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
             intent = new Intent(this, MainActivity.class);
         else
             intent = new Intent(this, SupportActivity.class);

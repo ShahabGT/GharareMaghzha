@@ -251,7 +251,9 @@
 
             <com.google.android.material.button.MaterialButton
                 android:drawableLeft="@drawable/vector_share"
-                android:drawableTint="@color/colorPrimary"
+                android:drawableTint="@color/black"
+                android:textColor="@color/black"
+
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:id="@+id/invite_share"
                 android:layout_width="wrap_content"
@@ -287,7 +289,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="123-456-789"
-                android:textColor="@color/black"
+                android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/invite_share"
                 app:layout_constraintLeft_toLeftOf="parent"

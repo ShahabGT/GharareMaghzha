@@ -284,6 +284,8 @@
         android:fontFamily="@font/vazir"
         android:id="@+id/profile_save"
         android:layout_width="0dp"
+        android:textColor="@color/black"
+
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/profile_save"
