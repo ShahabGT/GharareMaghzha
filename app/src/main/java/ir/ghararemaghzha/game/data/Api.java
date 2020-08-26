@@ -9,6 +9,7 @@ import ir.ghararemaghzha.game.models.PlanResponse;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.SliderResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
+import ir.ghararemaghzha.game.models.UserDetailsResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -187,6 +188,13 @@ public interface Api {
 
     @GET("ad")
     Call<SliderResponse> getSlider();
+
+    @FormUrlEncoded
+    @POST("userdetails")
+    Call<UserDetailsResponse> getUserDetails(
+            @Header("Authorization") String Token,
+            @Field("number") String number,
+            @Field("user_id") String userId);
 
 }
 

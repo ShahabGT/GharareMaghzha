@@ -1,11 +1,16 @@
 package ir.ghararemaghzha.game.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -20,12 +25,15 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.NumberToTextKt;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
+import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
+import ir.ghararemaghzha.game.dialogs.UserDetailsDialog;
 import ir.ghararemaghzha.game.models.HighscoreModel;
 import ir.ghararemaghzha.game.models.HighscoreResponse;
 import retrofit2.Call;
@@ -43,6 +51,8 @@ public class HighscoreFragment extends Fragment {
     private ImageView firstAvatar, secondAvatar, thirdAvatar, fourthAvatar, fifthAvatar, userAvatar;
     private ProgressBar loading;
 
+
+    private List<HighscoreModel> data;
     public HighscoreFragment() {
     }
 
@@ -113,6 +123,35 @@ public class HighscoreFragment extends Fragment {
             refreshLayout.setRefreshing(true);
             getData();
         });
+
+        firstCard.setOnClickListener(v->{
+            showDetailsDialog(data.get(0).getUserId());
+        });
+        secondCard.setOnClickListener(v->{
+            showDetailsDialog(data.get(1).getUserId());
+        });
+        thirdCard.setOnClickListener(v->{
+            showDetailsDialog(data.get(2).getUserId());
+        });
+        fourthCard.setOnClickListener(v->{
+            showDetailsDialog(data.get(3).getUserId());
+        });
+        fifthCard.setOnClickListener(v->{
+            showDetailsDialog(data.get(4).getUserId());
+        });
+
+    }
+
+    private void showDetailsDialog(String userId){
+        UserDetailsDialog dialog = new UserDetailsDialog(activity, userId);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     private void getData() {
@@ -143,7 +182,7 @@ public class HighscoreFragment extends Fragment {
                                     showUser=false;
                                     break;
                                 }
-                            List<HighscoreModel> data = response.body().getData();
+                            data = response.body().getData();
                             switch (data.size()) {
                                 case 5:
                                     fifthCard.setVisibility(View.VISIBLE);

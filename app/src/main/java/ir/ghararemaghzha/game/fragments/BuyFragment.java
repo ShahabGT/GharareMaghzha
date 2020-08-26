@@ -13,14 +13,18 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
+
 import java.util.List;
 import java.util.Objects;
+
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.BuyInterface;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -60,7 +64,7 @@ public class BuyFragment extends Fragment {
     }
 
     private void init(View v) {
-        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.buy_title);
+        ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.buy_title);
 
         loading = v.findViewById(R.id.buy_loading);
 
@@ -84,18 +88,28 @@ public class BuyFragment extends Fragment {
         fivePrice = v.findViewById(R.id.buy_five_price);
         fiveView = v.findViewById(R.id.buy_five_disable);
 
-        int userPlan = Integer.parseInt(MySharedPreference.getInstance(context).getPlan());
-        switch (userPlan){
-            case 5:
-                oneView.setVisibility(View.VISIBLE);
-            case 4:
-                twoView.setVisibility(View.VISIBLE);
-            case 3:
-                threeView.setVisibility(View.VISIBLE);
-            case 2:
-                fourView.setVisibility(View.VISIBLE);
-            case 1:
-                fiveView.setVisibility(View.VISIBLE);
+
+        int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
+        if (passed < 0 || passed > 9) {
+            oneView.setVisibility(View.VISIBLE);
+            twoView.setVisibility(View.VISIBLE);
+            threeView.setVisibility(View.VISIBLE);
+            fourView.setVisibility(View.VISIBLE);
+            fiveView.setVisibility(View.VISIBLE);
+        } else {
+            int userPlan = Integer.parseInt(MySharedPreference.getInstance(context).getPlan());
+            switch (userPlan) {
+                case 5:
+                    oneView.setVisibility(View.VISIBLE);
+                case 4:
+                    twoView.setVisibility(View.VISIBLE);
+                case 3:
+                    threeView.setVisibility(View.VISIBLE);
+                case 2:
+                    fourView.setVisibility(View.VISIBLE);
+                case 1:
+                    fiveView.setVisibility(View.VISIBLE);
+            }
         }
 
         getData();
@@ -129,7 +143,7 @@ public class BuyFragment extends Fragment {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(activity,true);
+            Utils.logout(activity, true);
             return;
         }
         loading.setVisibility(View.VISIBLE);
@@ -159,7 +173,7 @@ public class BuyFragment extends Fragment {
                             fivePrice.setText(context.getString(R.string.buy_price, Utils.moneySeparator(models.get(5).getPlanPrice())));
 
                         } else if (response.code() == 401) {
-                            Utils.logout(activity,true);
+                            Utils.logout(activity, true);
                         } else {
                             Utils.showInternetError(context, () -> getData());
                         }
@@ -184,7 +198,7 @@ public class BuyFragment extends Fragment {
         String number = MySharedPreference.getInstance(activity).getNumber();
         String token = MySharedPreference.getInstance(activity).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(activity,true);
+            Utils.logout(activity, true);
             return;
         }
         loading.setVisibility(View.VISIBLE);
@@ -213,7 +227,7 @@ public class BuyFragment extends Fragment {
                             context.startActivity(i);
 
                         } else if (response.code() == 401) {
-                            Utils.logout(activity,true);
+                            Utils.logout(activity, true);
                         } else {
                             Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                         }
