@@ -256,7 +256,6 @@ public class VerifyFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null
                                 && response.body().getResult().equals("success")
                                 && !response.body().getMessage().equals("empty")) {
-                            MySharedPreference.getInstance(context).setGotQuestions();
                             for (QuestionModel model : response.body().getData()) {
                                 if (model.getUserAnswer().equals("-1")) {
                                     model.setUploaded(false);

@@ -100,9 +100,12 @@ public class UserDetailsDialog extends Dialog {
                                 answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), response.body().getIncorrect()));
 
                                 questions.setText(context.getString(R.string.details_questions, answeredQuestions, totalQuestions));
-
-                                int aPercent= (response.body().getCorrect() * 100) / answeredQuestions;
-                                int qPercent = (answeredQuestions * 100) / totalQuestions;
+                                int aPercent=0;
+                                int qPercent=0;
+                                if(answeredQuestions>0) {
+                                     aPercent = (response.body().getCorrect() * 100) / answeredQuestions;
+                                     qPercent = (answeredQuestions * 100) / totalQuestions;
+                                }
                                 answersProgress.setProgress(aPercent);
                                 questionsProgress.setProgress(qPercent);
 

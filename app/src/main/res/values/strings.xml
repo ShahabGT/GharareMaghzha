@@ -206,9 +206,9 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="settings_notification">نمایش اعلان ها</string>
     <string name="settings_notification_summery">نمایش اعلان های مربوط به پیام های عمومی و پیام های چت پشتیبانی</string>
 
-    <string name="details_answers_title">نسبت جواب ها</string>
-    <string name="details_question_title">تعداد سوالات</string>
-    <string name="details_answers">%d درست \n
+    <string name="details_answers_title">جواب ها</string>
+    <string name="details_question_title">سوالات</string>
+    <string name="details_answers">%d درست\n
         %d غلط
     </string>
     <string name="details_questions">%d از %d سوال</string>

@@ -3,6 +3,7 @@ package ir.ghararemaghzha.game.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.emoji.widget.EmojiEditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +48,7 @@ public class SupportActivity extends AppCompatActivity {
     private ChatAdapter adapter;
     private EmojiEditText message;
     private ImageView send;
+    private ConstraintLayout loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class SupportActivity extends AppCompatActivity {
     }
 
     private void init(){
+        loading = findViewById(R.id.support_loading);
         db = Realm.getDefaultInstance();
         Intent intent = new Intent();
         intent.setAction(GHARAREHMAGHZHA_BROADCAST);
@@ -165,6 +168,7 @@ public class SupportActivity extends AppCompatActivity {
 
 
     private void getChatData() {
+        loading.setVisibility(View.VISIBLE);
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         String lastUpdate = MySharedPreference.getInstance(this).getLastUpdateChat();
@@ -178,6 +182,8 @@ public class SupportActivity extends AppCompatActivity {
                 .enqueue(new Callback<ChatResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {
+                        loading.setVisibility(View.GONE);
+
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             MySharedPreference.getInstance(SupportActivity.this).setLastUpdateChat(nowDate);
                             if(response.body().getMessage().equals("ok")) {
@@ -199,6 +205,7 @@ public class SupportActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<ChatResponse> call, @NonNull Throwable t) {
+                        loading.setVisibility(View.GONE);
 
                     }
                 });

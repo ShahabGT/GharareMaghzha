@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
                 .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-
                 .placeholder(R.drawable.placeholder)
                 .into((ImageView) findViewById(R.id.navigation_avatar));
 
@@ -503,8 +502,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
                         if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
-                            MySharedPreference.getInstance(MainActivity.this).setGotQuestions();
-
                             for (QuestionModel model : response.body().getData()) {
                                 if (model.getUserAnswer().equals("-1"))
                                     model.setUploaded(false);

@@ -120,13 +120,6 @@ public class MySharedPreference {
         return  sharedPreferences.getString("lastUpdateChat","0");
     }
 
-    public void setGotQuestions(){
-        sharedPreferences.edit().putBoolean("GotQuestions",true).apply();
-    }
-    public boolean getGotQuestions(){
-        return  sharedPreferences.getBoolean("GotQuestions",false);
-    }
-
     public void setUserBday(String UserBday){
         sharedPreferences.edit().putString("UserBday",UserBday).apply();
     }
