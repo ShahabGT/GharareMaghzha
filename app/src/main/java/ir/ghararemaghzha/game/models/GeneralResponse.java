@@ -48,6 +48,9 @@ public class GeneralResponse {
     @SerializedName("user_invite")
     private String userInvite;
 
+    @SerializedName("user_avatar")
+    private String userAvatar;
+
     private String count;
     private String value;
 
@@ -194,5 +197,13 @@ public class GeneralResponse {
 
     public void setUserInvite(String userInvite) {
         this.userInvite = userInvite;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

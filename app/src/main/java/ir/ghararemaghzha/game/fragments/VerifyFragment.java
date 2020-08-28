@@ -216,6 +216,8 @@ public class VerifyFragment extends Fragment {
                             MySharedPreference.getInstance(context).setUserBday(response.body().getUserBday());
                             MySharedPreference.getInstance(context).setUserEmail(response.body().getUserEmail());
                             MySharedPreference.getInstance(context).setUserInvite(response.body().getUserInvite());
+                            if(response.body().getUserAvatar()!=null && !response.body().getUserAvatar().isEmpty())
+                                MySharedPreference.getInstance(context).setUserAvatar(response.body().getUserAvatar());
                             dialog = Utils.showGetDataLoading(context);
                             getQuestions();
 

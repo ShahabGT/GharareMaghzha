@@ -99,16 +99,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setAvatars(){
+        Glide.with(this)
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
+                .circleCrop()
+                .placeholder(R.drawable.placeholder)
+                .into((ImageView) findViewById(R.id.navigation_avatar));
+
+        Glide.with(this)
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
+                .circleCrop()
+                .placeholder(R.drawable.placeholder)
+                .into(avatar);
+    }
+
     private void navigationDrawer() {
         ((MaterialTextView) findViewById(R.id.navigation_name)).setText(MySharedPreference.getInstance(this).getUsername());
         ((MaterialTextView) findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode()));
         ((MaterialTextView) findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore()));
-        Glide.with(this)
-                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
-                .circleCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.drawable.placeholder)
-                .into((ImageView) findViewById(R.id.navigation_avatar));
+
 
         motionLayout.transitionToStart();
 
@@ -160,14 +169,6 @@ public class MainActivity extends AppCompatActivity {
         newChat = findViewById(R.id.main_chat_new);
         highscore = findViewById(R.id.main_highscore);
         avatar = findViewById(R.id.toolbar_avatar);
-        Glide.with(this)
-                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
-                .circleCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-
-                .placeholder(R.drawable.placeholder)
-                .into(avatar);
-        // avatar.setImageURI(Uri.parse(getString(R.string.avatar_url,MySharedPreference.getInstance(this).getUserId())));
         buy = findViewById(R.id.main_buy);
         start = findViewById(R.id.main_start);
         ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
@@ -258,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        setAvatars();
         Utils.removeNotification(this);
         registerReceiver(notificationBroadCast, new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
         updateMessages();

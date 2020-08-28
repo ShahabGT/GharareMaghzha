@@ -1,6 +1,9 @@
 package ir.ghararemaghzha.game.activities;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,7 +21,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,6 +29,7 @@ import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Calendar;
 
 import ir.ghararemaghzha.game.R;
@@ -51,6 +54,9 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     private CheckBox female, male;
     private ConstraintLayout loading;
 
+    private boolean uploading;
+    private InstagramPicker in;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -66,6 +72,9 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     private void init() {
         canGoBack = true;
         findViewById(R.id.profile_close).setOnClickListener(v -> onBackPressed());
+
+        uploading = false;
+        in = new InstagramPicker(this);
 
         name = findViewById(R.id.profile_name);
         invite = findViewById(R.id.profile_invite);
@@ -105,9 +114,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
 
         Glide.with(this)
-                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserId()))
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
                 .circleCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.drawable.placeholder)
                 .into(avatar);
 
@@ -116,12 +124,14 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
     private void onClicks() {
         avatarChange.setOnClickListener(v -> {
-            InstagramPicker in = new InstagramPicker(this);
             in.show('1', '1', address -> {
                 try {
-                    if (Utils.checkInternet(ProfileActivity.this))
-                        changeAvatar(Uri.parse(address));
-                    else
+                    if (Utils.checkInternet(ProfileActivity.this)) {
+                        if (!uploading) {
+                            uploading = true;
+                            changeAvatar(Uri.parse(address));
+                        }
+                    } else
                         Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -131,9 +141,12 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
 
         });
         avatarRemove.setOnClickListener(v -> {
-            if (Utils.checkInternet(ProfileActivity.this))
-                removeAvatar();
-            else
+            if (Utils.checkInternet(ProfileActivity.this)) {
+                String avatarName = MySharedPreference.getInstance(this).getUserAvatar();
+                if (avatarName != null && !avatarName.isEmpty())
+                    removeAvatar(avatarName);
+
+            } else
                 Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
         });
 
@@ -190,11 +203,78 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private String toBase64(Uri path) throws Exception {
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+        // Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+        Bitmap bitmap = scale(path);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+
+
         byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);
+    }
+
+    private int getOrientation(Uri photoUri) {
+        Cursor cursor = getContentResolver().query(photoUri,
+                new String[]{MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
+        if (cursor != null) {
+            if (cursor.getCount() != 1) {
+                cursor.close();
+                return -1;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        } else
+            return -1;
+
+    }
+
+    private Bitmap scale(Uri photoUri) throws Exception {
+        InputStream is = getContentResolver().openInputStream(photoUri);
+        BitmapFactory.Options dbo = new BitmapFactory.Options();
+        dbo.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(is, null, dbo);
+        if (is != null)
+            is.close();
+
+        int rotatedWidth, rotatedHeight;
+        int orientation = getOrientation(photoUri);
+
+        if (orientation == 90 || orientation == 270) {
+            rotatedWidth = dbo.outHeight;
+            rotatedHeight = dbo.outWidth;
+        } else {
+            rotatedWidth = dbo.outWidth;
+            rotatedHeight = dbo.outHeight;
+        }
+
+        int MAX_IMAGE_DIMENSION = 500;
+        Bitmap srcBitmap;
+        is = getContentResolver().openInputStream(photoUri);
+        if (rotatedWidth > MAX_IMAGE_DIMENSION || rotatedHeight > MAX_IMAGE_DIMENSION) {
+            float widthRatio = ((float) rotatedWidth) / ((float) MAX_IMAGE_DIMENSION);
+            float heightRatio = ((float) rotatedHeight) / ((float) MAX_IMAGE_DIMENSION);
+            float maxRatio = Math.max(widthRatio, heightRatio);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = (int) maxRatio;
+            srcBitmap = BitmapFactory.decodeStream(is, null, options);
+        } else {
+            srcBitmap = BitmapFactory.decodeStream(is);
+        }
+        if (is != null)
+
+            is.close();
+
+        if (orientation > 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(orientation);
+            if (srcBitmap != null)
+                srcBitmap = Bitmap.createBitmap(srcBitmap, 0, 0, srcBitmap.getWidth(),
+                        srcBitmap.getHeight(), matrix, true);
+        }
+
+        return srcBitmap;
     }
 
     private void changeAvatar(Uri image) {
@@ -219,20 +299,67 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
             return;
         }
 
+        String avatarName = MySharedPreference.getInstance(this).getUserId() + Utils.currentDate().replace("-", "").replace(":", "").replace(" ", "");
+
         RetrofitClient.getInstance().getApi()
-                .alterAvatar("Bearer " + token, number, "change", pic).enqueue(new Callback<GeneralResponse>() {
+                .alterAvatar("Bearer " + token, number, "change", pic, avatarName).enqueue(new Callback<GeneralResponse>() {
             @Override
             public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                save.setEnabled(true);
+                canGoBack = true;
+                uploading = false;
+                loading.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                    save.setEnabled(true);
-                    canGoBack = true;
-                    loading.setVisibility(View.GONE);
                     Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
-             //       avatar.setImageURI(image);
+                    MySharedPreference.getInstance(ProfileActivity.this).setUserAvatar(avatarName);
                     Glide.with(ProfileActivity.this)
-                            .load(getString(R.string.avatar_url, MySharedPreference.getInstance(ProfileActivity.this).getUserId()))
+                            .load(getString(R.string.avatar_url, avatarName))
                             .circleCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .placeholder(R.drawable.placeholder)
+                            .into(avatar);
+                } else if (response.code() == 401) {
+                    Utils.logout(ProfileActivity.this, true);
+                } else {
+                    Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+                save.setEnabled(true);
+                canGoBack = true;
+                uploading = false;
+                loading.setVisibility(View.GONE);
+                Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void removeAvatar(String avatarName) {
+        save.setEnabled(false);
+        canGoBack = false;
+        loading.setVisibility(View.VISIBLE);
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(this, true);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .alterAvatar("Bearer " + token, number, "remove", "", avatarName).enqueue(new Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                save.setEnabled(true);
+                canGoBack = true;
+                loading.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                    Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
+                    MySharedPreference.getInstance(ProfileActivity.this).setUserAvatar("");
+                    Glide.with(ProfileActivity.this)
+                            .load(getString(R.string.avatar_url, MySharedPreference.getInstance(ProfileActivity.this).getUserAvatar()))
+                            .circleCrop()
                             .placeholder(R.drawable.placeholder)
                             .into(avatar);
                 } else if (response.code() == 401) {
@@ -250,48 +377,6 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                 Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
             }
         });
-
-
-    }
-
-    private void removeAvatar() {
-        save.setEnabled(false);
-        canGoBack = false;
-        loading.setVisibility(View.VISIBLE);
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this, true);
-            return;
-        }
-
-        RetrofitClient.getInstance().getApi()
-                .alterAvatar("Bearer " + token, number, "remove", "").enqueue(new Callback<GeneralResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
-                save.setEnabled(true);
-                canGoBack = true;
-                loading.setVisibility(View.GONE);
-                if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                    Toast.makeText(ProfileActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
-
-                } else if (response.code() == 401) {
-                    Utils.logout(ProfileActivity.this, true);
-                } else {
-                    Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
-                save.setEnabled(true);
-                canGoBack = true;
-                loading.setVisibility(View.GONE);
-                Toast.makeText(ProfileActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
     }
 
     private void updateProfile(String name, String email, String bday, String sex, String inviteCode) {

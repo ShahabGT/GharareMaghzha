@@ -160,7 +160,8 @@ public interface Api {
             @Header("Authorization") String Token,
             @Field("number") String number,
             @Field("option") String option,
-            @Field("image") String image);
+            @Field("image") String image,
+            @Field("avatar") String avatar);
 
     @FormUrlEncoded
     @POST("profile")

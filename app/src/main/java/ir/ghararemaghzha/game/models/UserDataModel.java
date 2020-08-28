@@ -23,6 +23,9 @@ public class UserDataModel {
     @SerializedName("user_code")
     private String userCode;
 
+    @SerializedName("user_avatar")
+    private String userAvatar;
+
     public String getUserId() {
         return userId;
     }
@@ -61,5 +64,13 @@ public class UserDataModel {
 
     public void setScoreCount(String scoreCount) {
         this.scoreCount = scoreCount;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

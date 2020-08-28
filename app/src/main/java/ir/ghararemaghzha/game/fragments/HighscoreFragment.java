@@ -189,9 +189,8 @@ public class HighscoreFragment extends Fragment {
                                     fifthName.setText(data.get(4).getUserName());
                                     fifthScore.setText(context.getString(R.string.highscore_score, data.get(4).getScoreCount()));
                                     Glide.with(context)
-                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserId())))
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(4).getUserAvatar())))
                                             .circleCrop()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(fifthAvatar);
                                 case 4:
@@ -199,9 +198,8 @@ public class HighscoreFragment extends Fragment {
                                     fourthName.setText(data.get(3).getUserName());
                                     fourthScore.setText(context.getString(R.string.highscore_score, data.get(3).getScoreCount()));
                                     Glide.with(context)
-                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserId())))
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(3).getUserAvatar())))
                                             .circleCrop()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(fourthAvatar);
                                 case 3:
@@ -209,9 +207,8 @@ public class HighscoreFragment extends Fragment {
                                     thirdName.setText(data.get(2).getUserName());
                                     thirdScore.setText(context.getString(R.string.highscore_score, data.get(2).getScoreCount()));
                                     Glide.with(context)
-                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserId())))
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(2).getUserAvatar())))
                                             .circleCrop()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(thirdAvatar);
                                 case 2:
@@ -219,19 +216,16 @@ public class HighscoreFragment extends Fragment {
                                     secondName.setText(data.get(1).getUserName());
                                     secondScore.setText(context.getString(R.string.highscore_score, data.get(1).getScoreCount()));
                                     Glide.with(context)
-                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserId())))
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(1).getUserAvatar())))
                                             .circleCrop()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-
                                             .placeholder(R.drawable.placeholder)
                                             .into(secondAvatar);
                                 case 1:
                                     firstName.setText(data.get(0).getUserName());
                                     firstScore.setText(context.getString(R.string.highscore_score, data.get(0).getScoreCount()));
                                     Glide.with(context)
-                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserId())))
+                                            .load(Uri.parse(context.getString(R.string.avatar_url, data.get(0).getUserAvatar())))
                                             .circleCrop()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                                             .placeholder(R.drawable.placeholder)
                                             .into(firstAvatar);
                                     break;
@@ -241,9 +235,8 @@ public class HighscoreFragment extends Fragment {
                                 userName.setText(response.body().getUser().getUserName());
                                 userScore.setText(context.getString(R.string.highscore_score, response.body().getUser().getScoreCount()));
                                 Glide.with(context)
-                                        .load(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserId())))
+                                        .load(Uri.parse(context.getString(R.string.avatar_url, response.body().getUser().getUserAvatar())))
                                         .circleCrop()
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                                         .placeholder(R.drawable.placeholder)
                                         .into(userAvatar);
                                 userRank.setText(context.getString(R.string.highscore_user_rank, NumberToTextKt.toEnglishFormat(Integer.parseInt(response.body().getUser().getUserRank())).trim()));

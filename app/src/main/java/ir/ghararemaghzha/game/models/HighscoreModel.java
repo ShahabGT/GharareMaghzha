@@ -27,6 +27,9 @@ public class HighscoreModel {
     @SerializedName("user_code")
     private String userCode;
 
+    @SerializedName("user_avatar")
+    private String userAvatar;
+
     public String getScoreCount() {
         return scoreCount;
     }
@@ -65,5 +68,13 @@ public class HighscoreModel {
 
     public void setUserCode(String userCode) {
         this.userCode = userCode;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

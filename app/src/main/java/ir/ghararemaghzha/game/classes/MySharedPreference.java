@@ -147,4 +147,11 @@ public class MySharedPreference {
     public String getUserInvite(){
         return  sharedPreferences.getString("invite","");
     }
+
+    public void setUserAvatar(String Avatar){
+        sharedPreferences.edit().putString("Avatar",Avatar).apply();
+    }
+    public String getUserAvatar(){
+        return  sharedPreferences.getString("Avatar","");
+    }
 }

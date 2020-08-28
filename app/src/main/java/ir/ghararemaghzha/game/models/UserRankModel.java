@@ -29,6 +29,9 @@ public class UserRankModel {
     @SerializedName("user_code")
     private String userCode;
 
+    @SerializedName("user_avatar")
+    private String userAvatar;
+
     public String getScoreCount() {
         return scoreCount;
     }
@@ -75,5 +78,13 @@ public class UserRankModel {
 
     public void setUserRank(String userRank) {
         this.userRank = userRank;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

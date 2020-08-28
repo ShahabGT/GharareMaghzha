@@ -89,9 +89,8 @@ public class UserDetailsDialog extends Dialog {
                                 score.setText(response.body().getUserData().getScoreCount());
 
                                 Glide.with(context)
-                                        .load(context.getString(R.string.avatar_url, userId))
+                                        .load(context.getString(R.string.avatar_url, response.body().getUserData().getUserAvatar()))
                                         .circleCrop()
-                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                                         .placeholder(R.drawable.placeholder)
                                         .into(avatar);
 
