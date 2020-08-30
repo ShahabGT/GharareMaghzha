@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
     public static ImageView profile, messages, highscore, buy, start;
-    public static MaterialTextView newMessage, newChat;
+    public static ImageView newMessage, newChat,newToolbar;
     public static int whichFragment = 1;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         messages = findViewById(R.id.main_messages);
         newMessage = findViewById(R.id.main_messages_new);
         newChat = findViewById(R.id.main_chat_new);
+        newToolbar = findViewById(R.id.toolbar_new);
         highscore = findViewById(R.id.main_highscore);
         avatar = findViewById(R.id.toolbar_avatar);
         buy = findViewById(R.id.main_buy);
@@ -277,22 +278,17 @@ public class MainActivity extends AppCompatActivity {
         int size = db.where(MessageModel.class).equalTo("sender", "admin").equalTo("read", 0).findAll().size();
         if (size > 0) {
             newMessage.setVisibility(View.VISIBLE);
-            if (size > 99)
-                newMessage.setText("99");
-            else
-                newMessage.setText(String.valueOf(size));
         } else {
             newMessage.setVisibility(View.GONE);
         }
         int chatSize = db.where(MessageModel.class).notEqualTo("sender", "admin").equalTo("read", 0).findAll().size();
         if (chatSize > 0) {
             newChat.setVisibility(View.VISIBLE);
-            if (size > 99)
-                newChat.setText("99");
-            else
-                newChat.setText(String.valueOf(size));
+            newToolbar.setVisibility(View.VISIBLE);
+
         } else {
             newChat.setVisibility(View.GONE);
+            newToolbar.setVisibility(View.GONE);
         }
     }
 
@@ -344,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
-
 
     private void verify() {
         String number = MySharedPreference.getInstance(this).getNumber();

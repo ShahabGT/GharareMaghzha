@@ -40,16 +40,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
         String title = data.get("title") + "";
         String body = data.get("body") + "";
+        String notificationBody = data.get("body") + "";
         String clickAction = data.get("click_action") + "";
         String sender = data.get("sender") + "";
+        MessageModel model = new MessageModel();
 
-        if (sender.equals("support")) {
+        if (title.equals("support")) {
             byte[] byteData = body.getBytes(StandardCharsets.UTF_8);
             body = Base64.encodeToString(byteData, Base64.DEFAULT);
+
+            title = "پیام جدید";
         }
 
         String date = data.get("time");
-        MessageModel model = new MessageModel();
         model.setStat(1);
         model.setMessage(body);
         model.setTitle(title);
@@ -68,7 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         sendBroadcast(intent);
 
         if (MySettingsPreference.getInstance(this).getNotification())
-            createNotification(title, body, clickAction);
+            createNotification(title, notificationBody, clickAction);
 
     }
 
@@ -99,7 +102,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder.setContentText(message);
         builder.setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
-        builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        builder.setPriority(NotificationCompat.PRIORITY_MAX);
         builder.setAutoCancel(true);
         builder.setContentIntent(pendingIntent);
         //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);

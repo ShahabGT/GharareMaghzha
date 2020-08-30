@@ -69,12 +69,13 @@
         app:layout_constraintTop_toBottomOf="@id/navigation_score" />
 
     <ScrollView
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/navigation_view"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_view">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -121,19 +122,17 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/navigation_buyhistory" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <ImageView
                 android:id="@+id/main_chat_new"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginRight="32dp"
-                android:background="@drawable/new_message"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="32dp"
                 android:elevation="12dp"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
-                android:text="1"
+                android:src="@drawable/new_message"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/navigation_support"
                 app:layout_constraintLeft_toLeftOf="@+id/navigation_support"
                 app:layout_constraintRight_toRightOf="@id/navigation_support"
@@ -159,6 +158,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/navigation_support" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/navigation_setting"
                 style="@style/TextAppearance.AppCompat.Small"
@@ -179,6 +179,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/navigation_invite" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/navigation_help"
                 style="@style/TextAppearance.AppCompat.Small"

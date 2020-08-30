@@ -137,20 +137,7 @@
             app:layout_constraintTop_toTopOf="@id/guide90"
             app:srcCompat="@drawable/supermarket" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/main_messages_new"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:background="@drawable/new_message"
-            android:elevation="12dp"
-            android:fontFamily="@font/vazir"
-            android:gravity="center"
-            android:text="1"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintRight_toRightOf="@+id/main_messages"
-            app:layout_constraintTop_toTopOf="@+id/main_messages" />
+
 
         <ImageView
             android:id="@+id/main_messages"
@@ -167,7 +154,21 @@
             app:layout_constraintTop_toTopOf="@id/guide90"
             app:srcCompat="@drawable/comment" />
 
-
+        <ImageView
+            android:id="@+id/main_messages_new"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/new_message"
+            android:elevation="12dp"
+            android:fontFamily="@font/vazir"
+            android:visibility="gone"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="@+id/main_messages"
+            app:layout_constraintTop_toTopOf="@+id/main_messages" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

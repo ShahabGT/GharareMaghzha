@@ -23,5 +23,17 @@
     <color name="mdtp_accent_color">#ffc308</color>
     <color name="mdtp_accent_color_dark">#fb8c05</color>
 
+    <color name="random1">#D50000</color>
+    <color name="random2">#C51162</color>
+    <color name="random3">#AA00FF</color>
+    <color name="random4">#6200EA</color>
+    <color name="random5">#304FFE</color>
+    <color name="random6">#0091EA</color>
+    <color name="random7">#00C853</color>
+    <color name="random8">#64DD17</color>
+    <color name="random9">#FFD600</color>
+    <color name="random10">#FF6D00</color>
+    <color name="random11">#DD2C00</color>
+
 
 </resources>

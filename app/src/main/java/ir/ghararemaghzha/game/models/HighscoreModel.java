@@ -30,6 +30,8 @@ public class HighscoreModel {
     @SerializedName("user_avatar")
     private String userAvatar;
 
+    private int color;
+
     public String getScoreCount() {
         return scoreCount;
     }
@@ -76,5 +78,13 @@ public class HighscoreModel {
 
     public void setUserAvatar(String userAvatar) {
         this.userAvatar = userAvatar;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

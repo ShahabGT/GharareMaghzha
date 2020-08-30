@@ -148,7 +148,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/details_answers_progress"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/details_questions_title"
-                tools:progress="50" />
+                tools:progress="0" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/details_questions_percent"
@@ -202,7 +202,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/details_questions_progress"
                 app:layout_constraintTop_toBottomOf="@+id/details_answers_title"
-                tools:progress="60" />
+                tools:progress="0" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/details_answers_percent"

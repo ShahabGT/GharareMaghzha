@@ -65,6 +65,8 @@
     <string name="profile_remaining_card">سوالات بدون پاسخ</string>
     <string name="profile_edit_title">ویرایش مشخصات</string>
     <string name="profile_edit_subtitle">ویرایش اطلاعات حساب</string>
+    <string name="profile_stat_title">وضعیت من</string>
+    <string name="profile_stat_subtitle">مشاهده آمار و اطلاعات</string>
     <string name="profile_buy_title">خرید سوال</string>
     <string name="profile_buy_subtitle">خرید بسته سوالات</string>
     <string name="profile_code">کد کاربری: %s</string>
@@ -173,7 +175,7 @@
     <string name="navigation_setting">تنظیمات</string>
     <string name="navigation_help">راهنما</string>
     <string name="navigation_about">درباره</string>
-    <string name="navigation_exit">خروج</string>
+    <string name="navigation_exit">خروج از حساب کاربری</string>
 
     <string name="buyhistory_title">تاریخچه خرید</string>
     <string name="buyhistory_empty">تاکنون خریدی انجام نداده اید!</string>
@@ -207,9 +209,8 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="settings_notification_summery">نمایش اعلان های مربوط به پیام های عمومی و پیام های چت پشتیبانی</string>
 
     <string name="details_answers_title">جواب ها</string>
-    <string name="details_question_title">سوالات</string>
-    <string name="details_answers">%d درست\n
-        %d غلط
+    <string name="details_question_title">سوال ها</string>
+    <string name="details_answers">%d درست\n%d غلط
     </string>
     <string name="details_questions">%d از %d سوال</string>
     <string name="details_code">کد کاربری: %s</string>
