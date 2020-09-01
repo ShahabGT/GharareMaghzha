@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,12 +14,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.ImageViewCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -28,7 +28,6 @@ import java.util.Objects;
 
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
-import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.ProfileActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.dialogs.UserDetailsDialog;
@@ -38,6 +37,7 @@ import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REF
 
 public class ProfileFragment extends Fragment {
 
+    private NavController navController;
     private Context context;
     private FragmentActivity activity;
     private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, remainingTimeTitle;
@@ -76,6 +76,12 @@ public class ProfileFragment extends Fragment {
         init(v);
 
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
     }
 
     private void init(View v) {
@@ -128,9 +134,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void onClicks() {
-        buy.setOnClickListener(v -> {
-            ((BottomNavigationView)activity.findViewById(R.id.main_bnv)).setSelectedItemId(R.id.menu_buy);
-        });
+        buy.setOnClickListener(v ->
+                navController.navigate(R.id.action_menu_profile_to_menu_buy)
+        );
         edit.setOnClickListener(v -> startActivity(new Intent(context, ProfileActivity.class)));
 
         stat.setOnClickListener(v -> showDetailsDialog(MySharedPreference.getInstance(context).getUserId()));

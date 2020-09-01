@@ -2,7 +2,6 @@ package ir.ghararemaghzha.game.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -12,20 +11,19 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.ImageViewCompat;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 import com.tmall.ultraviewpager.UltraViewPager;
 
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
-import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.QuestionActivity;
 import ir.ghararemaghzha.game.classes.MainViewPager;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -45,6 +43,7 @@ public class StartFragment extends Fragment {
     private MaterialTextView info;
     private MaterialCardView profile, highscore, start;
     private UltraViewPager ultraViewPager;
+    private NavController navController;
 
     private Realm db;
 
@@ -61,6 +60,12 @@ public class StartFragment extends Fragment {
         init(v);
 
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
     }
 
     @Override
@@ -95,12 +100,12 @@ public class StartFragment extends Fragment {
         getSlider();
     }
 
-    private void initViewPager(PagerAdapter pagerAdapter, int count){
+    private void initViewPager(PagerAdapter pagerAdapter, int count) {
         ultraViewPager.setVisibility(View.VISIBLE);
         ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL);
         ultraViewPager.setAdapter(pagerAdapter);
         ultraViewPager.setAutoMeasureHeight(true);
-        if(count>1) {
+        if (count > 1) {
             ultraViewPager.initIndicator();
             ultraViewPager.getIndicator()
                     .setOrientation(UltraViewPager.Orientation.HORIZONTAL)
@@ -117,12 +122,12 @@ public class StartFragment extends Fragment {
     }
 
     private void onClicks() {
-        profile.setOnClickListener(v -> {
-            ((BottomNavigationView)activity.findViewById(R.id.main_bnv)).setSelectedItemId(R.id.menu_profile);
-        });
-        highscore.setOnClickListener(v -> {
-            ((BottomNavigationView)activity.findViewById(R.id.main_bnv)).setSelectedItemId(R.id.menu_highscore);
-        });
+        profile.setOnClickListener(v ->
+                navController.navigate(R.id.action_menu_start_to_menu_profile)
+        );
+        highscore.setOnClickListener(v ->
+                navController.navigate(R.id.action_menu_start_to_menu_highscore)
+        );
         start.setOnClickListener(v -> {
             int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
             if (size > 0)
@@ -133,20 +138,20 @@ public class StartFragment extends Fragment {
 
     }
 
-    private void getSlider(){
+    private void getSlider() {
         RetrofitClient.getInstance().getApi()
                 .getSlider()
                 .enqueue(new Callback<SliderResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<SliderResponse> call,@NonNull  Response<SliderResponse> response) {
-                        if(response.isSuccessful() && response.body()!=null
-                                && response.body().getResult().equals("success") && !response.body().getMessage().equals("empty")){
-                            initViewPager(new MainViewPager(activity,response.body().getData()),response.body().getData().size());
+                    public void onResponse(@NonNull Call<SliderResponse> call, @NonNull Response<SliderResponse> response) {
+                        if (response.isSuccessful() && response.body() != null
+                                && response.body().getResult().equals("success") && !response.body().getMessage().equals("empty")) {
+                            initViewPager(new MainViewPager(activity, response.body().getData()), response.body().getData().size());
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<SliderResponse> call,@NonNull  Throwable t) {
+                    public void onFailure(@NonNull Call<SliderResponse> call, @NonNull Throwable t) {
 
                     }
                 });

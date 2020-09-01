@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_motion"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_motion"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/activity_main_scene"
@@ -16,45 +15,50 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <include
             android:id="@+id/main_toolbar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            layout="@layout/toolbar"
             app:layout_constraintLeft_toLeftOf="parent"
-            layout="@layout/toolbar"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/main_container"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/main_bnv"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/main_toolbar"
+            app:navGraph="@navigation/nav_graph" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_bnv"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:elevation="25dp"
             app:labelVisibilityMode="unlabeled"
-            app:menu="@menu/main_bottom_menu"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_height="wrap_content"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/main_bottom_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:focusable="true"
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:clickable="true"
         android:elevation="20dp"
-        android:id="@+id/main_view"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <include
         android:id="@+id/main_drawer"
         layout="@layout/navigation_drawer"

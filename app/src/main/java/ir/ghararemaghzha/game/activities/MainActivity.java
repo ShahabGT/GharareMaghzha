@@ -21,6 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.badge.BadgeDrawable;
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView avatar;
     private Intent refreshIntent;
     private MotionLayout motionLayout;
+    private NavController navController;
+    private NavHostFragment navHostFragment;
 
 
     @Override
@@ -127,12 +133,12 @@ public class MainActivity extends AppCompatActivity {
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_setting).setOnClickListener(v -> {
-
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
-                    .add(R.id.main_container, new SettingsFragment())
-                    .addToBackStack("settings")
-                    .commit();
+                   navController.navigate(R.id.action_global_settingsFragment);
+//            getSupportFragmentManager().beginTransaction()
+//                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
+//                    .add(R.id.main_container, new SettingsFragment())
+//                    .addToBackStack("settings")
+//                    .commit();
             motionLayout.transitionToStart();
 
         });
@@ -141,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         bnv = findViewById(R.id.main_bnv);
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
+        navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(bnv, navController);
+
         motionLayout = findViewById(R.id.main_motion);
         refreshIntent = new Intent(GHARAREHMAGHZHA_BROADCAST_REFRESH);
         db = Realm.getDefaultInstance();
@@ -148,10 +158,11 @@ public class MainActivity extends AppCompatActivity {
         newChat = findViewById(R.id.main_chat_new);
         newToolbar = findViewById(R.id.toolbar_new);
         avatar = findViewById(R.id.toolbar_avatar);
-        //  updateDatabase(0);
         onClicks();
         uploadAnswers();
         navigationDrawer();
+
+
     }
 
     @Override
@@ -161,28 +172,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
-        bnv.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.menu_profile:
-                    changeFragment(new ProfileFragment());
-                    break;
-                case R.id.menu_highscore:
-                    changeFragment(new HighscoreFragment());
-                    break;
-                case R.id.menu_start:
-                    changeFragment(new StartFragment());
-                    break;
-                case R.id.menu_buy:
-                    changeFragment(new BuyFragment());
-                    break;
-                case R.id.menu_message:
-                    changeFragment(new MessagesFragment());
-                    break;
-            }
-
-            return true;
-        });
-        bnv.setSelectedItemId(R.id.menu_buy);
+//        bnv.setOnNavigationItemSelectedListener(item -> {
+//            switch (item.getItemId()) {
+//                case R.id.menu_profile:
+//                    changeFragment(new ProfileFragment());
+//                    break;
+//                case R.id.menu_highscore:
+//                    changeFragment(new HighscoreFragment());
+//                    break;
+//                case R.id.menu_start:
+//                    changeFragment(new StartFragment());
+//                    break;
+//                case R.id.menu_buy:
+//                    changeFragment(new BuyFragment());
+//                    break;
+//                case R.id.menu_message:
+//                    changeFragment(new MessagesFragment());
+//                    break;
+//            }
+//
+//            return true;
+//        });
+//        bnv.setSelectedItemId(R.id.menu_buy);
 
         avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
 
@@ -192,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     private void changeFragment(Fragment fragment) {
 
         getSupportFragmentManager().beginTransaction()
-             //   .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
+                //   .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
                 .replace(R.id.main_container, fragment)
                 .commit();
         getSupportFragmentManager().popBackStack();
@@ -261,10 +272,7 @@ public class MainActivity extends AppCompatActivity {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
                             } else {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
-//                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty()) {
-//                                    int lastUpdate = Integer.parseInt(response.body().getLastUpdate());
-//                                    MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
-//                                }
+
                                 int lastUpdate = 0;
                                 if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty())
                                     lastUpdate = Integer.parseInt(response.body().getLastUpdate());
@@ -356,7 +364,6 @@ public class MainActivity extends AppCompatActivity {
             updateTime(nowDate);
             Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
             sendBroadcast(refreshIntent);
-            //   MySharedPreference.getInstance(this).setLastUpdate(nowDate);
 
         }
     }
@@ -414,15 +421,16 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
-                        //    if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                        //     MySharedPreference.getInstance(MainActivity.this).setLastUpdate(lastUpdate);
-                        //    }
                         if (response.code() == 401)
                             Utils.logout(MainActivity.this, true);
+                        else if(!response.isSuccessful())
+                            Utils.showInternetError(MainActivity.this, () -> updateTime(lastUpdate));
+
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+                        Utils.showInternetError(MainActivity.this, () -> updateTime(lastUpdate));
 
                     }
                 });
@@ -536,16 +544,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         if (motionLayout.getCurrentState() == motionLayout.getEndState()) {
             motionLayout.transitionToStart();
             return;
         }
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
+        if (navController.popBackStack())
             return;
-        }
+//        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+//            getSupportFragmentManager().popBackStack();
+//            return;
+//        }
         if (doubleBackToExitPressedOnce) {
-            finishAffinity();
+            super.onBackPressed();
             return;
         }
         doubleBackToExitPressedOnce = true;

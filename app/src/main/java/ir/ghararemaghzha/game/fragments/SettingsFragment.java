@@ -21,6 +21,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private Context context;
     private FragmentActivity activity;
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);

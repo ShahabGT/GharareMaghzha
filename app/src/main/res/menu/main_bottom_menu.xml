@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="profile"
+        android:title="@string/profile_title"
         android:id="@+id/menu_profile"
         android:icon="@drawable/user"/>
     <item
-        android:title="highscore"
+        android:title="@string/highscore_title"
         android:id="@+id/menu_highscore"
         android:icon="@drawable/success"/>
     <item
-        android:title="start"
+        android:title="@string/start_title"
         android:id="@+id/menu_start"
         android:icon="@drawable/questione"/>
     <item
-        android:title="buy"
+        android:title="@string/buy_title"
         android:id="@+id/menu_buy"
         android:icon="@drawable/supermarket"/>
     <item
-        android:title="message"
+        android:title="@string/message_incoming"
         android:id="@+id/menu_message"
         android:icon="@drawable/comment"/>
 

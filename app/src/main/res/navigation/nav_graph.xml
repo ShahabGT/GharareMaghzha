@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menu_profile">
+
+
+
+    <fragment
+        app:popUpTo="@+id/menu_profile"
+        android:id="@+id/menu_buy"
+        android:name="ir.ghararemaghzha.game.fragments.BuyFragment"
+        android:label="BuyFragment" />
+    <fragment
+        android:id="@+id/menu_highscore"
+        android:name="ir.ghararemaghzha.game.fragments.HighscoreFragment"
+        android:label="HighscoreFragment" />
+    <fragment
+        android:id="@+id/menu_message"
+        android:name="ir.ghararemaghzha.game.fragments.MessagesFragment"
+        android:label="fragment_messages"
+        tools:layout="@layout/fragment_messages" />
+    <fragment
+        android:id="@+id/menu_profile"
+        android:name="ir.ghararemaghzha.game.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_menu_profile_to_menu_buy"
+            app:destination="@id/menu_buy" />
+    </fragment>
+    <fragment
+        android:id="@+id/menu_start"
+        android:name="ir.ghararemaghzha.game.fragments.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_menu_start_to_menu_highscore"
+            app:destination="@id/menu_highscore" />
+        <action
+            android:id="@+id/action_menu_start_to_menu_profile"
+            app:destination="@id/menu_profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ir.ghararemaghzha.game.fragments.SettingsFragment"
+        android:label="SettingsFragment" />
+
+    <action android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment"/>
+</navigation>
