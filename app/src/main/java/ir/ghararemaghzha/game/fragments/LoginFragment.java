@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.Credentials;
@@ -44,7 +46,7 @@ public class LoginFragment extends Fragment {
     private MaterialTextView register;
     private TextInputEditText number;
     private MaterialButton verify;
-
+    private NavController navController;
 
 
     public LoginFragment() {
@@ -61,16 +63,22 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+    }
+
     private void init(View v) {
         register = v.findViewById(R.id.login_register);
         number = v.findViewById(R.id.login_number);
         verify = v.findViewById(R.id.login_verify);
 
-            try {
-                requestHint();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            requestHint();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         onClicks();
 
@@ -109,13 +117,9 @@ public class LoginFragment extends Fragment {
 
         });
 
-        register.setOnClickListener(v -> {
-            activity.getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.enter_left, R.anim.exit_right, R.anim.enter_right, R.anim.exit_left)
-                    .add(R.id.register_container, new RegisterFragment())
-                    .addToBackStack("login")
-                    .commit();
-        });
+        register.setOnClickListener(v ->
+                navController.navigate(R.id.action_loginFragment_to_registerFragment)
+        );
 
 
     }
@@ -135,23 +139,18 @@ public class LoginFragment extends Fragment {
                         register.setEnabled(true);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             SmsRetriever.getClient(activity).startSmsUserConsent("98300077");
-                            VerifyFragment verifyFragment = new VerifyFragment();
-                            verifyFragment.setNumber(number);
-                            activity.getSupportFragmentManager().beginTransaction()
-                                    .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
-                                    .replace(R.id.register_container, verifyFragment)
-                                    .commit();
+                            Bundle b = new Bundle();
+                            b.putString("number", number);
+                            navController.navigate(R.id.action_loginFragment_to_verifyFragment, b);
 
 
                         } else if (response.code() == 401) {
                             Toast.makeText(context, context.getResources().getText(R.string.loginfragment_nouser), Toast.LENGTH_SHORT).show();
-                            RegisterFragment registerFragment = new RegisterFragment();
-                            registerFragment.setLoginNumber(number);
-                            activity.getSupportFragmentManager().beginTransaction()
-                                    .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
-                                    .add(R.id.register_container, registerFragment)
-                                    .addToBackStack("register")
-                                    .commit();
+
+                            Bundle b = new Bundle();
+                            b.putString("number", number);
+                            navController.navigate(R.id.action_loginFragment_to_registerFragment, b);
+
                         } else if (response.code() == 403) {
                             Toast.makeText(context, context.getResources().getText(R.string.loginfragment_blocked), Toast.LENGTH_LONG).show();
                         } else {

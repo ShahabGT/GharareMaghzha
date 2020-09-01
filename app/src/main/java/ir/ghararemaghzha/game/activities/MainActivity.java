@@ -20,9 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -46,12 +44,6 @@ import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NewVersionDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
-import ir.ghararemaghzha.game.fragments.BuyFragment;
-import ir.ghararemaghzha.game.fragments.HighscoreFragment;
-import ir.ghararemaghzha.game.fragments.MessagesFragment;
-import ir.ghararemaghzha.game.fragments.ProfileFragment;
-import ir.ghararemaghzha.game.fragments.SettingsFragment;
-import ir.ghararemaghzha.game.fragments.StartFragment;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
 import ir.ghararemaghzha.game.models.QuestionModel;
@@ -85,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private Intent refreshIntent;
     private MotionLayout motionLayout;
     private NavController navController;
-    private NavHostFragment navHostFragment;
 
 
     @Override
@@ -133,12 +124,7 @@ public class MainActivity extends AppCompatActivity {
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_setting).setOnClickListener(v -> {
-                   navController.navigate(R.id.action_global_settingsFragment);
-//            getSupportFragmentManager().beginTransaction()
-//                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
-//                    .add(R.id.main_container, new SettingsFragment())
-//                    .addToBackStack("settings")
-//                    .commit();
+            navController.navigate(R.id.action_global_settingsFragment);
             motionLayout.transitionToStart();
 
         });
@@ -147,7 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         bnv = findViewById(R.id.main_bnv);
-        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
+        if(navHostFragment!=null)
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bnv, navController);
 
@@ -172,44 +159,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
-//        bnv.setOnNavigationItemSelectedListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.menu_profile:
-//                    changeFragment(new ProfileFragment());
-//                    break;
-//                case R.id.menu_highscore:
-//                    changeFragment(new HighscoreFragment());
-//                    break;
-//                case R.id.menu_start:
-//                    changeFragment(new StartFragment());
-//                    break;
-//                case R.id.menu_buy:
-//                    changeFragment(new BuyFragment());
-//                    break;
-//                case R.id.menu_message:
-//                    changeFragment(new MessagesFragment());
-//                    break;
-//            }
-//
-//            return true;
-//        });
-//        bnv.setSelectedItemId(R.id.menu_buy);
-
         avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
-
-
     }
-
-    private void changeFragment(Fragment fragment) {
-
-        getSupportFragmentManager().beginTransaction()
-                //   .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
-                .replace(R.id.main_container, fragment)
-                .commit();
-        getSupportFragmentManager().popBackStack();
-
-    }
-
 
     @Override
     protected void onResume() {
@@ -423,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.code() == 401)
                             Utils.logout(MainActivity.this, true);
-                        else if(!response.isSuccessful())
+                        else if (!response.isSuccessful())
                             Utils.showInternetError(MainActivity.this, () -> updateTime(lastUpdate));
 
                     }
@@ -551,10 +502,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (navController.popBackStack())
             return;
-//        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-//            getSupportFragmentManager().popBackStack();
-//            return;
-//        }
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;

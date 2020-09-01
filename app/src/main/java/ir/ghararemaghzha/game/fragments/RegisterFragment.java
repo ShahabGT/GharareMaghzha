@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.Credentials;
@@ -44,10 +46,7 @@ public class RegisterFragment extends Fragment {
     private MaterialButton verify;
 
     private String loginNumber;
-
-    public void setLoginNumber(String loginNumber) {
-        this.loginNumber = loginNumber;
-    }
+    private NavController navController;
 
 
     public RegisterFragment() {
@@ -59,12 +58,22 @@ public class RegisterFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_register, container, false);
         context = getContext();
         activity = getActivity();
+
+        if(getArguments()!=null)
+            loginNumber = getArguments().getString("number");
+
         init(v);
 
         //SmsRetriever.getClient(getActivity()).startSmsUserConsent("98300077");
 
 
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
     }
 
     private void init(View v) {
@@ -126,9 +135,9 @@ public class RegisterFragment extends Fragment {
 
         });
 
-        login.setOnClickListener(view -> {
-            activity.getSupportFragmentManager().popBackStack();
-        });
+        login.setOnClickListener(view ->
+                navController.popBackStack()
+        );
 
 
     }
@@ -174,13 +183,9 @@ public class RegisterFragment extends Fragment {
                         login.setEnabled(true);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             SmsRetriever.getClient(activity).startSmsUserConsent("98300077");
-                            VerifyFragment verifyFragment = new VerifyFragment();
-                            verifyFragment.setNumber(number);
-                            activity.getSupportFragmentManager().popBackStack();
-                            activity.getSupportFragmentManager().beginTransaction()
-                                    .setCustomAnimations(R.anim.enter_right, R.anim.exit_left)
-                                    .replace(R.id.register_container, verifyFragment)
-                                    .commit();
+                            Bundle b = new Bundle();
+                            b.putString("number",number);
+                            navController.navigate(R.id.action_registerFragment_to_verifyFragment);
 
                         } else if (response.code() == 409) {
                             Toast.makeText(context, context.getResources().getText(R.string.registerfragment_conflict), Toast.LENGTH_SHORT).show();

@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -85,10 +87,25 @@ public class VerifyFragment extends Fragment {
         context = getContext();
         activity = getActivity();
 
+        if(getArguments()!=null)
+            number = getArguments().getString("number");
+
         context.registerReceiver(rec, new IntentFilter("codeReceived"));
         init(v);
 
         return v;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void init(View v) {
@@ -122,9 +139,7 @@ public class VerifyFragment extends Fragment {
     }
 
     private void onClicks() {
-        resend.setOnClickListener(v -> {
-            doResend();
-        });
+        resend.setOnClickListener(v -> doResend());
         verify.setOnClickListener(v -> {
             String c = code.getText().toString();
             if (c.length() < 6 || c.startsWith("0")) {
@@ -168,7 +183,7 @@ public class VerifyFragment extends Fragment {
                 .resend(number)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
-                    public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
+                    public void onResponse(@NonNull Call<GeneralResponse> call,@NonNull  Response<GeneralResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             Toast.makeText(context, context.getString(R.string.general_send), Toast.LENGTH_SHORT).show();
                             timerTime *= 2;
@@ -181,7 +196,7 @@ public class VerifyFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<GeneralResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<GeneralResponse> call,@NonNull  Throwable t) {
                         Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show();
 
                     }
