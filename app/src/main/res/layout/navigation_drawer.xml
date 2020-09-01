@@ -202,6 +202,27 @@
                 app:layout_constraintTop_toBottomOf="@id/navigation_setting" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/navigation_rule"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:drawableTop="@drawable/vector_rules"
+                android:focusable="true"
+                android:fontFamily="@font/vazir"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:soundEffectsEnabled="true"
+                android:text="@string/navigation_rule"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:drawableTint="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/navigation_help" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/navigation_about"
                 style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="0dp"
@@ -220,7 +241,7 @@
                 app:drawableTint="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/navigation_help" />
+                app:layout_constraintTop_toBottomOf="@id/navigation_rule" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/navigation_exit"

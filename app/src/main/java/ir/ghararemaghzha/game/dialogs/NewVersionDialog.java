@@ -14,14 +14,12 @@ import ir.ghararemaghzha.game.R;
 
 public class NewVersionDialog extends Dialog {
     private FragmentActivity context;
-    private String urgent;
     private ImageView playstore,direct;
 
 
-    public NewVersionDialog(@NonNull FragmentActivity context, String urgent) {
+    public NewVersionDialog(@NonNull FragmentActivity context) {
         super(context);
         this.context= context;
-        this.urgent = urgent;
     }
 
     @Override
@@ -56,14 +54,5 @@ public class NewVersionDialog extends Dialog {
         });
 
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(urgent.equals("0"))
-            super.onBackPressed();
-        else{
-            dismiss();
-        }
     }
 }

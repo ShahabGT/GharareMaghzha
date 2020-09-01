@@ -134,7 +134,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-
             android:layout_marginTop="18dp"
             android:fontFamily="@font/vazir"
             android:padding="8dp"

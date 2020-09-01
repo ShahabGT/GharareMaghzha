@@ -50,15 +50,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-
         <com.google.android.material.textview.MaterialTextView
-            android:autoLink="all"
             android:id="@+id/incoming_title"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
+            android:autoLink="all"
             android:fontFamily="@font/vazir"
             android:text="@string/start_start_title"
             android:textColor="@color/black"
@@ -66,13 +65,14 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/incoming_icon" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/incoming_date"
             style="@style/TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
+            android:layout_marginRight="8dp"
             android:fontFamily="@font/vazir"
             android:text="1399/05/05"
             android:textColor="@color/black"
@@ -93,9 +93,9 @@
                 style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="all"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:autoLink="all"
                 android:fontFamily="@font/vazir" />
         </ScrollView>
 

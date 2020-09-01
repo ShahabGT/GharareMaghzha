@@ -164,9 +164,9 @@
     <string name="buy_dialog_discount_text">مبلغ قابل پرداخت با %d درصد تخفیف:</string>
     <string name="buy_dialog_buy">پرداخت</string>
     <string name="buy_dialog_cancel">انصراف</string>
-    <string name="buy_dialog_giftcode">کد معرف</string>
+    <string name="buy_dialog_giftcode">کد تخفیف</string>
     <string name="buy_dialog_check">بررسی</string>
-    <string name="buy_dialog_giftcode_btn">کد معرف دارم!</string>
+    <string name="buy_dialog_giftcode_btn">کد تخفیف دارم!</string>
     <string name="buy_dialog_giftcode_invalid">کد معرف وارد شده معتبر نیست</string>
 
     <string name="navigation_buyhistory">تاریخچه خرید</string>
@@ -174,6 +174,7 @@
     <string name="navigation_invite">معرفی به دوستان</string>
     <string name="navigation_setting">تنظیمات</string>
     <string name="navigation_help">راهنما</string>
+    <string name="navigation_rule">قوانین و مقررات</string>
     <string name="navigation_about">درباره</string>
     <string name="navigation_exit">خروج از حساب کاربری</string>
 

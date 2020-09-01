@@ -601,7 +601,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNewVersionDialog(String urgent) {
-        NewVersionDialog dialog = new NewVersionDialog(this, urgent);
+        NewVersionDialog dialog = new NewVersionDialog(this);
         if (urgent.equals("0")) {
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(true);
