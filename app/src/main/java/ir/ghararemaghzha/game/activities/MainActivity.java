@@ -1,13 +1,10 @@
 package ir.ghararemaghzha.game.activities;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,12 +20,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -69,12 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
     @SuppressLint("StaticFieldLeak")
-    public static ImageView profile, messages, highscore, buy, start;
-    public static ImageView newMessage, newChat,newToolbar;
-    public static int whichFragment = 1;
+    public static ImageView newChat, newToolbar;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
     private GetDataDialog dataDialog;
+    private BottomNavigationView bnv;
     private BroadcastReceiver notificationBroadCast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -99,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setAvatars(){
+    private void setAvatars() {
         Glide.with(this)
                 .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
                 .circleCrop()
@@ -118,10 +113,6 @@ public class MainActivity extends AppCompatActivity {
         ((MaterialTextView) findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode()));
         ((MaterialTextView) findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore()));
 
-     //   motionLayout.transitionToStart();
-
-     //   findViewById(R.id.main_view).setOnClickListener(v->motionLayout.transitionToStart());
-
         findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
         findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> {
             startActivity(new Intent(this, BuyHistoryActivity.class));
@@ -136,48 +127,28 @@ public class MainActivity extends AppCompatActivity {
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_setting).setOnClickListener(v -> {
-            ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-            ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-            ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-            ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-            changeFragment(new SettingsFragment());
+
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
+                    .add(R.id.main_container, new SettingsFragment())
+                    .addToBackStack("settings")
+                    .commit();
             motionLayout.transitionToStart();
-            whichFragment = -1;
+
         });
     }
 
-    private void animate() {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(start, "scaleX", 1f, 1.1f, 1f);
-        scaleX.setDuration(1500);
-        scaleX.setRepeatCount(ValueAnimator.INFINITE);
-        scaleX.setRepeatMode(ValueAnimator.RESTART);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(start, "scaleY", 1f, 1.1f, 1f);
-        scaleY.setDuration(1500);
-        scaleY.setRepeatCount(ValueAnimator.INFINITE);
-        scaleY.setRepeatMode(ValueAnimator.RESTART);
-        scaleX.start();
-        scaleY.start();
-    }
 
     private void init() {
+        bnv = findViewById(R.id.main_bnv);
         motionLayout = findViewById(R.id.main_motion);
         refreshIntent = new Intent(GHARAREHMAGHZHA_BROADCAST_REFRESH);
         db = Realm.getDefaultInstance();
         doubleBackToExitPressedOnce = false;
-        profile = findViewById(R.id.main_profile);
-        messages = findViewById(R.id.main_messages);
-        newMessage = findViewById(R.id.main_messages_new);
         newChat = findViewById(R.id.main_chat_new);
         newToolbar = findViewById(R.id.toolbar_new);
-        highscore = findViewById(R.id.main_highscore);
         avatar = findViewById(R.id.toolbar_avatar);
-        buy = findViewById(R.id.main_buy);
-        start = findViewById(R.id.main_start);
-        ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
-        changeFragment(new ProfileFragment());
-
         //  updateDatabase(0);
-        animate();
         onClicks();
         uploadAnswers();
         navigationDrawer();
@@ -187,63 +158,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (db != null) db.close();
-        whichFragment = 1;
     }
 
     private void onClicks() {
-        profile.setOnClickListener(v -> {
-            if (whichFragment != 1) {
-                ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
-                ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                changeFragment(new ProfileFragment());
-                whichFragment = 1;
+        bnv.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menu_profile:
+                    changeFragment(new ProfileFragment());
+                    break;
+                case R.id.menu_highscore:
+                    changeFragment(new HighscoreFragment());
+                    break;
+                case R.id.menu_start:
+                    changeFragment(new StartFragment());
+                    break;
+                case R.id.menu_buy:
+                    changeFragment(new BuyFragment());
+                    break;
+                case R.id.menu_message:
+                    changeFragment(new MessagesFragment());
+                    break;
             }
 
-
+            return true;
         });
-
-        messages.setOnClickListener(v -> {
-            if (whichFragment != 2) {
-                ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
-                ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                changeFragment(new MessagesFragment());
-                whichFragment = 2;
-            }
-        });
-        highscore.setOnClickListener(v -> {
-            if (whichFragment != 3) {
-                ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
-                ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                changeFragment(new HighscoreFragment());
-                whichFragment = 3;
-            }
-        });
-        buy.setOnClickListener(v -> {
-            if (whichFragment != 4) {
-                ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark)));
-                ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                changeFragment(new BuyFragment());
-                whichFragment = 4;
-            }
-        });
-        start.setOnClickListener(v -> {
-            if (whichFragment != 5) {
-                ImageViewCompat.setImageTintList(buy, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(profile, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(messages, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                ImageViewCompat.setImageTintList(highscore, ColorStateList.valueOf(ContextCompat.getColor(MainActivity.this, R.color.black)));
-                changeFragment(new StartFragment());
-                whichFragment = 5;
-            }
-        });
+        bnv.setSelectedItemId(R.id.menu_buy);
 
         avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
 
@@ -251,10 +190,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeFragment(Fragment fragment) {
+
         getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
+             //   .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
                 .replace(R.id.main_container, fragment)
                 .commit();
+        getSupportFragmentManager().popBackStack();
+
     }
 
 
@@ -277,10 +219,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateMessages() {
         int size = db.where(MessageModel.class).equalTo("sender", "admin").equalTo("read", 0).findAll().size();
+        BadgeDrawable badgeDrawable = bnv.getOrCreateBadge(R.id.menu_message);
+
         if (size > 0) {
-            newMessage.setVisibility(View.VISIBLE);
+            badgeDrawable.setVisible(true);
         } else {
-            newMessage.setVisibility(View.GONE);
+            badgeDrawable.setVisible(false);
         }
         int chatSize = db.where(MessageModel.class).notEqualTo("sender", "admin").equalTo("read", 0).findAll().size();
         if (chatSize > 0) {
@@ -592,8 +536,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(motionLayout.getCurrentState()==motionLayout.getEndState()){
+        if (motionLayout.getCurrentState() == motionLayout.getEndState()) {
             motionLayout.transitionToStart();
+            return;
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
             return;
         }
         if (doubleBackToExitPressedOnce) {

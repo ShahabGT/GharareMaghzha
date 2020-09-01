@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="profile"
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/user"/>
+    <item
+        android:title="highscore"
+        android:id="@+id/menu_highscore"
+        android:icon="@drawable/success"/>
+    <item
+        android:title="start"
+        android:id="@+id/menu_start"
+        android:icon="@drawable/questione"/>
+    <item
+        android:title="buy"
+        android:id="@+id/menu_buy"
+        android:icon="@drawable/supermarket"/>
+    <item
+        android:title="message"
+        android:id="@+id/menu_message"
+        android:icon="@drawable/comment"/>
+
+</menu>

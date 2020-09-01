@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 import com.tmall.ultraviewpager.UltraViewPager;
@@ -117,26 +118,10 @@ public class StartFragment extends Fragment {
 
     private void onClicks() {
         profile.setOnClickListener(v -> {
-            ImageViewCompat.setImageTintList(MainActivity.buy, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            ImageViewCompat.setImageTintList(MainActivity.profile, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorPrimaryDark)));
-            ImageViewCompat.setImageTintList(MainActivity.messages, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            ImageViewCompat.setImageTintList(MainActivity.highscore, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            activity.getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
-                    .replace(R.id.main_container, new ProfileFragment())
-                    .commit();
-            MainActivity.whichFragment = 1;
+            ((BottomNavigationView)activity.findViewById(R.id.main_bnv)).setSelectedItemId(R.id.menu_profile);
         });
         highscore.setOnClickListener(v -> {
-            ImageViewCompat.setImageTintList(MainActivity.buy, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            ImageViewCompat.setImageTintList(MainActivity.profile, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            ImageViewCompat.setImageTintList(MainActivity.messages, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            ImageViewCompat.setImageTintList(MainActivity.highscore, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorPrimaryDark)));
-            activity.getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
-                    .replace(R.id.main_container, new HighscoreFragment())
-                    .commit();
-            MainActivity.whichFragment = 3;
+            ((BottomNavigationView)activity.findViewById(R.id.main_bnv)).setSelectedItemId(R.id.menu_highscore);
         });
         start.setOnClickListener(v -> {
             int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();

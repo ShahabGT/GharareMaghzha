@@ -20,6 +20,7 @@ import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -128,16 +129,7 @@ public class ProfileFragment extends Fragment {
 
     private void onClicks() {
         buy.setOnClickListener(v -> {
-            ImageViewCompat.setImageTintList(MainActivity.buy, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorPrimaryDark)));
-            ImageViewCompat.setImageTintList(MainActivity.profile, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            ImageViewCompat.setImageTintList(MainActivity.messages, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            ImageViewCompat.setImageTintList(MainActivity.highscore, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
-            activity.getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.fadein, R.anim.fadeout)
-                    .replace(R.id.main_container, new BuyFragment())
-                    .commit();
-            MainActivity.whichFragment = 4;
-
+            ((BottomNavigationView)activity.findViewById(R.id.main_bnv)).setSelectedItemId(R.id.menu_buy);
         });
         edit.setOnClickListener(v -> startActivity(new Intent(context, ProfileActivity.class)));
 
