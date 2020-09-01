@@ -2,7 +2,9 @@ package ir.ghararemaghzha.game.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -12,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.textview.MaterialTextView;
 
 import ir.ghararemaghzha.game.R;
@@ -28,7 +29,7 @@ public class UserDetailsDialog extends Dialog {
 
     private Activity context;
     private String userId;
-    private MaterialTextView name, code, rank, score, questions, answers,questionsPercent, answersPercent;
+    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent;
     private ProgressBar answersProgress, questionsProgress;
     private ImageView avatar;
 
@@ -62,7 +63,12 @@ public class UserDetailsDialog extends Dialog {
         avatar = findViewById(R.id.details_avatar);
 
         answersProgress = findViewById(R.id.details_answers_progress);
+        answersProgress.setProgress(0);
+        answersProgress.setMax(100);
+
         questionsProgress = findViewById(R.id.details_questions_progress);
+        questionsProgress.setProgress(0);
+        questionsProgress.setMax(100);
 
         findViewById(R.id.details_close).setOnClickListener(v -> dismiss());
 
@@ -99,18 +105,29 @@ public class UserDetailsDialog extends Dialog {
                                 answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), response.body().getIncorrect()));
 
                                 questions.setText(context.getString(R.string.details_questions, answeredQuestions, totalQuestions));
-                                int aPercent=0;
-                                int qPercent=0;
-                                if(answeredQuestions>0) {
-                                     aPercent = (response.body().getCorrect() * 100) / answeredQuestions;
-                                     qPercent = (answeredQuestions * 100) / totalQuestions;
+                                int aPercent;
+                                int qPercent;
+                                if (answeredQuestions > 0) {
+                                    aPercent = (response.body().getCorrect() * 100) / answeredQuestions;
+                                    qPercent = (answeredQuestions * 100) / totalQuestions;
+                                }else {
+                                    qPercent=0;
+                                    aPercent=0;
                                 }
-                                answersProgress.setProgress(aPercent);
-                                questionsProgress.setProgress(qPercent);
+                                new Handler().postDelayed(() -> {
+                                    if (Build.VERSION.SDK_INT >= 24) {
+                                        answersProgress.setProgress(aPercent, true);
+                                        questionsProgress.setProgress(qPercent, true);
+                                    } else {
+                                        answersProgress.setProgress(aPercent);
+                                        questionsProgress.setProgress(qPercent);
+                                    }
+                                }, 500);
 
-                                answersPercent.setText("%"+aPercent);
 
-                                questionsPercent.setText("%"+qPercent);
+                                answersPercent.setText("%" + aPercent);
+
+                                questionsPercent.setText("%" + qPercent);
 
                                 loading.setVisibility(View.GONE);
                             } else {
@@ -134,6 +151,14 @@ public class UserDetailsDialog extends Dialog {
                     }
                 });
 
+
+    }
+
+    @Override
+    public void dismiss() {
+        answersProgress.setProgress(0);
+        questionsProgress.setProgress(0);
+        super.dismiss();
 
     }
 }

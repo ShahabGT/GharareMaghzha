@@ -172,6 +172,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:focusable="true"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:id="@+id/main_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <include
         android:id="@+id/main_drawer"
         layout="@layout/navigation_drawer"

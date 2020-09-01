@@ -118,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
         ((MaterialTextView) findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode()));
         ((MaterialTextView) findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore()));
 
+     //   motionLayout.transitionToStart();
 
-        motionLayout.transitionToStart();
+     //   findViewById(R.id.main_view).setOnClickListener(v->motionLayout.transitionToStart());
 
         findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
         findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> {
@@ -591,6 +592,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(motionLayout.getCurrentState()==motionLayout.getEndState()){
+            motionLayout.transitionToStart();
+            return;
+        }
         if (doubleBackToExitPressedOnce) {
             finishAffinity();
             return;
