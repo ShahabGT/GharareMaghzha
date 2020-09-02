@@ -1,13 +1,5 @@
 package ir.ghararemaghzha.game.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.emoji.widget.EmojiEditText;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +9,15 @@ import android.util.Base64;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.emoji.widget.EmojiEditText;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.nio.charset.StandardCharsets;
 
@@ -27,7 +26,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.adapters.ChatAdapter;
-import ir.ghararemaghzha.game.adapters.IncomingAdapter;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
@@ -37,6 +35,7 @@ import ir.ghararemaghzha.game.models.TimeResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Utils.getNextKey;
 
@@ -50,6 +49,14 @@ public class SupportActivity extends AppCompatActivity {
     private ImageView send;
     private ConstraintLayout loading;
 
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Utils.removeNotification(SupportActivity.this);
+            getChatData();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -61,7 +68,8 @@ public class SupportActivity extends AppCompatActivity {
         init();
     }
 
-    private void init(){
+    private void init() {
+        MySharedPreference.getInstance(this).setUnreadChats(0);
         loading = findViewById(R.id.support_loading);
         db = Realm.getDefaultInstance();
         Intent intent = new Intent();
@@ -90,8 +98,8 @@ public class SupportActivity extends AppCompatActivity {
                 });
             }
         });
-        if(db.where(MessageModel.class).notEqualTo("sender", "admin").findAll().size()==0)
-            getChatData();
+        // if(db.where(MessageModel.class).notEqualTo("sender", "admin").findAll().size()==0)
+        getChatData();
 
 
         send = findViewById(R.id.chat_send);
@@ -101,8 +109,14 @@ public class SupportActivity extends AppCompatActivity {
 
     }
 
-    private void onClicks(){
-        findViewById(R.id.chat_close).setOnClickListener(v->onBackPressed());
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(br, new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
+    }
+
+    private void onClicks() {
+        findViewById(R.id.chat_close).setOnClickListener(v -> onBackPressed());
 
         send.setOnClickListener(v -> {
             String txt = message.getText().toString().trim();
@@ -120,19 +134,20 @@ public class SupportActivity extends AppCompatActivity {
                 model.setRead(1);
                 model.setSender(userId);
                 model.setTitle("new");
-                int key= getNextKey(db);
+                int key = getNextKey(db);
                 model.setMessageId(getNextKey(db));
                 db.executeTransaction(realm1 -> realm1.insert(model));
-                sendMessage(body,key);
+                sendMessage(body, key);
                 recyclerView.scrollToPosition(0);
             }
         });
     }
-    private void sendMessage(String message,int key) {
+
+    private void sendMessage(String message, int key) {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this,true);
+            Utils.logout(this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -140,14 +155,14 @@ public class SupportActivity extends AppCompatActivity {
                 .enqueue(new Callback<TimeResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
-                        if(response.isSuccessful() && response.body()!=null && response.body().getResult().equals("success")) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             db.beginTransaction();
                             RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
                             models.first().setStat(1);
                             db.commitTransaction();
-                        }else if(response.code()==401){
-                            Utils.logout(SupportActivity.this,true);
-                        }else{
+                        } else if (response.code() == 401) {
+                            Utils.logout(SupportActivity.this, true);
+                        } else {
                             db.beginTransaction();
                             RealmResults<MessageModel> models = db.where(MessageModel.class).equalTo("messageId", key).findAll();
                             models.first().setStat(-1);
@@ -171,13 +186,13 @@ public class SupportActivity extends AppCompatActivity {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         String lastUpdate = MySharedPreference.getInstance(this).getLastUpdateChat();
-        String nowDate= Utils.currentDate();
+        String nowDate = Utils.currentDate();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(this,true);
+            Utils.logout(this, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .getMessages("Bearer " + token, number)
+                .getMessages("Bearer " + token, number, lastUpdate)
                 .enqueue(new Callback<ChatResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {
@@ -185,7 +200,7 @@ public class SupportActivity extends AppCompatActivity {
 
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             MySharedPreference.getInstance(SupportActivity.this).setLastUpdateChat(nowDate);
-                            if(response.body().getMessage().equals("ok")) {
+                            if (response.body().getMessage().equals("ok")) {
                                 for (MessageModel model : response.body().getData()) {
                                     model.setStat(1);
                                     model.setRead(1);
@@ -196,9 +211,8 @@ public class SupportActivity extends AppCompatActivity {
                             }
 
 
-
-                        }else if (response.code() == 401) {
-                            Utils.logout(SupportActivity.this,true);
+                        } else if (response.code() == 401) {
+                            Utils.logout(SupportActivity.this, true);
                         }
                     }
 
@@ -214,6 +228,7 @@ public class SupportActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         MySharedPreference.getInstance(this).setLastUpdateChat(Utils.currentDate());
-        if(db!=null)db.close();
+        if (db != null) db.close();
+        unregisterReceiver(br);
     }
 }

@@ -48,8 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (title.equals("support")) {
             byte[] byteData = body.getBytes(StandardCharsets.UTF_8);
             body = Base64.encodeToString(byteData, Base64.DEFAULT);
-
-            title = "پیام جدید";
+            title = "پیام جدید از پشتیبانی";
         }
 
         String date = data.get("time");
@@ -59,11 +58,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         model.setSender(sender);
         model.setDate(date);
         model.setRead(0);
-        Realm db = Realm.getDefaultInstance();
-        model.setMessageId(getNextKey(db));
-        db.beginTransaction();
-        db.insert(model);
-        db.commitTransaction();
+        if (!title.equals("پیام جدید از پشتیبانی")) {
+            Realm db = Realm.getDefaultInstance();
+            model.setMessageId(getNextKey(db));
+            db.beginTransaction();
+            db.insert(model);
+            db.commitTransaction();
+        }else{
+            MySharedPreference.getInstance(this).setUnreadChats(MySharedPreference.getInstance(this).getUnreadChats()+1);
+        }
 
         Intent intent = new Intent();
         intent.setAction(GHARAREHMAGHZHA_BROADCAST);

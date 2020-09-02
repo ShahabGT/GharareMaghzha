@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateMessages();
+            Utils.removeNotification(MainActivity.this);
         }
     };
 
@@ -180,17 +181,15 @@ public class MainActivity extends AppCompatActivity {
     private void updateMessages() {
         int size = db.where(MessageModel.class).equalTo("sender", "admin").equalTo("read", 0).findAll().size();
         BadgeDrawable badgeDrawable = bnv.getOrCreateBadge(R.id.menu_message);
-
         if (size > 0) {
             badgeDrawable.setVisible(true);
         } else {
             badgeDrawable.setVisible(false);
         }
-        int chatSize = db.where(MessageModel.class).notEqualTo("sender", "admin").equalTo("read", 0).findAll().size();
-        if (chatSize > 0) {
+
+        if (MySharedPreference.getInstance(MainActivity.this).getUnreadChats() > 0) {
             newChat.setVisibility(View.VISIBLE);
             newToolbar.setVisibility(View.VISIBLE);
-
         } else {
             newChat.setVisibility(View.GONE);
             newToolbar.setVisibility(View.GONE);
@@ -494,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (motionLayout.getCurrentState() == motionLayout.getEndState()) {
+        if (motionLayout.getCurrentState() ==R.id.end) {
             motionLayout.transitionToStart();
             return;
         }

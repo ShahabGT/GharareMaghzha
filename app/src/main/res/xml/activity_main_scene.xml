@@ -55,7 +55,7 @@
 
     <Transition
         app:constraintSetEnd="@id/start"
-        app:constraintSetStart="@+id/end"
+        app:constraintSetStart="@id/end"
         app:duration="150"
         app:motionInterpolator="linear" >
         <OnClick app:targetId="@+id/main_view" />

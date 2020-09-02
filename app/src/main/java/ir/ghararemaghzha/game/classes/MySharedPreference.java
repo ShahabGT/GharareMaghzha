@@ -154,4 +154,11 @@ public class MySharedPreference {
     public String getUserAvatar(){
         return  sharedPreferences.getString("Avatar","");
     }
+
+    public void setUnreadChats(int num){
+        sharedPreferences.edit().putInt("chats",num).apply();
+    }
+    public int getUnreadChats(){
+        return  sharedPreferences.getInt("chats",0);
+    }
 }
