@@ -44,12 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         Utils.getFbToken(this);
 
-
-
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.register_container,new LoginFragment())
-//                .commit();
-
         IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
         registerReceiver(smsVerificationReceiver, intentFilter);
 

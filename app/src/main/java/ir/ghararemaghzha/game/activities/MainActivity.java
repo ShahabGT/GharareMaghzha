@@ -1,6 +1,5 @@
 package ir.ghararemaghzha.game.activities;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,8 +59,7 @@ import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REF
 public class MainActivity extends AppCompatActivity {
 
     private TimeDialog timeDialog;
-    @SuppressLint("StaticFieldLeak")
-    public static ImageView newChat, newToolbar;
+    private ImageView newChat, newToolbar;
     private boolean doubleBackToExitPressedOnce;
     private Realm db;
     private GetDataDialog dataDialog;
@@ -134,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         bnv = findViewById(R.id.main_bnv);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
-        if(navHostFragment!=null)
-        navController = navHostFragment.getNavController();
+        if (navHostFragment != null)
+            navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bnv, navController);
 
         motionLayout = findViewById(R.id.main_motion);

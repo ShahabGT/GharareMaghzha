@@ -56,16 +56,17 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
 
         if (position < data.size()) {
             HighscoreModel model = data.get(position);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                 h.rank.getBackground().setColorFilter(new BlendModeColorFilter(context.getResources().getColor(model.getColor(), null), BlendMode.SRC_ATOP));
-            } else {
+             else
                 h.rank.getBackground().setColorFilter(context.getResources().getColor(model.getColor()), PorterDuff.Mode.SRC_ATOP);
 
-            }
+
             h.name.setText(model.getUserName());
             h.score.setText(model.getScoreCount());
             h.rank.setText(String.valueOf(position + 1));
-
+            h.card.setCardBackgroundColor(context.getResources().getColor(R.color.white));
             Glide.with(context)
                     .load(context.getString(R.string.avatar_url, model.getUserAvatar()))
                     .circleCrop()

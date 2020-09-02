@@ -123,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void onClicks() {
-        avatarChange.setOnClickListener(v -> {
+        avatarChange.setOnClickListener(v ->
             in.show('1', '1', address -> {
                 try {
                     if (Utils.checkInternet(ProfileActivity.this)) {
@@ -136,10 +136,8 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });
-
-
-        });
+            })
+        );
         avatarRemove.setOnClickListener(v -> {
             if (Utils.checkInternet(ProfileActivity.this)) {
                 String avatarName = MySharedPreference.getInstance(this).getUserAvatar();
@@ -203,11 +201,9 @@ public class ProfileActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private String toBase64(Uri path) throws Exception {
-        // Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
         Bitmap bitmap = scale(path);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
-
 
         byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);

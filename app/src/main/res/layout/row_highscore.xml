@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/highscore_row_card"
     android:layout_width="match_parent"
@@ -20,11 +21,13 @@
             android:layout_width="60dp"
             android:layout_height="0dp"
             android:background="@drawable/poly"
+            android:backgroundTint="@color/random11"
+            android:backgroundTintMode="src_atop"
             android:fontFamily="@font/vazir"
             android:gravity="center"
             android:maxLines="1"
-            android:text=""
-            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textColor="@color/white"
             app:autoSizeMaxTextSize="20sp"
             app:autoSizeMinTextSize="5sp"
             app:autoSizeTextType="uniform"
