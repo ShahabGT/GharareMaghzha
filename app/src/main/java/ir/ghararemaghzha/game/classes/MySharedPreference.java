@@ -161,4 +161,25 @@ public class MySharedPreference {
     public int getUnreadChats(){
         return  sharedPreferences.getInt("chats",0);
     }
+
+    public void setBooster(int booster){
+        sharedPreferences.edit().putInt("booster",booster).apply();
+    }
+    public int getBooster(){
+        return  sharedPreferences.getInt("booster",0);
+    }
+
+    public void setBoosterDate(String boosterDate){
+        sharedPreferences.edit().putString("boosterDate",boosterDate).apply();
+    }
+    public String getBoosterDate(){
+        return  sharedPreferences.getString("boosterDate","");
+    }
+
+    public void setBoosterValue(float boosterValue){
+        sharedPreferences.edit().putFloat("boosterValue",boosterValue).apply();
+    }
+    public float getBoosterValue(){
+        return  sharedPreferences.getFloat("boosterValue",1f);
+    }
 }

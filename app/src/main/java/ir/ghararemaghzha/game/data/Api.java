@@ -22,8 +22,8 @@ public interface Api {
 
 
     @FormUrlEncoded
-    @POST("verify")
-    Call<VerifyResponse> verify(
+    @POST("validate")
+    Call<VerifyResponse> validate(
             @Header("Authorization") String Token,
             @Field("number") String number
     );

@@ -72,6 +72,12 @@ public class QuestionActivity extends AppCompatActivity {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_question);
         init();
+
+        if(MySharedPreference.getInstance(this).getBooster()!=0){
+            ((MaterialTextView)findViewById(R.id.booster)).setText(MySharedPreference.getInstance(this).getBoosterDate());
+        }
+
+
     }
 
     private void init() {
@@ -447,7 +453,7 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void uploadScore() {
-        gameScore += Integer.parseInt(model.getQuestionPoints());
+        gameScore += Integer.parseInt(model.getQuestionPoints())*MySharedPreference.getInstance(this).getBoosterValue();
         score.setText(String.valueOf(gameScore));
         YoYo.with(Techniques.Bounce).duration(500).playOn(score);
         MySharedPreference.getInstance(QuestionActivity.this).setScore(String.valueOf(gameScore));

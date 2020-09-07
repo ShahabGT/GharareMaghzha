@@ -10,14 +10,26 @@ public class VerifyResponse {
 
     private String result;
     private String version;
+
     @SerializedName("version_essential")
     private String versionEssential;
+
     private String message;
+
     @SerializedName("user_plan")
     private String userPlan;
 
     @SerializedName("score_count")
     private String scoreCount;
+
+    @SerializedName("user_booster_expire")
+    private String userBoosterExpire;
+
+    @SerializedName("user_booster")
+    private String userBooster;
+
+    @SerializedName("booster_value")
+    private String boosterValue;
 
     public String getResult() {
         return result;
@@ -65,5 +77,29 @@ public class VerifyResponse {
 
     public void setScoreCount(String scoreCount) {
         this.scoreCount = scoreCount;
+    }
+
+    public String getUserBoosterExpire() {
+        return userBoosterExpire;
+    }
+
+    public void setUserBoosterExpire(String userBoosterExpire) {
+        this.userBoosterExpire = userBoosterExpire;
+    }
+
+    public String getUserBooster() {
+        return userBooster;
+    }
+
+    public void setUserBooster(String userBooster) {
+        this.userBooster = userBooster;
+    }
+
+    public String getBoosterValue() {
+        return boosterValue;
+    }
+
+    public void setBoosterValue(String boosterValue) {
+        this.boosterValue = boosterValue;
     }
 }

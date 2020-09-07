@@ -1,7 +1,5 @@
 package ir.ghararemaghzha.game.activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -253,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         RetrofitClient.getInstance().getApi()
-                .verify("Bearer " + token, number)
+                .validate("Bearer " + token, number)
                 .enqueue(new Callback<VerifyResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<VerifyResponse> call, @NonNull Response<VerifyResponse> response) {
@@ -274,17 +272,30 @@ public class MainActivity extends AppCompatActivity {
                             else if (oldScore > newScore)
                                 uploadScore(String.valueOf(oldScore));
 
-                            if (newVersion > myVersion) {
-                                if (response.body().getVersionEssential().equals("1")) {
+                            if (newVersion > myVersion)
+                                if (response.body().getVersionEssential().equals("1"))
                                     showNewVersionDialog("1");
-                                } else {
+                                else
                                     showNewVersionDialog("0");
+                            sendBroadcast(refreshIntent);
+
+                            int serverBooster = Integer.parseInt(response.body().getUserBooster());
+                            int localBooster = MySharedPreference.getInstance(MainActivity.this).getBooster();
+                            if (serverBooster != 0 && serverBooster > localBooster) {
+                                if (Utils.isBoosterValid(response.body().getUserBoosterExpire())) {
+                                    MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
+                                    MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
+                                    MySharedPreference.getInstance(MainActivity.this).setBoosterDate(response.body().getUserBoosterExpire());
+                                    String[] expireDate = response.body().getUserBoosterExpire().replace(" ", ":").replace("-", ":").split(":");
+                                    Utils.setAlarm(MainActivity.this,
+                                            Integer.parseInt(expireDate[0]),
+                                            Integer.parseInt(expireDate[1]),
+                                            Integer.parseInt(expireDate[2]),
+                                            Integer.parseInt(expireDate[3]),
+                                            Integer.parseInt(expireDate[4]));
                                 }
-
-
                             }
 
-                            sendBroadcast(refreshIntent);
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this, true);
                         } else
@@ -391,16 +402,26 @@ public class MainActivity extends AppCompatActivity {
         }
         int questions = db.where(QuestionModel.class).findAll().size();  //500
         int plan = Integer.parseInt(newPlan);  //5
-    //    int size = (plan * 1000) + 100;
+        //    int size = (plan * 1000) + 100;
         int size = 500;
-        switch (plan){
-            case 1: size += 500;break;
-            case 2: size += 1000;break;
-            case 3: size += 1500;break;
-            case 4: size += 2000;break;
-            case 5: size += 2500;break;
+        switch (plan) {
+            case 1:
+                size += 500;
+                break;
+            case 2:
+                size += 1000;
+                break;
+            case 3:
+                size += 1500;
+                break;
+            case 4:
+                size += 2000;
+                break;
+            case 5:
+                size += 2500;
+                break;
         }
-        size -=questions;
+        size -= questions;
         RetrofitClient.getInstance().getApi()
                 .getQuestions("Bearer " + token, number, String.valueOf(questions), String.valueOf(size))
                 .enqueue(new Callback<QuestionResponse>() {
@@ -500,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (motionLayout.getCurrentState() ==R.id.end) {
+        if (motionLayout.getCurrentState() == R.id.end) {
             motionLayout.transitionToStart();
             return;
         }

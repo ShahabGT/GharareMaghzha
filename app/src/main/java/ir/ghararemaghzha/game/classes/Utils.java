@@ -2,16 +2,19 @@ package ir.ghararemaghzha.game.classes;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,6 +22,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.pm.PackageInfoCompat;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -36,7 +41,9 @@ import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.SplashActivity;
+import ir.ghararemaghzha.game.activities.SupportActivity;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
@@ -75,15 +82,34 @@ public class Utils {
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         String systemDate = dateFormat.format(d);
-        System.out.println(systemDate);
         try {
             d = dateFormat.parse(serverDate);
             long server = d != null ? d.getTime() : 0;
             d = dateFormat.parse(systemDate);
             long system = d == null ? 0 : d.getTime();
             long diff = server - system;
-            if (diff >= -200000 && diff <= 200000) {
+            if (diff >= -60000 && diff <= 60000) {
                 res = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public static boolean isBoosterValid(String boosterDate) {
+        boolean res = true;
+        Date d = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        String systemDate = dateFormat.format(d);
+        try {
+            d = dateFormat.parse(boosterDate);
+            long server = d != null ? d.getTime() : 0;
+            d = dateFormat.parse(systemDate);
+            long system = d == null ? 0 : d.getTime();
+            long diff = server - system;
+            if (diff >= -1000 && diff <= 1000) {
+                res = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -274,9 +300,57 @@ public class Utils {
         c.clear();
         c.set(year,month-1,day,hour,minute,0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+
         Intent i = new Intent(context.getApplicationContext(),BoosterReceiver.class);
-        PendingIntent pendingIntent =PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_ONE_SHOT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+        PendingIntent pendingIntent =PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_NO_CREATE);
+        if (pendingIntent != null && alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+        }
+    }
+
+    public static void createNotification(Context context,String title, String message, String clickAction) {
+        Intent intent;
+        if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
+            intent = new Intent(context, MainActivity.class);
+        else
+            intent = new Intent(context, SupportActivity.class);
+
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        createNotificationChannel(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Const.CHANNEL_CODE);
+
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentTitle(title);
+        builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
+        builder.setContentText(message);
+        builder.setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+        builder.setPriority(NotificationCompat.PRIORITY_MAX);
+        builder.setAutoCancel(true);
+        builder.setContentIntent(pendingIntent);
+        //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);
+        //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
+        builder.setVibrate(new long[]{1000, 1000, 1000});
+        builder.setLights(Color.YELLOW, 1000, 1000);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        notificationManagerCompat.notify(Const.NOTIFICATION_ID, builder.build());
+
+
+    }
+
+
+    private static void createNotificationChannel(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Ghararemaghzha Message Notifications";
+            String description = "Using this channel to display notification for Ghararemaghzha game";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel notificationChannel = new NotificationChannel(Const.CHANNEL_CODE, name, importance);
+            notificationChannel.setDescription(description);
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
 }

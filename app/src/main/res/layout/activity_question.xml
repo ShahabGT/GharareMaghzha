@@ -15,6 +15,8 @@
         app:layout_constraintGuide_percent="0.3" />
 
 
+
+
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -128,7 +130,14 @@
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:id="@+id/booster"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/question_top_menu"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content"/>
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/question_10"
         android:layout_width="wrap_content"
