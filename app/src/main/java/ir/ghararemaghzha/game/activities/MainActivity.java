@@ -1,5 +1,7 @@
 package ir.ghararemaghzha.game.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -321,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 
-        //   int lastUpdate = MySharedPreference.getInstance(this).getLastUpdate();
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
         if (passed == 9) {
@@ -332,7 +333,6 @@ public class MainActivity extends AppCompatActivity {
             updateTime(nowDate);
             Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
             sendBroadcast(refreshIntent);
-            //   MySharedPreference.getInstance(this).setLastUpdate(lastUpdate);
         } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
             int range = remaining / (10 - passed);
@@ -344,7 +344,6 @@ public class MainActivity extends AppCompatActivity {
                 updateTime(nowDate);
                 Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
                 sendBroadcast(refreshIntent);
-                //      MySharedPreference.getInstance(this).setLastUpdate(lastUpdate);
 
             }
         } else if (nowDate == lastUpdate && serverCount > userCount) {
@@ -353,7 +352,6 @@ public class MainActivity extends AppCompatActivity {
                 questions.setBoolean("visible", true);
             });
             sendBroadcast(refreshIntent);
-            //   MySharedPreference.getInstance(this).setLastUpdate(lastUpdate);
         }
     }
 
@@ -391,9 +389,18 @@ public class MainActivity extends AppCompatActivity {
             Utils.logout(MainActivity.this, true);
             return;
         }
-        int questions = db.where(QuestionModel.class).findAll().size();  //3
+        int questions = db.where(QuestionModel.class).findAll().size();  //500
         int plan = Integer.parseInt(newPlan);  //5
-        int size = (plan * 1000) + 100;
+    //    int size = (plan * 1000) + 100;
+        int size = 500;
+        switch (plan){
+            case 1: size += 500;break;
+            case 2: size += 1000;break;
+            case 3: size += 1500;break;
+            case 4: size += 2000;break;
+            case 5: size += 2500;break;
+        }
+        size -=questions;
         RetrofitClient.getInstance().getApi()
                 .getQuestions("Bearer " + token, number, String.valueOf(questions), String.valueOf(size))
                 .enqueue(new Callback<QuestionResponse>() {

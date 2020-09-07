@@ -43,7 +43,6 @@ public class SupportActivity extends AppCompatActivity {
 
     private Realm db;
     private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
     private ChatAdapter adapter;
     private EmojiEditText message;
     private ImageView send;
@@ -83,7 +82,7 @@ public class SupportActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.chat_recycler);
 
-        layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -98,9 +97,8 @@ public class SupportActivity extends AppCompatActivity {
                 });
             }
         });
-        // if(db.where(MessageModel.class).notEqualTo("sender", "admin").findAll().size()==0)
-        getChatData();
 
+        getChatData();
 
         send = findViewById(R.id.chat_send);
         message = findViewById(R.id.chat_text);
@@ -219,7 +217,6 @@ public class SupportActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<ChatResponse> call, @NonNull Throwable t) {
                         loading.setVisibility(View.GONE);
-
                     }
                 });
     }
@@ -227,7 +224,7 @@ public class SupportActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MySharedPreference.getInstance(this).setLastUpdateChat(Utils.currentDate());
+     //   MySharedPreference.getInstance(this).setLastUpdateChat(Utils.currentDate());
         if (db != null) db.close();
         unregisterReceiver(br);
     }

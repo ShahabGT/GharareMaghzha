@@ -78,7 +78,7 @@
             android:fontFamily="@font/vazir"
             android:imeOptions="actionNext"
             android:inputType="textPersonName"
-            android:maxLength="50"
+            android:maxLength="30"
             android:padding="16dp"
             android:singleLine="true" />
 

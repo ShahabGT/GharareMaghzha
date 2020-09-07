@@ -70,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
+                android:textStyle="bold"
                 android:text="@string/buy_one_count"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"

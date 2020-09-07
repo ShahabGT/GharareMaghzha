@@ -117,6 +117,8 @@ public class QuestionActivity extends AppCompatActivity {
                 progress -= 5;
                 timeText.setText(String.valueOf(time));
                 progressBar.setProgress(progress);
+                if(l<6000)
+                    timeText.setTextColor(getResources().getColor(R.color.random1));
             }
 
             @Override
@@ -338,6 +340,7 @@ public class QuestionActivity extends AppCompatActivity {
             time = 20;
             progress = 100;
             timeText.setText(String.valueOf(time));
+            timeText.setTextColor(getResources().getColor(R.color.black));
             progressBar.setProgress(100);
             randomAnswers = randomNumbers();
             question.setText(model.getQuestionText());

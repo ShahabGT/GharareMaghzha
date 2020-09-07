@@ -116,7 +116,7 @@ public class HighscoreFragment extends Fragment {
                             boolean showUser=true;
                             List<HighscoreModel> data = response.body().getData();
                             for(int i=0;i<data.size();i++){
-                                data.get(i).setColor(getRandomColor());
+                              //  data.get(i).setColor(getRandomColor());
                                 if (data.get(i).getUserId().equals(response.body().getUser().getUserId())) {
                                     showUser=false;
                                 }

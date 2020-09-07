@@ -1,7 +1,9 @@
 package ir.ghararemaghzha.game.classes;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -24,6 +26,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -44,6 +47,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.ALARM_SERVICE;
 import static ir.ghararemaghzha.game.classes.Const.FCM_TOPIC;
 
 public class Utils {
@@ -262,6 +266,17 @@ public class Utils {
         intent.putExtra(Intent.EXTRA_TEXT,title);
         context.startActivity(Intent.createChooser(intent,context.getString(R.string.general_share)));
 
+    }
+
+
+    public static void setAlarm(Context context,int year,int month,int day,int hour,int minute){
+        Calendar c = Calendar.getInstance();
+        c.clear();
+        c.set(year,month-1,day,hour,minute,0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Intent i = new Intent(context.getApplicationContext(),BoosterReceiver.class);
+        PendingIntent pendingIntent =PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_ONE_SHOT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
     }
 
 }

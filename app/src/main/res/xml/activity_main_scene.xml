@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<ConstraintSet android:id="@+id/start">
-    <Constraint
-        android:id="@id/main_view"
-        android:visibility="gone"/>
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@id/main_view"
+            android:visibility="gone" />
 
-</ConstraintSet>
+    </ConstraintSet>
     <ConstraintSet android:id="@+id/end">
         <Constraint android:id="@id/main_container" />
         <Constraint
             android:id="@id/main_content"
             android:layout_width="0dp"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="1"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
             android:scaleY="0.9"
+            android:scaleX="0.9"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@id/main_drawer"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="1" />
         <Constraint
             android:id="@+id/main_drawer"
             android:layout_width="200dp"
@@ -29,26 +30,27 @@
             app:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@id/main_view"
-            android:visibility="visible"
             android:layout_width="0dp"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="1"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
             android:scaleY="0.9"
+            android:scaleX="0.9"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@id/main_drawer"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="1" />
     </ConstraintSet>
 
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
         app:duration="150"
-        app:motionInterpolator="linear" >
+        app:motionInterpolator="linear">
         <OnSwipe
-            app:touchAnchorId="@+id/main_content"
             app:dragDirection="dragLeft"
+            app:touchAnchorId="@+id/main_content"
             app:touchAnchorSide="left" />
         <OnClick app:targetId="@+id/toolbar_menu" />
     </Transition>
@@ -57,7 +59,11 @@
         app:constraintSetEnd="@id/start"
         app:constraintSetStart="@id/end"
         app:duration="150"
-        app:motionInterpolator="linear" >
+        app:motionInterpolator="linear">
+        <OnSwipe
+            app:dragDirection="dragRight"
+            app:touchAnchorId="@id/main_view"
+            app:touchAnchorSide="right" />
         <OnClick app:targetId="@+id/main_view" />
     </Transition>
 </MotionScene>

@@ -109,6 +109,7 @@ public class BuyFragment extends Fragment {
                     fourView.setVisibility(View.VISIBLE);
                 case 1:
                     fiveView.setVisibility(View.VISIBLE);
+                    break;
             }
         }
 
