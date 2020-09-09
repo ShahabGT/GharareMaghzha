@@ -230,6 +230,7 @@ public class Utils {
         realm.beginTransaction();
         realm.deleteAll();
         realm.commitTransaction();
+        cancelAlarm(context);
         context.startActivity(new Intent(context, SplashActivity.class));
         context.finish();
     }
@@ -297,16 +298,28 @@ public class Utils {
 
     public static void setAlarm(Context context,int year,int month,int day,int hour,int minute){
         Calendar c = Calendar.getInstance();
-        c.clear();
-        c.set(year,month-1,day,hour,minute,0);
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.set(Calendar.YEAR,year);
+        c.set(Calendar.MONTH,month-1);
+        c.set(Calendar.DAY_OF_MONTH,day);
+        c.set(Calendar.HOUR_OF_DAY,hour);
+        c.set(Calendar.MINUTE,minute);
+        c.set(Calendar.SECOND,0);
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
         Intent i = new Intent(context.getApplicationContext(),BoosterReceiver.class);
-        PendingIntent pendingIntent =PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_NO_CREATE);
-        if (pendingIntent != null && alarmManager != null) {
-            alarmManager.cancel(pendingIntent);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
-        }
+        PendingIntent pendingIntent =PendingIntent.getBroadcast(context, 1, i,PendingIntent.FLAG_UPDATE_CURRENT);
+       // alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(),pendingIntent),pendingIntent);
+
+    }
+
+    public static void cancelAlarm(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context.getApplicationContext(), BoosterReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
     }
 
     public static void createNotification(Context context,String title, String message, String clickAction) {
@@ -329,6 +342,7 @@ public class Utils {
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
         builder.setPriority(NotificationCompat.PRIORITY_MAX);
         builder.setAutoCancel(true);
+        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         builder.setContentIntent(pendingIntent);
         //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);
         //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
@@ -345,7 +359,7 @@ public class Utils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Ghararemaghzha Message Notifications";
             String description = "Using this channel to display notification for Ghararemaghzha game";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel notificationChannel = new NotificationChannel(Const.CHANNEL_CODE, name, importance);
             notificationChannel.setDescription(description);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

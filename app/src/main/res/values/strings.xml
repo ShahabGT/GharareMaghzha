@@ -158,6 +158,10 @@
     <string name="buy_four_count">2000 \n سوال</string>
     <string name="buy_five_count">2500 \n سوال</string>
     <string name="buy_price">%s تومان</string>
+    <string name="buy_plan_title">پکیج %s تایی سوال</string>
+    <string name="buy_booster_title">افزایش %s برابری امتیاز سوال ها برای 24 ساعت</string>
+    <string name="buy_booster_title_invalid">تعداد استفاده شما به پایان رسیده</string>
+
     <string name="buy_buy">خرید</string>
 
     <string name="buy_dialog_text">مبلغ قابل پرداخت:</string>
@@ -181,6 +185,7 @@
     <string name="buyhistory_title">تاریخچه خرید</string>
     <string name="buyhistory_empty">تاکنون خریدی انجام نداده اید!</string>
     <string name="buyhistory_row_title">نوع پکیج: %s سوالی</string>
+    <string name="buyhistory_row_title2">نوع پکیج: افزایش امتیاز</string>
     <string name="buyhistory_row_date">تاریخ: %s</string>
     <string name="buyhistory_row_price">مبلغ: %s تومان</string>
     <string name="buyhistory_row_influencer">کد معرف: %s</string>

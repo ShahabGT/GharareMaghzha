@@ -37,7 +37,22 @@ public class BuyHistoryAdapter extends RecyclerView.Adapter<BuyHistoryAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder h, int position) {
         BuyHistoryModel model = data.get(position);
         if (model != null) {
-            h.title.setText(context.getString(R.string.buyhistory_row_title, model.getPlan()+"000"));
+            switch (model.getPlan()){
+                case "1":
+                    h.title.setText(context.getString(R.string.buyhistory_row_title, "500")); break;
+                case "2":
+                    h.title.setText(context.getString(R.string.buyhistory_row_title, "1000")); break;
+                case "3":
+                    h.title.setText(context.getString(R.string.buyhistory_row_title, "1500")); break;
+                case "4":
+                    h.title.setText(context.getString(R.string.buyhistory_row_title, "2000")); break;
+                case "5":
+                    h.title.setText(context.getString(R.string.buyhistory_row_title, "2500")); break;
+                default:
+                    h.title.setText(context.getString(R.string.buyhistory_row_title2)); break;
+
+
+            }
 
             h.price.setText(context.getString(R.string.buyhistory_row_price, Utils.moneySeparator(model.getAmount())));
             if (model.getInfluencerCode() != null && !model.getInfluencerCode().isEmpty()) {

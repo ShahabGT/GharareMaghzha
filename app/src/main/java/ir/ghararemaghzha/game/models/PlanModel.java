@@ -7,30 +7,32 @@ public class PlanModel {
 //            "plan_count": "100",
 //            "plan_price": "0"
 
-    @SerializedName("planId")
-    private String plan_id;
+    @SerializedName("plan_id")
+    private String planId;
 
-    @SerializedName("planCount")
-    private String plan_count;
+    @SerializedName("plan_count")
+    private String planCount;
 
     @SerializedName("plan_price")
     private String planPrice;
 
+    private String value;
 
-    public String getPlan_id() {
-        return plan_id;
+
+    public String getPlanId() {
+        return planId;
     }
 
-    public void setPlan_id(String plan_id) {
-        this.plan_id = plan_id;
+    public void setPlanId(String planId) {
+        this.planId = planId;
     }
 
-    public String getPlan_count() {
-        return plan_count;
+    public String getPlanCount() {
+        return planCount;
     }
 
-    public void setPlan_count(String plan_count) {
-        this.plan_count = plan_count;
+    public void setPlanCount(String planCount) {
+        this.planCount = planCount;
     }
 
     public String getPlanPrice() {
@@ -39,5 +41,13 @@ public class PlanModel {
 
     public void setPlanPrice(String planPrice) {
         this.planPrice = planPrice;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

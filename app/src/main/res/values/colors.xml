@@ -23,6 +23,25 @@
     <color name="mdtp_accent_color">#ffc308</color>
     <color name="mdtp_accent_color_dark">#fb8c05</color>
 
+
+    <color name="light1">#E1BEE7</color>
+    <color name="dark1">#6A1B9A</color>
+
+    <color name="light2">#FFE0B2</color>
+    <color name="dark2">#EF6C00</color>
+
+    <color name="light3">#C8E6C9</color>
+    <color name="dark3">#2E7D32</color>
+
+    <color name="light4">#BBDEFB</color>
+    <color name="dark4">#1565C0</color>
+
+    <color name="light5">#FFCDD2</color>
+    <color name="dark5">#AD1457</color>
+
+    <color name="light6">#FFCDD2</color>
+    <color name="dark6">#C62828</color>
+
     <color name="random1">#D50000</color>
     <color name="random2">#C51162</color>
     <color name="random3">#AA00FF</color>

@@ -45,6 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"
+        app:cardBackgroundColor="@color/light3"
         android:layout_marginRight="8dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
@@ -68,7 +69,7 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/profile_question_card"
-                android:textColor="@color/black"
+                android:textColor="@color/dark3"
                 android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -78,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="1500"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/dark3" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -88,6 +89,7 @@
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
+        app:cardBackgroundColor="@color/light4"
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="@id/profile_guide35"
@@ -109,7 +111,7 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/profile_score_card"
-                android:textColor="@color/black"
+                android:textColor="@color/dark4"
                 android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -119,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="24300"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/dark4" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -127,6 +129,7 @@
         android:id="@+id/profile_time_card"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardBackgroundColor="@color/light5"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
         app:cardCornerRadius="16dp"
@@ -151,7 +154,7 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/profile_time_card"
-                android:textColor="@color/black"
+                android:textColor="@color/dark5"
                 android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -161,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="12 روز"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/dark5" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -169,6 +172,7 @@
         android:id="@+id/profile_remaining_card"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:cardBackgroundColor="@color/light2"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         app:cardCornerRadius="16dp"
@@ -192,7 +196,7 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/profile_remaining_card"
-                android:textColor="@color/black"
+                android:textColor="@color/dark2"
                 android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -202,7 +206,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="24300"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/dark2" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -323,7 +327,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/vector_left"
-                app:tint="@color/green" />
+                app:tint="@color/blue" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/profile_stat_title"

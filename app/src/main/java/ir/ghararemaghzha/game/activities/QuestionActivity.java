@@ -73,8 +73,12 @@ public class QuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_question);
         init();
 
-        if(MySharedPreference.getInstance(this).getBooster()!=0){
+        if(MySharedPreference.getInstance(this).getBoosterValue()!=1){
             ((MaterialTextView)findViewById(R.id.booster)).setText(MySharedPreference.getInstance(this).getBoosterDate());
+        }
+
+        if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
+            MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
         }
 
 
