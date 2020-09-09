@@ -67,6 +67,8 @@
     <string name="profile_edit_subtitle">ویرایش اطلاعات حساب</string>
     <string name="profile_stat_title">وضعیت من</string>
     <string name="profile_stat_subtitle">مشاهده آمار و اطلاعات</string>
+    <string name="profile_myscore_title">امتیاز ها</string>
+    <string name="profile_myscore_subtitle">مشاهده نحوه امتیاز گیری</string>
     <string name="profile_buy_title">خرید سوال</string>
     <string name="profile_buy_subtitle">خرید بسته سوالات</string>
     <string name="profile_code">کد کاربری: %s</string>

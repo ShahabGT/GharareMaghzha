@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/light_background"
     android:clickable="true"
     android:focusable="true"
     tools:context=".fragments.StartFragment">
 
     <com.tmall.ultraviewpager.UltraViewPager
         android:id="@+id/start_slider"
-        android:background="@color/light_background"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:background="@color/light_background"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,8 +53,9 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
+        app:cardPreventCornerOverlap="true"
         app:layout_constraintBottom_toTopOf="@id/start_highscore_card"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -63,15 +64,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/icon_guide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+            <ImageView
+                android:id="@+id/start_start_icon"
+                android:layout_width="90dp"
+                android:layout_height="100dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/start" />
 
             <ImageView
                 android:id="@+id/start_start_left"
@@ -81,7 +84,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/vector_left"
-                app:tint="@color/colorPrimary" />
+                app:tint="@color/dark2" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_start_title"
@@ -91,9 +94,11 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/start_start_title"
+                android:textColor="@color/dark2"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/start_start_subtitle"
                 app:layout_constraintLeft_toRightOf="@+id/start_start_left"
-                app:layout_constraintRight_toRightOf="@id/icon_guide"
+                app:layout_constraintRight_toLeftOf="@id/start_start_icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -104,22 +109,16 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/start_start_subtitle"
+                android:textColor="@color/dark2"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/start_start_left"
-                app:layout_constraintRight_toRightOf="@id/icon_guide"
+                app:layout_constraintRight_toLeftOf="@id/start_start_icon"
                 app:layout_constraintTop_toBottomOf="@id/start_start_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="110dp"
-        android:elevation="15dp"
-        app:layout_constraintBottom_toBottomOf="@id/start_start_card"
-        app:layout_constraintRight_toRightOf="@id/start_start_card"
-        app:layout_constraintTop_toTopOf="@id/start_start_card"
-        app:srcCompat="@drawable/start" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/start_highscore_card"
@@ -131,8 +130,9 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
+        app:cardPreventCornerOverlap="true"
         app:layout_constraintBottom_toTopOf="@id/start_profile_card"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -141,15 +141,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/icon_guide2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+            <ImageView
+                android:id="@+id/start_highscore_icon"
+                android:layout_width="90dp"
+                android:layout_height="100dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/highscore" />
 
             <ImageView
                 android:id="@+id/start_highscore_left"
@@ -159,7 +161,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/vector_left"
-                app:tint="@color/blue" />
+                app:tint="@color/dark4" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_highscore_title"
@@ -169,9 +171,11 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/start_highscore_title"
+                android:textColor="@color/dark4"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/start_highscore_subtitle"
                 app:layout_constraintLeft_toRightOf="@+id/start_highscore_left"
-                app:layout_constraintRight_toRightOf="@id/icon_guide2"
+                app:layout_constraintRight_toLeftOf="@+id/start_highscore_icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -182,22 +186,16 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/start_start_subtitle"
+                android:textColor="@color/dark4"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/start_highscore_left"
-                app:layout_constraintRight_toRightOf="@id/icon_guide2"
+                app:layout_constraintRight_toLeftOf="@+id/start_highscore_icon"
                 app:layout_constraintTop_toBottomOf="@id/start_highscore_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="110dp"
-        android:elevation="15dp"
-        app:layout_constraintBottom_toBottomOf="@id/start_highscore_card"
-        app:layout_constraintRight_toRightOf="@id/start_highscore_card"
-        app:layout_constraintTop_toTopOf="@id/start_highscore_card"
-        app:srcCompat="@drawable/highscore" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/start_profile_card"
@@ -209,8 +207,9 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
+        app:cardPreventCornerOverlap="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -219,15 +218,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/icon_guide3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+            <ImageView
+                android:id="@+id/start_profile_icon"
+                android:layout_width="90dp"
+                android:layout_height="100dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/profile_edit" />
 
             <ImageView
                 android:id="@+id/start_profile_left"
@@ -237,7 +238,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/vector_left"
-                app:tint="@color/green" />
+                app:tint="@color/dark3" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_profile_title"
@@ -247,9 +248,11 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/start_profile_title"
+                android:textColor="@color/dark3"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/start_profile_subtitle"
                 app:layout_constraintLeft_toRightOf="@+id/start_profile_left"
-                app:layout_constraintRight_toRightOf="@id/icon_guide3"
+                app:layout_constraintRight_toLeftOf="@+id/start_profile_icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -260,20 +263,15 @@
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text="@string/start_profile_subtitle"
+                android:textColor="@color/dark3"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/start_profile_left"
-                app:layout_constraintRight_toRightOf="@id/icon_guide3"
+                app:layout_constraintRight_toLeftOf="@+id/start_profile_icon"
                 app:layout_constraintTop_toBottomOf="@id/start_profile_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="110dp"
-        android:elevation="15dp"
-        app:layout_constraintBottom_toBottomOf="@id/start_profile_card"
-        app:layout_constraintRight_toRightOf="@id/start_profile_card"
-        app:layout_constraintTop_toTopOf="@id/start_profile_card"
-        app:srcCompat="@drawable/profile_edit" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
