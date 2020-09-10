@@ -6,6 +6,7 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -58,7 +59,7 @@ public class QuestionActivity extends AppCompatActivity {
     private int correctSound, wrongSound;
     private int gameScore = 0;
     private boolean shouldRandomize;
-    private ImageView music, autoNext;
+    private ImageView music, autoNext, booster;
     private boolean musicSetting;
     private boolean autoNextSetting;
 
@@ -73,18 +74,13 @@ public class QuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_question);
         init();
 
-        if(MySharedPreference.getInstance(this).getBoosterValue()!=1){
-            ((MaterialTextView)findViewById(R.id.booster)).setText(MySharedPreference.getInstance(this).getBoosterDate());
-        }
-
-        if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
-            MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
-        }
-
 
     }
 
     private void init() {
+        if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
+            MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
+        }
         db = Realm.getDefaultInstance();
         data = db.where(QuestionModel.class).equalTo("visible", true).findAll();
 
@@ -100,6 +96,11 @@ public class QuestionActivity extends AppCompatActivity {
         next = findViewById(R.id.question_next);
         questionPoints = findViewById(R.id.question_points);
         questionRemain = findViewById(R.id.question_remaining);
+
+        booster = findViewById(R.id.question_booster);
+        if (MySharedPreference.getInstance(this).getBoosterValue() == 1f) {
+            booster.setVisibility(View.GONE);
+        }
 
         question = findViewById(R.id.question_question);
         questionc = findViewById(R.id.question_question_card);
@@ -127,7 +128,7 @@ public class QuestionActivity extends AppCompatActivity {
                 progress -= 5;
                 timeText.setText(String.valueOf(time));
                 progressBar.setProgress(progress);
-                if(l<6000)
+                if (l < 6000)
                     timeText.setTextColor(getResources().getColor(R.color.random1));
             }
 
@@ -457,7 +458,7 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void uploadScore() {
-        gameScore += Integer.parseInt(model.getQuestionPoints())*MySharedPreference.getInstance(this).getBoosterValue();
+        gameScore += Integer.parseInt(model.getQuestionPoints()) * MySharedPreference.getInstance(this).getBoosterValue();
         score.setText(String.valueOf(gameScore));
         YoYo.with(Techniques.Bounce).duration(500).playOn(score);
         MySharedPreference.getInstance(QuestionActivity.this).setScore(String.valueOf(gameScore));

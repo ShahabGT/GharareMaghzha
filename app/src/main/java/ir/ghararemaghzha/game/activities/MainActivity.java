@@ -161,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
+            MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
+        }
         setAvatars();
         Utils.removeNotification(this);
         registerReceiver(notificationBroadCast, new IntentFilter(GHARAREHMAGHZHA_BROADCAST));

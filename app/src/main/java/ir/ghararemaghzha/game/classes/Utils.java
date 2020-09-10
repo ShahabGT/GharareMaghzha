@@ -108,9 +108,10 @@ public class Utils {
             d = dateFormat.parse(systemDate);
             long system = d == null ? 0 : d.getTime();
             long diff = server - system;
-            if (diff >= -1000 && diff <= 1000) {
-                res = false;
-            }
+//            if (diff >= -1000 && diff <= 1000) {
+//                res = false;
+//            }
+            if(system>server)res=false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -297,6 +298,7 @@ public class Utils {
 
 
     public static void setAlarm(Context context,int year,int month,int day,int hour,int minute){
+        cancelAlarm(context);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
         c.set(Calendar.YEAR,year);

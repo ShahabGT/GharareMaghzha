@@ -163,6 +163,7 @@
     <string name="buy_plan_title">پکیج %s تایی سوال</string>
     <string name="buy_booster_title">افزایش %s برابری امتیاز سوال ها برای 24 ساعت</string>
     <string name="buy_booster_title_invalid">تعداد استفاده شما به پایان رسیده</string>
+    <string name="buy_booster_title_inuse">پکیج افزایش امتیاز برای شما فعال می باشد</string>
 
     <string name="buy_buy">خرید</string>
 
@@ -222,5 +223,8 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     </string>
     <string name="details_questions">%d از %d سوال</string>
     <string name="details_code">کد کاربری: %s</string>
+
+    <string name="booster_notif_title">پکیج افزایش امتیاز</string>
+    <string name="booster_notif_body">مدت زمان اعتبار پکیج افزایش امتیاز شما به پایان رسید.</string>
 
 </resources>

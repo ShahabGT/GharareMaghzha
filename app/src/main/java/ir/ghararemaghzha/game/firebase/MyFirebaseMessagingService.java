@@ -27,6 +27,7 @@ import ir.ghararemaghzha.game.activities.SupportActivity;
 import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySettingsPreference;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
+import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.models.MessageModel;
 
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
@@ -74,7 +75,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         sendBroadcast(intent);
 
         if (MySettingsPreference.getInstance(this).getNotification())
-            createNotification(title, notificationBody, clickAction);
+            Utils.createNotification(this,title,notificationBody,clickAction);
+
+       // createNotification(title, notificationBody, clickAction);
 
     }
 
@@ -82,52 +85,51 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        if (!s.isEmpty()) {
+        if (!s.isEmpty())
             MySharedPreference.getInstance(this).setFbToken(s);
-        }
     }
-
-    private void createNotification(String title, String message, String clickAction) {
-        Intent intent;
-        if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
-            intent = new Intent(this, MainActivity.class);
-        else
-            intent = new Intent(this, SupportActivity.class);
-
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Const.CHANNEL_CODE);
-
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentTitle(title);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-        builder.setContentText(message);
-        builder.setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL);
-        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
-        builder.setPriority(NotificationCompat.PRIORITY_MAX);
-        builder.setAutoCancel(true);
-        builder.setContentIntent(pendingIntent);
-        //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);
-        //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
-        builder.setVibrate(new long[]{1000, 1000, 1000});
-        builder.setLights(Color.YELLOW, 1000, 1000);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(Const.NOTIFICATION_ID, builder.build());
-
-
-    }
-
-
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Ghararemaghzha Message Notifications";
-            String description = "Using this channel to display notification for Ghararemaghzha game";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel notificationChannel = new NotificationChannel(Const.CHANNEL_CODE, name, importance);
-            notificationChannel.setDescription(description);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-    }
+//
+//    private void createNotification(String title, String message, String clickAction) {
+//        Intent intent;
+//        if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
+//            intent = new Intent(this, MainActivity.class);
+//        else
+//            intent = new Intent(this, SupportActivity.class);
+//
+//
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        createNotificationChannel();
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Const.CHANNEL_CODE);
+//
+//        builder.setSmallIcon(R.mipmap.ic_launcher);
+//        builder.setContentTitle(title);
+//        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+//        builder.setContentText(message);
+//        builder.setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL);
+//        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+//        builder.setPriority(NotificationCompat.PRIORITY_MAX);
+//        builder.setAutoCancel(true);
+//        builder.setContentIntent(pendingIntent);
+//        //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);
+//        //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
+//        builder.setVibrate(new long[]{1000, 1000, 1000});
+//        builder.setLights(Color.YELLOW, 1000, 1000);
+//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+//        notificationManagerCompat.notify(Const.NOTIFICATION_ID, builder.build());
+//
+//
+//    }
+//
+//
+//    private void createNotificationChannel() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            CharSequence name = "Ghararemaghzha Message Notifications";
+//            String description = "Using this channel to display notification for Ghararemaghzha game";
+//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//            NotificationChannel notificationChannel = new NotificationChannel(Const.CHANNEL_CODE, name, importance);
+//            notificationChannel.setDescription(description);
+//            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            notificationManager.createNotificationChannel(notificationChannel);
+//        }
+//    }
 }

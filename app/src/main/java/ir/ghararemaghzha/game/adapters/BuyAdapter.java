@@ -18,6 +18,7 @@ import java.util.List;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.BuyInterface;
+import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.models.PlanModel;
 
@@ -96,7 +97,11 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
 
                 }
             } else {
-                if (!model.getPlanId().equals("-1")) {
+                if (MySharedPreference.getInstance(context).getBoosterValue() != 1f) {
+                    h.title.setText(context.getString(R.string.buy_booster_title_inuse));
+                    h.price.setText(context.getString(R.string.buy_price, "0"));
+                    h.buy.setVisibility(View.GONE);
+                } else if (!model.getPlanId().equals("-1")) {
                     h.title.setText(context.getString(R.string.buy_booster_title, model.getValue()));
                     h.price.setText(context.getString(R.string.buy_price, Utils.moneySeparator(model.getPlanPrice())));
                 } else {
@@ -104,6 +109,7 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                     h.price.setText(context.getString(R.string.buy_price, "0"));
                     h.buy.setVisibility(View.GONE);
                 }
+
                 h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null));
             }
 
