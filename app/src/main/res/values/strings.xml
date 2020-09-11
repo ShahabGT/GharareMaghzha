@@ -30,14 +30,14 @@
     <string name="loginfragment_blocked">شماره وارد شده بلاک شده! لطفا با پشتیبانی تماس بگیرید</string>
     <string name="loginfragment_title">به قرار مغز ها خوش آمدید</string>
     <string name="loginfragment_text">لطفا برای ورود شماره تلفن همراه تان را وارد کنید تا
-کد فعالسازی برای شما ارسال گردد.</string>
+کد فعالسازی برای شما ارسال شود.</string>
     <string name="loginfragment_register">حساب کاربری ندارید؟  ثبت نام کنید!</string>
     <string name="loginfragment_verify">ارسال کد تایید</string>
 
     <string name="registerfragment_conflict">شماره وارد شده قبلا ثبت شده!</string>
     <string name="registerfragment_title">ثبت نام در قرار مغز ها</string>
     <string name="registerfragment_text">لطفا اطلاعات زیر را تکمیل نمایید تا کد
-فعالسازی ثبت نام برای شما ارسال گردد.</string>
+فعالسازی ثبت نام برای شما ارسال شود.</string>
     <string name="registerfragment_login">حساب کاربری دارید؟  وارد شوید!</string>
 
 

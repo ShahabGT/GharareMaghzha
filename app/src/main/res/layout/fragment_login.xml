@@ -12,21 +12,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.3" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/login_guide3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
 
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/login_header"
-        app:layout_constraintBottom_toBottomOf="@id/login_guide"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/login_guide3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_wave"
+        app:layout_constraintBottom_toBottomOf="@id/login_guide"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_guide3" />
 
     <ImageView
         android:id="@+id/login_logo"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
+        android:layout_width="130dp"
+        android:layout_height="150dp"
         app:layout_constraintBottom_toTopOf="@id/login_logo_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -42,7 +56,8 @@
         android:text="@string/app_name"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/login_guide"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/login_guide3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_logo" />
@@ -64,6 +79,7 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/grey"
         android:layout_margin="18dp"
         android:fontFamily="@font/vazir"
         android:text="@string/loginfragment_text"
@@ -102,10 +118,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:layout_marginBottom="18dp"
         android:fontFamily="@font/vazir"
         android:soundEffectsEnabled="true"
         android:text="@string/loginfragment_verify"
         android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/login_register"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_number_layout" />
