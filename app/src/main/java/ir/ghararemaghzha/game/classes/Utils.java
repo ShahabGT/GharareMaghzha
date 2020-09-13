@@ -222,18 +222,18 @@ public class Utils {
         return version;
     }
 
-    public static void logout(Activity context,boolean showMessage) {
+    public static void logout(Activity activity,boolean showMessage) {
         if(showMessage)
-            Toast.makeText(context, context.getString(R.string.access_error), Toast.LENGTH_LONG).show();
-        MySharedPreference.getInstance(context).clear();
+            Toast.makeText(activity, activity.getString(R.string.access_error), Toast.LENGTH_LONG).show();
+        MySharedPreference.getInstance(activity).clear();
         FirebaseMessaging.getInstance().unsubscribeFromTopic(FCM_TOPIC);
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         realm.deleteAll();
         realm.commitTransaction();
-        cancelAlarm(context);
-        context.startActivity(new Intent(context, SplashActivity.class));
-        context.finish();
+        cancelAlarm(activity);
+        activity.startActivity(new Intent(activity, SplashActivity.class));
+        activity.finish();
     }
 
     public static void updateServerQuestions(Activity context, String questionCount) {

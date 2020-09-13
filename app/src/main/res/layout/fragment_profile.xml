@@ -296,7 +296,7 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toTopOf="@id/profile_myscore_card"
+        app:layout_constraintBottom_toTopOf="@id/profile_scorehelper_card"
         app:layout_constraintLeft_toLeftOf="@id/profile_time_card"
         app:layout_constraintRight_toRightOf="@id/profile_remaining_card"
         app:layout_constraintTop_toBottomOf="@id/profile_edit_card"
@@ -359,7 +359,7 @@
 
     </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profile_myscore_card"
+        android:id="@+id/profile_scorehelper_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -406,7 +406,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
-                android:text="@string/profile_myscore_title"
+                android:text="@string/profile_scorehelper_title"
                 android:textColor="@color/dark2"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/profile_mystat_subtitle"
@@ -421,7 +421,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
-                android:text="@string/profile_myscore_subtitle"
+                android:text="@string/profile_scorehelper_subtitle"
                 android:textColor="@color/dark2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/profile_mystat_left"
@@ -446,7 +446,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/profile_time_card"
         app:layout_constraintRight_toRightOf="@id/profile_remaining_card"
-        app:layout_constraintTop_toBottomOf="@id/profile_myscore_card">
+        app:layout_constraintTop_toBottomOf="@id/profile_scorehelper_card">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

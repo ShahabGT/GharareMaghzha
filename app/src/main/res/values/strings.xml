@@ -4,6 +4,7 @@
     <string name="slider_image_url">https://ghararehmaghzha.ir/api/slider/%s.jpg</string>
     <string name="en_digits">abcdefghijklmnopqrstuvwxyz1234567890</string>
     <string name="numbers">1234567980</string>
+    <string name="instagram_url">https://instagram.com/shahabgt</string>
 
     <string name="access_error">حساب کاربری شما جای دیگر آنلاین شده لطفا دوباره وارد شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
@@ -67,8 +68,8 @@
     <string name="profile_edit_subtitle">ویرایش اطلاعات حساب</string>
     <string name="profile_stat_title">وضعیت من</string>
     <string name="profile_stat_subtitle">مشاهده آمار و اطلاعات</string>
-    <string name="profile_myscore_title">امتیاز ها</string>
-    <string name="profile_myscore_subtitle">مشاهده نحوه امتیاز گیری</string>
+    <string name="profile_scorehelper_title">امتیاز ها</string>
+    <string name="profile_scorehelper_subtitle">مشاهده نحوه امتیاز گیری</string>
     <string name="profile_buy_title">خرید سوال</string>
     <string name="profile_buy_subtitle">خرید بسته سوالات</string>
     <string name="profile_code">کد کاربری: %s</string>
@@ -183,6 +184,7 @@
     <string name="navigation_help">راهنما</string>
     <string name="navigation_rule">قوانین و مقررات</string>
     <string name="navigation_about">درباره</string>
+    <string name="navigation_instagram">اینستاگرام</string>
     <string name="navigation_exit">خروج از حساب کاربری</string>
 
     <string name="buyhistory_title">تاریخچه خرید</string>
@@ -226,5 +228,7 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
 
     <string name="booster_notif_title">پکیج افزایش امتیاز</string>
     <string name="booster_notif_body">مدت زمان اعتبار پکیج افزایش امتیاز شما به پایان رسید.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

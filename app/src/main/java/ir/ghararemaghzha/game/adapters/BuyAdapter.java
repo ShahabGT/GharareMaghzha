@@ -59,9 +59,15 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
 
         PlanModel model = data.get(position);
         if (model != null) {
+            int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
+            if(passed>=10){
+                h.buy.setText(R.string.profile_time_end);
+                h.buy.setEnabled(false);
+            }
             if (h.viewType == LIST_TYPE) {
                 h.title.setText(context.getString(R.string.buy_plan_title, model.getPlanCount()));
                 h.price.setText(context.getString(R.string.buy_price, Utils.moneySeparator(model.getPlanPrice())));
+
                 h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null));
                 switch (position) {
                     case 0:

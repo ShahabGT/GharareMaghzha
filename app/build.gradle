@@ -83,6 +83,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:2.3.0"
 
 
+    implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
 }
 repositories {
     mavenCentral()

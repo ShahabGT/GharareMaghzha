@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -22,15 +24,18 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
@@ -108,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
         findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> {
-            startActivity(new Intent(this, BuyHistoryActivity.class));
+            //   startActivity(new Intent(this, BuyHistoryActivity.class));
+            navController.navigate(R.id.action_global_buyHistoryFragment);
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_support).setOnClickListener(v -> {
@@ -116,11 +122,20 @@ public class MainActivity extends AppCompatActivity {
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_invite).setOnClickListener(v -> {
-            startActivity(new Intent(this, InviteActivity.class));
+           // startActivity(new Intent(this, InviteActivity.class));
+            navController.navigate(R.id.action_global_inviteFragment);
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_setting).setOnClickListener(v -> {
             navController.navigate(R.id.action_global_settingsFragment);
+            motionLayout.transitionToStart();
+
+        });
+        findViewById(R.id.navigation_instagram).setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.instagram_url)));
+            startActivity(intent);
             motionLayout.transitionToStart();
 
         });
@@ -133,6 +148,9 @@ public class MainActivity extends AppCompatActivity {
         if (navHostFragment != null)
             navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bnv, navController);
+
+        bnv.setOnNavigationItemReselectedListener(item -> {
+        });
 
         motionLayout = findViewById(R.id.main_motion);
         refreshIntent = new Intent(GHARAREHMAGHZHA_BROADCAST_REFRESH);
@@ -155,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
-        avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
+        //  avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
+        avatar.setOnClickListener(v -> navController.navigate(R.id.action_global_profileEditFragment));
     }
 
     @Override

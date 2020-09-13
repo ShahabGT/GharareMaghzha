@@ -6,16 +6,16 @@
     app:startDestination="@id/menu_profile">
 
 
-
     <fragment
-        app:popUpTo="@+id/menu_profile"
         android:id="@+id/menu_buy"
         android:name="ir.ghararemaghzha.game.fragments.BuyFragment"
-        android:label="BuyFragment" />
+        android:label="BuyFragment"
+        tools:layout="@layout/fragment_buy" />
     <fragment
         android:id="@+id/menu_highscore"
         android:name="ir.ghararemaghzha.game.fragments.HighscoreFragment"
-        android:label="HighscoreFragment" />
+        android:label="HighscoreFragment"
+        tools:layout="@layout/fragment_highscore" />
     <fragment
         android:id="@+id/menu_message"
         android:name="ir.ghararemaghzha.game.fragments.MessagesFragment"
@@ -25,7 +25,7 @@
         android:id="@+id/menu_profile"
         android:name="ir.ghararemaghzha.game.fragments.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_menu_profile_to_menu_buy"
             app:destination="@id/menu_buy" />
@@ -34,7 +34,7 @@
         android:id="@+id/menu_start"
         android:name="ir.ghararemaghzha.game.fragments.StartFragment"
         android:label="fragment_start"
-        tools:layout="@layout/fragment_start" >
+        tools:layout="@layout/fragment_start">
         <action
             android:id="@+id/action_menu_start_to_menu_highscore"
             app:destination="@id/menu_highscore" />
@@ -47,6 +47,32 @@
         android:name="ir.ghararemaghzha.game.fragments.SettingsFragment"
         android:label="SettingsFragment" />
 
-    <action android:id="@+id/action_global_settingsFragment"
-        app:destination="@id/settingsFragment"/>
+
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment" />
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="ir.ghararemaghzha.game.fragments.ProfileEditFragment"
+        android:label="fragment_profile_edit"
+        tools:layout="@layout/fragment_profile_edit" />
+    <action
+        android:id="@+id/action_global_profileEditFragment"
+        app:destination="@id/profileEditFragment" />
+    <fragment
+        android:id="@+id/buyHistoryFragment"
+        android:name="ir.ghararemaghzha.game.fragments.BuyHistoryFragment"
+        android:label="BuyHistoryFragment"
+        tools:layout="@layout/fragment_buy_history" />
+    <action
+        android:id="@+id/action_global_buyHistoryFragment"
+        app:destination="@id/buyHistoryFragment" />
+    <fragment
+        android:id="@+id/inviteFragment"
+        android:name="ir.ghararemaghzha.game.fragments.InviteFragment"
+        android:label="InviteFragment"
+        tools:layout="@layout/fragment_invite" />
+    <action
+        android:id="@+id/action_global_inviteFragment"
+        app:destination="@id/inviteFragment" />
 </navigation>

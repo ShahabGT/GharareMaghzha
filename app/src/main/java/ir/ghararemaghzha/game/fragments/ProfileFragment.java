@@ -29,6 +29,7 @@ import java.util.Objects;
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.ProfileActivity;
+import ir.ghararemaghzha.game.activities.ScoreHelperActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.dialogs.UserDetailsDialog;
 import ir.ghararemaghzha.game.models.QuestionModel;
@@ -41,7 +42,7 @@ public class ProfileFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, remainingTimeTitle;
-    private MaterialCardView buy, edit, stat;
+    private MaterialCardView buy, edit, stat, scoreHelper;
 
     private Realm db;
 
@@ -99,6 +100,7 @@ public class ProfileFragment extends Fragment {
         buy = v.findViewById(R.id.profile_buy_card);
         edit = v.findViewById(R.id.profile_edit_card);
         stat = v.findViewById(R.id.profile_stat_card);
+        scoreHelper = v.findViewById(R.id.profile_scorehelper_card);
 
         updateUI();
 
@@ -126,9 +128,9 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        int total = db.where(QuestionModel.class).findAll().size();
+        //   int total = db.where(QuestionModel.class).findAll().size();
         totalQuestions.setText(String.valueOf(db.where(QuestionModel.class).findAll().size()));
-        int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
+        //   int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
         remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size()));
 
     }
@@ -137,9 +139,11 @@ public class ProfileFragment extends Fragment {
         buy.setOnClickListener(v ->
                 navController.navigate(R.id.action_menu_profile_to_menu_buy)
         );
-        edit.setOnClickListener(v -> startActivity(new Intent(context, ProfileActivity.class)));
+    //    edit.setOnClickListener(v -> startActivity(new Intent(context, ProfileActivity.class)));
+        edit.setOnClickListener(v -> navController.navigate(R.id.action_global_profileEditFragment));
 
         stat.setOnClickListener(v -> showDetailsDialog(MySharedPreference.getInstance(context).getUserId()));
+        scoreHelper.setOnClickListener(v -> startActivity(new Intent(activity, ScoreHelperActivity.class)));
     }
 
     private void showDetailsDialog(String userId) {

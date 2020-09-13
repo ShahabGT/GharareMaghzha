@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.SET_ALARM" />
 
     <application
         android:name=".classes.MyApplication"
@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:supportsRtl">
+        <activity android:name=".activities.ScoreHelperActivity"></activity>
         <activity
             android:name=".activities.InviteActivity"
             android:screenOrientation="portrait"
@@ -111,10 +112,11 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".classes.BoosterReceiver"
+        <receiver
+            android:name=".classes.BoosterReceiver"
             android:directBootAware="true"
-            android:exported="false"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
