@@ -18,15 +18,15 @@ import ir.ghararemaghzha.game.R;
 
 
 public class ScoreHelperViewPager extends PagerAdapter {
-    private List<Fragment> fragments;
+    private int count;
 
-    public ScoreHelperViewPager(List<Fragment> fragments) {
-        this.fragments = fragments;
+    public ScoreHelperViewPager(int count) {
+        this.count=count;
     }
 
     @Override
     public int getCount() {
-        return fragments.size();
+        return count;
     }
 
     @Override

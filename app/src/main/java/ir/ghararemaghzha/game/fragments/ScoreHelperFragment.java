@@ -51,10 +51,6 @@ public class ScoreHelperFragment extends Fragment {
 
         ultraViewPager = v.findViewById(R.id.score_helper_slider);
         ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL);
-        List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new Score1Fragment());
-        fragmentList.add(new Score2Fragment());
-        fragmentList.add(new Score3Fragment());
      //   ultraViewPager.setMultiScreen(0.9f);
       //  ultraViewPager.setRatio(0.3f);
      //   ultraViewPager.setMaxHeight(1400);
@@ -69,7 +65,7 @@ public class ScoreHelperFragment extends Fragment {
         ultraViewPager.getIndicator().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
         ultraViewPager.getIndicator().build();
         ultraViewPager.setInfiniteLoop(true);
-        ultraViewPager.setAdapter(new ScoreHelperViewPager(fragmentList));
+        ultraViewPager.setAdapter(new ScoreHelperViewPager(3));
 
 
     }

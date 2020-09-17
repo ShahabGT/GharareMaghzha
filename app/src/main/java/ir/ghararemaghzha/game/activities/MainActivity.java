@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
 
                                 int lastUpdate = 0;
-                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty())
+                                if (!response.body().getLastUpdate().isEmpty())
                                     lastUpdate = Integer.parseInt(response.body().getLastUpdate());
                                 updateDatabase(serverCount, lastUpdate);
 

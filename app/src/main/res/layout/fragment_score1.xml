@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
-    android:focusable="true"
-    tools:context=".fragments.Score1Fragment">
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/score1_guide5"
