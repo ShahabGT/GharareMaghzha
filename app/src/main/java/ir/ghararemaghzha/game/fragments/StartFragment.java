@@ -25,7 +25,7 @@ import com.tmall.ultraviewpager.UltraViewPager;
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.QuestionActivity;
-import ir.ghararemaghzha.game.classes.MainViewPager;
+import ir.ghararemaghzha.game.adapters.MainViewPager;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;

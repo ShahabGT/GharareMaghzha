@@ -100,7 +100,9 @@ public class UserDetailsDialog extends Dialog {
                                         .placeholder(R.drawable.placeholder)
                                         .into(avatar);
 
-                                int totalQuestions = (Integer.parseInt(response.body().getPlan()) * 1000) + 100;
+                 //               int totalQuestions = (Integer.parseInt(response.body().getPlan()) * 1000) + 100;
+                                int totalQuestions = (Integer.parseInt(response.body().getPlan()) *500) + 500;
+
                                 int answeredQuestions = response.body().getCorrect() + response.body().getIncorrect();
                                 answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), response.body().getIncorrect()));
 

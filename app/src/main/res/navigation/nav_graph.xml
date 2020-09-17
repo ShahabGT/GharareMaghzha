@@ -75,4 +75,12 @@
     <action
         android:id="@+id/action_global_inviteFragment"
         app:destination="@id/inviteFragment" />
+    <fragment
+        android:id="@+id/scoreHelperFragment"
+        android:name="ir.ghararemaghzha.game.fragments.ScoreHelperFragment"
+        android:label="fragment_score_helper"
+        tools:layout="@layout/fragment_score_helper" />
+    <action
+        android:id="@+id/action_global_scoreHelperFragment"
+        app:destination="@id/scoreHelperFragment" />
 </navigation>

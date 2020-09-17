@@ -212,6 +212,7 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
 \n
 </string>
 
+    <string name="settings_title">تنظیمات</string>
     <string name="settings_music">پخش موسیقی</string>
     <string name="settings_music_summery">پخش موسیقی در هنگام پاسخگویی به سوالات</string>
     <string name="settings_auto_next">نمایش سوال بعدی</string>
@@ -228,7 +229,13 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
 
     <string name="booster_notif_title">پکیج افزایش امتیاز</string>
     <string name="booster_notif_body">مدت زمان اعتبار پکیج افزایش امتیاز شما به پایان رسید.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="score_helper_title">افزایش امتیاز</string>
+    <string name="score1_title">پاسخ به سوالات</string>
+    <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا 500 سوال به صورت رایگان برای شما فعال می باشد.</string>
+    <string name="score2_title">معرفی به دوستان</string>
+    <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 100 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
+    <string name="score3_title">پکیج افزایش امتیاز</string>
+    <string name="score3_subtitle">با خریداری پکیج افزایش دهنده امتیاز، مقدار امتیاز هر سوال به مدت 24 ساعت یا حداکثر 1000 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 3 بار این پکیج قابل خریداری می باشد.</string>
 
 </resources>

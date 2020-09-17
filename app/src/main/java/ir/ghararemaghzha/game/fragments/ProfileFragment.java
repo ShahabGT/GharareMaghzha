@@ -143,7 +143,8 @@ public class ProfileFragment extends Fragment {
         edit.setOnClickListener(v -> navController.navigate(R.id.action_global_profileEditFragment));
 
         stat.setOnClickListener(v -> showDetailsDialog(MySharedPreference.getInstance(context).getUserId()));
-        scoreHelper.setOnClickListener(v -> startActivity(new Intent(activity, ScoreHelperActivity.class)));
+    //    scoreHelper.setOnClickListener(v -> startActivity(new Intent(activity, ScoreHelperActivity.class)));
+        scoreHelper.setOnClickListener(v -> navController.navigate(R.id.action_global_scoreHelperFragment));
     }
 
     private void showDetailsDialog(String userId) {

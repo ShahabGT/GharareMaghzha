@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.google.android.material.textview.MaterialTextView;
+
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySettingsPreference;
 
@@ -25,6 +27,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
+        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.settings_title);
+
         v.setBackgroundResource(R.color.light_background);
         v.setClickable(true);
         v.setFocusable(true);

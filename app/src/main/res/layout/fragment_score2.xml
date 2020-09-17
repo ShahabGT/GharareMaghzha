@@ -10,36 +10,35 @@
     tools:context=".fragments.Score1Fragment">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/score1_guide5"
+        android:id="@+id/score2_guide5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
     <View
-        android:id="@+id/score1_view1"
+        android:id="@+id/score2_view1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/dark7"
-        app:layout_constraintBottom_toBottomOf="@+id/score1_guide5"
+        android:background="@color/dark3"
+        app:layout_constraintBottom_toBottomOf="@+id/score2_guide5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <View
-        android:id="@+id/score1_view2"
+        android:id="@+id/score2_view2"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="@drawable/ic_wave"
-        android:backgroundTint="@color/dark7"
+        android:backgroundTint="@color/dark3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/score1_guide5" />
+        app:layout_constraintTop_toBottomOf="@id/score2_guide5" />
     <com.skyfishjy.library.RippleBackground
         android:id="@+id/guide_ripple"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/score1_view2"
+        app:layout_constraintBottom_toBottomOf="@id/score2_view2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -53,38 +52,38 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/score_question" />
+            android:src="@drawable/score_share" />
     </com.skyfishjy.library.RippleBackground>
 
-
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/score1_title"
+        android:id="@+id/score2_title"
         style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/vazir"
         android:gravity="center"
         android:padding="8dp"
-        android:text="@string/score1_title"
-        android:textColor="@color/dark7"
+        android:text="@string/score2_title"
+        android:textColor="@color/dark3"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/score1_view2" />
+        app:layout_constraintTop_toBottomOf="@id/score2_view2" />
+
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/score1_subtitle"
+        android:id="@+id/score2_subtitle"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fontFamily="@font/vazir"
         android:gravity="center|top"
         android:padding="16dp"
-        android:text="@string/score1_subtitle"
-        android:textColor="@color/dark7"
+        android:text="@string/score2_subtitle"
+        android:textColor="@color/dark3"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/score1_title" />
+        app:layout_constraintTop_toBottomOf="@id/score2_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
