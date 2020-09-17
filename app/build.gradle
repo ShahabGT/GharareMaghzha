@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-    implementation 'io.realm:android-adapters:2.1.1'
+    implementation 'io.realm:android-adapters:3.1.0'
 
     implementation 'com.airbnb.android:lottie:3.4.2'
     implementation "androidx.emoji:emoji:1.1.0"

@@ -20,7 +20,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:supportsRtl">
-        <activity android:name=".activities.ScoreHelperActivity"></activity>
         <activity
             android:name=".activities.InviteActivity"
             android:screenOrientation="portrait"

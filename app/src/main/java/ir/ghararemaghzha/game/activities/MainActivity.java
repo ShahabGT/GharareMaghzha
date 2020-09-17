@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_invite).setOnClickListener(v -> {
-           // startActivity(new Intent(this, InviteActivity.class));
+            // startActivity(new Intent(this, InviteActivity.class));
             navController.navigate(R.id.action_global_inviteFragment);
             motionLayout.transitionToStart();
         });
@@ -162,14 +162,9 @@ public class MainActivity extends AppCompatActivity {
         onClicks();
         uploadAnswers();
         navigationDrawer();
+        registerReceiver(notificationBroadCast, new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
 
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (db != null) db.close();
     }
 
     private void onClicks() {
@@ -185,16 +180,14 @@ public class MainActivity extends AppCompatActivity {
         }
         setAvatars();
         Utils.removeNotification(this);
-        registerReceiver(notificationBroadCast, new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
         updateMessages();
         checkTime();
     }
 
-
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         unregisterReceiver(notificationBroadCast);
-        super.onStop();
+        super.onDestroy();
     }
 
     private void updateMessages() {

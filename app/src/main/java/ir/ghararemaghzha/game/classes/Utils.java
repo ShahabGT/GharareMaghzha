@@ -98,6 +98,7 @@ public class Utils {
     }
 
     public static boolean isBoosterValid(String boosterDate) {
+        if (boosterDate.isEmpty()) return false;
         boolean res = true;
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -107,11 +108,8 @@ public class Utils {
             long server = d != null ? d.getTime() : 0;
             d = dateFormat.parse(systemDate);
             long system = d == null ? 0 : d.getTime();
-            long diff = server - system;
-//            if (diff >= -1000 && diff <= 1000) {
-//                res = false;
-//            }
-            if(system>server)res=false;
+
+            if (system > server) res = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -222,8 +220,8 @@ public class Utils {
         return version;
     }
 
-    public static void logout(Activity activity,boolean showMessage) {
-        if(showMessage)
+    public static void logout(Activity activity, boolean showMessage) {
+        if (showMessage)
             Toast.makeText(activity, activity.getString(R.string.access_error), Toast.LENGTH_LONG).show();
         MySharedPreference.getInstance(activity).clear();
         FirebaseMessaging.getInstance().unsubscribeFromTopic(FCM_TOPIC);
@@ -240,7 +238,7 @@ public class Utils {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(context,true);
+            Utils.logout(context, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -288,32 +286,32 @@ public class Utils {
         return res;
     }
 
-    public static void shareCode(Context context,String title){
-        Intent intent= new Intent(Intent.ACTION_SEND);
+    public static void shareCode(Context context, String title) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT,title);
-        context.startActivity(Intent.createChooser(intent,context.getString(R.string.general_share)));
+        intent.putExtra(Intent.EXTRA_TEXT, title);
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.general_share)));
 
     }
 
 
-    public static void setAlarm(Context context,int year,int month,int day,int hour,int minute){
+    public static void setAlarm(Context context, int year, int month, int day, int hour, int minute) {
         cancelAlarm(context);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
-        c.set(Calendar.YEAR,year);
-        c.set(Calendar.MONTH,month-1);
-        c.set(Calendar.DAY_OF_MONTH,day);
-        c.set(Calendar.HOUR_OF_DAY,hour);
-        c.set(Calendar.MINUTE,minute);
-        c.set(Calendar.SECOND,0);
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month - 1);
+        c.set(Calendar.DAY_OF_MONTH, day);
+        c.set(Calendar.HOUR_OF_DAY, hour);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
-        Intent i = new Intent(context.getApplicationContext(),BoosterReceiver.class);
-        PendingIntent pendingIntent =PendingIntent.getBroadcast(context, 1, i,PendingIntent.FLAG_UPDATE_CURRENT);
-       // alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
-        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(),pendingIntent),pendingIntent);
+        Intent i = new Intent(context.getApplicationContext(), BoosterReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        // alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);
 
     }
 
@@ -324,7 +322,7 @@ public class Utils {
         alarmManager.cancel(pendingIntent);
     }
 
-    public static void createNotification(Context context,String title, String message, String clickAction) {
+    public static void createNotification(Context context, String title, String message, String clickAction) {
         Intent intent;
         if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
             intent = new Intent(context, MainActivity.class);

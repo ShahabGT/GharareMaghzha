@@ -180,7 +180,6 @@ public class SupportActivity extends AppCompatActivity {
 
 
     private void getChatData() {
-        loading.setVisibility(View.VISIBLE);
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         String lastUpdate = MySharedPreference.getInstance(this).getLastUpdateChat();
@@ -194,7 +193,6 @@ public class SupportActivity extends AppCompatActivity {
                 .enqueue(new Callback<ChatResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {
-                        loading.setVisibility(View.GONE);
 
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             MySharedPreference.getInstance(SupportActivity.this).setLastUpdateChat(nowDate);
@@ -216,16 +214,13 @@ public class SupportActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<ChatResponse> call, @NonNull Throwable t) {
-                        loading.setVisibility(View.GONE);
                     }
                 });
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-     //   MySharedPreference.getInstance(this).setLastUpdateChat(Utils.currentDate());
-        if (db != null) db.close();
         unregisterReceiver(br);
+        super.onDestroy();
     }
 }

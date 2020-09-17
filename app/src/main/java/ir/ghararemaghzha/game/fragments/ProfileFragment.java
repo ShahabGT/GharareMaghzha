@@ -28,8 +28,6 @@ import java.util.Objects;
 
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
-import ir.ghararemaghzha.game.activities.ProfileActivity;
-import ir.ghararemaghzha.game.activities.ScoreHelperActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.dialogs.UserDetailsDialog;
 import ir.ghararemaghzha.game.models.QuestionModel;
