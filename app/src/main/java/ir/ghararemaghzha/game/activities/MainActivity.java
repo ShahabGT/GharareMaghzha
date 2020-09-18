@@ -41,6 +41,8 @@ import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
+import ir.ghararemaghzha.game.data.ApiRepository;
+import ir.ghararemaghzha.game.data.NetworkApi;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NewVersionDialog;

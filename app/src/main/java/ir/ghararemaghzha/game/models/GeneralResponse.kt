@@ -18,11 +18,11 @@ data class GeneralResponse(
         @SerializedName("influencer_id") val influencerId:String,
         @SerializedName("influencer_amount") val influencerAmount:String,
         @SerializedName("merchant_id") val merchantId:String,
-        @SerializedName("user_sex") val userSex:String,
-        @SerializedName("user_bday") val userBday:String,
-        @SerializedName("user_email") val userEmail:String,
-        @SerializedName("user_invite") val userInvite:String,
-        @SerializedName("user_avatar") val userAvatar:String,
+        @SerializedName("user_sex") val userSex:String?,
+        @SerializedName("user_bday") val userBday:String?,
+        @SerializedName("user_email") val userEmail:String?,
+        @SerializedName("user_invite") val userInvite:String?,
+        @SerializedName("user_avatar") val userAvatar:String?,
 )
 
 

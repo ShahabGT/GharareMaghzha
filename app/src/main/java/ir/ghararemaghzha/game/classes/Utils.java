@@ -134,8 +134,10 @@ public class Utils {
         try {
             InputMethodManager inputManager = (InputMethodManager)
                     activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(Objects.requireNonNull(activity.getCurrentFocus()).getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
+            if (activity.getCurrentFocus() != null) {
+                inputManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

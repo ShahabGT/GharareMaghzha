@@ -102,7 +102,7 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
         name.setText(MySharedPreference.getInstance(context).getUsername());
         number.setText(MySharedPreference.getInstance(context).getNumber());
         bday.setText(MySharedPreference.getInstance(context).getUserBday());
-        email.setText(MySharedPreference.getInstance(context).getEmail());
+        email.setText(MySharedPreference.getInstance(context).getUserEmail());
         String sex = MySharedPreference.getInstance(context).getUserSex();
         if (sex.equals("male")) {
             male.setChecked(true);

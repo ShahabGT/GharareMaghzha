@@ -137,7 +137,7 @@ public class MySharedPreference {
     public void setUserEmail(String Email){
         sharedPreferences.edit().putString("Email",Email).apply();
     }
-    public String getEmail(){
+    public String getUserEmail(){
         return  sharedPreferences.getString("Email","");
     }
 
