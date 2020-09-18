@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -235,8 +236,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                         MySharedPreference.getInstance(ctx).userId = userId
                         Toast.makeText(ctx, ctx.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
-                        startActivity(Intent(act, MainActivity::class.java))
-                        act.overridePendingTransition(R.anim.enter_right, R.anim.exit_left)
+                        view?.findNavController()!!.navigate(R.id.action_verifyFragment_to_mainActivity)
                         act.finish()
 
 

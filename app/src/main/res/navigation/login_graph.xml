@@ -9,39 +9,53 @@
         android:id="@+id/loginFragment"
         android:name="ir.ghararemaghzha.game.fragments.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_verifyFragment"
             app:destination="@id/verifyFragment"
-            app:enterAnim="@anim/fadein"
-            app:exitAnim="@anim/fadeout"
-            app:popEnterAnim="@anim/fadein"
-            app:popExitAnim="@anim/fadeout" />
+            app:enterAnim="@anim/enter_left"
+            app:exitAnim="@anim/exit_right"
+            app:popEnterAnim="@anim/enter_right"
+            app:popExitAnim="@anim/exit_left" />
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment"
-            app:enterAnim="@anim/fadein"
-            app:exitAnim="@anim/fadeout"
-            app:popEnterAnim="@anim/fadein"
-            app:popExitAnim="@anim/fadeout" />
+            app:enterAnim="@anim/enter_left"
+            app:exitAnim="@anim/exit_right"
+            app:popEnterAnim="@anim/enter_right"
+            app:popExitAnim="@anim/exit_left" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="ir.ghararemaghzha.game.fragments.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_verifyFragment"
             app:destination="@id/verifyFragment"
-            app:enterAnim="@anim/fadein"
-            app:exitAnim="@anim/fadeout"
-            app:popEnterAnim="@anim/fadein"
-            app:popExitAnim="@anim/fadeout"
-            />
+            app:enterAnim="@anim/enter_left"
+            app:exitAnim="@anim/exit_right"
+            app:popEnterAnim="@anim/enter_right"
+            app:popExitAnim="@anim/exit_left" />
     </fragment>
     <fragment
         android:id="@+id/verifyFragment"
         android:name="ir.ghararemaghzha.game.fragments.VerifyFragment"
         android:label="fragment_verify"
-        tools:layout="@layout/fragment_verify" />
+        tools:layout="@layout/fragment_verify">
+
+
+        <action
+            android:id="@+id/action_verifyFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/enter_left"
+            app:exitAnim="@anim/exit_right"
+            app:popEnterAnim="@anim/enter_right"
+            app:popExitAnim="@anim/exit_left" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="ir.ghararemaghzha.game.activities.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>
