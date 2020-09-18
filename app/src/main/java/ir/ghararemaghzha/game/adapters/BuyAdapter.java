@@ -60,7 +60,7 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
         PlanModel model = data.get(position);
         if (model != null) {
             int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
-            if(passed>=10){
+            if (passed >= 10) {
                 h.buy.setText(R.string.profile_time_end);
                 h.buy.setEnabled(false);
             }
@@ -69,39 +69,85 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                 h.price.setText(context.getString(R.string.buy_price, Utils.moneySeparator(model.getPlanPrice())));
 
                 h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null));
+                int userPlan = Integer.parseInt(MySharedPreference.getInstance(context).getPlan());
                 switch (position) {
-                    case 0:
+                    case 1:
                         ImageViewCompat.setImageTintList(h.bg, ColorStateList.valueOf(context.getResources().getColor(R.color.light1)));
                         h.price.setTextColor(context.getResources().getColor(R.color.dark1));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark1));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark1));
+                        if (userPlan > 4) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark1));
+                            h.buy.setEnabled(true);
+                            h.buy.setClickable(true);
+                        }
                         break;
-                    case 1:
+                    case 2:
                         ImageViewCompat.setImageTintList(h.bg, ColorStateList.valueOf(context.getResources().getColor(R.color.light2)));
                         h.price.setTextColor(context.getResources().getColor(R.color.dark2));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark2));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark2));
+                        if (userPlan > 3) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark2));
+                            h.buy.setEnabled(true);
+                            h.buy.setClickable(true);
+                        }
                         break;
-                    case 2:
+                    case 3:
                         ImageViewCompat.setImageTintList(h.bg, ColorStateList.valueOf(context.getResources().getColor(R.color.light3)));
                         h.price.setTextColor(context.getResources().getColor(R.color.dark3));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark3));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark3));
+                        if (userPlan > 2) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark3));
+                            h.buy.setEnabled(true);
+                            h.buy.setClickable(true);
+                        }
                         break;
-                    case 3:
+                    case 4:
                         ImageViewCompat.setImageTintList(h.bg, ColorStateList.valueOf(context.getResources().getColor(R.color.light4)));
                         h.price.setTextColor(context.getResources().getColor(R.color.dark4));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark4));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark4));
+                        if (userPlan > 1) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark4));
+                            h.buy.setEnabled(true);
+                            h.buy.setClickable(true);
+                        }
                         break;
-                    case 4:
+                    case 5:
                         ImageViewCompat.setImageTintList(h.bg, ColorStateList.valueOf(context.getResources().getColor(R.color.light5)));
                         h.price.setTextColor(context.getResources().getColor(R.color.dark5));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark5));
-                        h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark5));
+                        if (userPlan > 0) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark5));
+                            h.buy.setEnabled(true);
+                            h.buy.setClickable(true);
+                        }
                         break;
 
                 }
+
             } else {
                 if (MySharedPreference.getInstance(context).getBoosterValue() != 1f) {
                     h.title.setText(context.getString(R.string.buy_booster_title_inuse));

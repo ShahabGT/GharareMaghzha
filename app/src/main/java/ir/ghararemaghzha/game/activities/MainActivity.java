@@ -327,11 +327,11 @@ public class MainActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
+        int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible",false).findAll().size();
         int range = remaining / (10 - passed);
         if (range > 0) {
             db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible",false).limit(range).findAll();
                 questions.setBoolean("visible", true);
             });
             updateTime(nowDate);
@@ -350,18 +350,18 @@ public class MainActivity extends AppCompatActivity {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
         if (passed == 9) {
             db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll();
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer","-1").and().equalTo("visible", false).findAll();
                 questions.setBoolean("visible", true);
             });
             updateTime(nowDate);
             Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
             sendBroadcast(refreshIntent);
         } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
-            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
+            int remaining = db.where(QuestionModel.class).equalTo("userAnswer","-1").and().equalTo("visible", false).findAll().size();
             int range = remaining / (10 - passed);
             if (range > 0) {
                 db.executeTransaction(realm -> {
-                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
+                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer","-1").and().equalTo("visible", false).limit(range).findAll();
                     questions.setBoolean("visible", true);
                 });
                 updateTime(nowDate);
