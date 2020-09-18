@@ -20,10 +20,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:supportsRtl">
-        <activity
-            android:name=".activities.InviteActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <meta-data
             android:name="fontProviderRequests"
@@ -39,10 +35,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.BuyHistoryActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.QuestionActivity"
             android:hardwareAccelerated="true"
@@ -62,10 +54,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat"
             tools:ignore="MissingClass" />
-        <activity
-            android:name=".activities.ProfileActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <service
             android:name=".firebase.MyFirebaseMessagingService"

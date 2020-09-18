@@ -28,16 +28,14 @@
         <androidx.emoji.widget.EmojiTextView
             android:id="@+id/chat_row_message"
             android:autoLink="all"
-
             style="@style/Base.TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/vazir"
             android:gravity="right"
-            android:maxWidth="240dp"
+            android:maxWidth="300dp"
             android:padding="8dp"
-            android:shadowColor="#ffffff"
-            android:text="متن پیasdasdasdasdwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwام"
+            android:text=""
             android:textColor="#ffffff"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
