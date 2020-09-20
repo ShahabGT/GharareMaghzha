@@ -66,6 +66,14 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
             h.name.setText(model.getUserName());
             h.score.setText(model.getScoreCount());
             h.rank.setText(String.valueOf(position + 1));
+            h.rank2.setText(String.valueOf(position + 1));
+            if(position<5){
+                h.rank.setVisibility(View.INVISIBLE);
+                h.rank2.setVisibility(View.VISIBLE);
+            }else{
+                h.rank2.setVisibility(View.INVISIBLE);
+                h.rank.setVisibility(View.VISIBLE);
+            }
             h.card.setCardBackgroundColor(context.getResources().getColor(R.color.white));
             Glide.with(context)
                     .load(context.getString(R.string.avatar_url, model.getUserAvatar()))
@@ -116,7 +124,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView name, score, rank;
+        private MaterialTextView name, score, rank,rank2;
         private ImageView avatar;
         private MaterialCardView card;
 
@@ -125,6 +133,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
             name = v.findViewById(R.id.highscore_row_name);
             score = v.findViewById(R.id.highscore_row_score);
             rank = v.findViewById(R.id.highscore_row_rank);
+            rank2 = v.findViewById(R.id.highscore_row_rank2);
 
             avatar = v.findViewById(R.id.highscore_row_avatar);
             card = v.findViewById(R.id.highscore_row_card);

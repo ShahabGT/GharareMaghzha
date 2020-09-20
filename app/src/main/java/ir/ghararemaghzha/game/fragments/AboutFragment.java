@@ -37,7 +37,7 @@ public class AboutFragment extends Fragment {
 
     private Context context;
     private FragmentActivity activity;
-    private MaterialTextView text, tradeMark, tradeMark2;
+    private MaterialTextView text,tradeMark, tradeMark2, tradeMark3;
     private ImageView telegram, instagram, website, email;
 
     @Override
@@ -55,12 +55,34 @@ public class AboutFragment extends Fragment {
 
         text = v.findViewById(R.id.about_text);
         text.setText(getText());
-        tradeMark = v.findViewById(R.id.about_trademark2);
-        tradeMark2 = v.findViewById(R.id.about_trademark3);
+        tradeMark = v.findViewById(R.id.about_trademark1);
+        tradeMark2 = v.findViewById(R.id.about_trademark2);
+        tradeMark3 = v.findViewById(R.id.about_trademark3);
 
-        String tradeMarkText = context.getString(R.string.about_trademark2);
+        String tradeMarkText = context.getString(R.string.about_trademark1);
         SpannableString spannableString = new SpannableString(tradeMarkText);
         ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("http://tajrannoyan.com"));
+                startActivity(intent);
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                ds.setColor(getResources().getColor(R.color.red));
+                ds.setUnderlineText(true);
+            }
+        };
+        spannableString.setSpan(clickableSpan, 37, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tradeMark.setText(spannableString);
+        tradeMark.setMovementMethod(LinkMovementMethod.getInstance());
+
+        String tradeMarkText2 = context.getString(R.string.about_trademark2);
+        SpannableString spannableString2 = new SpannableString(tradeMarkText2);
+        ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
                 Intent intent = new Intent();
@@ -75,15 +97,15 @@ public class AboutFragment extends Fragment {
                 ds.setUnderlineText(true);
             }
         };
-        spannableString.setSpan(clickableSpan, 36, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tradeMark.setText(spannableString);
-        tradeMark.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableString2.setSpan(clickableSpan2, 36, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tradeMark2.setText(spannableString2);
+        tradeMark2.setMovementMethod(LinkMovementMethod.getInstance());
 
 
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             String version = pInfo.versionName;
-            tradeMark2.setText(getString(R.string.about_trademark3, version));
+            tradeMark3.setText(getString(R.string.about_trademark3, version));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

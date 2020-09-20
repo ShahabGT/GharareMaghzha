@@ -164,7 +164,7 @@
     <string name="buy_plan_title">پکیج %s تایی سوال</string>
     <string name="buy_booster_title">افزایش %s برابری امتیاز سوال ها برای 24 ساعت</string>
     <string name="buy_booster_title_invalid">تعداد استفاده شما به پایان رسیده</string>
-    <string name="buy_booster_title_inuse">پکیج افزایش امتیاز برای شما فعال می باشد</string>
+    <string name="buy_booster_title_inuse">پکیج نیترو امتیاز برای شما فعال می باشد</string>
 
     <string name="buy_buy">خرید</string>
 
@@ -190,7 +190,7 @@
     <string name="buyhistory_title">تاریخچه خرید</string>
     <string name="buyhistory_empty">تاکنون خریدی انجام نداده اید!</string>
     <string name="buyhistory_row_title">نوع پکیج: %s سوالی</string>
-    <string name="buyhistory_row_title2">نوع پکیج: افزایش امتیاز</string>
+    <string name="buyhistory_row_title2">نوع پکیج: نیترو امتیاز</string>
     <string name="buyhistory_row_date">تاریخ: %s</string>
     <string name="buyhistory_row_price">مبلغ: %s تومان</string>
     <string name="buyhistory_row_influencer">کد معرف: %s</string>
@@ -233,10 +233,13 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="score_helper_title">افزایش امتیاز</string>
     <string name="score1_title">پاسخ به سوالات</string>
     <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا 500 سوال به صورت رایگان برای شما فعال می باشد.</string>
+    <string name="score1_button">ورود به صفحه سوالات</string>
     <string name="score2_title">معرفی به دوستان</string>
     <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 100 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
-    <string name="score3_title">پکیج افزایش امتیاز</string>
-    <string name="score3_subtitle">با خریداری پکیج افزایش دهنده امتیاز، مقدار امتیاز هر سوال به مدت 24 ساعت یا حداکثر 1000 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 3 بار این پکیج قابل خریداری می باشد.</string>
+    <string name="score2_button">ورود به صفحه معرفی به دوستان</string>
+    <string name="score3_title">پکیج نیترو امتیاز</string>
+    <string name="score3_subtitle">با خریداری پکیج نیترو امتیاز، مقدار امتیاز هر سوال به مدت 24 ساعت یا حداکثر 1000 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 3 بار این پکیج قابل خریداری می باشد.</string>
+    <string name="score3_button">ورود به صفحه خرید</string>
 
 
     <string name="tap_target_profile_title">حساب کاربری</string>
@@ -256,7 +259,7 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="rules_title">قوانین و مقررات</string>
 
     <string name="about_title">درباره</string>
-    <string name="about_trademark1">تمامی حقوق این محصول متعلق به \n شرکت تاجران نویان می باشد</string>
+    <string name="about_trademark1">تمامی حقوق این محصول متعلق به \n شرکت تاجران نویان توسعه می باشد</string>
     <string name="about_trademark2">توسعه دهنده و برنامه نویس سمت سرور: شهاب عظیمی</string>
     <string name="about_trademark3">ورژن %s ، 1399</string>
 

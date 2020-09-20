@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(bnv.getRootView().findViewById(R.id.menu_start), getString(R.string.tap_target_highscore_title), getString(R.string.tap_target_highscore_des))
+                        TapTarget.forView(bnv.getRootView().findViewById(R.id.menu_start), getString(R.string.tap_target_start_title), getString(R.string.tap_target_start_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)

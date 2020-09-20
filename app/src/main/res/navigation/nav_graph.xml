@@ -79,7 +79,17 @@
         android:id="@+id/scoreHelperFragment"
         android:name="ir.ghararemaghzha.game.fragments.ScoreHelperFragment"
         android:label="fragment_score_helper"
-        tools:layout="@layout/fragment_score_helper" />
+        tools:layout="@layout/fragment_score_helper" >
+        <action
+            android:id="@+id/action_scoreHelperFragment_to_menu_buy"
+            app:destination="@id/menu_buy" />
+        <action
+            android:id="@+id/action_scoreHelperFragment_to_menu_start"
+            app:destination="@id/menu_start" />
+        <action
+            android:id="@+id/action_scoreHelperFragment_to_inviteFragment"
+            app:destination="@id/inviteFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_scoreHelperFragment"
         app:destination="@id/scoreHelperFragment" />
