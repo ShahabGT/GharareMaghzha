@@ -4,7 +4,7 @@
     <string name="slider_image_url">https://ghararehmaghzha.ir/api/slider/%s.jpg</string>
     <string name="en_digits">abcdefghijklmnopqrstuvwxyz1234567890</string>
     <string name="numbers">1234567980</string>
-    <string name="instagram_url">https://instagram.com/shahabgt</string>
+    <string name="instagram_url">https://instagram.com/ghararehmaghzha</string>
 
     <string name="access_error">حساب کاربری شما جای دیگر آنلاین شده لطفا دوباره وارد شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
@@ -237,5 +237,27 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 100 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
     <string name="score3_title">پکیج افزایش امتیاز</string>
     <string name="score3_subtitle">با خریداری پکیج افزایش دهنده امتیاز، مقدار امتیاز هر سوال به مدت 24 ساعت یا حداکثر 1000 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 3 بار این پکیج قابل خریداری می باشد.</string>
+
+
+    <string name="tap_target_profile_title">حساب کاربری</string>
+    <string name="tap_target_profile_des">در این صفحه اطلاعات مربوط به حساب کاربری خود شامل تعداد سوالات و زمان باقیمانده مسابقه و تغییر مشخصات کاربری خود را مشاهده می کنید</string>
+    <string name="tap_target_highscore_title">کاربران</string>
+    <string name="tap_target_highscore_des">در این صفحه کاربران با بالاترین امتیاز را مشاهده می کنید</string>
+    <string name="tap_target_start_title">شروع مسابقه</string>
+    <string name="tap_target_start_des">در این صفحه می توانید بازی رو شروع کنید و امتیاز خود را افزایش دهید. در ابتدا 500 سوال به صورت رایگان در اختیار شما قرار گرفته است</string>
+    <string name="tap_target_buy_title">خرید</string>
+    <string name="tap_target_buy_des">در این صفحه می توانید تعداد سوالات خود را افزایش دهید. حداکثر تعداد سوال در هر دوره 3000 سوال می باشد. همچنین می توانید پکیج افزایش دهنده امتیاز 24 ساعته را خریداری نمایید</string>
+    <string name="tap_target_message_title">پیام ها</string>
+    <string name="tap_target_message_des">در صفحه می توانید پیام های مدیریت را مشاهده کنید</string>
+    <string name="tap_target_menu_title">منو</string>
+    <string name="tap_target_menu_des">انتخاب های بیشتر شامل تاریخچه خرید، ارتباط پشتیبانی، معرفی به دوستان و... را در این این قسمت مشاهده کنید</string>
+
+
+    <string name="rules_title">قوانین و مقررات</string>
+
+    <string name="about_title">درباره</string>
+    <string name="about_trademark1">تمامی حقوق این محصول متعلق به \n شرکت تاجران نویان می باشد</string>
+    <string name="about_trademark2">توسعه دهنده و برنامه نویس سمت سرور: شهاب عظیمی</string>
+    <string name="about_trademark3">ورژن %s ، 1399</string>
 
 </resources>

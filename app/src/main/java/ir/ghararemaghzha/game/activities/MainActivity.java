@@ -26,6 +26,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
@@ -41,11 +43,10 @@ import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
-import ir.ghararemaghzha.game.data.ApiRepository;
-import ir.ghararemaghzha.game.data.NetworkApi;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NewVersionDialog;
+import ir.ghararemaghzha.game.dialogs.RulesDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
@@ -91,7 +92,66 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         init();
+        if (MySharedPreference.getInstance(this).isFirstTime())
+            helpInfo();
 
+    }
+
+    private void helpInfo() {
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(bnv.getRootView().findViewById(R.id.menu_profile), getString(R.string.tap_target_profile_title), getString(R.string.tap_target_profile_des))
+                                .cancelable(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(bnv.getRootView().findViewById(R.id.menu_highscore), getString(R.string.tap_target_highscore_title), getString(R.string.tap_target_highscore_des))
+                                .cancelable(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(bnv.getRootView().findViewById(R.id.menu_start), getString(R.string.tap_target_highscore_title), getString(R.string.tap_target_highscore_des))
+                                .cancelable(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(bnv.getRootView().findViewById(R.id.menu_buy), getString(R.string.tap_target_buy_title), getString(R.string.tap_target_buy_des))
+                                .cancelable(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(bnv.getRootView().findViewById(R.id.menu_message), getString(R.string.tap_target_message_title), getString(R.string.tap_target_message_des))
+                                .cancelable(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.toolbar_menu), getString(R.string.tap_target_menu_title), getString(R.string.tap_target_menu_des))
+                                .cancelable(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black)
+
+                ).listener(new TapTargetSequence.Listener() {
+
+            @Override
+            public void onSequenceFinish() {
+                MySharedPreference.getInstance(MainActivity.this).setFirstTime();
+            }
+
+            @Override
+            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+            }
+
+            @Override
+            public void onSequenceCanceled(TapTarget lastTarget) {
+            }
+        }).start();
     }
 
     private void setAvatars() {
@@ -139,6 +199,22 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse(getString(R.string.instagram_url)));
             startActivity(intent);
             motionLayout.transitionToStart();
+
+        });
+
+        findViewById(R.id.navigation_rule).setOnClickListener(v -> {
+            showRulesDialog();
+            motionLayout.transitionToStart();
+
+        });
+        findViewById(R.id.navigation_about).setOnClickListener(v -> {
+            navController.navigate(R.id.action_global_aboutFragment);
+            motionLayout.transitionToStart();
+
+        });
+        findViewById(R.id.navigation_help).setOnClickListener(v -> {
+            motionLayout.transitionToStart();
+            helpInfo();
 
         });
     }
@@ -329,11 +405,11 @@ public class MainActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible",false).findAll().size();
+        int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
         int range = remaining / (10 - passed);
         if (range > 0) {
             db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible",false).limit(range).findAll();
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).limit(range).findAll();
                 questions.setBoolean("visible", true);
             });
             updateTime(nowDate);
@@ -352,18 +428,18 @@ public class MainActivity extends AppCompatActivity {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
         if (passed == 9) {
             db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer","-1").and().equalTo("visible", false).findAll();
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll();
                 questions.setBoolean("visible", true);
             });
             updateTime(nowDate);
             Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
             sendBroadcast(refreshIntent);
         } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
-            int remaining = db.where(QuestionModel.class).equalTo("userAnswer","-1").and().equalTo("visible", false).findAll().size();
+            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
             int range = remaining / (10 - passed);
             if (range > 0) {
                 db.executeTransaction(realm -> {
-                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer","-1").and().equalTo("visible", false).limit(range).findAll();
+                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).limit(range).findAll();
                     questions.setBoolean("visible", true);
                 });
                 updateTime(nowDate);
@@ -559,6 +635,16 @@ public class MainActivity extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
         }
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    }
+
+    private void showRulesDialog() {
+        RulesDialog dialog = new RulesDialog(this);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.CENTER);

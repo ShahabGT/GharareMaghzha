@@ -2,8 +2,10 @@ package ir.ghararemaghzha.game.classes;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -14,15 +16,15 @@ public class MySharedPreference {
     private static SharedPreferences sharedPreferences;
 
 
-    public static MySharedPreference getInstance(Context context){
-        if (instance==null) {
+    public static MySharedPreference getInstance(Context context) {
+        if (instance == null) {
             instance = new MySharedPreference(context);
         }
 
         return instance;
     }
 
-    private MySharedPreference(Context context){
+    private MySharedPreference(Context context) {
         try {
             MasterKey masterKey = new MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build();
             sharedPreferences = EncryptedSharedPreferences.create(
@@ -37,149 +39,177 @@ public class MySharedPreference {
 
     }
 
-    public void clear(){
+    public void clear() {
         String fbToken = getFbToken();
         sharedPreferences.edit().clear().apply();
         setFbToken(fbToken);
+        setFirstTime();
     }
 
-    public void setAccessToken(String accessToken){
-        sharedPreferences.edit().putString("accessToken",accessToken).apply();
+    public boolean isFirstTime() {
+        return sharedPreferences.getBoolean("isFirstTime", true);
     }
-    public String getAccessToken(){
-        return  sharedPreferences.getString("accessToken","");
-    }
-
-    public void setUsername(String username){
-        sharedPreferences.edit().putString("username",username).apply();
-    }
-    public String getUsername(){
-        return  sharedPreferences.getString("username","");
+    public void setFirstTime(){
+        sharedPreferences.edit().putBoolean("isFirstTime", false).apply();
     }
 
-    public void setNumber(String number){
-        sharedPreferences.edit().putString("number",number).apply();
-    }
-    public String getNumber(){
-        return  sharedPreferences.getString("number","");
+    public void setAccessToken(String accessToken) {
+        sharedPreferences.edit().putString("accessToken", accessToken).apply();
     }
 
-    public void setUserId(String userId){
-        sharedPreferences.edit().putString("userId",userId).apply();
-    }
-    public String getUserId(){
-        return  sharedPreferences.getString("userId","");
+    public String getAccessToken() {
+        return sharedPreferences.getString("accessToken", "");
     }
 
-    public void setUserCode(String userCode){
-        sharedPreferences.edit().putString("userCode",userCode).apply();
-    }
-    public String getUserCode(){
-        return  sharedPreferences.getString("userCode","");
+    public void setUsername(String username) {
+        sharedPreferences.edit().putString("username", username).apply();
     }
 
-    public void setFbToken(String fbToken){
-        sharedPreferences.edit().putString("fbToken",fbToken).apply();
-    }
-    public String getFbToken(){
-        return  sharedPreferences.getString("fbToken","");
+    public String getUsername() {
+        return sharedPreferences.getString("username", "");
     }
 
-    public void setScore(String score){
-        sharedPreferences.edit().putString("score",score).apply();
-    }
-    public String getScore(){
-        return  sharedPreferences.getString("score","0");
+    public void setNumber(String number) {
+        sharedPreferences.edit().putString("number", number).apply();
     }
 
-    public void setPlan(String plan){
-        sharedPreferences.edit().putString("plan",plan).apply();
-    }
-    public String getPlan(){
-        return  sharedPreferences.getString("plan","");
+    public String getNumber() {
+        return sharedPreferences.getString("number", "");
     }
 
-    public void setDaysPassed(String daysPassed){
-        sharedPreferences.edit().putString("daysPassed",daysPassed).apply();
-    }
-    public String getDaysPassed(){
-        return  sharedPreferences.getString("daysPassed","-1");
+    public void setUserId(String userId) {
+        sharedPreferences.edit().putString("userId", userId).apply();
     }
 
-    public void setLastUpdate(int lastUpdate){
-        sharedPreferences.edit().putInt("lastUpdate",lastUpdate).apply();
-    }
-    public int getLastUpdate(){
-        return  sharedPreferences.getInt("lastUpdate",0);
+    public String getUserId() {
+        return sharedPreferences.getString("userId", "");
     }
 
-    public void setLastUpdateChat(String lastUpdate){
-        sharedPreferences.edit().putString("lastUpdateChat",lastUpdate).apply();
-    }
-    public String getLastUpdateChat(){
-        return  sharedPreferences.getString("lastUpdateChat","0");
+    public void setUserCode(String userCode) {
+        sharedPreferences.edit().putString("userCode", userCode).apply();
     }
 
-    public void setUserBday(String UserBday){
-        sharedPreferences.edit().putString("UserBday",UserBday).apply();
-    }
-    public String getUserBday(){
-        return  sharedPreferences.getString("UserBday","");
+    public String getUserCode() {
+        return sharedPreferences.getString("userCode", "");
     }
 
-    public void setUserSex(String UserSex){
-        sharedPreferences.edit().putString("UserSex",UserSex).apply();
-    }
-    public String getUserSex(){
-        return  sharedPreferences.getString("UserSex","");
+    public void setFbToken(String fbToken) {
+        sharedPreferences.edit().putString("fbToken", fbToken).apply();
     }
 
-    public void setUserEmail(String Email){
-        sharedPreferences.edit().putString("Email",Email).apply();
-    }
-    public String getUserEmail(){
-        return  sharedPreferences.getString("Email","");
+    public String getFbToken() {
+        return sharedPreferences.getString("fbToken", "");
     }
 
-    public void setUserInvite(String invite){
-        sharedPreferences.edit().putString("invite",invite).apply();
-    }
-    public String getUserInvite(){
-        return  sharedPreferences.getString("invite","");
+    public void setScore(String score) {
+        sharedPreferences.edit().putString("score", score).apply();
     }
 
-    public void setUserAvatar(String Avatar){
-        sharedPreferences.edit().putString("Avatar",Avatar).apply();
-    }
-    public String getUserAvatar(){
-        return  sharedPreferences.getString("Avatar","");
+    public String getScore() {
+        return sharedPreferences.getString("score", "0");
     }
 
-    public void setUnreadChats(int num){
-        sharedPreferences.edit().putInt("chats",num).apply();
-    }
-    public int getUnreadChats(){
-        return  sharedPreferences.getInt("chats",0);
+    public void setPlan(String plan) {
+        sharedPreferences.edit().putString("plan", plan).apply();
     }
 
-    public void setBooster(int booster){
-        sharedPreferences.edit().putInt("booster",booster).apply();
-    }
-    public int getBooster(){
-        return  sharedPreferences.getInt("booster",0);
+    public String getPlan() {
+        return sharedPreferences.getString("plan", "");
     }
 
-    public void setBoosterDate(String boosterDate){
-        sharedPreferences.edit().putString("boosterDate",boosterDate).apply();
-    }
-    public String getBoosterDate(){
-        return  sharedPreferences.getString("boosterDate","");
+    public void setDaysPassed(String daysPassed) {
+        sharedPreferences.edit().putString("daysPassed", daysPassed).apply();
     }
 
-    public void setBoosterValue(float boosterValue){
-        sharedPreferences.edit().putFloat("boosterValue",boosterValue).apply();
+    public String getDaysPassed() {
+        return sharedPreferences.getString("daysPassed", "-1");
     }
-    public float getBoosterValue(){
-        return  sharedPreferences.getFloat("boosterValue",1f);
+
+    public void setLastUpdate(int lastUpdate) {
+        sharedPreferences.edit().putInt("lastUpdate", lastUpdate).apply();
+    }
+
+    public int getLastUpdate() {
+        return sharedPreferences.getInt("lastUpdate", 0);
+    }
+
+    public void setLastUpdateChat(String lastUpdate) {
+        sharedPreferences.edit().putString("lastUpdateChat", lastUpdate).apply();
+    }
+
+    public String getLastUpdateChat() {
+        return sharedPreferences.getString("lastUpdateChat", "0");
+    }
+
+    public void setUserBday(String UserBday) {
+        sharedPreferences.edit().putString("UserBday", UserBday).apply();
+    }
+
+    public String getUserBday() {
+        return sharedPreferences.getString("UserBday", "");
+    }
+
+    public void setUserSex(String UserSex) {
+        sharedPreferences.edit().putString("UserSex", UserSex).apply();
+    }
+
+    public String getUserSex() {
+        return sharedPreferences.getString("UserSex", "");
+    }
+
+    public void setUserEmail(String Email) {
+        sharedPreferences.edit().putString("Email", Email).apply();
+    }
+
+    public String getUserEmail() {
+        return sharedPreferences.getString("Email", "");
+    }
+
+    public void setUserInvite(String invite) {
+        sharedPreferences.edit().putString("invite", invite).apply();
+    }
+
+    public String getUserInvite() {
+        return sharedPreferences.getString("invite", "");
+    }
+
+    public void setUserAvatar(String Avatar) {
+        sharedPreferences.edit().putString("Avatar", Avatar).apply();
+    }
+
+    public String getUserAvatar() {
+        return sharedPreferences.getString("Avatar", "");
+    }
+
+    public void setUnreadChats(int num) {
+        sharedPreferences.edit().putInt("chats", num).apply();
+    }
+
+    public int getUnreadChats() {
+        return sharedPreferences.getInt("chats", 0);
+    }
+
+    public void setBooster(int booster) {
+        sharedPreferences.edit().putInt("booster", booster).apply();
+    }
+
+    public int getBooster() {
+        return sharedPreferences.getInt("booster", 0);
+    }
+
+    public void setBoosterDate(String boosterDate) {
+        sharedPreferences.edit().putString("boosterDate", boosterDate).apply();
+    }
+
+    public String getBoosterDate() {
+        return sharedPreferences.getString("boosterDate", "");
+    }
+
+    public void setBoosterValue(float boosterValue) {
+        sharedPreferences.edit().putFloat("boosterValue", boosterValue).apply();
+    }
+
+    public float getBoosterValue() {
+        return sharedPreferences.getFloat("boosterValue", 1f);
     }
 }
