@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textview.MaterialTextView;
+
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.BuyInterface;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -41,7 +43,7 @@ public class BuyDialog extends Dialog {
     }
 
     private MaterialButton buy, cancel, giftcodeBtn, giftcodeCheck;
-    private TextView tAmount, tTitle, tDiscountAmount, tDiscountTitle;
+    private MaterialTextView tAmount, tTitle, tDiscountAmount, tDiscountTitle;
     private EditText giftcode;
     private LinearLayout linearLayout;
 

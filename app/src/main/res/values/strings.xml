@@ -40,6 +40,8 @@
     <string name="registerfragment_text">لطفا اطلاعات زیر را تکمیل نمایید تا کد
 فعالسازی ثبت نام برای شما ارسال شود.</string>
     <string name="registerfragment_login">حساب کاربری دارید؟  وارد شوید!</string>
+    <string name="registerfragment_rules">پذیرش قوانین و مقررات قرار مغزها</string>
+    <string name="registerfragment_rules_error">در صورت عدم پذیرش قوانین و مقررات، امکان ثبت نام وجود ندارد</string>
 
 
     <string name="verify_wrong_code">کد وارد شده صحیح نیست!</string>

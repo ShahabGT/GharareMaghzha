@@ -68,7 +68,8 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/reg_title"
-        style="@style/TextAppearance.AppCompat.Large"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="18dp"
@@ -80,7 +81,8 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/reg_text"
-        style="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        style="@style/TextAppearance.AppCompat.Small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="18dp"
@@ -121,7 +123,9 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:hint="@string/general_number"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -141,6 +145,33 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/reg_rules_layout"
+        app:layout_constraintTop_toBottomOf="@id/reg_number_layout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:textColor="@color/black"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:id="@+id/reg_rules_text"
+            android:text="سلام عشقولم"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:id="@+id/reg_rules_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorPrimary" />
+
+
+    </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/reg_verify"
         style="@style/TextAppearance.AppCompat.Medium"
@@ -153,7 +184,7 @@
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reg_number_layout" />
+        app:layout_constraintTop_toBottomOf="@id/reg_rules_layout" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/reg_login"
@@ -162,7 +193,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="18dp"
         android:fontFamily="@font/vazir"
-        android:text="@string/registerfragment_login"
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

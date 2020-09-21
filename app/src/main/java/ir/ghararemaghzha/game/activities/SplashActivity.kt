@@ -1,6 +1,8 @@
 package ir.ghararemaghzha.game.activities
 
+import android.animation.ObjectAnimator
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +17,8 @@ import ir.ghararemaghzha.game.classes.MySharedPreference
 
 class SplashActivity : AppCompatActivity() {
 
+    private lateinit var mediaPlayer: MediaPlayer;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
@@ -27,17 +31,34 @@ class SplashActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_splash)
 
+        ObjectAnimator.ofFloat(findViewById(R.id.splash_logo),"Alpha",0f,1f).setDuration(1300).start()
+        ObjectAnimator.ofFloat(findViewById(R.id.splash_text),"Alpha",0f,1f).setDuration(1300).start()
+
+
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.intro)
+        mediaPlayer.start()
+    }
+
+    override fun onResume() {
+        super.onResume()
         Handler(Looper.getMainLooper()).postDelayed({
             val userId = MySharedPreference.getInstance(this).userId
 
             if (userId.isEmpty())
                 startActivity(Intent(this, RegisterActivity::class.java))
-             else
+            else
                 startActivity(Intent(this, MainActivity::class.java))
 
             this@SplashActivity.finish()
-        }, 500)
+        }, 2000)
+
     }
 
     override fun onBackPressed() {}
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
 }

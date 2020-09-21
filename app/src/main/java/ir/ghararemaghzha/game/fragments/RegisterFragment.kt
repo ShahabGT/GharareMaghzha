@@ -3,15 +3,20 @@ package ir.ghararemaghzha.game.fragments
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.*
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
@@ -26,6 +31,7 @@ import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
+import ir.ghararemaghzha.game.dialogs.RulesDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +42,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private lateinit var act: FragmentActivity
     private val resolveHint = 521
     private lateinit var login: MaterialTextView
+    private lateinit var ruleText: MaterialTextView
+    private lateinit var ruleCheck: CheckBox
     private lateinit var number: TextInputEditText
     private lateinit var name: TextInputEditText
     private lateinit var verify: MaterialButton
@@ -58,6 +66,32 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         number = v.findViewById(R.id.reg_number)
         verify = v.findViewById(R.id.reg_verify)
         login = v.findViewById(R.id.reg_login)
+        ruleText = v.findViewById(R.id.reg_rules_text)
+        ruleCheck = v.findViewById(R.id.reg_rules_check)
+
+
+        val tradeMarkText = ctx.getString(R.string.registerfragment_rules)
+        val spannableString = SpannableString(tradeMarkText)
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                showRulesDialog()
+            }
+
+            @Suppress("DEPRECATION")
+            override fun updateDrawState(ds: TextPaint) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    ds.color = resources.getColor(R.color.red, null)
+                else
+                    ds.color = resources.getColor(R.color.red)
+
+                ds.isUnderlineText = true
+            }
+        }
+        spannableString.setSpan(clickableSpan, 0, tradeMarkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ruleText.text = spannableString
+        ruleText.movementMethod = LinkMovementMethod.getInstance()
+
+
 
         if (loginNumber.isEmpty()) {
             try {
@@ -91,7 +125,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             val nu = number.text.toString()
             val na = name.text.toString()
 
-            if (nu.length < 11 || !nu.startsWith("09")) {
+            if(!ruleCheck.isChecked) {
+                Toast.makeText(ctx, R.string.registerfragment_rules_error, Toast.LENGTH_SHORT).show()
+            }else if (nu.length < 11 || !nu.startsWith("09")) {
                 Toast.makeText(ctx, R.string.general_number_error, Toast.LENGTH_SHORT).show()
             } else if (na.length < 6) {
                 Toast.makeText(ctx, R.string.general_name_error, Toast.LENGTH_SHORT).show()
@@ -104,7 +140,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     CoroutineScope(Dispatchers.IO).launch {
                         doRegister(na, nu)
                     }
-                }else
+                } else
                     Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
 
 
@@ -112,9 +148,19 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         }
 
-        login.setOnClickListener {view?.findNavController()!!.popBackStack() }
+        login.setOnClickListener { view?.findNavController()!!.popBackStack() }
 
 
+    }
+
+    private fun showRulesDialog() {
+        val dialog = RulesDialog(ctx)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+        dialog.window?.setGravity(Gravity.CENTER)
+        dialog.show()
+        val window = dialog.window
+        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
     }
 
     private fun requestHint() {
@@ -151,8 +197,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     SmsRetriever.getClient(act).startSmsRetriever()
                     val b = Bundle()
                     b.putString("number", number)
-                   // navController.navigate(R.id.action_registerFragment_to_verifyFragment)
-                    view?.findNavController()!!.navigate(R.id.action_registerFragment_to_verifyFragment,b)
+                    // navController.navigate(R.id.action_registerFragment_to_verifyFragment)
+                    view?.findNavController()!!.navigate(R.id.action_registerFragment_to_verifyFragment, b)
 
                 }
             }
