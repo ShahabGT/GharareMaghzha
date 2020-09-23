@@ -38,6 +38,7 @@
             android:id="@+id/question_music"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:elevation="10dp"
             android:background="@drawable/round"
             android:clickable="true"
             android:focusable="true"
@@ -116,8 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
-
-                android:text="score"
+                android:text="1500"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/question_score_img"
@@ -172,6 +172,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:progress="100" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/question_progress_text"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/vazir"
+        android:text="20"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/question_progress_bar"
+        app:layout_constraintLeft_toLeftOf="@id/question_progress_bar"
+        app:layout_constraintRight_toRightOf="@id/question_progress_bar"
+        app:layout_constraintTop_toTopOf="@id/question_progress_bar" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/question_question_card"
@@ -198,7 +210,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="right"
-                android:text="@string/question_points"
+                android:text="امتیاز سوال:"
                 android:textColor="@color/black"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -210,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="right"
-                android:text="@string/question_remaining"
+                android:text="سوالات باقی مانده:"
                 android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -242,18 +254,7 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/question_progress_text"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/vazir"
-        android:text="20"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/question_progress_bar"
-        app:layout_constraintLeft_toLeftOf="@id/question_progress_bar"
-        app:layout_constraintRight_toRightOf="@id/question_progress_bar"
-        app:layout_constraintTop_toTopOf="@id/question_progress_bar" />
+
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/question_answer1_card"

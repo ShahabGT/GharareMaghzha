@@ -199,7 +199,7 @@ public class Utils {
     }
 
     public static void showInternetError(Context context, RetryInterface retry) {
-        NoInternetDialog dialog = new NoInternetDialog(context, retry);
+        NoInternetDialog dialog = new NoInternetDialog(context,retry);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

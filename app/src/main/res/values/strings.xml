@@ -257,6 +257,22 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="tap_target_menu_title">منو</string>
     <string name="tap_target_menu_des">انتخاب های بیشتر شامل تاریخچه خرید، ارتباط پشتیبانی، معرفی به دوستان و... را در این این قسمت مشاهده کنید</string>
 
+    <string name="tap_target_question_score_title">امتیاز</string>
+    <string name="tap_target_question_score_des">میزان امتیاز شما در این دوره از مسابقه</string>
+    <string name="tap_target_question_music_title">موسیقی</string>
+    <string name="tap_target_question_music_des">فعال/غیرفعال کردن موسیقی پس زمینه</string>
+    <string name="tap_target_question_next_title">سوال بعدی</string>
+    <string name="tap_target_question_next_des">فعال/غیرفعال کردن نمایش خودار سوال بعدی</string>
+    <string name="tap_target_question_booster_title">نیترو امتیاز</string>
+    <string name="tap_target_question_booster_des">در صورت خرید نیترو امتیاز این گزینه نمایش داده خواهد شد و امتیازات شما در هر سوال بیشتر خواهد شد</string>
+    <string name="tap_target_question_time_title">زمان</string>
+    <string name="tap_target_question_time_des">نمایش میزان زمان باقیمانده برای هر سوال، در صورت اتمام زمان جواب دادن به سوال امکانپذیر نیست</string>
+    <string name="tap_target_question_point_title">امتیاز سوال</string>
+    <string name="tap_target_question_point_des">نمایش امتیاز سوال جاری، در صورت درست جواب دادن امتیاز این سوال به امتیاز کلی شما اضافه میشود</string>
+    <string name="tap_target_question_question_title">سوالات باقیمانده</string>
+    <string name="tap_target_question_question_des">سوالات باقیمانده روز جاری شما</string>
+    <string name="tap_target_question_next_question_title">سوال بعدی</string>
+    <string name="tap_target_question_next_question_des">نمایش سوال بعدی</string>
 
     <string name="rules_title">قوانین و مقررات</string>
 
@@ -264,5 +280,7 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="about_trademark1">تمامی حقوق این محصول متعلق به \n شرکت تاجران نویان توسعه می باشد</string>
     <string name="about_trademark2">توسعه دهنده و برنامه نویس سمت سرور: شهاب عظیمی</string>
     <string name="about_trademark3">ورژن %s ، 1399</string>
+
+    <string name="info_btn">بستن</string>
 
 </resources>

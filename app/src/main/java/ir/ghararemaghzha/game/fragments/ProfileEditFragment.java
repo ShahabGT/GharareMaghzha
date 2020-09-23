@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.util.Calendar;
 
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
@@ -57,7 +58,6 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
     private ConstraintLayout loading;
 
     private boolean uploading;
-    private InstagramPicker in;
 
 
     public ProfileEditFragment() {
@@ -80,7 +80,6 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.profile_edit_subtitle);
 
         uploading = false;
-        in = new InstagramPicker(activity);
 
         name = v.findViewById(R.id.profile_name);
         invite = v.findViewById(R.id.profile_invite);
@@ -129,20 +128,23 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
     }
 
     private void onClicks() {
-        avatarChange.setOnClickListener(v ->
-                in.show('1', '1', address -> {
-                    try {
-                        if (Utils.checkInternet(activity)) {
-                            if (!uploading) {
-                                uploading = true;
-                                changeAvatar(Uri.parse(address));
-                            }
-                        } else
-                            Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                })
+        avatarChange.setOnClickListener(v -> {
+                    InstagramPicker in = new InstagramPicker(activity);
+
+                    in.show('1', '1', address -> {
+                        try {
+                            if (Utils.checkInternet(activity)) {
+                                if (!uploading) {
+                                    uploading = true;
+                                    changeAvatar(Uri.parse(address));
+                                }
+                            } else
+                                Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
         );
         avatarRemove.setOnClickListener(v -> {
             if (Utils.checkInternet(activity)) {
@@ -316,6 +318,7 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
                             .circleCrop()
                             .placeholder(R.drawable.placeholder)
                             .into(avatar);
+                    MainActivity.setAvatars(activity);
                 } else if (response.code() == 401) {
                     Utils.logout(activity, true);
                 } else {

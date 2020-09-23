@@ -44,6 +44,7 @@ public class MySharedPreference {
         sharedPreferences.edit().clear().apply();
         setFbToken(fbToken);
         setFirstTime();
+        setFirstTimeQuestion();
     }
 
     public boolean isFirstTime() {
@@ -51,6 +52,12 @@ public class MySharedPreference {
     }
     public void setFirstTime(){
         sharedPreferences.edit().putBoolean("isFirstTime", false).apply();
+    }
+    public boolean isFirstTimeQuestion() {
+        return sharedPreferences.getBoolean("isFirstTimeQuestion", true);
+    }
+    public void setFirstTimeQuestion(){
+        sharedPreferences.edit().putBoolean("isFirstTimeQuestion", false).apply();
     }
 
     public void setAccessToken(String accessToken) {

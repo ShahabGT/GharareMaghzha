@@ -1,6 +1,7 @@
 package ir.ghararemaghzha.game.activities;
 
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -154,18 +155,18 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void setAvatars() {
-        Glide.with(this)
-                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
+    public static void setAvatars(Activity activity) {
+        Glide.with(activity)
+                .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
-                .into((ImageView) findViewById(R.id.navigation_avatar));
+                .into((ImageView) activity.findViewById(R.id.navigation_avatar));
 
-        Glide.with(this)
-                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
+        Glide.with(activity)
+                .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
-                .into(avatar);
+                .into((ImageView) activity.findViewById(R.id.toolbar_avatar));
     }
 
     private void navigationDrawer() {
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
             MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
         }
-        setAvatars();
+        setAvatars(this);
         Utils.removeNotification(this);
         updateMessages();
         checkTime();
@@ -301,9 +302,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            verify();
-
-
                             int serverCount = Integer.parseInt(response.body().getUserQuestions());
 
                             if (!Utils.isTimeAcceptable(response.body().getTime())) {
@@ -312,10 +310,10 @@ public class MainActivity extends AppCompatActivity {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
 
                                 int lastUpdate = 0;
-                                if (!response.body().getLastUpdate().isEmpty())
+                                if (response.body().getLastUpdate()!=null && !response.body().getLastUpdate().isEmpty())
                                     lastUpdate = Integer.parseInt(response.body().getLastUpdate());
                                 updateDatabase(serverCount, lastUpdate);
-
+                                verify();
                             }
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this, true);

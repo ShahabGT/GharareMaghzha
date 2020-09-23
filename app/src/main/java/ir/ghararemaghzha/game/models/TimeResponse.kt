@@ -7,7 +7,7 @@ data class TimeResponse(
         val message: String,
         val time: String,
         val passed: String,
-        @SerializedName("last_update") val lastUpdate: String,
+        @SerializedName("last_update") val lastUpdate: String?,
         @SerializedName("user_questions") val userQuestions: String,
 )
 

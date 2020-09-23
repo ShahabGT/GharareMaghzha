@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
@@ -72,10 +74,92 @@ public class QuestionActivity extends AppCompatActivity {
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_question);
-        init();
+
+        if (MySharedPreference.getInstance(this).isFirstTimeQuestion())
+            helpInfo();
+        else
+            init();
 
 
     }
+
+    private void helpInfo() {
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.question_score_card), getString(R.string.tap_target_question_score_title), getString(R.string.tap_target_question_score_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_music), getString(R.string.tap_target_question_music_title), getString(R.string.tap_target_question_music_des))
+                                .cancelable(false)
+                                .dimColor(R.color.black)
+                                .tintTarget(false)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_autonext), getString(R.string.tap_target_question_next_title), getString(R.string.tap_target_question_next_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_booster), getString(R.string.tap_target_question_booster_title), getString(R.string.tap_target_question_booster_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_progress_text), getString(R.string.tap_target_question_time_title), getString(R.string.tap_target_question_time_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_points), getString(R.string.tap_target_question_point_title), getString(R.string.tap_target_question_point_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_remaining), getString(R.string.tap_target_question_question_title), getString(R.string.tap_target_question_question_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_next), getString(R.string.tap_target_question_next_question_title), getString(R.string.tap_target_question_next_question_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black)
+                ).listener(new TapTargetSequence.Listener() {
+
+            @Override
+            public void onSequenceFinish() {
+                MySharedPreference.getInstance(QuestionActivity.this).setFirstTimeQuestion();
+                init();
+            }
+
+            @Override
+            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+            }
+
+            @Override
+            public void onSequenceCanceled(TapTarget lastTarget) {
+            }
+        }).start();
+    }
+
 
     private void init() {
         if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
@@ -502,11 +586,12 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (db != null) db.close();
-        soundPool.release();
-        soundPool = null;
-        mediaPlayer.release();
-        mediaPlayer = null;
+        if (soundPool != null && mediaPlayer != null) {
+            soundPool.release();
+            soundPool = null;
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
 
     }
 }
