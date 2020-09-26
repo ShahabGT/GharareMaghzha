@@ -39,7 +39,7 @@ public class RulesDialog extends Dialog {
     private String getText(){
         InputStream inputStream = context.getResources().openRawResource(R.raw.rules);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder text = new StringBuilder("");
+        StringBuilder text = new StringBuilder();
         String line;
         try {
             while ( (line = reader.readLine()) != null) {

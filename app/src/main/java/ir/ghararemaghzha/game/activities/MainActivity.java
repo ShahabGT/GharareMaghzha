@@ -32,6 +32,7 @@ import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,6 +65,9 @@ import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REF
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+
     private TimeDialog timeDialog;
     private ImageView newChat, newToolbar;
     private boolean doubleBackToExitPressedOnce;
@@ -92,10 +96,18 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         init();
         if (MySharedPreference.getInstance(this).isFirstTime())
             helpInfo();
 
+    }
+
+    private void firebaseDebug(String result){
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "verify");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, result);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
     }
 
     private void helpInfo() {
@@ -222,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void init() {
+
         bnv = findViewById(R.id.main_bnv);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
         if (navHostFragment != null)
@@ -343,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<VerifyResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<VerifyResponse> call, @NonNull Response<VerifyResponse> response) {
+                        firebaseDebug(response.body().getResult());
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             int newPlan = Integer.parseInt(response.body().getUserPlan());
                             int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
@@ -392,6 +406,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<VerifyResponse> call, @NonNull Throwable t) {
+                        firebaseDebug("failed");
+
                         Utils.showInternetError(MainActivity.this, () -> verify());
 
                     }

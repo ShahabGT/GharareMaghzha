@@ -67,6 +67,7 @@
                 <ImageView
                     android:id="@+id/about_telegram"
                     android:layout_width="50dp"
+                    android:visibility="gone"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/telegram" />

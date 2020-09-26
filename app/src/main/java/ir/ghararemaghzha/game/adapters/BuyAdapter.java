@@ -60,15 +60,12 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
         PlanModel model = data.get(position);
         if (model != null) {
             int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
-            if (passed >= 10) {
-                h.buy.setText(R.string.profile_time_end);
-                h.buy.setEnabled(false);
-            }
+
             if (h.viewType == LIST_TYPE) {
                 h.title.setText(context.getString(R.string.buy_plan_title, model.getPlanCount()));
                 h.price.setText(context.getString(R.string.buy_price, Utils.moneySeparator(model.getPlanPrice())));
 
-                h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null));
+                h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null, false));
                 int userPlan = Integer.parseInt(MySharedPreference.getInstance(context).getPlan());
                 switch (position) {
                     case 1:
@@ -76,6 +73,11 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                         h.price.setTextColor(context.getResources().getColor(R.color.dark1));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark1));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark1));
+                        if (passed > 9 || passed < 0) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else
                         if (userPlan > 4) {
                             h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                             h.buy.setEnabled(false);
@@ -91,7 +93,11 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                         h.price.setTextColor(context.getResources().getColor(R.color.dark2));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark2));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark2));
-                        if (userPlan > 3) {
+                        if (passed > 9 || passed < 0) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else if (userPlan > 3) {
                             h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                             h.buy.setEnabled(false);
                             h.buy.setClickable(false);
@@ -106,7 +112,11 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                         h.price.setTextColor(context.getResources().getColor(R.color.dark3));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark3));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark3));
-                        if (userPlan > 2) {
+                        if (passed > 9 || passed < 0) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else if (userPlan > 2) {
                             h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                             h.buy.setEnabled(false);
                             h.buy.setClickable(false);
@@ -121,7 +131,11 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                         h.price.setTextColor(context.getResources().getColor(R.color.dark4));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark4));
                         h.buy.setBackgroundColor(context.getResources().getColor(R.color.dark4));
-                        if (userPlan > 1) {
+                        if (passed > 9 || passed < 0) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else if (userPlan > 1) {
                             h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                             h.buy.setEnabled(false);
                             h.buy.setClickable(false);
@@ -135,7 +149,11 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                         ImageViewCompat.setImageTintList(h.bg, ColorStateList.valueOf(context.getResources().getColor(R.color.light5)));
                         h.price.setTextColor(context.getResources().getColor(R.color.dark5));
                         h.title.setTextColor(context.getResources().getColor(R.color.dark5));
-                        if (userPlan > 0) {
+                        if (passed > 9 || passed < 0) {
+                            h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                            h.buy.setEnabled(false);
+                            h.buy.setClickable(false);
+                        } else if (userPlan > 0) {
                             h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                             h.buy.setEnabled(false);
                             h.buy.setClickable(false);
@@ -149,7 +167,11 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                 }
 
             } else {
-                if (MySharedPreference.getInstance(context).getBoosterValue() != 1f) {
+                if (passed > 9 || passed < 0) {
+                    h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
+                    h.buy.setEnabled(false);
+                    h.buy.setClickable(false);
+                } else if (MySharedPreference.getInstance(context).getBoosterValue() != 1f) {
                     h.title.setText(context.getString(R.string.buy_booster_title_inuse));
                     h.price.setText(context.getString(R.string.buy_price, "0"));
                     h.buy.setVisibility(View.GONE);
@@ -162,7 +184,7 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                     h.buy.setVisibility(View.GONE);
                 }
 
-                h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null));
+                h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null, true));
             }
 
         }

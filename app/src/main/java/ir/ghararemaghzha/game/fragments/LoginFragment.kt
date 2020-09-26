@@ -102,7 +102,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         register.setOnClickListener {
-        //    navController.navigate(R.id.action_loginFragment_to_registerFragment)
             view?.findNavController()!!.navigate(R.id.action_loginFragment_to_registerFragment)
         }
 

@@ -36,6 +36,7 @@
 
     <color name="light4">#BBDEFB</color>
     <color name="dark4">#1565C0</color>
+    <color name="alpha4">#4D1565C0</color>
 
     <color name="light5">#FFCDD2</color>
     <color name="dark5">#AD1457</color>

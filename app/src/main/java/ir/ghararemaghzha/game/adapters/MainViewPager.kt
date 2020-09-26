@@ -1,4 +1,4 @@
-package ir.ghararemaghzha.game.adapters;
+package ir.ghararemaghzha.game.adapters
 
 import android.content.Intent
 import android.net.Uri

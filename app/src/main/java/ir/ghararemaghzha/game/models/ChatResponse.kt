@@ -1,4 +1,4 @@
-package ir.ghararemaghzha.game.models;
+package ir.ghararemaghzha.game.models
 
 
 data class ChatResponse(

@@ -1,11 +1,7 @@
 package ir.ghararemaghzha.game.adapters;
 
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +11,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -56,25 +52,16 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
 
         if (position < data.size()) {
             HighscoreModel model = data.get(position);
-
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-//                h.rank.getBackground().setColorFilter(new BlendModeColorFilter(context.getResources().getColor(model.getColor(), null), BlendMode.SRC_ATOP));
-//             else
-//                h.rank.getBackground().setColorFilter(context.getResources().getColor(model.getColor()), PorterDuff.Mode.SRC_ATOP);
-
-
             h.name.setText(model.getUserName());
             h.score.setText(model.getScoreCount());
             h.rank.setText(String.valueOf(position + 1));
-            h.rank2.setText(String.valueOf(position + 1));
-            if(position<5){
-                h.rank.setVisibility(View.INVISIBLE);
-                h.rank2.setVisibility(View.VISIBLE);
-            }else{
-                h.rank2.setVisibility(View.INVISIBLE);
-                h.rank.setVisibility(View.VISIBLE);
+
+            if (position < 5) {
+                h.rank.setBackground(ContextCompat.getDrawable(context, R.drawable.oval));
+            } else {
+                h.rank.setBackground(null);
             }
-            h.card.setCardBackgroundColor(context.getResources().getColor(R.color.white));
+            h.itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
             Glide.with(context)
                     .load(context.getString(R.string.avatar_url, model.getUserAvatar()))
                     .circleCrop()
@@ -83,7 +70,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
 
             h.itemView.setOnClickListener(v -> showDetailsDialog(model.getUserId()));
             if (!showUser && model.getUserId().equals(user.getUserId())) {
-                h.card.setCardBackgroundColor(context.getResources().getColor(R.color.green2));
+                h.itemView.setBackgroundColor(context.getResources().getColor(R.color.alpha4));
                 h.name.setText("شما");
 
             }
@@ -91,7 +78,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
             h.name.setText("شما");
             h.score.setText(user.getScoreCount());
             h.rank.setText(user.getUserRank());
-            h.card.setCardBackgroundColor(context.getResources().getColor(R.color.green2));
+            h.itemView.setBackgroundColor(context.getResources().getColor(R.color.alpha4));
             Glide.with(context)
                     .load(context.getString(R.string.avatar_url, user.getUserAvatar()))
                     .circleCrop()
@@ -124,19 +111,15 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView name, score, rank,rank2;
+        private MaterialTextView name, score, rank;
         private ImageView avatar;
-        private MaterialCardView card;
 
         public ViewHolder(@NonNull View v) {
             super(v);
             name = v.findViewById(R.id.highscore_row_name);
             score = v.findViewById(R.id.highscore_row_score);
             rank = v.findViewById(R.id.highscore_row_rank);
-            rank2 = v.findViewById(R.id.highscore_row_rank2);
-
             avatar = v.findViewById(R.id.highscore_row_avatar);
-            card = v.findViewById(R.id.highscore_row_card);
         }
     }
 }

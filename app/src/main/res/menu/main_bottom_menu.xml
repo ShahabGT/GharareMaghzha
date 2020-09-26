@@ -4,22 +4,22 @@
     <item
         android:title="@string/profile_title"
         android:id="@+id/menu_profile"
-        android:icon="@drawable/user"/>
+        android:icon="@drawable/ic_main_profile"/>
     <item
         android:title="@string/highscore_title"
         android:id="@+id/menu_highscore"
-        android:icon="@drawable/success"/>
+        android:icon="@drawable/ic_main_highscore"/>
     <item
         android:title="@string/start_title"
         android:id="@+id/menu_start"
-        android:icon="@drawable/questione"/>
+        android:icon="@drawable/ic_main_game"/>
     <item
         android:title="@string/buy_title"
         android:id="@+id/menu_buy"
-        android:icon="@drawable/supermarket"/>
+        android:icon="@drawable/ic_main_buy"/>
     <item
         android:title="@string/message_incoming"
         android:id="@+id/menu_message"
-        android:icon="@drawable/comment"/>
+        android:icon="@drawable/ic_main_messages"/>
 
 </menu>

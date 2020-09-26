@@ -1,6 +1,6 @@
-package ir.ghararemaghzha.game.models;
+package ir.ghararemaghzha.game.models
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
 
 
 data class GeneralResponse(

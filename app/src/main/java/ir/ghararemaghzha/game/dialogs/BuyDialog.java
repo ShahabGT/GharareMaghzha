@@ -32,14 +32,16 @@ public class BuyDialog extends Dialog {
     private BuyInterface buyInterface;
     private String influencerId="";
     private String influencerAmount="";
+    private boolean isScoreBooster;
 
 
-    public BuyDialog(@NonNull FragmentActivity context, String amount, String plan, BuyInterface buyInterface) {
+    public BuyDialog(@NonNull FragmentActivity context, String amount, String plan, BuyInterface buyInterface,boolean isScoreBooster) {
         super(context);
         this.context = context;
         this.amount = amount;
         this.plan = plan;
         this.buyInterface=buyInterface;
+        this.isScoreBooster= isScoreBooster;
     }
 
     private MaterialButton buy, cancel, giftcodeBtn, giftcodeCheck;
@@ -70,6 +72,10 @@ public class BuyDialog extends Dialog {
 
 
         tAmount.setText(context.getString(R.string.amount_model, Utils.moneySeparator(amount)));
+
+        if(isScoreBooster){
+            giftcodeBtn.setVisibility(View.GONE);
+        }
         onClicks();
     }
 
@@ -101,7 +107,7 @@ public class BuyDialog extends Dialog {
         });
 
         buy.setOnClickListener(View -> {
-            buyInterface.buy(plan,amount,influencerId,influencerAmount);
+            buyInterface.buy(plan,amount,influencerId,influencerAmount,isScoreBooster);
             dismiss();
         });
 

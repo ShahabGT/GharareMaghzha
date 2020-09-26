@@ -23,6 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 
 import ir.ghararemaghzha.game.R;
@@ -78,8 +81,8 @@ public class BuyFragment extends Fragment {
     }
 
 
-    private void showBuyDialog(String planPrice, String Plan, BuyInterface buyInterface) {
-        BuyDialog dialog = new BuyDialog(activity, planPrice, Plan, buyInterface);
+    private void showBuyDialog(String planPrice, String Plan, BuyInterface buyInterface, boolean isScoreBooster) {
+        BuyDialog dialog = new BuyDialog(activity, planPrice, Plan, buyInterface,isScoreBooster);
         dialog.setCanceledOnTouchOutside(true);
         dialog.setCancelable(true);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -108,10 +111,11 @@ public class BuyFragment extends Fragment {
 
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             adapter = new BuyAdapter(context, response.body().getData(),
-                                    (pPlan, pPrice, a, b) ->
-                                            showBuyDialog(pPrice, pPlan, (plan, amount, influencerId, influencerAmount) ->
-                                                    initBuy(plan, influencerId, influencerAmount, amount))
+                                    (pPlan, pPrice, a, b,isBooster) ->
+                                            showBuyDialog(pPrice, pPlan, (plan, amount, influencerId, influencerAmount,isScoreBooster) ->
+                                                    initBuy(plan, influencerId, influencerAmount, amount),isBooster)
                             );
+
 
                             recyclerView.setAdapter(adapter);
                         } else if (response.code() == 401) {

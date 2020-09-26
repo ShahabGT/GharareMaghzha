@@ -1,4 +1,4 @@
-package ir.ghararemaghzha.game.data;
+package ir.ghararemaghzha.game.data
 
 import ir.ghararemaghzha.game.models.*
 import retrofit2.Call

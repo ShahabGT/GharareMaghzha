@@ -14,7 +14,6 @@ import ir.ghararemaghzha.game.R;
 
 public class NewVersionDialog extends Dialog {
     private FragmentActivity context;
-    private ImageView playstore,direct;
 
 
     public NewVersionDialog(@NonNull FragmentActivity context) {
@@ -27,30 +26,26 @@ public class NewVersionDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_newversion);
 
-        playstore = findViewById(R.id.newversion_dialog_playstore);
-        direct = findViewById(R.id.newversion_dialog_direct);
         onClicks();
 
     }
 
     private void onClicks(){
-        playstore.setOnClickListener(View-> {
+        findViewById(R.id.newversion_dialog_playstore).setOnClickListener(View-> {
 
             final String appPackageName = context.getPackageName();
             try {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-            } catch (Exception e) {
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            } catch (Exception e) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
             }
 
         });
 
-        direct.setOnClickListener(v->{
+        findViewById(R.id.newversion_dialog_direct).setOnClickListener(v->{
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://ghararehmaghzha.ir/download/ghararehmaghzha.apk"));
             context.startActivity(intent);
-
-
         });
 
 

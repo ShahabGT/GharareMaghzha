@@ -40,8 +40,8 @@
         <ImageView
             android:id="@+id/newversion_dialog_playstore"
             android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/playstore"
+            android:layout_height="80dp"
+            android:src="@drawable/dl_playstore"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/newversion_dialog_direct"
@@ -50,8 +50,8 @@
         <ImageView
             android:id="@+id/newversion_dialog_direct"
             android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/direct"
+            android:layout_height="80dp"
+            android:src="@drawable/dl_direct"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toRightOf="@+id/newversion_dialog_playstore"

@@ -47,7 +47,7 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
 
     @Override
     public long getItemId(int position) {
-        return (long)getItem(position).getMessageId();
+        return getItem(position).getMessageId();
     }
 
     @Override

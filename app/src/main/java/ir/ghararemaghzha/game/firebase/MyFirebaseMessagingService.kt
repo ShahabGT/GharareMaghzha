@@ -1,4 +1,4 @@
-package ir.ghararemaghzha.game.firebase;
+package ir.ghararemaghzha.game.firebase
 
 import android.content.Intent
 import com.google.firebase.messaging.FirebaseMessagingService

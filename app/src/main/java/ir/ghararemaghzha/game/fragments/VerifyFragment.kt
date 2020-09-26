@@ -18,10 +18,10 @@ import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
 import io.realm.Realm
 import ir.ghararemaghzha.game.R
-import ir.ghararemaghzha.game.activities.MainActivity
 import ir.ghararemaghzha.game.classes.Const.FCM_TOPIC
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.Utils
@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class VerifyFragment : Fragment(R.layout.fragment_verify) {
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
     private lateinit var ctx: Context
     private lateinit var act: FragmentActivity
@@ -64,6 +65,8 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
         ctx = requireContext()
         act = requireActivity()
         if (arguments != null)
@@ -83,7 +86,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
         resend.isEnabled = false
         code = v.findViewById(R.id.verify_code)
         verify = v.findViewById(R.id.verify_verify)
-        SmsRetriever.getClient(act).startSmsRetriever()
+        SmsRetriever.getClient(act).startSmsUserConsent(null)
         initTimer()
         onClicks()
 
@@ -236,6 +239,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                         MySharedPreference.getInstance(ctx).userId = userId
                         Toast.makeText(ctx, ctx.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
+                        logEvent()
                         view?.findNavController()!!.navigate(R.id.action_verifyFragment_to_mainActivity)
                         act.finish()
 
@@ -266,5 +270,12 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     override fun onDestroy() {
         super.onDestroy()
         ctx.unregisterReceiver(rec)
+    }
+
+    private fun logEvent() {
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, userId)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, userName)
+        mFirebaseAnalytics?.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
     }
 }

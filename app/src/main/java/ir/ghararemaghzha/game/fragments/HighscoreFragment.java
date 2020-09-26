@@ -40,7 +40,6 @@ import retrofit2.Response;
 public class HighscoreFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
-    private SwipeRefreshLayout refreshLayout;
     private ConstraintLayout loading;
     private RecyclerView recyclerView;
     private HighscoreAdapter adapter;
@@ -81,20 +80,9 @@ public class HighscoreFragment extends Fragment {
 
         loading = v.findViewById(R.id.highscore_loading);
 
-//        refreshLayout = v.findViewById(R.id.highscore_refresh);
-//        refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-
         getData();
-        onClicks();
     }
 
-    private void onClicks() {
-//        refreshLayout.setOnRefreshListener(() -> {
-//            refreshLayout.setRefreshing(true);
-//            getData();
-//        });
-
-    }
 
     private void getData() {
         String number = MySharedPreference.getInstance(context).getNumber();
@@ -109,14 +97,12 @@ public class HighscoreFragment extends Fragment {
                 .enqueue(new Callback<HighscoreResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<HighscoreResponse> call, @NonNull Response<HighscoreResponse> response) {
-                     //   refreshLayout.setRefreshing(false);
                         loading.setVisibility(View.GONE);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
 
                             boolean showUser=true;
                             List<HighscoreModel> data = response.body().getData();
                             for(int i=0;i<data.size();i++){
-                              //  data.get(i).setColor(getRandomColor());
                                 if (data.get(i).getUserId().equals(response.body().getUser().getUserId())) {
                                     showUser=false;
                                 }
@@ -137,7 +123,6 @@ public class HighscoreFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Call<HighscoreResponse> call, @NonNull Throwable t) {
                         loading.setVisibility(View.GONE);
-                     //   refreshLayout.setRefreshing(false);
                         Utils.showInternetError(context, () -> getData());
 
                     }

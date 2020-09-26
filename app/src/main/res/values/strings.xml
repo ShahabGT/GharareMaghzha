@@ -195,6 +195,7 @@
     <string name="buyhistory_row_title2">نوع پکیج: نیترو امتیاز</string>
     <string name="buyhistory_row_date">تاریخ: %s</string>
     <string name="buyhistory_row_price">مبلغ: %s تومان</string>
+    <string name="buyhistory_influencer_price">مبلغ تخفیف: %s تومان</string>
     <string name="buyhistory_row_influencer">کد معرف: %s</string>
     <string name="buyhistory_row_stat">وضعیت: %s</string>
     <string name="buyhistory_row_rescode">کد پیگیری: %s</string>

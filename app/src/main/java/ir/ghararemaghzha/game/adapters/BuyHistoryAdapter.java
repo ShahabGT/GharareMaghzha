@@ -57,7 +57,7 @@ public class BuyHistoryAdapter extends RecyclerView.Adapter<BuyHistoryAdapter.Vi
             h.price.setText(context.getString(R.string.buyhistory_row_price, Utils.moneySeparator(model.getAmount())));
             if (model.getInfluencerCode() != null && !model.getInfluencerCode().isEmpty()) {
                 h.influencer.setVisibility(View.VISIBLE);
-                h.influencer.setText(context.getString(R.string.buyhistory_row_price, Utils.moneySeparator(model.getAmount())));
+                h.influencer.setText(context.getString(R.string.buyhistory_influencer_price, Utils.moneySeparator(model.getAmount())));
             } else
                 h.influencer.setVisibility(View.GONE);
 

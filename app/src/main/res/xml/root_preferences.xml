@@ -3,21 +3,21 @@
     <SwitchPreferenceCompat
         android:summary="@string/settings_music_summery"
         app:allowDividerBelow="true"
-        app:icon="@drawable/vector_music_on"
+        app:icon="@drawable/ic_settings_music"
         app:key="music"
         app:title="@string/settings_music" />
 
     <SwitchPreferenceCompat
         android:summary="@string/settings_auto_next_summery"
         app:allowDividerBelow="true"
-        app:icon="@drawable/vector_next"
+        app:icon="@drawable/ic_settings_next"
         app:key="next"
         app:title="@string/settings_auto_next" />
 
     <SwitchPreferenceCompat
         android:summary="@string/settings_notification_summery"
         app:allowDividerBelow="true"
-        app:icon="@drawable/vector_notification"
+        app:icon="@drawable/ic_settings_notification"
         app:key="notification"
         app:title="@string/settings_notification" />
 

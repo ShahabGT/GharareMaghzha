@@ -1,6 +1,6 @@
-package ir.ghararemaghzha.game.models;
+package ir.ghararemaghzha.game.models
 
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
 
 
 data class BuyHistoryModel(
@@ -13,9 +13,9 @@ data class BuyHistoryModel(
         @SerializedName("merchant_id") val merchantId:String,
         @SerializedName("user_id") val userId:String,
         @SerializedName("influencer_id") val influencerId:String,
-        @SerializedName("influencer_code") val influencerCode:String,
-        @SerializedName("influencer_name") val influencerName:String,
-        @SerializedName("influencer_amount") val influencerAmount:String,
+        @SerializedName("influencer_code") val influencerCode:String?,
+        @SerializedName("influencer_name") val influencerName:String?,
+        @SerializedName("influencer_amount") val influencerAmount:String?,
         @SerializedName("orderid") val orderId:String,
         @SerializedName("rescode") val resCode:String,
 )

@@ -24,7 +24,7 @@ class RegisterActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
-            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
         setContentView(R.layout.activity_register)
         Utils.getFbToken(this)
@@ -46,10 +46,12 @@ class RegisterActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK && data != null) {
                 val message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
                 if (message != null && message.isNotEmpty()) {
-                    val oneTimeCode = message.substring(message.length - 6)
-                    val intent = Intent("codeReceived")
-                    intent.putExtra("code", oneTimeCode)
-                    sendBroadcast(intent)
+                    if (message.contains("قرار مغزها", true)) {
+                        val oneTimeCode = message.substring(message.length - 6)
+                        val intent = Intent("codeReceived")
+                        intent.putExtra("code", oneTimeCode)
+                        sendBroadcast(intent)
+                    }
                 }
             }
         }

@@ -37,7 +37,6 @@ public class AboutFragment extends Fragment {
 
     private Context context;
     private FragmentActivity activity;
-    private MaterialTextView text,tradeMark, tradeMark2, tradeMark3;
     private ImageView telegram, instagram, website, email;
 
     @Override
@@ -53,11 +52,11 @@ public class AboutFragment extends Fragment {
     private void init(View v) {
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.about_title);
 
-        text = v.findViewById(R.id.about_text);
+        MaterialTextView text = v.findViewById(R.id.about_text);
         text.setText(getText());
-        tradeMark = v.findViewById(R.id.about_trademark1);
-        tradeMark2 = v.findViewById(R.id.about_trademark2);
-        tradeMark3 = v.findViewById(R.id.about_trademark3);
+        MaterialTextView tradeMark = v.findViewById(R.id.about_trademark1);
+        MaterialTextView tradeMark2 = v.findViewById(R.id.about_trademark2);
+        MaterialTextView tradeMark3 = v.findViewById(R.id.about_trademark3);
 
         String tradeMarkText = context.getString(R.string.about_trademark1);
         SpannableString spannableString = new SpannableString(tradeMarkText);
@@ -120,7 +119,7 @@ public class AboutFragment extends Fragment {
     private String getText() {
         InputStream inputStream = context.getResources().openRawResource(R.raw.about);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder text = new StringBuilder("");
+        StringBuilder text = new StringBuilder();
         String line;
         try {
             while ((line = reader.readLine()) != null) {

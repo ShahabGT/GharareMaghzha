@@ -17,7 +17,7 @@ import ir.ghararemaghzha.game.classes.MySharedPreference
 
 class SplashActivity : AppCompatActivity() {
 
-    private lateinit var mediaPlayer: MediaPlayer;
+    private lateinit var mediaPlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
