@@ -19,7 +19,6 @@ import ir.ghararemaghzha.game.classes.MySettingsPreference;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private SwitchPreferenceCompat music, next, notification;
     private Context context;
     private FragmentActivity activity;
 
@@ -27,11 +26,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-        ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.settings_title);
+        ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.settings_title);
 
-        v.setBackgroundResource(R.color.light_background);
-        v.setClickable(true);
-        v.setFocusable(true);
+        if (v != null) {
+            v.setBackgroundResource(R.color.light_background);
+            v.setClickable(true);
+            v.setFocusable(true);
+        }
         return v;
     }
 
@@ -41,33 +42,33 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         context = getContext();
         activity = getActivity();
 
-        music = findPreference("music");
-        next = findPreference("next");
-        notification = findPreference("notification");
+        SwitchPreferenceCompat music = findPreference("music");
+        SwitchPreferenceCompat next = findPreference("next");
+        SwitchPreferenceCompat notification = findPreference("notification");
 
-        if (music != null)
-            music.setChecked(MySettingsPreference.getInstance(getContext()).getMusic());
-        if (music != null)
+        if (music != null) {
+            music.setChecked(MySettingsPreference.getInstance(context).getMusic());
             music.setOnPreferenceChangeListener((preference, newValue) -> {
                 MySettingsPreference.getInstance(context).setMusic((boolean) newValue);
                 return true;
             });
+        }
 
-        if (notification != null)
-            notification.setChecked(MySettingsPreference.getInstance(getContext()).getNotification());
-        if (notification != null)
+        if (notification != null) {
+            notification.setChecked(MySettingsPreference.getInstance(context).getNotification());
             notification.setOnPreferenceChangeListener((preference, newValue) -> {
                 MySettingsPreference.getInstance(context).setNotification((boolean) newValue);
                 return true;
             });
+        }
 
-        if (next != null)
-            next.setChecked(MySettingsPreference.getInstance(getContext()).getAutoNext());
-        if (next != null)
+        if (next != null) {
+            next.setChecked(MySettingsPreference.getInstance(context).getAutoNext());
             next.setOnPreferenceChangeListener((preference, newValue) -> {
                 MySettingsPreference.getInstance(context).setAutoNext((boolean) newValue);
                 return true;
             });
+        }
 
 
     }

@@ -1,32 +1,26 @@
 package ir.ghararemaghzha.game.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
 import com.google.android.material.textview.MaterialTextView;
 import com.tmall.ultraviewpager.UltraViewPager;
 import com.tmall.ultraviewpager.transformer.UltraScaleTransformer;
-
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.adapters.ScoreHelperViewPager;
 
 
 public class ScoreHelperFragment extends Fragment {
 
-    private UltraViewPager ultraViewPager;
-    private Context context;
     private FragmentActivity activity;
     private NavController navController;
 
@@ -45,7 +39,6 @@ public class ScoreHelperFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_score_helper, container, false);
-        context = getContext();
         activity = getActivity();
         return v;
     }
@@ -54,12 +47,8 @@ public class ScoreHelperFragment extends Fragment {
     private void init(View v) {
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.score_helper_title);
 
-        ultraViewPager = v.findViewById(R.id.score_helper_slider);
+        UltraViewPager ultraViewPager = v.findViewById(R.id.score_helper_slider);
         ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL);
-        //   ultraViewPager.setMultiScreen(0.9f);
-        //  ultraViewPager.setRatio(0.3f);
-        //   ultraViewPager.setMaxHeight(1400);
-        //    ultraViewPager.setAutoMeasureHeight(true);
         ultraViewPager.setPageTransformer(true, new UltraScaleTransformer());
         ultraViewPager.initIndicator();
         ultraViewPager.getIndicator()

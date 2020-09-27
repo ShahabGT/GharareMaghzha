@@ -1,0 +1,21 @@
+package ir.ghararemaghzha.game.classes
+
+object Const {
+    @JvmField
+    var CHANNEL_CODE = "ghrarehmaghzha_notifications"
+
+    @JvmField
+    var NOTIFICATION_ID = 113
+
+    @JvmField
+    var FCM_TOPIC = "ghrarehmaghzha_users"
+
+    @JvmField
+    var GHARAREHMAGHZHA_BROADCAST = "ir.ghararemaghzha.game.BROADCAST"
+
+    @JvmField
+    var GHARAREHMAGHZHA_BROADCAST_REFRESH = "ir.ghararemaghzha.game.REFRESH"
+
+    @JvmField
+    var GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA = "ir.ghararemaghzha.game.Support_BROADCAST"
+}
