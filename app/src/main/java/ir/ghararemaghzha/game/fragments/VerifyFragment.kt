@@ -191,7 +191,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 MySharedPreference.getInstance(ctx).userBday = res.value.userBday
                 MySharedPreference.getInstance(ctx).userEmail = res.value.userEmail
                 MySharedPreference.getInstance(ctx).userInvite = res.value.userInvite
-                if (res.value.userAvatar.isNullOrEmpty())
+                if (!res.value.userAvatar.isNullOrEmpty())
                     MySharedPreference.getInstance(ctx).userAvatar = res.value.userAvatar
                 withContext(Dispatchers.Main) {
                     dialog = Utils.showGetDataLoading(ctx)

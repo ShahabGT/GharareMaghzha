@@ -205,7 +205,7 @@
     <string name="invite_info_text1">با معرفی هر نفر %s امتیاز دریافت کنید</string>
     <string name="invite_info_text2">سقف معرفی دوستان 10 نفر می باشد</string>
     <string name="invite_invite_title">کد معرفی شما:</string>
-    <string name="invite_star_title">فقط %d نفر مانده!</string>
+    <string name="invite_star_title">%d نفر مانده!</string>
     <string name="invite_count">%s نفر</string>
     <string name="invite_share_title">اشتراک گذاری</string>
     <string name="invite_share">اپلیکیشن قرار مغزها رو دیدی؟ حتما نصبش کن \n
@@ -230,15 +230,15 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="details_questions">%d از %d سوال</string>
     <string name="details_code">کد کاربری: %s</string>
 
-    <string name="booster_notif_title">پکیج افزایش امتیاز</string>
-    <string name="booster_notif_body">مدت زمان اعتبار پکیج افزایش امتیاز شما به پایان رسید.</string>
+    <string name="booster_notif_title">پکیج نیترو امتیاز</string>
+    <string name="booster_notif_body">مدت زمان اعتبار پکیج نیترو امتیاز شما به پایان رسید.</string>
 
-    <string name="score_helper_title">افزایش امتیاز</string>
+    <string name="score_helper_title">نیترو امتیاز</string>
     <string name="score1_title">پاسخ به سوالات</string>
     <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا 500 سوال به صورت رایگان برای شما فعال می باشد.</string>
     <string name="score1_button">ورود به صفحه سوالات</string>
     <string name="score2_title">معرفی به دوستان</string>
-    <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 100 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
+    <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 500 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
     <string name="score2_button">ورود به صفحه معرفی به دوستان</string>
     <string name="score3_title">پکیج نیترو امتیاز</string>
     <string name="score3_subtitle">با خریداری پکیج نیترو امتیاز، مقدار امتیاز هر سوال به مدت 24 ساعت یا حداکثر 1000 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 3 بار این پکیج قابل خریداری می باشد.</string>
@@ -252,11 +252,11 @@ https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
     <string name="tap_target_start_title">شروع مسابقه</string>
     <string name="tap_target_start_des">در این صفحه می توانید بازی رو شروع کنید و امتیاز خود را افزایش دهید. در ابتدا 500 سوال به صورت رایگان در اختیار شما قرار گرفته است</string>
     <string name="tap_target_buy_title">خرید</string>
-    <string name="tap_target_buy_des">در این صفحه می توانید تعداد سوالات خود را افزایش دهید. حداکثر تعداد سوال در هر دوره 3000 سوال می باشد. همچنین می توانید پکیج افزایش دهنده امتیاز 24 ساعته را خریداری نمایید</string>
+    <string name="tap_target_buy_des">در این صفحه می توانید تعداد سوالات خود را افزایش دهید. حداکثر تعداد سوال در هر دوره 3000 سوال می باشد. همچنین می توانید پکیج نیترو امتیاز 24 ساعته را خریداری نمایید</string>
     <string name="tap_target_message_title">پیام ها</string>
-    <string name="tap_target_message_des">در صفحه می توانید پیام های مدیریت را مشاهده کنید</string>
+    <string name="tap_target_message_des">در این صفحه می توانید پیام های مدیریت را مشاهده کنید</string>
     <string name="tap_target_menu_title">منو</string>
-    <string name="tap_target_menu_des">انتخاب های بیشتر شامل تاریخچه خرید، ارتباط پشتیبانی، معرفی به دوستان و... را در این این قسمت مشاهده کنید</string>
+    <string name="tap_target_menu_des">انتخاب های بیشتر شامل تاریخچه خرید، ارتباط پشتیبانی، معرفی به دوستان و… را در این قسمت مشاهده کنید</string>
 
     <string name="tap_target_question_score_title">امتیاز</string>
     <string name="tap_target_question_score_des">میزان امتیاز شما در این دوره از مسابقه</string>

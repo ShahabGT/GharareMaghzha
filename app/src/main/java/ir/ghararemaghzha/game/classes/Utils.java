@@ -12,8 +12,10 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.Window;
@@ -199,7 +201,7 @@ public class Utils {
     }
 
     public static void showInternetError(Context context, RetryInterface retry) {
-        NoInternetDialog dialog = new NoInternetDialog(context,retry);
+        NoInternetDialog dialog = new NoInternetDialog(context, retry);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -347,8 +349,8 @@ public class Utils {
         builder.setAutoCancel(true);
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         builder.setContentIntent(pendingIntent);
-        //  Uri alarmSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification);
-        //  builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
+        Uri alarmSound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.intro);
+        builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
         builder.setVibrate(new long[]{1000, 1000, 1000});
         builder.setLights(Color.YELLOW, 1000, 1000);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);

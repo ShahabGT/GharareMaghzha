@@ -79,11 +79,11 @@ public class InviteFragment extends Fragment {
                         loading.setVisibility(View.GONE);
 
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            fCount = Float.parseFloat(response.body().getCount());
+                            fCount = Float.parseFloat(response.body().getCount())+0f;
                             int remaining = 10 - (int) fCount;
-                            count.setText(getString(R.string.invite_star_title, remaining));
+                            count.setText(context.getString(R.string.invite_star_title, remaining));
                             progressBar.setProgress(fCount);
-                            value.setText(getString(R.string.invite_info_text1, response.body().getValue()));
+                            value.setText(context.getString(R.string.invite_info_text1, response.body().getValue()));
 
                         } else if (response.code() == 401) {
                             Utils.logout(activity, true);

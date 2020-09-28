@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.os.Message
 import android.util.Base64
 import android.view.Window
 import android.view.WindowInsets
@@ -208,12 +209,15 @@ class SupportActivity : AppCompatActivity() {
                 if (res.value.message == "ok") {
                     MySharedPreference.getInstance(this).lastUpdateChat = nowDate
                     val myDb = Realm.getDefaultInstance()
-                    res.value.data.forEach { model ->
-                        model.stat = 1
-                        model.read = 1
-                        model.messageId = getNextKey(myDb)
-                        myDb.executeTransaction { it.insert(model) }
+                    val data:MutableCollection<MessageModel> = mutableListOf()
+                    res.value.data.forEach {
+                        it.stat = 1
+                        it.read = 1
+                        it.title="new"
+                        it.messageId = getNextKey(myDb)
+                        data.add(it)
                     }
+                    myDb.executeTransaction { it.insert(data) }
 
                     withContext(Dispatchers.Main) {
                         recyclerView.scrollToPosition(0)
@@ -228,5 +232,11 @@ class SupportActivity : AppCompatActivity() {
                 if (!res.isNetworkError && res.errorCode == 401) logout(this, true)
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(br)
+
     }
 }

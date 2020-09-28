@@ -20,7 +20,17 @@
         android:id="@+id/menu_message"
         android:name="ir.ghararemaghzha.game.fragments.MessagesFragment"
         android:label="fragment_messages"
-        tools:layout="@layout/fragment_messages" />
+        tools:layout="@layout/fragment_messages" >
+        <action
+            android:id="@+id/action_menu_message_to_menu_buy"
+            app:destination="@id/menu_buy" />
+        <action
+            android:id="@+id/action_menu_message_to_menu_highscore"
+            app:destination="@id/menu_highscore" />
+        <action
+            android:id="@+id/action_menu_message_to_menu_start"
+            app:destination="@id/menu_start" />
+    </fragment>
     <fragment
         android:id="@+id/menu_profile"
         android:name="ir.ghararemaghzha.game.fragments.ProfileFragment"

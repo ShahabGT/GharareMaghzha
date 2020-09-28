@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
@@ -28,9 +29,11 @@ public class IncomingAdapter extends RecyclerView.Adapter<IncomingAdapter.ViewHo
 
     private Context context;
     private RealmResults<MessageModel> data;
-    public IncomingAdapter(Context context, RealmResults<MessageModel> data) {
+    private NavController navController;
+    public IncomingAdapter(Context context, NavController navController, RealmResults<MessageModel> data) {
         this.context=context;
         this.data=data;
+        this.navController=navController;
     }
 
     @NonNull
@@ -52,7 +55,7 @@ public class IncomingAdapter extends RecyclerView.Adapter<IncomingAdapter.ViewHo
             h.date.setText(dateConverter.getMonth()+"/"+dateConverter.getDay());
 
             h.itemView.setOnClickListener(v->{
-                IncomingDialog dialog = new IncomingDialog(context,model);
+                IncomingDialog dialog = new IncomingDialog(context,navController,model);
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.setCancelable(true);
                 Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

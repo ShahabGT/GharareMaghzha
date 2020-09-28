@@ -36,9 +36,11 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
     private fun init(v: View) {
         (act.findViewById<View>(R.id.toolbar_title) as MaterialTextView).setText(R.string.about_title)
         (v.findViewById(R.id.about_text) as MaterialTextView).text = getAboutText()
+
         val tradeMark: MaterialTextView = v.findViewById(R.id.about_trademark1)
         val tradeMark2: MaterialTextView = v.findViewById(R.id.about_trademark2)
         val tradeMark3: MaterialTextView = v.findViewById(R.id.about_trademark3)
+
         val tradeMarkText = ctx.getString(R.string.about_trademark1)
         val spannableString = SpannableString(tradeMarkText)
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
@@ -61,6 +63,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
         spannableString.setSpan(clickableSpan, 37, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         tradeMark.text = spannableString
         tradeMark.movementMethod = LinkMovementMethod.getInstance()
+
         val tradeMarkText2 = ctx.getString(R.string.about_trademark2)
         val spannableString2 = SpannableString(tradeMarkText2)
         val clickableSpan2: ClickableSpan = object : ClickableSpan() {
@@ -82,6 +85,8 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
         spannableString2.setSpan(clickableSpan2, 36, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         tradeMark2.text = spannableString2
         tradeMark2.movementMethod = LinkMovementMethod.getInstance()
+
+
         val pInfo = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
         val version = pInfo.versionName
         tradeMark3.text = getString(R.string.about_trademark3, version)

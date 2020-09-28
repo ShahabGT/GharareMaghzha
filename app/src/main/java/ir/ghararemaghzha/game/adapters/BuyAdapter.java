@@ -167,6 +167,9 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                 }
 
             } else {
+                h.title.setText(context.getString(R.string.buy_booster_title, model.getValue()));
+                h.price.setText(context.getString(R.string.buy_price, Utils.moneySeparator(model.getPlanPrice())));
+
                 if (passed > 9 || passed < 0) {
                     h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                     h.buy.setEnabled(false);

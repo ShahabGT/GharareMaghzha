@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void firebaseDebug(String result){
+    private void firebaseDebug(String result) {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "verify");
         bundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, result);
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
 
                                 int lastUpdate = 0;
-                                if (response.body().getLastUpdate()!=null && !response.body().getLastUpdate().isEmpty())
+                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty())
                                     lastUpdate = Integer.parseInt(response.body().getLastUpdate());
                                 updateDatabase(serverCount, lastUpdate);
                                 verify();
@@ -340,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
                         Utils.showInternetError(MainActivity.this, () -> checkTime());
                     }
                 });
-
     }
 
     private void verify() {
@@ -356,7 +355,8 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<VerifyResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<VerifyResponse> call, @NonNull Response<VerifyResponse> response) {
-                        firebaseDebug(response.body().getResult());
+                        if (response.body() != null)
+                            firebaseDebug(response.body().getResult());
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             int newPlan = Integer.parseInt(response.body().getUserPlan());
                             int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
@@ -414,13 +414,14 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateDatabase() {
+    private void updateDatabase(int size) {
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
         int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
-        int range = remaining / (10 - passed);
+        //   int range = remaining / (10 - passed);
+        int range = size / (10 - passed);
         if (range > 0) {
             db.executeTransaction(realm -> {
                 RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).limit(range).findAll();
@@ -540,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
                                 model.setVisible(false);
                                 db.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
                             }
-                            updateDatabase();
+                            updateDatabase(response.body().getData().size());
                             MySharedPreference.getInstance(MainActivity.this).setPlan(newPlan);
                             sendBroadcast(refreshIntent);
                             if (dataDialog != null) dataDialog.dismiss();

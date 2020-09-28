@@ -25,7 +25,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
         val data = remoteMessage.data
         val title = data["title"]!!
-        val notificationBody = data["body"]!!
+        var notificationBody = data["body"]!!
         val clickAction = data["click_action"]!!
         val intent = Intent()
         intent.action = GHARAREHMAGHZHA_BROADCAST
@@ -53,9 +53,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             MySharedPreference.getInstance(this).unreadChats = MySharedPreference.getInstance(this).unreadChats + 1
         }
         sendBroadcast(intent)
-        if (MySettingsPreference.getInstance(this).notification)
-            Utils.createNotification(this, title, notificationBody, clickAction)
+        if (MySettingsPreference.getInstance(this).notification) {
+            if (title != "support")
+                if (notificationBody.contains("<link>", true))
+                    notificationBody = notificationBody.substring(0, notificationBody.indexOf("<link>") - 1)
 
+
+            Utils.createNotification(this, title, notificationBody, clickAction)
+        }
     }
 
 

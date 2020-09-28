@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
@@ -45,7 +46,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
         if (data.isEmpty())
             v.findViewById<View>(R.id.message_empty).visibility = View.VISIBLE
         else {
-            val adapter = IncomingAdapter(ctx, data)
+            val adapter = IncomingAdapter(ctx,view?.findNavController(), data)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
         }
