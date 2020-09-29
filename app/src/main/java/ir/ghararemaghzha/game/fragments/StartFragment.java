@@ -115,9 +115,8 @@ public class StartFragment extends Fragment {
                     .setNormalColor(0xFFECEFF1)
                     .setRadius((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()))
                     .build();
-
             ultraViewPager.setInfiniteLoop(true);
-            ultraViewPager.setAutoScroll(2000);
+            ultraViewPager.setAutoScroll(5000);
         }
     }
 

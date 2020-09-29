@@ -63,8 +63,8 @@
     <string name="profile_title">حساب من</string>
     <string name="profile_question_card">تعداد کل سوالات</string>
     <string name="profile_score_card">امتیاز من</string>
-    <string name="profile_time_card">زمان باقی مانده مسابقه</string>
-    <string name="profile_time_card_tostart">زمان باقی مانده تا شروع مسابقه</string>
+    <string name="profile_time_card">تا پایان مسابقه</string>
+    <string name="profile_time_card_tostart">تا شروع مسابقه</string>
     <string name="profile_remaining_card">سوالات بدون پاسخ</string>
     <string name="profile_edit_title">ویرایش مشخصات</string>
     <string name="profile_edit_subtitle">ویرایش اطلاعات حساب</string>
@@ -209,10 +209,11 @@
     <string name="invite_count">%s نفر</string>
     <string name="invite_share_title">اشتراک گذاری</string>
     <string name="invite_share">اپلیکیشن قرار مغزها رو دیدی؟ حتما نصبش کن \n
-کد معرف من: %s \n
-دانلود از: \n
-https://ghararehmaghzha.ir/download/ghararehmaghzha.apk
-\n
+کد معرف من: %s  \n
+دانلود بصورت مستقیم: \n
+https://ghararehmaghzha.ir/download/ghararehmaghzha.apk \n
+دانلود از گوگل پلی: \n
+https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
 </string>
 
     <string name="settings_title">تنظیمات</string>

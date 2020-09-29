@@ -260,7 +260,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
-        //  avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
         avatar.setOnClickListener(v -> navController.navigate(R.id.action_global_profileEditFragment));
     }
 

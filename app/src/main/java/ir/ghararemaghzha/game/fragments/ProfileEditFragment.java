@@ -75,9 +75,20 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.findViewById(R.id.toolbar_avatar).setEnabled(false);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        activity.findViewById(R.id.toolbar_avatar).setEnabled(true);
+    }
 
     private void init(View v) {
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.profile_edit_subtitle);
+
 
         uploading = false;
 

@@ -35,7 +35,10 @@ class MainViewPager(ctx: FragmentActivity, sldr: List<SliderModel>) : PagerAdapt
                 .into(imageView)
 
 
-        imageView.setOnClickListener { openLinks(model.sliderLink) }
+        imageView.setOnClickListener {
+            if (!model.sliderLink.isNullOrEmpty())
+                openLinks(model.sliderLink)
+        }
         container.addView(imageView)
         return imageView
     }
