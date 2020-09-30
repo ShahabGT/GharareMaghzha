@@ -95,7 +95,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
         if (!showUser)
             return data.size();
         else
-            return 11;
+            return data.size()+1;
     }
 
     private void showDetailsDialog(String userId) {

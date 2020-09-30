@@ -43,7 +43,6 @@ public class HighscoreFragment extends Fragment {
     private ConstraintLayout loading;
     private RecyclerView recyclerView;
     private HighscoreAdapter adapter;
-    private List<Integer> randomColors;
 
     public HighscoreFragment() {
     }
@@ -61,18 +60,6 @@ public class HighscoreFragment extends Fragment {
     }
 
     private void init(View v) {
-        randomColors =new ArrayList<>();
-        randomColors.add(R.color.random1);
-        randomColors.add(R.color.random2);
-        randomColors.add(R.color.random3);
-        randomColors.add(R.color.random4);
-        randomColors.add(R.color.random5);
-        randomColors.add(R.color.random6);
-        randomColors.add(R.color.random7);
-        randomColors.add(R.color.random8);
-        randomColors.add(R.color.random9);
-        randomColors.add(R.color.random10);
-        randomColors.add(R.color.random11);
         ((MaterialTextView)activity.findViewById(R.id.toolbar_title)).setText(R.string.highscore_title);
 
         recyclerView = v.findViewById(R.id.highscore_recycler);
@@ -128,12 +115,4 @@ public class HighscoreFragment extends Fragment {
                     }
                 });
     }
-
-    private int getRandomColor() {
-        int r = new Random().nextInt(randomColors.size());
-        int color= randomColors.get(r);
-        randomColors.remove(r);
-        return color;
-    }
-
 }
