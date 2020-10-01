@@ -515,8 +515,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         } else if (nowDate == lastUpdate && serverCount > userCount) {
+            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
+            int range = serverCount-remaining;
             db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(serverCount).findAll();
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
                 questions.setBoolean("visible", true);
             });
             sendBroadcast(refreshIntent);

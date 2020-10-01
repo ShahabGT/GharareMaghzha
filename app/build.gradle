@@ -14,8 +14,8 @@ android {
         applicationId "ir.ghararemaghzha.game"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 15
-        versionName "1.5.0"
+        versionCode 16
+        versionName "1.5.1"
     }
 
     buildTypes {
@@ -86,8 +86,6 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
-    implementation 'com.mohamadamin:persianmaterialdatetimepicker:1.2.1'
-
     implementation 'androidx.emoji:emoji:1.1.0'
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
 
@@ -103,6 +101,9 @@ dependencies {
 
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.0'
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
+
+    implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'
+
 }
 
 repositories {

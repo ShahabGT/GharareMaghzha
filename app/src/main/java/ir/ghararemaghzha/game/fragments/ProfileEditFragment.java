@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -26,12 +27,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
-import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
-import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.Calendar;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
@@ -39,13 +37,15 @@ import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.GeneralResponse;
+import ir.hamsaa.persiandatepicker.Listener;
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
 import ir.shahabazimi.instagrampicker.InstagramPicker;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ProfileEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class ProfileEditFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private ImageView avatar;
@@ -80,6 +80,7 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
         super.onResume();
         activity.findViewById(R.id.toolbar_avatar).setEnabled(false);
     }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -168,22 +169,7 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
         });
 
         bdayView.setOnClickListener(v -> {
-            PersianCalendar persianCalendar = new PersianCalendar();
-            DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                    this,
-                    persianCalendar.getPersianYear(),
-                    persianCalendar.getPersianMonth(),
-                    persianCalendar.getPersianDay()
-            );
-            PersianCalendar maxDate = new PersianCalendar();
-            maxDate.setPersianDate(1390, 1, 1);
-
-            PersianCalendar minDate = new PersianCalendar();
-            minDate.setPersianDate(1300, 1, 1);
-            datePickerDialog.setMaxDate(maxDate);
-            datePickerDialog.setMinDate(minDate);
-            datePickerDialog.setFirstDayOfWeek(Calendar.SATURDAY);
-            datePickerDialog.show(activity.getFragmentManager(), "DatePickerDialog");
+            selectDate();
         });
 
         male.setOnCheckedChangeListener((a, b) -> {
@@ -207,8 +193,14 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
                 s = "female";
             else if (male.isChecked() && !female.isChecked())
                 s = "male";
-            if (n.isEmpty() || e.isEmpty() || b.isEmpty() || s.isEmpty() || n.length() < 6 || !Utils.isEmailValid(e))
-                Toast.makeText(context, getString(R.string.general_form_error), Toast.LENGTH_SHORT).show();
+            if (n.isEmpty() || n.length() < 6)
+                Toast.makeText(context, getString(R.string.general_name_form_error), Toast.LENGTH_SHORT).show();
+            else if (e.isEmpty() || !Utils.isEmailValid(e))
+                Toast.makeText(context, getString(R.string.general_email_form_error), Toast.LENGTH_SHORT).show();
+            else if (b.isEmpty())
+                Toast.makeText(context, getString(R.string.general_bday_form_error), Toast.LENGTH_SHORT).show();
+            else if (s.isEmpty())
+                Toast.makeText(context, getString(R.string.general_sex_form_error), Toast.LENGTH_SHORT).show();
             else if (Utils.checkInternet(activity))
                 updateProfile(n, e, b, s, i);
             else
@@ -217,6 +209,35 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
         });
 
 
+    }
+
+    private void selectDate() {
+        int color;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            color = getResources().getColor(R.color.colorPrimary, null);
+        else
+            color = getResources().getColor(R.color.colorPrimary);
+
+        new PersianDatePickerDialog(context)
+                .setPositiveButtonString("انتخاب")
+                .setNegativeButton("بستن")
+                .setTodayButton("امروز")
+                .setMinYear(1300)
+                .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                .setActionTextColor(color)
+                .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                .setShowInBottomSheet(true)
+                .setListener(new Listener() {
+                    @Override
+                    public void onDateSelected(ir.hamsaa.persiandatepicker.util.PersianCalendar persianCalendar) {
+                        String date = persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay();
+                        bday.setText(date);
+                    }
+
+                    @Override
+                    public void onDismissed() {
+                    }
+                }).show();
     }
 
     private String toBase64(Uri path) throws Exception {
@@ -444,11 +465,5 @@ public class ProfileEditFragment extends Fragment implements DatePickerDialog.On
                     }
                 });
 
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
-        bday.setText(date);
     }
 }

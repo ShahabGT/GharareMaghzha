@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffc308</color>
-    <color name="colorPrimary2">#6200EE</color>
-
     <color name="colorPrimaryDark">#fb8c05</color>
-    <color name="colorPrimaryDark2">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
     <color name="black">#000000</color>
@@ -16,14 +13,9 @@
     <color name="red2">#F8536E</color>
     <color name="blue">#2691af</color>
 
-
     <color name="dark_background">#FF424242</color>
     <color name="light_background">#F3ECFE</color>
     <color name="transparent">#00000000</color>
-
-    <color name="mdtp_accent_color">#ffc308</color>
-    <color name="mdtp_accent_color_dark">#fb8c05</color>
-
 
     <color name="light1">#E1BEE7</color>
     <color name="dark1">#6A1B9A</color>
@@ -58,6 +50,5 @@
     <color name="random9">#FFD600</color>
     <color name="random10">#FF6D00</color>
     <color name="random11">#DD2C00</color>
-
 
 </resources>

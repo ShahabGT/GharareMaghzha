@@ -13,7 +13,10 @@
     <string name="general_internet_error">خطا! لطفا اتصال به اینترنت را بررسی کنید</string>
     <string name="general_number_error">خطا! لطفا شماره تلفن را بررسی کنید</string>
     <string name="general_name_error">خطا! لطفا نام و نام خانوادگی خود را بررسی کنید</string>
-    <string name="general_form_error">خطا! لطفا اطلاعات وارد شده را بررسی کنید</string>
+    <string name="general_name_form_error">خطا! لطفا نام و نام خانوادگی خود را بررسی کنید</string>
+    <string name="general_email_form_error">خطا! لطفا ایمیل خود را بررسی کنید</string>
+    <string name="general_bday_form_error">خطا! لطفا تاریخ تولد خود را بررسی کنید</string>
+    <string name="general_sex_form_error">خطا! لطفا جنسیت خود را بررسی کنید</string>
     <string name="general_number">شماره تلفن همراه</string>
     <string name="general_invite">کد معرف</string>
     <string name="general_email">ایمیل</string>
@@ -81,8 +84,8 @@
     <string name="profile_avatar_change">انتخاب تصویر</string>
     <string name="profile_avatar_remove">حذف</string>
     <string name="profile_sex">جنسیت</string>
-    <string name="profile_male">مذکر</string>
-    <string name="profile_female">مونث</string>
+    <string name="profile_male">آقا</string>
+    <string name="profile_female">خانم</string>
     <string name="profile_save">ثبت اطلاعات</string>
     <string name="profile_invite_notfound">کد معرف وارد شده معتبر نیست!</string>
     <string name="profile_invite_failed">خطا در ثبت کد معرف، لطفا دوباره امتحان کنید</string>
