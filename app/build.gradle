@@ -14,8 +14,8 @@ android {
         applicationId "ir.ghararemaghzha.game"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 14
-        versionName "1.4.4"
+        versionCode 15
+        versionName "1.5.0"
     }
 
     buildTypes {
@@ -66,10 +66,10 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
-    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation 'com.google.firebase:firebase-messaging:20.3.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1'
-    implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
-    implementation 'com.google.firebase:firebase-perf:19.0.8'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    implementation 'com.google.firebase:firebase-perf:19.0.9'
 
 
     implementation 'com.github.ShahabGT:InstagramPicker:2.1.1'

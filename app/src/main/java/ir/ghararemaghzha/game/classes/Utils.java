@@ -351,7 +351,7 @@ public class Utils {
         builder.setContentIntent(pendingIntent);
         Uri alarmSound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.intro);
         builder.setSound(alarmSound, AudioManager.STREAM_NOTIFICATION);
-        builder.setVibrate(new long[]{1000, 1000, 1000});
+        builder.setVibrate(new long[]{2000, 1000, 2000});
         builder.setLights(Color.YELLOW, 1000, 1000);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(Const.NOTIFICATION_ID, builder.build());

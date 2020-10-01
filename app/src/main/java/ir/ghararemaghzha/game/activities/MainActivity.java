@@ -39,9 +39,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
@@ -56,6 +58,7 @@ import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
+import kotlin.Pair;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -413,7 +416,54 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateDatabase(int size) {
+    private Pair<String, Sort> randomSortField() {
+        int rand = new Random().nextInt(6);
+        int rand2 = new Random().nextInt(2);
+        switch (rand) {
+            case 0: {
+                if (rand2 == 0)
+                    return new Pair<>("questionId", Sort.ASCENDING);
+                else
+                    return new Pair<>("questionId", Sort.DESCENDING);
+            }
+            case 1: {
+                if (rand2 == 0)
+                    return new Pair<>("questionText", Sort.ASCENDING);
+                else
+                    return new Pair<>("questionText", Sort.DESCENDING);
+            }
+            case 2: {
+                if (rand2 == 0)
+                    return new Pair<>("questionA1", Sort.ASCENDING);
+                else
+                    return new Pair<>("questionA1", Sort.DESCENDING);
+            }
+
+            case 3: {
+                if (rand2 == 0)
+                    return new Pair<>("questionA2", Sort.ASCENDING);
+                else
+                    return new Pair<>("questionA2", Sort.DESCENDING);
+            }
+            case 4: {
+                if (rand2 == 0)
+                    return new Pair<>("questionA3", Sort.ASCENDING);
+                else
+                    return new Pair<>("questionA3", Sort.DESCENDING);
+            }
+            case 5: {
+                if (rand2 == 0)
+                    return new Pair<>("questionA4", Sort.ASCENDING);
+                else
+                    return new Pair<>("questionA4", Sort.DESCENDING);
+            }
+            default: {
+                return new Pair<>("questionId", Sort.DESCENDING);
+            }
+        }
+    }
+
+    private synchronized void updateDatabase(int size) {
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
         int nowDate = Integer.parseInt(dateFormat.format(d));
@@ -421,9 +471,11 @@ public class MainActivity extends AppCompatActivity {
         int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
         //   int range = remaining / (10 - passed);
         int range = size / (10 - passed);
+        Pair<String,Sort> pair = randomSortField();
+
         if (range > 0) {
             db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).limit(range).findAll();
+                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).sort(pair.getFirst(),pair.getSecond()).limit(range).findAll();
                 questions.setBoolean("visible", true);
             });
             updateTime(nowDate);
@@ -433,10 +485,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateDatabase(int serverCount, int lastUpdate) {
+    private synchronized void updateDatabase(int serverCount, int lastUpdate) {
         int userCount = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
         Date d = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+        Pair<String,Sort> pair = randomSortField();
 
         int nowDate = Integer.parseInt(dateFormat.format(d));
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
@@ -453,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
             int range = remaining / (10 - passed);
             if (range > 0) {
                 db.executeTransaction(realm -> {
-                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).limit(range).findAll();
+                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).sort(pair.getFirst(),pair.getSecond()).limit(range).findAll();
                     questions.setBoolean("visible", true);
                 });
                 updateTime(nowDate);

@@ -126,9 +126,7 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        //   int total = db.where(QuestionModel.class).findAll().size();
         totalQuestions.setText(String.valueOf(db.where(QuestionModel.class).findAll().size()));
-        //   int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
         remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size()));
 
     }
@@ -137,11 +135,11 @@ public class ProfileFragment extends Fragment {
         buy.setOnClickListener(v ->
                 navController.navigate(R.id.action_menu_profile_to_menu_buy)
         );
-    //    edit.setOnClickListener(v -> startActivity(new Intent(context, ProfileActivity.class)));
+
         edit.setOnClickListener(v -> navController.navigate(R.id.action_global_profileEditFragment));
 
         stat.setOnClickListener(v -> showDetailsDialog(MySharedPreference.getInstance(context).getUserId()));
-    //    scoreHelper.setOnClickListener(v -> startActivity(new Intent(activity, ScoreHelperActivity.class)));
+        
         scoreHelper.setOnClickListener(v -> navController.navigate(R.id.action_global_scoreHelperFragment));
     }
 
