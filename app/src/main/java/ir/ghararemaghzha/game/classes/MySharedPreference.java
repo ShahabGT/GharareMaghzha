@@ -47,16 +47,41 @@ public class MySharedPreference {
         setFirstTimeQuestion();
     }
 
+    public void setFullyUpdated(String... data) {
+        sharedPreferences.edit().putString("fullyUpdatedData0", data[0]).apply();
+        sharedPreferences.edit().putString("fullyUpdatedData1", data[1]).apply();
+    }
+
+    public String[] getFullyUpdated() {
+        String[] data = new String[2];
+        data[0] = sharedPreferences.getString("fullyUpdatedData0", "");
+        data[1] = sharedPreferences.getString("fullyUpdatedData1", "");
+        return data;
+    }
+
+    public int getQuestionsToUnlock(){
+        return sharedPreferences.getInt("questionsToUnlock", 0);
+    }
+
+    public void setQuestionsToUnlock(int size){
+        sharedPreferences.edit().putInt("questionsToUnlock", size).apply();
+
+    }
+
+
     public boolean isFirstTime() {
         return sharedPreferences.getBoolean("isFirstTime", true);
     }
-    public void setFirstTime(){
+
+    public void setFirstTime() {
         sharedPreferences.edit().putBoolean("isFirstTime", false).apply();
     }
+
     public boolean isFirstTimeQuestion() {
         return sharedPreferences.getBoolean("isFirstTimeQuestion", true);
     }
-    public void setFirstTimeQuestion(){
+
+    public void setFirstTimeQuestion() {
         sharedPreferences.edit().putBoolean("isFirstTimeQuestion", false).apply();
     }
 

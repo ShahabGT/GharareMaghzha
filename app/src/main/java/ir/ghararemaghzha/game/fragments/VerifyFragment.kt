@@ -31,6 +31,8 @@ import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
 import ir.ghararemaghzha.game.dialogs.GetDataDialog
+import ir.ghararemaghzha.game.models.MessageModel
+import ir.ghararemaghzha.game.models.QuestionModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -231,11 +233,15 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     verify.setText(R.string.verify_verify)
                     dialog.dismiss()
                     if (res.value.message != "empty") {
+                        val data:MutableCollection<QuestionModel> = mutableListOf()
+
                         for (model in res.value.data) {
                             model.isUploaded = model.userAnswer != "-1"
                             model.isVisible = false
-                            db.executeTransaction { it.insertOrUpdate(model) }
+                            data.add(model)
                         }
+                        db.executeTransaction { it.insertOrUpdate(data) }
+
                         MySharedPreference.getInstance(ctx).userId = userId
                         Toast.makeText(ctx, ctx.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
