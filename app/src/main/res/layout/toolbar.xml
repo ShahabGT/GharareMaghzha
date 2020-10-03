@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/white">
+    android:background="@color/colorPrimary">
 
     <ImageView
         android:id="@+id/toolbar_menu"
@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_main_menu"
-        app:tint="@color/colorPrimaryDark" />
+        app:tint="@color/white" />
 
     <ImageView
         android:id="@+id/toolbar_new"
@@ -42,7 +42,7 @@
         android:layout_height="0dp"
         android:fontFamily="@font/vazir"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/toolbar_avatar"

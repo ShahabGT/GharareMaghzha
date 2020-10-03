@@ -30,6 +30,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
@@ -136,6 +137,9 @@ public class ProfileEditFragment extends Fragment {
                 .placeholder(R.drawable.placeholder)
                 .into(avatar);
 
+        if (MySharedPreference.getInstance(context).getUserAvatar().isEmpty())
+            avatarRemove.setVisibility(View.GONE);
+
         onClicks();
     }
 
@@ -168,9 +172,7 @@ public class ProfileEditFragment extends Fragment {
                 Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
         });
 
-        bdayView.setOnClickListener(v -> {
-            selectDate();
-        });
+        bdayView.setOnClickListener(v -> selectDate());
 
         male.setOnCheckedChangeListener((a, b) -> {
             if (b)
@@ -183,11 +185,11 @@ public class ProfileEditFragment extends Fragment {
 
         save.setOnClickListener(v -> {
             String i = "";
-            if (invite.isEnabled() && !invite.getText().toString().trim().isEmpty())
+            if (invite.isEnabled() && !Objects.requireNonNull(invite.getText()).toString().trim().isEmpty())
                 i = invite.getText().toString();
-            String n = name.getText().toString();
-            String e = email.getText().toString();
-            String b = bday.getText().toString();
+            String n = Objects.requireNonNull(name.getText()).toString() + "";
+            String e = Objects.requireNonNull(email.getText()).toString() + "";
+            String b = Objects.requireNonNull(bday.getText()).toString() + "";
             String s = "";
             if (female.isChecked() && !male.isChecked())
                 s = "female";
@@ -195,12 +197,12 @@ public class ProfileEditFragment extends Fragment {
                 s = "male";
             if (n.isEmpty() || n.length() < 6)
                 Toast.makeText(context, getString(R.string.general_name_form_error), Toast.LENGTH_SHORT).show();
-            else if (e.isEmpty() || !Utils.isEmailValid(e))
+            else if (!e.isEmpty() && !Utils.isEmailValid(e))
                 Toast.makeText(context, getString(R.string.general_email_form_error), Toast.LENGTH_SHORT).show();
-            else if (b.isEmpty())
-                Toast.makeText(context, getString(R.string.general_bday_form_error), Toast.LENGTH_SHORT).show();
-            else if (s.isEmpty())
-                Toast.makeText(context, getString(R.string.general_sex_form_error), Toast.LENGTH_SHORT).show();
+//            else if (b.isEmpty())
+//                Toast.makeText(context, getString(R.string.general_bday_form_error), Toast.LENGTH_SHORT).show();
+//            else if (s.isEmpty())
+//                Toast.makeText(context, getString(R.string.general_sex_form_error), Toast.LENGTH_SHORT).show();
             else if (Utils.checkInternet(activity))
                 updateProfile(n, e, b, s, i);
             else
@@ -350,6 +352,8 @@ public class ProfileEditFragment extends Fragment {
                             .circleCrop()
                             .placeholder(R.drawable.placeholder)
                             .into(avatar);
+                    avatarRemove.setVisibility(View.VISIBLE);
+
                     MainActivity.setAvatars(activity);
                 } else if (response.code() == 401) {
                     Utils.logout(activity, true);
@@ -393,6 +397,8 @@ public class ProfileEditFragment extends Fragment {
                             .circleCrop()
                             .placeholder(R.drawable.placeholder)
                             .into(avatar);
+                    avatarRemove.setVisibility(View.GONE);
+                    MainActivity.setAvatars(activity);
                 } else if (response.code() == 401) {
                     Utils.logout(activity, true);
                 } else {

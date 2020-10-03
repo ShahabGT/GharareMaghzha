@@ -21,16 +21,20 @@
     <color name="dark1">#6A1B9A</color>
 
     <color name="light2">#FFE0B2</color>
+    <color name="medium2">#FF9800</color>
     <color name="dark2">#EF6C00</color>
 
     <color name="light3">#C8E6C9</color>
+    <color name="medium3">#4CAF50</color>
     <color name="dark3">#2E7D32</color>
 
     <color name="light4">#BBDEFB</color>
+    <color name="medium4">#2196F3</color>
     <color name="dark4">#1565C0</color>
     <color name="alpha4">#4D1565C0</color>
 
     <color name="light5">#FFCDD2</color>
+    <color name="medium5">#E91E63</color>
     <color name="dark5">#AD1457</color>
 
     <color name="light6">#FFCDD2</color>

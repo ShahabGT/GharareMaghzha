@@ -26,7 +26,8 @@
     <string name="general_name">نام و نام خانوادگی</string>
     <string name="general_code">کد تایید</string>
     <string name="general_exit">برای خروج کلید بازگشت رو دوباره بفشارید</string>
-    <string name="general_noquestions">سوالی برای پاسخ دادن وجود ندارد!</string>
+    <string name="general_noquestions">سوالات امروز شما تمام شده است!</string>
+    <string name="general_noquestions_at_all">میزان سوالات شما به اتمام رسیده! در صورت نیاز سوال جدید بخرید</string>
     <string name="amount_model">%s تومان</string>
     <string name="discount_model">%s %</string>
 
@@ -229,7 +230,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
 
     <string name="details_answers_title">جواب ها</string>
     <string name="details_question_title">سوال ها</string>
-    <string name="details_answers">%d درست\n%d غلط
+    <string name="details_answers">%d درست ،%d غلط
     </string>
     <string name="details_questions">%d از %d سوال</string>
     <string name="details_code">کد کاربری: %s</string>
@@ -287,5 +288,8 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="about_trademark3">ورژن %s ، 1399</string>
 
     <string name="info_btn">بستن</string>
+
+    <string name="questions_notification_title">سوالات شما تمام شد!</string>
+    <string name="questions_notification_body">سوالات امروز شما تمام شد، برای جواب دادن به سوالات بیشتر تا فردا صبر کنید</string>
 
 </resources>

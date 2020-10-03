@@ -106,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
         init();
         if (MySharedPreference.getInstance(this).isFirstTime())
             helpInfo();
+        else
+            firebaseDebug("ok");
+
 
     }
 
@@ -161,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSequenceFinish() {
                 MySharedPreference.getInstance(MainActivity.this).setFirstTime();
+                firebaseDebug("ok");
+
             }
 
             @Override
@@ -361,52 +366,51 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<VerifyResponse> call, @NonNull Response<VerifyResponse> response) {
                         if (response.body() != null)
-                            firebaseDebug(response.body().getResult());
-                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            int newPlan = Integer.parseInt(response.body().getUserPlan());
-                            int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
-                            if (newPlan > oldPlan) {
-                                dataDialog = Utils.showGetDataLoading(MainActivity.this);
-                                getQuestions(String.valueOf(newPlan));
-                            }
-                            int myVersion = Utils.getVersionCode(MainActivity.this);
-                            int newVersion = Integer.parseInt(response.body().getVersion());
-                            int newScore = Integer.parseInt(response.body().getScoreCount());
-                            int oldScore = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getScore());
-
-                            if (newScore > oldScore)
-                                MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
-                            else if (oldScore > newScore)
-                                uploadScore(String.valueOf(oldScore));
-
-                            if (newVersion > myVersion)
-                                if (response.body().getVersionEssential().equals("1"))
-                                    showNewVersionDialog("1");
-                                else
-                                    showNewVersionDialog("0");
-                            sendBroadcast(refreshIntent);
-
-                            int serverBooster = Integer.parseInt(response.body().getUserBooster());
-                            int localBooster = MySharedPreference.getInstance(MainActivity.this).getBooster();
-                            if (serverBooster != 0 && serverBooster > localBooster) {
-                                if (Utils.isBoosterValid(response.body().getUserBoosterExpire())) {
-                                    MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
-                                    MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
-                                    MySharedPreference.getInstance(MainActivity.this).setBoosterDate(response.body().getUserBoosterExpire());
-                                    String[] expireDate = response.body().getUserBoosterExpire().replace(" ", ":").replace("-", ":").split(":");
-                                    Utils.setAlarm(MainActivity.this,
-                                            Integer.parseInt(expireDate[0]),
-                                            Integer.parseInt(expireDate[1]),
-                                            Integer.parseInt(expireDate[2]),
-                                            Integer.parseInt(expireDate[3]),
-                                            Integer.parseInt(expireDate[4]));
+                            if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                                int newPlan = Integer.parseInt(response.body().getUserPlan());
+                                int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
+                                if (newPlan > oldPlan) {
+                                    dataDialog = Utils.showGetDataLoading(MainActivity.this);
+                                    getQuestions(String.valueOf(newPlan));
                                 }
-                            }
+                                int myVersion = Utils.getVersionCode(MainActivity.this);
+                                int newVersion = Integer.parseInt(response.body().getVersion());
+                                int newScore = Integer.parseInt(response.body().getScoreCount());
+                                int oldScore = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getScore());
 
-                        } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this, true);
-                        } else
-                            Utils.showInternetError(MainActivity.this, () -> verify());
+                                if (newScore > oldScore)
+                                    MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
+                                else if (oldScore > newScore)
+                                    uploadScore(String.valueOf(oldScore));
+
+                                if (newVersion > myVersion)
+                                    if (response.body().getVersionEssential().equals("1"))
+                                        showNewVersionDialog("1");
+                                    else
+                                        showNewVersionDialog("0");
+                                sendBroadcast(refreshIntent);
+
+                                int serverBooster = Integer.parseInt(response.body().getUserBooster());
+                                int localBooster = MySharedPreference.getInstance(MainActivity.this).getBooster();
+                                if (serverBooster != 0 && serverBooster > localBooster) {
+                                    if (Utils.isBoosterValid(response.body().getUserBoosterExpire())) {
+                                        MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
+                                        MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
+                                        MySharedPreference.getInstance(MainActivity.this).setBoosterDate(response.body().getUserBoosterExpire());
+                                        String[] expireDate = response.body().getUserBoosterExpire().replace(" ", ":").replace("-", ":").split(":");
+                                        Utils.setAlarm(MainActivity.this,
+                                                Integer.parseInt(expireDate[0]),
+                                                Integer.parseInt(expireDate[1]),
+                                                Integer.parseInt(expireDate[2]),
+                                                Integer.parseInt(expireDate[3]),
+                                                Integer.parseInt(expireDate[4]));
+                                    }
+                                }
+
+                            } else if (response.code() == 401) {
+                                Utils.logout(MainActivity.this, true);
+                            } else
+                                Utils.showInternetError(MainActivity.this, () -> verify());
                     }
 
                     @Override
@@ -504,7 +508,12 @@ public class MainActivity extends AppCompatActivity {
             sendBroadcast(refreshIntent);
         } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
-            int range = remaining / (10 - passed);
+            int range;
+            if (serverCount > 0)
+                range = (remaining / (10 - passed)) + serverCount;
+            else
+                range = remaining / (10 - passed);
+
             if (range > 0) {
                 db.executeTransaction(realm -> {
                     RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).sort(pair.getFirst(), pair.getSecond()).limit(range).findAll();

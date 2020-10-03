@@ -64,7 +64,7 @@ public class QuestionActivity extends AppCompatActivity {
     private ImageView music, autoNext, booster;
     private boolean musicSetting;
     private boolean autoNextSetting;
-
+private boolean foreground=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,7 +224,7 @@ public class QuestionActivity extends AppCompatActivity {
                 answer2c.setEnabled(false);
                 answer3c.setEnabled(false);
                 answer4c.setEnabled(false);
-                if (autoNextSetting)
+                if (autoNextSetting && foreground)
                     nextQuestion();
             }
         };
@@ -414,7 +414,8 @@ public class QuestionActivity extends AppCompatActivity {
 
     private void nextQuestion() {
         if (data.isEmpty()) {
-            Toast.makeText(this, getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+            Utils.createNotification(this,getString(R.string.questions_notification_title),getString(R.string.questions_notification_body),"ir.ghararemaghzha.game.TARGET_NOTIFICATION");
+            Toast.makeText(this, getString(R.string.questions_notification_title), Toast.LENGTH_SHORT).show();
             onBackPressed();
             return;
         }
@@ -579,13 +580,22 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        foreground=true;
         if (mediaPlayer != null && musicSetting)
             mediaPlayer.start();
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        foreground=false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        nextTimer.cancel();
+        downTimer.cancel();
         if (soundPool != null && mediaPlayer != null) {
             soundPool.release();
             soundPool = null;

@@ -1,5 +1,7 @@
 package ir.ghararemaghzha.game.adapters;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -54,11 +56,26 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
 
     }
 
+    private void anim(View view) {
+
+        ObjectAnimator sx = ObjectAnimator.ofFloat(view, "scaleY", 1, 1.1f, 1);
+        ObjectAnimator sy = ObjectAnimator.ofFloat(view, "scaleX", 1, 1.1f, 1);
+        sx.setDuration(2000);
+        sy.setDuration(2000);
+        sx.setRepeatCount(ValueAnimator.INFINITE);
+        sx.setRepeatMode(ValueAnimator.RESTART);
+        sy.setRepeatCount(ValueAnimator.INFINITE);
+        sy.setRepeatMode(ValueAnimator.RESTART);
+        sx.start();
+        sy.start();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder h, int position) {
 
         PlanModel model = data.get(position);
         if (model != null) {
+            anim(h.buy);
             int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
 
             if (h.viewType == LIST_TYPE) {
@@ -77,8 +94,7 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
                             h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                             h.buy.setEnabled(false);
                             h.buy.setClickable(false);
-                        } else
-                        if (userPlan > 4) {
+                        } else if (userPlan > 4) {
                             h.buy.setBackgroundColor(context.getResources().getColor(R.color.grey));
                             h.buy.setEnabled(false);
                             h.buy.setClickable(false);

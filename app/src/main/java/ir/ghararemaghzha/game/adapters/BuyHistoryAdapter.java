@@ -61,7 +61,7 @@ public class BuyHistoryAdapter extends RecyclerView.Adapter<BuyHistoryAdapter.Vi
             } else
                 h.influencer.setVisibility(View.GONE);
 
-            if (model.getUserId().equals("1")) {
+            if (model.getValid().equals("1")) {
                 h.stat.setText(context.getString(R.string.buyhistory_row_stat, "موفق"));
                 h.resCode.setVisibility(View.VISIBLE);
                 h.resCode.setText(context.getString(R.string.buyhistory_row_rescode, model.getResCode()));
