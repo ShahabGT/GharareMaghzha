@@ -123,7 +123,8 @@ interface Api {
             @Header("Authorization") Token: String,
             @Field("number") number: String,
             @Field("question_id") questionId: String,
-            @Field("user_answer") userAnswer: String
+            @Field("user_answer") userAnswer: String,
+            @Field("user_answer_booster") booster: String
     ): Call<GeneralResponse>
 
     @FormUrlEncoded
@@ -189,6 +190,14 @@ interface Api {
             @Field("number") number: String,
             @Field("user_id") userId: String
     ): Call<UserDetailsResponse>
+
+    @FormUrlEncoded
+    @POST("report")
+    fun report(
+            @Header("Authorization") Token: String,
+            @Field("number") number: String,
+            @Field("question_id") questionId: String,
+    ): Call<GeneralResponse>
 
 }
 

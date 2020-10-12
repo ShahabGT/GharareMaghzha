@@ -127,7 +127,9 @@ public class ProfileFragment extends Fragment {
 
 
         totalQuestions.setText(String.valueOf(db.where(QuestionModel.class).findAll().size()));
-        remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size()));
+        remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class)
+                .equalTo("bought",true)
+                .and().equalTo("userAnswer", "-1").findAll().size()));
 
     }
 

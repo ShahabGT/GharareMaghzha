@@ -8,6 +8,7 @@ data class UserDetailsResponse(
         val correct: Int,
         val incorrect: Int,
         val plan: String,
+        val booster: String,
         @SerializedName("user_data") val userData: UserDataModel
 )
 

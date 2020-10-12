@@ -14,8 +14,8 @@ android {
         applicationId "ir.ghararemaghzha.game"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 18
-        versionName "1.6.0"
+        versionCode 21
+        versionName "2.1.0"
     }
 
     buildTypes {

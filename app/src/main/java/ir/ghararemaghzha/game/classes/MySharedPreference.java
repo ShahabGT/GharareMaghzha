@@ -1,6 +1,7 @@
 package ir.ghararemaghzha.game.classes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.security.crypto.EncryptedSharedPreferences;
@@ -8,6 +9,10 @@ import androidx.security.crypto.MasterKey;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+
+import io.realm.Realm;
+import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.models.MessageModel;
 
 
 public class MySharedPreference {
@@ -47,27 +52,39 @@ public class MySharedPreference {
         setFirstTimeQuestion();
     }
 
-    public void setFullyUpdated(String... data) {
-        sharedPreferences.edit().putString("fullyUpdatedData0", data[0]).apply();
-        sharedPreferences.edit().putString("fullyUpdatedData1", data[1]).apply();
-    }
-
-    public String[] getFullyUpdated() {
-        String[] data = new String[2];
-        data[0] = sharedPreferences.getString("fullyUpdatedData0", "");
-        data[1] = sharedPreferences.getString("fullyUpdatedData1", "");
-        return data;
-    }
-
-    public int getQuestionsToUnlock(){
-        return sharedPreferences.getInt("questionsToUnlock", 0);
-    }
-
-    public void setQuestionsToUnlock(int size){
-        sharedPreferences.edit().putInt("questionsToUnlock", size).apply();
+    public void counterIncrease(Context context) {
+        int counter = sharedPreferences.getInt("counter", 0);
+        if (counter < 299)
+            sharedPreferences.edit().putInt("counter", counter + 1).apply();
+        else
+            clearCounter(context, true);
 
     }
 
+    public void clearCounter(Context context, boolean showNotification) {
+        sharedPreferences.edit().putInt("counter", 0).apply();
+        if (showNotification && Utils.isBoosterValid(MySharedPreference.getInstance(context).getBoosterDate())) {
+            MySharedPreference.getInstance(context).setBoosterValue(1f);
+            Utils.cancelAlarm(context);
+            Utils.createNotification(context, context.getString(R.string.booster_notif_title), context.getString(R.string.booster_notif_body), "ir.ghararemaghzha.game.TARGET_NOTIFICATION");
+            saveToDB(context);
+        }
+    }
+
+    private void saveToDB(Context context) {
+        MessageModel model = new MessageModel();
+        model.setStat(1);
+        model.setMessage(context.getString(R.string.booster_notif_body));
+        model.setTitle(context.getString(R.string.booster_notif_title));
+        model.setSender("admin");
+        model.setDate(Utils.currentDate());
+        model.setRead(0);
+        Realm db = Realm.getDefaultInstance();
+        model.setMessageId(Utils.getNextKey(db));
+        db.beginTransaction();
+        db.insert(model);
+        db.commitTransaction();
+    }
 
     public boolean isFirstTime() {
         return sharedPreferences.getBoolean("isFirstTime", true);
@@ -162,7 +179,7 @@ public class MySharedPreference {
     }
 
     public int getLastUpdate() {
-        return sharedPreferences.getInt("lastUpdate", 0);
+        return sharedPreferences.getInt("lastUpdate", -1);
     }
 
     public void setLastUpdateChat(String lastUpdate) {

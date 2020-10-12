@@ -103,8 +103,9 @@ class ApiRepository(
             Token: String,
             number: String,
             questionId: String,
-            userAnswer: String
-    ) = safeApiCall { api.answerQuestion(Token, number, questionId, userAnswer) }
+            userAnswer: String,
+            booster: String
+    ) = safeApiCall { api.answerQuestion(Token, number, questionId, userAnswer,booster) }
 
 
     suspend fun sendScore(
@@ -162,5 +163,9 @@ class ApiRepository(
             userId: String
     ) = safeApiCall { api.getUserDetails(Token, number, userId) }
 
-
+    suspend fun report(
+            Token: String,
+            number: String,
+            questionId: String
+    ) = safeApiCall { api.report(Token, number,questionId) }
 }

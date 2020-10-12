@@ -100,7 +100,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
 
     private void showDetailsDialog(String userId) {
         UserDetailsDialog dialog = new UserDetailsDialog(context, userId);
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.setCancelable(true);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;

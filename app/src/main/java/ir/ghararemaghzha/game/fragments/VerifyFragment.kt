@@ -31,7 +31,6 @@ import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
 import ir.ghararemaghzha.game.dialogs.GetDataDialog
-import ir.ghararemaghzha.game.models.MessageModel
 import ir.ghararemaghzha.game.models.QuestionModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -224,7 +223,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     }
 
     private suspend fun getQuestions() {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number, "0", "0")) {
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number, "3000", "3000")) {
 
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {
@@ -233,11 +232,20 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     verify.setText(R.string.verify_verify)
                     dialog.dismiss()
                     if (res.value.message != "empty") {
-                        val data:MutableCollection<QuestionModel> = mutableListOf()
-
-                        for (model in res.value.data) {
+                        val data: MutableCollection<QuestionModel> = mutableListOf()
+                        val userPlan = MySharedPreference.getInstance(ctx).plan.toInt()
+                        var size = 500
+                        when (userPlan) {
+                            1 -> size += 500
+                            2 -> size += 1000
+                            3 -> size += 1500
+                            4 -> size += 2000
+                            5 -> size += 2500
+                        }
+                        for ((index, model) in res.value.data.withIndex()) {
                             model.isUploaded = model.userAnswer != "-1"
                             model.isVisible = false
+                            model.isBought = index < size
                             data.add(model)
                         }
                         db.executeTransaction { it.insertOrUpdate(data) }

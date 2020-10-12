@@ -16,6 +16,7 @@ public class QuestionModel extends RealmObject {
 //            "question_correct": "1",
 //            "question_points": "10",
 //            "user_answer": "-1"
+//            "user_answer_booster": "0"
 //    }
 
 
@@ -47,9 +48,12 @@ public class QuestionModel extends RealmObject {
     @SerializedName("user_answer")
     private String userAnswer;
 
+    @SerializedName("user_answer_booster")
+    private String userBooster;
+
     private boolean visible;
     private boolean uploaded;
-
+    private boolean bought;
 
 
     public boolean isVisible() {
@@ -138,5 +142,21 @@ public class QuestionModel extends RealmObject {
 
     public void setUserAnswer(String userAnswer) {
         this.userAnswer = userAnswer;
+    }
+
+    public String getUserBooster() {
+        return userBooster;
+    }
+
+    public void setUserBooster(String userBooster) {
+        this.userBooster = userBooster;
+    }
+
+    public boolean isBought() {
+        return bought;
+    }
+
+    public void setBought(boolean bought) {
+        this.bought = bought;
     }
 }

@@ -29,7 +29,7 @@ public class UserDetailsDialog extends Dialog {
 
     private Activity context;
     private String userId;
-    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent;
+    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent,booster;
     private ProgressBar answersProgress, questionsProgress;
     private ImageView avatar;
 
@@ -55,6 +55,7 @@ public class UserDetailsDialog extends Dialog {
         code = findViewById(R.id.details_code);
         rank = findViewById(R.id.details_rank);
         score = findViewById(R.id.details_score);
+        booster = findViewById(R.id.details_answers_booster);
         questions = findViewById(R.id.details_questions);
         questionsPercent = findViewById(R.id.details_questions_percent);
         answers = findViewById(R.id.details_answers);
@@ -93,6 +94,7 @@ public class UserDetailsDialog extends Dialog {
                                 code.setText(context.getString(R.string.details_code, response.body().getUserData().getUserCode()));
                                 rank.setText(response.body().getUserData().getUserRank());
                                 score.setText(response.body().getUserData().getScoreCount());
+                                booster.setText(context.getString(R.string.details_booster,response.body().getBooster()));
 
                                 Glide.with(context)
                                         .load(context.getString(R.string.avatar_url, response.body().getUserData().getUserAvatar()))

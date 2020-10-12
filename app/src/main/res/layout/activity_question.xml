@@ -499,5 +499,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/question_10" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/question_report"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:drawableLeft="@drawable/vector_report"
+        android:focusable="true"
+        android:fontFamily="@font/vazir"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:soundEffectsEnabled="true"
+        android:text="@string/question_report"
+        android:textColor="@color/black"
+        app:drawableTint="@color/dark6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@id/question_90" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

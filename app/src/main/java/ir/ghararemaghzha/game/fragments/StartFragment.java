@@ -75,10 +75,12 @@ public class StartFragment extends Fragment {
     }
 
     private void updateInfo() {
-        //  int remain = db.where(QuestionModel.class).equalTo("userAnswer", "-1").findAll().size();
         int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
         if (passed >= 0 && passed < 10)
-            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size())));
+            info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class)
+                    .equalTo("visible", true)
+                    .and().equalTo("userAnswer","-1")
+                    .findAll().size())));
         else if (passed < 0)
             info.setText(context.getString(R.string.start_info, String.valueOf(0)));
         else {
@@ -113,7 +115,7 @@ public class StartFragment extends Fragment {
                     .setMargin(0, 0, 0, 16)
                     .setFocusColor(0xFFFCD736)
                     .setNormalColor(0xFFECEFF1)
-                    .setRadius((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()))
+                    .setRadius((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics()))
                     .build();
             ultraViewPager.setInfiniteLoop(true);
             ultraViewPager.setAutoScroll(5000);

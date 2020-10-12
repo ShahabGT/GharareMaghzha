@@ -64,7 +64,9 @@ public class QuestionActivity extends AppCompatActivity {
     private ImageView music, autoNext, booster;
     private boolean musicSetting;
     private boolean autoNextSetting;
-private boolean foreground=false;
+    private boolean hasBooster = false;
+    private boolean foreground = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +137,13 @@ private boolean foreground=false;
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
+                        TapTarget.forView(findViewById(R.id.question_report), getString(R.string.tap_target_question_next_report_title), getString(R.string.tap_target_question_next_report_des))
+                                .cancelable(false)
+                                .tintTarget(false)
+                                .dimColor(R.color.black)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .targetCircleColor(R.color.white)
+                                .textColor(android.R.color.black),
                         TapTarget.forView(findViewById(R.id.question_next), getString(R.string.tap_target_question_next_question_title), getString(R.string.tap_target_question_next_question_des))
                                 .cancelable(false)
                                 .tintTarget(false)
@@ -164,9 +173,11 @@ private boolean foreground=false;
     private void init() {
         if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
             MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
+            MySharedPreference.getInstance(this).clearCounter(this,false);
         }
         db = Realm.getDefaultInstance();
-        data = db.where(QuestionModel.class).equalTo("visible", true).findAll();
+        data = db.where(QuestionModel.class).equalTo("visible", true)
+                .and().equalTo("userAnswer", "-1").findAll();
 
         music = findViewById(R.id.question_music);
         musicSetting = MySettingsPreference.getInstance(this).getMusic();
@@ -184,6 +195,9 @@ private boolean foreground=false;
         booster = findViewById(R.id.question_booster);
         if (MySharedPreference.getInstance(this).getBoosterValue() == 1f) {
             booster.setVisibility(View.GONE);
+            hasBooster = false;
+        } else {
+            hasBooster = true;
         }
 
         question = findViewById(R.id.question_question);
@@ -251,6 +265,8 @@ private boolean foreground=false;
         wrongSound = soundPool.load(this, R.raw.wrong, 1);
         mediaPlayer = MediaPlayer.create(this, R.raw.game);
         mediaPlayer.setLooping(true);
+
+        findViewById(R.id.question_report).setOnClickListener(v -> report());
     }
 
 
@@ -281,6 +297,7 @@ private boolean foreground=false;
 
 
         answer1c.setOnClickListener(v -> {
+            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -312,6 +329,7 @@ private boolean foreground=false;
                 new Handler().postDelayed(this::nextQuestion, 1000);
         });
         answer2c.setOnClickListener(v -> {
+            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -342,6 +360,7 @@ private boolean foreground=false;
 
         });
         answer3c.setOnClickListener(v -> {
+            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -371,6 +390,7 @@ private boolean foreground=false;
 
         });
         answer4c.setOnClickListener(v -> {
+            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -414,7 +434,7 @@ private boolean foreground=false;
 
     private void nextQuestion() {
         if (data.isEmpty()) {
-            Utils.createNotification(this,getString(R.string.questions_notification_title),getString(R.string.questions_notification_body),"ir.ghararemaghzha.game.TARGET_NOTIFICATION");
+            Utils.createNotification(this, getString(R.string.questions_notification_title), getString(R.string.questions_notification_body), "ir.ghararemaghzha.game.TARGET_NOTIFICATION");
             Toast.makeText(this, getString(R.string.questions_notification_title), Toast.LENGTH_SHORT).show();
             onBackPressed();
             return;
@@ -478,10 +498,13 @@ private boolean foreground=false;
     }
 
     private void setAnswer(String userAnswer) {
+        String b = "0";
+        if (hasBooster) b = "1";
         db.beginTransaction();
         RealmResults<QuestionModel> result = db.where(QuestionModel.class).equalTo("questionId", model.getQuestionId()).findAll();
         Objects.requireNonNull(result.first()).setUserAnswer(userAnswer);
-        Objects.requireNonNull(result.first()).setVisible(false);
+        Objects.requireNonNull(result.first()).setUserBooster(b);
+        //   Objects.requireNonNull(result.first()).setVisible(false);
         db.commitTransaction();
     }
 
@@ -493,8 +516,11 @@ private boolean foreground=false;
             Utils.logout(QuestionActivity.this, true);
             return;
         }
+        String b = "0";
+        if (hasBooster) b = "1";
+
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer)
+                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer, b)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -542,6 +568,29 @@ private boolean foreground=false;
         return data.get(currentQuestion);
     }
 
+    private void report() {
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(QuestionActivity.this, true);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .report("Bearer " + token, number, model.getQuestionId())
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getMessage().equals("submitted"))
+                            Toast.makeText(QuestionActivity.this, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+
+                    }
+                });
+    }
+
     private void uploadScore() {
         gameScore += Integer.parseInt(model.getQuestionPoints()) * MySharedPreference.getInstance(this).getBoosterValue();
         score.setText(String.valueOf(gameScore));
@@ -565,7 +614,6 @@ private boolean foreground=false;
 
                     @Override
                     public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
-
                     }
                 });
     }
@@ -580,7 +628,7 @@ private boolean foreground=false;
     @Override
     protected void onResume() {
         super.onResume();
-        foreground=true;
+        foreground = true;
         if (mediaPlayer != null && musicSetting)
             mediaPlayer.start();
     }
@@ -588,7 +636,7 @@ private boolean foreground=false;
     @Override
     protected void onStop() {
         super.onStop();
-        foreground=false;
+        foreground = false;
     }
 
     @Override

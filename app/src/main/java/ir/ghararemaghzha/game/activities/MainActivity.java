@@ -34,17 +34,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
 import io.realm.Realm;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import ir.ghararemaghzha.game.R;
@@ -103,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        db = Realm.getDefaultInstance();
+
         init();
         if (MySharedPreference.getInstance(this).isFirstTime())
             helpInfo();
@@ -110,6 +106,71 @@ public class MainActivity extends AppCompatActivity {
             firebaseDebug("ok");
 
 
+    }
+
+    private void getData() {
+        GetDataDialog dialog = Utils.showGetDataLoading(MainActivity.this);
+        String number = MySharedPreference.getInstance(this).getNumber();
+        String token = MySharedPreference.getInstance(this).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(MainActivity.this, true);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .getQuestions("Bearer " + token, number, "3000", "3000")
+                .enqueue(new Callback<QuestionResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String userPlan = MySharedPreference.getInstance(MainActivity.this).getPlan();
+                            int size = 500;
+                            switch (userPlan) {
+                                case "1":
+                                    size += 500;
+                                    break;
+                                case "2":
+                                    size += 1000;
+                                    break;
+                                case "3":
+                                    size += 1500;
+                                    break;
+                                case "4":
+                                    size += 2000;
+                                    break;
+                                case "5":
+                                    size += 2500;
+                                    break;
+                            }
+                            ArrayList<QuestionModel> data = new ArrayList<>();
+                            for (int i = 0; i < response.body().getData().size(); i++) {
+                                QuestionModel m = response.body().getData().get(i);
+                                m.setVisible(false);
+                                if (!m.getUserAnswer().equals("-1"))
+                                    m.setUploaded(true);
+                                else m.setUploaded(false);
+
+                                if (i < size)
+                                    m.setBought(true);
+                                else m.setBought(false);
+                                m.setVisible(false);
+                                data.add(m);
+                            }
+                            db.executeTransaction(realm -> realm.insertOrUpdate(data));
+                            dialog.dismiss();
+                            updateMessages();
+                            checkTime();
+                        } else {
+                            dialog.dismiss();
+                            Utils.showInternetError(MainActivity.this, () -> getData());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
+                        dialog.dismiss();
+                        Utils.showInternetError(MainActivity.this, () -> getData());
+                    }
+                });
     }
 
     private void firebaseDebug(String result) {
@@ -257,7 +318,6 @@ public class MainActivity extends AppCompatActivity {
 
         motionLayout = findViewById(R.id.main_motion);
         refreshIntent = new Intent(GHARAREHMAGHZHA_BROADCAST_REFRESH);
-        db = Realm.getDefaultInstance();
         doubleBackToExitPressedOnce = false;
         newChat = findViewById(R.id.main_chat_new);
         newToolbar = findViewById(R.id.toolbar_new);
@@ -280,10 +340,16 @@ public class MainActivity extends AppCompatActivity {
         if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
             MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
         }
+        if (db.isEmpty()) {
+            getData();
+        }else{
+            updateMessages();
+            checkTime();
+        }
+
         setAvatars(this);
         Utils.removeNotification(this);
-        updateMessages();
-        checkTime();
+
     }
 
     @Override
@@ -325,17 +391,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            int serverCount = Integer.parseInt(response.body().getUserQuestions());
-
                             if (!Utils.isTimeAcceptable(response.body().getTime())) {
                                 timeDialog = Utils.showTimeError(MainActivity.this);
                             } else {
                                 MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
-
-                                int lastUpdate = 0;
-                                if (response.body().getLastUpdate() != null && !response.body().getLastUpdate().isEmpty())
-                                    lastUpdate = Integer.parseInt(response.body().getLastUpdate());
-                                updateDatabase(serverCount, lastUpdate);
                                 verify();
                             }
                         } else if (response.code() == 401) {
@@ -366,12 +425,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<VerifyResponse> call, @NonNull Response<VerifyResponse> response) {
                         if (response.body() != null)
-                            if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
+                            if (response.isSuccessful() && response.body().getResult().equals("success")) {
                                 int newPlan = Integer.parseInt(response.body().getUserPlan());
                                 int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
                                 if (newPlan > oldPlan) {
                                     dataDialog = Utils.showGetDataLoading(MainActivity.this);
-                                    getQuestions(String.valueOf(newPlan));
+                                    getQuestions(newPlan);
+                                } else {
+                                    updateDatabase(false);
                                 }
                                 int myVersion = Utils.getVersionCode(MainActivity.this);
                                 int newVersion = Integer.parseInt(response.body().getVersion());
@@ -394,6 +455,7 @@ public class MainActivity extends AppCompatActivity {
                                 int localBooster = MySharedPreference.getInstance(MainActivity.this).getBooster();
                                 if (serverBooster != 0 && serverBooster > localBooster) {
                                     if (Utils.isBoosterValid(response.body().getUserBoosterExpire())) {
+                                        MySharedPreference.getInstance(MainActivity.this).clearCounter(MainActivity.this,false);
                                         MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
                                         MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
                                         MySharedPreference.getInstance(MainActivity.this).setBoosterDate(response.body().getUserBoosterExpire());
@@ -470,167 +532,94 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateDatabase(int size) {
-        Date d = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-        int nowDate = Integer.parseInt(dateFormat.format(d));
-        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        int range = size / (10 - passed);
-        Pair<String, Sort> pair = randomSortField();
+    private void updateDatabase(boolean shouldUpdate) {
+        int day = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        if(day>=0 && day<10) {
+            if (shouldUpdate | day != MySharedPreference.getInstance(this).getLastUpdate()) {
+                final int range;
+                Pair<String, Sort> pair = randomSortField();
+                switch (day) {
+                    case 1:
+                        range = 600;
+                        break;
+                    case 2:
+                        range = 900;
+                        break;
+                    case 3:
+                        range = 1200;
+                        break;
+                    case 4:
+                        range = 1500;
+                        break;
+                    case 5:
+                        range = 1800;
+                        break;
+                    case 6:
+                        range = 2100;
+                        break;
+                    case 7:
+                        range = 2400;
+                        break;
+                    case 8:
+                        range = 2700;
+                        break;
+                    case 9:
+                        range = 3000;
+                        break;
+                    default:
+                        range = 300;
+                }
 
-        if (range > 0) {
-            db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).sort(pair.getFirst(), pair.getSecond()).limit(range).findAll();
-                questions.setBoolean("visible", true);
-            });
-            updateTime(nowDate);
-            Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
-            sendBroadcast(refreshIntent);
-            MySharedPreference.getInstance(MainActivity.this).setQuestionsToUnlock(0);
-        }
-    }
-
-    private void updateDatabase(int serverCount, int lastUpdate) {
-        int userCount = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
-        Date d = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-        Pair<String, Sort> pair = randomSortField();
-
-        int nowDate = Integer.parseInt(dateFormat.format(d));
-        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if (passed == 9) {
-            db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll();
-                questions.setBoolean("visible", true);
-            });
-            updateTime(nowDate);
-            Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
-            sendBroadcast(refreshIntent);
-        } else if (passed >= 0 && nowDate > lastUpdate && passed < 10) {
-            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
-            int range;
-            if (serverCount > 0)
-                range = (remaining / (10 - passed)) + serverCount;
-            else
-                range = remaining / (10 - passed);
-
-            if (range > 0) {
                 db.executeTransaction(realm -> {
-                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).sort(pair.getFirst(), pair.getSecond()).limit(range).findAll();
+                    RealmResults<QuestionModel> questions = realm.where(QuestionModel.class)
+                            .equalTo("bought", true)
+                            .sort("questionId", Sort.ASCENDING)
+                            .limit(range).findAll();
+
                     questions.setBoolean("visible", true);
                 });
-                updateTime(nowDate);
-                Utils.updateServerQuestions(this, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
                 sendBroadcast(refreshIntent);
-
+                MySharedPreference.getInstance(this).setLastUpdate(day);
+            }else if(!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
+                MySharedPreference.getInstance(this).clearCounter(this,false);
             }
-        } else if (nowDate == lastUpdate && serverCount > userCount) {
-            int range = serverCount - userCount;
-            db.executeTransaction(realm -> {
-                RealmResults<QuestionModel> questions = realm.where(QuestionModel.class).equalTo("userAnswer", "-1").limit(range).findAll();
-                questions.setBoolean("visible", true);
-            });
-            sendBroadcast(refreshIntent);
-        } else if (MySharedPreference.getInstance(MainActivity.this).getQuestionsToUnlock() > 0) {
-            updateDatabase(MySharedPreference.getInstance(MainActivity.this).getQuestionsToUnlock());
         }
+
     }
 
-    private void getQuestions(String newPlan) {
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this, true);
-            return;
-        }
-        int questions = db.where(QuestionModel.class).findAll().size();  //500
-        int plan = Integer.parseInt(newPlan);  //5
-        int size = 500;
+    private void getQuestions(int plan) {
+        final int size;
         switch (plan) {
             case 1:
-                size += 500;
+                size = 1000;
                 break;
             case 2:
-                size += 1000;
+                size = 1500;
                 break;
             case 3:
-                size += 1500;
+                size = 2000;
                 break;
             case 4:
-                size += 2000;
+                size = 2500;
                 break;
             case 5:
-                size += 2500;
+                size = 3000;
                 break;
+            default:
+                size = 0;
         }
-        size -= questions;
-        RetrofitClient.getInstance().getApi()
-                .getQuestions("Bearer " + token, number, String.valueOf(questions), String.valueOf(size))
-                .enqueue(new Callback<QuestionResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && !response.body().getMessage().equals("empty")) {
-                            Collection<RealmObject> data = new ArrayList<>();
-                            for (QuestionModel model : response.body().getData()) {
-                                if (model.getUserAnswer().equals("-1"))
-                                    model.setUploaded(false);
-                                else
-                                    model.setUploaded(true);
-                                model.setVisible(false);
-                                data.add(model);
-                            }
-                            db.executeTransaction(realm -> realm.insertOrUpdate(data));
-                            MySharedPreference.getInstance(MainActivity.this).setPlan(newPlan);
-                            MySharedPreference.getInstance(MainActivity.this).setQuestionsToUnlock(response.body().getData().size());
-                            updateDatabase(response.body().getData().size());
-                            sendBroadcast(refreshIntent);
-                            if (dataDialog != null) dataDialog.dismiss();
-                        } else if (response.code() == 401) {
-                            if (dataDialog != null) dataDialog.dismiss();
-                            Utils.logout(MainActivity.this, true);
-                        } else {
-                            if (dataDialog != null) dataDialog.dismiss();
-                            Utils.showInternetError(MainActivity.this, () -> getQuestions(newPlan));
-                        }
 
-                    }
+        db.executeTransaction(realm -> {
+            RealmResults<QuestionModel> questions = realm.where(QuestionModel.class)
+                    .sort("questionId", Sort.ASCENDING)
+                    .limit(size).findAll();
 
-                    @Override
-                    public void onFailure(@NonNull Call<QuestionResponse> call, @NonNull Throwable t) {
-                        if (dataDialog != null) dataDialog.dismiss();
-                        Utils.showInternetError(MainActivity.this, () -> getQuestions(newPlan));
-                    }
-                });
+            questions.setBoolean("bought", true);
+        });
+        MySharedPreference.getInstance(MainActivity.this).setPlan(String.valueOf(plan));
+        if(dataDialog!=null) dataDialog.dismiss();
+        updateDatabase(true);
     }
-
-
-    private void updateTime(int lastUpdate) {
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this, true);
-            return;
-        }
-        RetrofitClient.getInstance().getApi()
-                .updateLastUpdate("Bearer " + token, number, String.valueOf(lastUpdate))
-                .enqueue(new Callback<GeneralResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
-                        if (response.code() == 401)
-                            Utils.logout(MainActivity.this, true);
-                        else if (!response.isSuccessful())
-                            Utils.showInternetError(MainActivity.this, () -> updateTime(lastUpdate));
-
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
-                        Utils.showInternetError(MainActivity.this, () -> updateTime(lastUpdate));
-
-                    }
-                });
-    }
-
 
     private void uploadScore(String score) {
         String number = MySharedPreference.getInstance(this).getNumber();
@@ -659,10 +648,10 @@ public class MainActivity extends AppCompatActivity {
     private void uploadAnswers() {
         RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
         for (QuestionModel model : models)
-            uploadAnswer(model.getQuestionId(), model.getUserAnswer());
+            uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster());
     }
 
-    private void uploadAnswer(String questionId, String userAnswer) {
+    private void uploadAnswer(String questionId, String userAnswer, String booster) {
 
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
@@ -671,7 +660,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, questionId, userAnswer)
+                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {

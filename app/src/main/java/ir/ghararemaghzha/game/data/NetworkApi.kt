@@ -1,6 +1,7 @@
 package ir.ghararemaghzha.game.data
 
 import ir.ghararemaghzha.game.models.*
+import retrofit2.Call
 import retrofit2.http.*
 
 interface NetworkApi {
@@ -122,7 +123,8 @@ interface NetworkApi {
             @Header("Authorization") Token: String,
             @Field("number") number: String,
             @Field("question_id") questionId: String,
-            @Field("user_answer") userAnswer: String
+            @Field("user_answer") userAnswer: String,
+            @Field("user_answer_booster") booster: String
     ): GeneralResponse
 
     @FormUrlEncoded
@@ -189,6 +191,13 @@ interface NetworkApi {
             @Field("user_id") userId: String
     ): UserDetailsResponse
 
+    @FormUrlEncoded
+    @POST("report")
+    suspend fun report(
+            @Header("Authorization") Token: String,
+            @Field("number") number: String,
+            @Field("question_id") questionId: String
+    ): GeneralResponse
 }
 
 
