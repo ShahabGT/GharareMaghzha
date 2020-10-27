@@ -168,4 +168,10 @@ class ApiRepository(
             number: String,
             questionId: String
     ) = safeApiCall { api.report(Token, number,questionId) }
+
+    suspend fun info(
+            Token: String,
+            number: String,
+            info: String
+    ) = safeApiCall { api.info(Token, number,info) }
 }

@@ -76,7 +76,7 @@ interface Api {
 
 
     @FormUrlEncoded
-    @POST("questions")
+    @POST("questions2")
     fun getQuestions(
             @Header("Authorization") Token: String,
             @Field("number") number: String,
@@ -197,6 +197,14 @@ interface Api {
             @Header("Authorization") Token: String,
             @Field("number") number: String,
             @Field("question_id") questionId: String,
+    ): Call<GeneralResponse>
+
+    @FormUrlEncoded
+    @POST("info")
+    fun info(
+            @Header("Authorization") Token: String,
+            @Field("number") number: String,
+            @Field("info") info: String,
     ): Call<GeneralResponse>
 
 }

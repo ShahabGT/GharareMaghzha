@@ -19,6 +19,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_main_menu"
         app:tint="@color/white" />
+    <ImageView
+        android:id="@+id/toolbar_insta"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:soundEffectsEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/toolbar_menu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/instagram128"
+        app:tint="@color/white" />
+
 
     <ImageView
         android:id="@+id/toolbar_new"
@@ -45,9 +60,11 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@id/toolbar_avatar"
         app:layout_constraintRight_toLeftOf="@id/toolbar_menu"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/toolbar_avatar"

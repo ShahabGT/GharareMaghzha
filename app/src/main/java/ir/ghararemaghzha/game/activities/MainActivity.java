@@ -17,7 +17,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -25,7 +24,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-
 import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -33,11 +31,8 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -55,7 +50,6 @@ import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
 import ir.ghararemaghzha.game.models.TimeResponse;
 import ir.ghararemaghzha.game.models.VerifyResponse;
-import kotlin.Pair;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private Realm db;
     private GetDataDialog dataDialog;
     private BottomNavigationView bnv;
-    private BroadcastReceiver notificationBroadCast = new BroadcastReceiver() {
+    private final BroadcastReceiver notificationBroadCast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateMessages();
@@ -145,13 +139,9 @@ public class MainActivity extends AppCompatActivity {
                             for (int i = 0; i < response.body().getData().size(); i++) {
                                 QuestionModel m = response.body().getData().get(i);
                                 m.setVisible(false);
-                                if (!m.getUserAnswer().equals("-1"))
-                                    m.setUploaded(true);
-                                else m.setUploaded(false);
+                                m.setUploaded(!m.getUserAnswer().equals("-1"));
 
-                                if (i < size)
-                                    m.setBought(true);
-                                else m.setBought(false);
+                                m.setBought(i < size);
                                 m.setVisible(false);
                                 data.add(m);
                             }
@@ -331,6 +321,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
+        findViewById(R.id.toolbar_insta).setOnClickListener(v->{
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(getString(R.string.instagram_url)));
+            startActivity(intent);
+        });
         avatar.setOnClickListener(v -> navController.navigate(R.id.action_global_profileEditFragment));
     }
 
@@ -342,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (db.isEmpty()) {
             getData();
-        }else{
+        } else {
             updateMessages();
             checkTime();
         }
@@ -361,11 +357,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateMessages() {
         int size = db.where(MessageModel.class).equalTo("sender", "admin").equalTo("read", 0).findAll().size();
         BadgeDrawable badgeDrawable = bnv.getOrCreateBadge(R.id.menu_message);
-        if (size > 0) {
-            badgeDrawable.setVisible(true);
-        } else {
-            badgeDrawable.setVisible(false);
-        }
+        badgeDrawable.setVisible(size > 0);
 
         if (MySharedPreference.getInstance(MainActivity.this).getUnreadChats() > 0) {
             newChat.setVisibility(View.VISIBLE);
@@ -439,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
                                 int newScore = Integer.parseInt(response.body().getScoreCount());
                                 int oldScore = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getScore());
 
-                                if (newScore > oldScore)
+                                if (newScore == 0 || newScore > oldScore)
                                     MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
                                 else if (oldScore > newScore)
                                     uploadScore(String.valueOf(oldScore));
@@ -455,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
                                 int localBooster = MySharedPreference.getInstance(MainActivity.this).getBooster();
                                 if (serverBooster != 0 && serverBooster > localBooster) {
                                     if (Utils.isBoosterValid(response.body().getUserBoosterExpire())) {
-                                        MySharedPreference.getInstance(MainActivity.this).clearCounter(MainActivity.this,false);
+                                        MySharedPreference.getInstance(MainActivity.this).clearCounter(MainActivity.this, false);
                                         MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
                                         MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
                                         MySharedPreference.getInstance(MainActivity.this).setBoosterDate(response.body().getUserBoosterExpire());
@@ -485,59 +477,11 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private Pair<String, Sort> randomSortField() {
-        int rand = new Random().nextInt(6);
-        int rand2 = new Random().nextInt(2);
-        switch (rand) {
-            case 0: {
-                if (rand2 == 0)
-                    return new Pair<>("questionId", Sort.ASCENDING);
-                else
-                    return new Pair<>("questionId", Sort.DESCENDING);
-            }
-            case 1: {
-                if (rand2 == 0)
-                    return new Pair<>("questionText", Sort.ASCENDING);
-                else
-                    return new Pair<>("questionText", Sort.DESCENDING);
-            }
-            case 2: {
-                if (rand2 == 0)
-                    return new Pair<>("questionA1", Sort.ASCENDING);
-                else
-                    return new Pair<>("questionA1", Sort.DESCENDING);
-            }
-
-            case 3: {
-                if (rand2 == 0)
-                    return new Pair<>("questionA2", Sort.ASCENDING);
-                else
-                    return new Pair<>("questionA2", Sort.DESCENDING);
-            }
-            case 4: {
-                if (rand2 == 0)
-                    return new Pair<>("questionA3", Sort.ASCENDING);
-                else
-                    return new Pair<>("questionA3", Sort.DESCENDING);
-            }
-            case 5: {
-                if (rand2 == 0)
-                    return new Pair<>("questionA4", Sort.ASCENDING);
-                else
-                    return new Pair<>("questionA4", Sort.DESCENDING);
-            }
-            default: {
-                return new Pair<>("questionId", Sort.DESCENDING);
-            }
-        }
-    }
-
     private void updateDatabase(boolean shouldUpdate) {
         int day = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if(day>=0 && day<10) {
+        if (day >= 0 && day < 10) {
             if (shouldUpdate | day != MySharedPreference.getInstance(this).getLastUpdate()) {
                 final int range;
-                Pair<String, Sort> pair = randomSortField();
                 switch (day) {
                     case 1:
                         range = 600;
@@ -573,15 +517,15 @@ public class MainActivity extends AppCompatActivity {
                 db.executeTransaction(realm -> {
                     RealmResults<QuestionModel> questions = realm.where(QuestionModel.class)
                             .equalTo("bought", true)
-                            .sort("questionId", Sort.ASCENDING)
+                            .sort("sortId", Sort.ASCENDING)
                             .limit(range).findAll();
 
                     questions.setBoolean("visible", true);
                 });
                 sendBroadcast(refreshIntent);
                 MySharedPreference.getInstance(this).setLastUpdate(day);
-            }else if(!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
-                MySharedPreference.getInstance(this).clearCounter(this,false);
+            } else if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
+                MySharedPreference.getInstance(this).clearCounter(this, false);
             }
         }
 
@@ -611,44 +555,51 @@ public class MainActivity extends AppCompatActivity {
 
         db.executeTransaction(realm -> {
             RealmResults<QuestionModel> questions = realm.where(QuestionModel.class)
-                    .sort("questionId", Sort.ASCENDING)
+                    .sort("sortId", Sort.ASCENDING)
                     .limit(size).findAll();
 
             questions.setBoolean("bought", true);
         });
         MySharedPreference.getInstance(MainActivity.this).setPlan(String.valueOf(plan));
-        if(dataDialog!=null) dataDialog.dismiss();
+        if (dataDialog != null) dataDialog.dismiss();
         updateDatabase(true);
     }
 
     private void uploadScore(String score) {
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this, true);
-            return;
-        }
-        RetrofitClient.getInstance().getApi()
-                .sendScore("Bearer " + token, number, score)
-                .enqueue(new Callback<GeneralResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
-                        if (response.code() == 401) {
-                            Utils.logout(MainActivity.this, true);
+        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        if(passed<10) {
+            String number = MySharedPreference.getInstance(this).getNumber();
+            String token = MySharedPreference.getInstance(this).getAccessToken();
+            if (number.isEmpty() || token.isEmpty()) {
+                Utils.logout(MainActivity.this, true);
+                return;
+            }
+            RetrofitClient.getInstance().getApi()
+                    .sendScore("Bearer " + token, number, score)
+                    .enqueue(new Callback<GeneralResponse>() {
+                        @Override
+                        public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+                            if (response.code() == 401) {
+                                Utils.logout(MainActivity.this, true);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+                        @Override
+                        public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+        }
     }
 
     private void uploadAnswers() {
-        RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
-        for (QuestionModel model : models)
-            uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster());
+        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        if(passed<10) {
+            RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
+            for (QuestionModel model : models)
+                uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster());
+
+        }
     }
 
     private void uploadAnswer(String questionId, String userAnswer, String booster) {

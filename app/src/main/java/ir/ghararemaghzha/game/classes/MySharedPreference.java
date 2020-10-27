@@ -46,10 +46,19 @@ public class MySharedPreference {
 
     public void clear() {
         String fbToken = getFbToken();
+        int counter = getCounter();
         sharedPreferences.edit().clear().apply();
         setFbToken(fbToken);
         setFirstTime();
         setFirstTimeQuestion();
+        setCounter(counter);
+    }
+
+    private void setCounter(int counter){
+        sharedPreferences.edit().putInt("counter",counter).apply();
+    }
+    private int getCounter(){
+        return sharedPreferences.getInt("counter",0);
     }
 
     public void counterIncrease(Context context) {

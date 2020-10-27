@@ -10,6 +10,7 @@ data class GeneralResponse(
         val time:String,
         val count:String,
         val value:String,
+        val data:String,
         @SerializedName("user_id") val userId:String,
         @SerializedName("user_name") val userName:String,
         @SerializedName("user_code") val userCode:String,

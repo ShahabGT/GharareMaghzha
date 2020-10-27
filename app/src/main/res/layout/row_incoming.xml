@@ -52,21 +52,26 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/incoming_title"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/vazir"
-            android:text="@string/start_start_title"
+            android:gravity="right"
+            android:text="asdasdasdasdasdasdasdasdasdasdasddwqwdqwd"
             android:textColor="@color/black"
             android:textStyle="bold"
+            android:maxEms="6"
+            android:singleLine="true"
+            app:layout_constraintLeft_toRightOf="@id/incoming_left"
             app:layout_constraintRight_toLeftOf="@id/incoming_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/incoming_body"
             style="@style/TextAppearance.AppCompat.Small"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:gravity="right"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:ellipsize="end"
@@ -74,6 +79,7 @@
             android:maxEms="10"
             android:singleLine="true"
             android:text="@string/start_start_subtitle"
+            app:layout_constraintLeft_toRightOf="@id/incoming_left"
             app:layout_constraintRight_toLeftOf="@id/incoming_icon"
             app:layout_constraintTop_toBottomOf="@+id/incoming_title"
 

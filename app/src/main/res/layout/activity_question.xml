@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="1500"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/question_score_img"
                 app:layout_constraintLeft_toRightOf="@id/question_score_img"
@@ -178,7 +178,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/vazir"
-        android:text="20"
+        android:text="15"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/question_progress_bar"
         app:layout_constraintLeft_toLeftOf="@id/question_progress_bar"
@@ -246,10 +246,30 @@
                 android:gravity="center"
                 android:text="سوال"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/question_report"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/question_points" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/question_report"
+                android:layout_width="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/square"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:drawableLeft="@drawable/vector_report"
+                android:focusable="true"
+                android:fontFamily="@font/vazir"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:soundEffectsEnabled="true"
+                android:text="@string/question_report"
+                android:textColor="@color/black"
+                app:drawableTint="@color/dark6"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/question_question" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
@@ -500,7 +520,8 @@
         app:layout_constraintLeft_toLeftOf="@id/question_10" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/question_report"
+        android:visibility="gone"
+        android:id="@+id/question_reportxx"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

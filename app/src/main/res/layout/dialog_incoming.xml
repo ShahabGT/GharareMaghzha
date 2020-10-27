@@ -8,13 +8,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp">
+        android:padding="4dp">
 
         <ImageView
             android:id="@+id/incoming_icon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_margin="8dp"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_margin="4dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/logo_re" />
@@ -40,7 +40,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/incoming_title"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -65,8 +65,8 @@
             android:fontFamily="@font/vazir"
             android:text="1399/05/05"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/incoming_icon"
-            app:layout_constraintRight_toLeftOf="@id/incoming_icon"
+            app:layout_constraintBottom_toBottomOf="@id/incoming_line"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/incoming_title" />
 
         <View
@@ -91,7 +91,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/incoming_body"
-                style="@style/TextAppearance.AppCompat.Medium"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="match_parent"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"

@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
 
     private Realm db;
 
-    private BroadcastReceiver br = new BroadcastReceiver() {
+    private final BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateUI();

@@ -154,7 +154,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun showRulesDialog() {
-        val dialog = RulesDialog(ctx)
+        val dialog = RulesDialog(act)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
         dialog.window?.setGravity(Gravity.CENTER)

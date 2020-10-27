@@ -22,6 +22,7 @@
     <string name="general_email">ایمیل</string>
     <string name="general_bday">تاریخ تولد</string>
     <string name="general_share">اشتراک از طریق</string>
+    <string name="general_end">مدت زمان مسابقه به پایان رسید!</string>
 
     <string name="general_name">نام و نام خانوادگی</string>
     <string name="general_code">کد تایید</string>
@@ -97,7 +98,7 @@
     <string name="start_start_title">شروع مسابقه</string>
     <string name="start_start_subtitle">پاسخ به سوالات باقیمانده</string>
     <string name="start_highscore_title">برترین کاربران</string>
-    <string name="start_highscore_subtitle">مشاهده لیست 10 کاربر برتر</string>
+    <string name="start_highscore_subtitle">مشاهده لیست کاربران برتر</string>
     <string name="start_info">شما دارای %s سوال بدون پاسخ هستید!</string>
     <string name="start_info_passed">زمان مسابقه به پایان رسیده است!</string>
 
@@ -245,7 +246,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا 500 سوال به صورت رایگان برای شما فعال می باشد.</string>
     <string name="score1_button">ورود به صفحه سوالات</string>
     <string name="score2_title">معرفی به دوستان</string>
-    <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 500 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
+    <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 2000 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
     <string name="score2_button">ورود به صفحه معرفی به دوستان</string>
     <string name="score3_title">پکیج نیترو امتیاز</string>
     <string name="score3_subtitle">با خریداری پکیج نیترو امتیاز، مقدار امتیاز هر سوال به مدت 24 ساعت یا حداکثر 300 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 5 بار این پکیج قابل خریداری می باشد.</string>

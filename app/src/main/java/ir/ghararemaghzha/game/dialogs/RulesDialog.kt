@@ -1,46 +1,66 @@
 package ir.ghararemaghzha.game.dialogs
 
+import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.Toast
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.textview.MaterialTextView
+import ir.ghararemaghzha.game.R
+import ir.ghararemaghzha.game.classes.MySharedPreference
+import ir.ghararemaghzha.game.classes.Utils
+import ir.ghararemaghzha.game.data.ApiRepository
+import ir.ghararemaghzha.game.data.NetworkApi
+import ir.ghararemaghzha.game.data.RemoteDataSource
+import ir.ghararemaghzha.game.data.Resource
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import ir.ghararemaghzha.game.R
 
- class RulesDialog(context: Context) : Dialog(context) {
+class RulesDialog(context: Activity) : Dialog(context) {
 
-    private val ctx=context
-
-
-     override fun onCreate(savedInstanceState: Bundle?) {
-         super.onCreate(savedInstanceState)
-         setContentView(R.layout.dialog_rules)
-         findViewById<MaterialTextView>(R.id.rules_text).text=getText()
-         findViewById<ImageView>(R.id.rules_close).setOnClickListener{dismiss()}
-     }
+    private val ctx = context
+    private lateinit var text :MaterialTextView
 
 
-
-    private fun getText():String{
-        val inputStream = ctx.resources.openRawResource(R.raw.rules)
-        val reader =  BufferedReader( InputStreamReader(inputStream))
-        val text =  StringBuilder()
-        var line:String?
-
-        try {
-            line = reader.readLine()
-            while ( line != null) {
-                text.append(line)
-                text.append("\n")
-                line = reader.readLine()
-            }
-        }catch ( e :IOException){
-            e.printStackTrace()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.dialog_rules)
+        text =findViewById(R.id.rules_text)
+        findViewById<ImageView>(R.id.rules_close).setOnClickListener { dismiss() }
+        CoroutineScope(Dispatchers.IO).launch {
+            getData()
         }
-
-        return text.toString()
     }
+
+
+    private suspend fun getData() {
+        val number = MySharedPreference.getInstance(ctx).number
+        val token = MySharedPreference.getInstance(ctx).accessToken
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(ctx, true)
+        }
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).info("Bearer $token", number, "rules")) {
+            is Resource.Success -> {
+                withContext(Dispatchers.Main) {
+                    text.text = res.value.data
+                }
+            }
+            is Resource.Failure -> {
+                withContext(Dispatchers.Main) {
+                    dismiss()
+                    Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
+
+                }
+            }
+        }
+    }
+
+
+
 }
+
+
+

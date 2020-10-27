@@ -12,10 +12,21 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
+import ir.ghararemaghzha.game.classes.MySharedPreference
+import ir.ghararemaghzha.game.classes.Utils
+import ir.ghararemaghzha.game.data.ApiRepository
+import ir.ghararemaghzha.game.data.NetworkApi
+import ir.ghararemaghzha.game.data.RemoteDataSource
+import ir.ghararemaghzha.game.data.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -23,6 +34,7 @@ import java.io.InputStreamReader
 class AboutFragment : Fragment(R.layout.fragment_about) {
     private lateinit var ctx: Context
     private lateinit var act: FragmentActivity
+    private lateinit var text: MaterialTextView
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,8 +47,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 
     private fun init(v: View) {
         (act.findViewById<View>(R.id.toolbar_title) as MaterialTextView).setText(R.string.about_title)
-        (v.findViewById(R.id.about_text) as MaterialTextView).text = getAboutText()
-
+        text = v.findViewById(R.id.about_text)
         val tradeMark: MaterialTextView = v.findViewById(R.id.about_trademark1)
         val tradeMark2: MaterialTextView = v.findViewById(R.id.about_trademark2)
         val tradeMark3: MaterialTextView = v.findViewById(R.id.about_trademark3)
@@ -91,26 +102,32 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
         val version = pInfo.versionName
         tradeMark3.text = getString(R.string.about_trademark3, version)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            getData()
+        }
+
         onClicks(v)
     }
 
-    private fun getAboutText(): String {
-        val inputStream = ctx.resources.openRawResource(R.raw.about)
-        val reader = BufferedReader(InputStreamReader(inputStream))
-        val text = StringBuilder()
-        var line: String?
-        try {
-            while (reader.readLine().also { line = it } != null) {
-                text.append(line)
-                text.append("\n")
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
+    private suspend fun getData() {
+        val number = MySharedPreference.getInstance(ctx).number
+        val token = MySharedPreference.getInstance(ctx).accessToken
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(act, true)
         }
-        return text.toString()
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).info("Bearer $token", number, "about")) {
+            is Resource.Success -> {
+                withContext(Dispatchers.Main) {
+                    text.text = res.value.data
+                }
+            }
+            is Resource.Failure -> {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
-
-
     private fun onClicks(v: View) {
         (v.findViewById(R.id.about_email) as ImageView).setOnClickListener {
             val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(

@@ -5,6 +5,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.realm.Realm
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST
+import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_END
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA
 import ir.ghararemaghzha.game.classes.MySettingsPreference
 import ir.ghararemaghzha.game.classes.MySharedPreference
@@ -30,6 +31,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val intent = Intent()
         intent.action = GHARAREHMAGHZHA_BROADCAST
         intent.putExtra(GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA, "new")
+
+        if(title=="ended" && data["body"]=="ended"){
+            val i = Intent()
+            i.action = GHARAREHMAGHZHA_BROADCAST_END
+            sendBroadcast(i)
+            return
+        }
 
         if (title != "support") {
             val body = data["body"]

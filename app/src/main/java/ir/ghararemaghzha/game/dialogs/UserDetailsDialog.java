@@ -27,9 +27,9 @@ import retrofit2.Response;
 
 public class UserDetailsDialog extends Dialog {
 
-    private Activity context;
-    private String userId;
-    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent,booster;
+    private final Activity context;
+    private final String userId;
+    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent, booster;
     private ProgressBar answersProgress, questionsProgress;
     private ImageView avatar;
 
@@ -94,7 +94,10 @@ public class UserDetailsDialog extends Dialog {
                                 code.setText(context.getString(R.string.details_code, response.body().getUserData().getUserCode()));
                                 rank.setText(response.body().getUserData().getUserRank());
                                 score.setText(response.body().getUserData().getScoreCount());
-                                booster.setText(context.getString(R.string.details_booster,response.body().getBooster()));
+                                if (Integer.parseInt(response.body().getBooster()) < 1500)
+                                    booster.setText(context.getString(R.string.details_booster, response.body().getBooster()));
+                                else
+                                    booster.setText(context.getString(R.string.details_booster, "1500"));
 
                                 Glide.with(context)
                                         .load(context.getString(R.string.avatar_url, response.body().getUserData().getUserAvatar()))
@@ -102,21 +105,30 @@ public class UserDetailsDialog extends Dialog {
                                         .placeholder(R.drawable.placeholder)
                                         .into(avatar);
 
-                 //               int totalQuestions = (Integer.parseInt(response.body().getPlan()) * 1000) + 100;
-                                int totalQuestions = (Integer.parseInt(response.body().getPlan()) *500) + 500;
+                                int totalQuestions = (Integer.parseInt(response.body().getPlan()) * 500) + 500;
 
                                 int answeredQuestions = response.body().getCorrect() + response.body().getIncorrect();
-                                answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), response.body().getIncorrect()));
+                                if (answeredQuestions <= 3000) {
+                                    answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), response.body().getIncorrect()));
+                                    questions.setText(context.getString(R.string.details_questions, answeredQuestions, totalQuestions));
+                                } else {
+                                    int incorrect = response.body().getIncorrect() - (answeredQuestions - 3000);
+                                    answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), incorrect));
+                                    questions.setText(context.getString(R.string.details_questions, 3000, totalQuestions));
 
-                                questions.setText(context.getString(R.string.details_questions, answeredQuestions, totalQuestions));
+                                }
+
                                 int aPercent;
                                 int qPercent;
-                                if (answeredQuestions > 0) {
+                                if (answeredQuestions > 0 && answeredQuestions <= 3000) {
                                     aPercent = (response.body().getCorrect() * 100) / answeredQuestions;
                                     qPercent = (answeredQuestions * 100) / totalQuestions;
-                                }else {
-                                    qPercent=0;
-                                    aPercent=0;
+                                } else if (answeredQuestions > 3000) {
+                                    aPercent = (response.body().getCorrect() * 100) / 3000;
+                                    qPercent = (answeredQuestions * 100) / totalQuestions;
+                                } else {
+                                    qPercent = 0;
+                                    aPercent = 0;
                                 }
                                 new Handler().postDelayed(() -> {
                                     if (Build.VERSION.SDK_INT >= 24) {

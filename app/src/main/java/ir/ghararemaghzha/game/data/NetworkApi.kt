@@ -76,7 +76,7 @@ interface NetworkApi {
 
 
     @FormUrlEncoded
-    @POST("questions")
+    @POST("questions2")
     suspend fun getQuestions(
             @Header("Authorization") Token: String,
             @Field("number") number: String,
@@ -197,6 +197,14 @@ interface NetworkApi {
             @Header("Authorization") Token: String,
             @Field("number") number: String,
             @Field("question_id") questionId: String
+    ): GeneralResponse
+
+    @FormUrlEncoded
+    @POST("info")
+    suspend fun info(
+            @Header("Authorization") Token: String,
+            @Field("number") number: String,
+            @Field("info") info: String
     ): GeneralResponse
 }
 

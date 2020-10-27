@@ -1,5 +1,9 @@
 package ir.ghararemaghzha.game.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -43,9 +47,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_END;
+
 public class QuestionActivity extends AppCompatActivity {
     private int progress = 100;
-    private int time = 20;
+    private int time = 15;
     private CountDownTimer downTimer, nextTimer;
     private ProgressBar progressBar;
     private MaterialButton next;
@@ -61,11 +67,20 @@ public class QuestionActivity extends AppCompatActivity {
     private int correctSound, wrongSound;
     private int gameScore = 0;
     private boolean shouldRandomize;
-    private ImageView music, autoNext, booster;
+    private ImageView music;
+    private ImageView autoNext;
     private boolean musicSetting;
     private boolean autoNextSetting;
     private boolean hasBooster = false;
     private boolean foreground = false;
+
+    private final BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(QuestionActivity.this, R.string.general_end, Toast.LENGTH_LONG).show();
+            onBackPressed();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +207,7 @@ public class QuestionActivity extends AppCompatActivity {
         questionPoints = findViewById(R.id.question_points);
         questionRemain = findViewById(R.id.question_remaining);
 
-        booster = findViewById(R.id.question_booster);
+        ImageView booster = findViewById(R.id.question_booster);
         if (MySharedPreference.getInstance(this).getBoosterValue() == 1f) {
             booster.setVisibility(View.GONE);
             hasBooster = false;
@@ -219,11 +234,11 @@ public class QuestionActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.question_progress_bar);
         progressBar.setProgress(progress);
         timeText = findViewById(R.id.question_progress_text);
-        downTimer = new CountDownTimer(20000, 1000) {
+        downTimer = new CountDownTimer(15000, 1000) {
             @Override
             public void onTick(long l) {
                 time -= 1;
-                progress -= 5;
+                progress -= 6.6;
                 timeText.setText(String.valueOf(time));
                 progressBar.setProgress(progress);
                 if (l < 6000)
@@ -453,7 +468,7 @@ public class QuestionActivity extends AppCompatActivity {
             answer3c.setCardBackgroundColor(getResources().getColor(R.color.white));
             answer4c.setEnabled(true);
             answer4c.setCardBackgroundColor(getResources().getColor(R.color.white));
-            time = 20;
+            time = 15;
             progress = 100;
             timeText.setText(String.valueOf(time));
             timeText.setTextColor(getResources().getColor(R.color.black));
@@ -504,7 +519,6 @@ public class QuestionActivity extends AppCompatActivity {
         RealmResults<QuestionModel> result = db.where(QuestionModel.class).equalTo("questionId", model.getQuestionId()).findAll();
         Objects.requireNonNull(result.first()).setUserAnswer(userAnswer);
         Objects.requireNonNull(result.first()).setUserBooster(b);
-        //   Objects.requireNonNull(result.first()).setVisible(false);
         db.commitTransaction();
     }
 
@@ -628,6 +642,7 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(br,new IntentFilter(GHARAREHMAGHZHA_BROADCAST_END));
         foreground = true;
         if (mediaPlayer != null && musicSetting)
             mediaPlayer.start();
@@ -636,6 +651,7 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterReceiver(br);
         foreground = false;
     }
 
