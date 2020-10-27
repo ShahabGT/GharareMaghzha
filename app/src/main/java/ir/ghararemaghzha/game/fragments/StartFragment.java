@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
@@ -20,6 +21,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
+import com.skyfishjy.library.RippleBackground;
 import com.tmall.ultraviewpager.UltraViewPager;
 
 import io.realm.Realm;
@@ -41,7 +43,7 @@ public class StartFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private MaterialTextView info;
-    private MaterialCardView profile, highscore, start;
+    private ConstraintLayout profile, highscore, start;
     private UltraViewPager ultraViewPager;
     private NavController navController;
 
@@ -82,10 +84,10 @@ public class StartFragment extends Fragment {
                     .and().equalTo("userAnswer","-1")
                     .findAll().size())));
         else if (passed < 0)
-            info.setText(context.getString(R.string.start_info, String.valueOf(0)));
+            info.setText(R.string.start_info_notstarted);
         else {
             info.setText(context.getString(R.string.start_info_passed));
-         //   start.setEnabled(false);
+            start.setEnabled(false);
         }
         Utils.updateServerQuestions(activity, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
     }
@@ -94,16 +96,17 @@ public class StartFragment extends Fragment {
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.start_title);
         db = Realm.getDefaultInstance();
         info = v.findViewById(R.id.start_info);
-        profile = v.findViewById(R.id.start_profile_card);
-        highscore = v.findViewById(R.id.start_highscore_card);
-        start = v.findViewById(R.id.start_start_card);
+        profile = v.findViewById(R.id.start_profile);
+        highscore = v.findViewById(R.id.start_highscore);
+        start = v.findViewById(R.id.start_start);
         ultraViewPager = v.findViewById(R.id.start_slider);
+        ((RippleBackground)v.findViewById(R.id.start_start_ripple)).startRippleAnimation();
+
         onClicks();
         getSlider();
     }
 
     private void initViewPager(PagerAdapter pagerAdapter, int count) {
-        ultraViewPager.setVisibility(View.VISIBLE);
         ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL);
         ultraViewPager.setAdapter(pagerAdapter);
         ultraViewPager.setAutoMeasureHeight(true);
@@ -130,14 +133,19 @@ public class StartFragment extends Fragment {
                 navController.navigate(R.id.action_menu_start_to_menu_highscore)
         );
         start.setOnClickListener(v -> {
-//            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
-//            int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
-//            if (size > 0)
+            int passed = Integer.parseInt(MySharedPreference.getInstance(activity).getDaysPassed());
+            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
+            int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
+            if (size > 0)
                 startActivity(new Intent(activity, QuestionActivity.class));
-//            else if (remaining == 0)
-//                Toast.makeText(context, context.getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show();
-//            else
-//                Toast.makeText(context, context.getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+            else if (remaining == 0)
+                Toast.makeText(context, context.getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show();
+            else if(passed<0)
+                Toast.makeText(context, context.getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show();
+            else if(passed>9)
+                Toast.makeText(context, context.getString(R.string.start_info_passed), Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(context, context.getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -151,6 +159,9 @@ public class StartFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null
                                 && response.body().getResult().equals("success") && !response.body().getMessage().equals("empty")) {
                             initViewPager(new MainViewPager(activity, response.body().getData()), response.body().getData().size());
+                        }else{
+                            ultraViewPager.setVisibility(View.GONE);
+
                         }
                     }
 

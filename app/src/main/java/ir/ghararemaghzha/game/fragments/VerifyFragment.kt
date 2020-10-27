@@ -223,7 +223,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     }
 
     private suspend fun getQuestions() {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number, "3000", "3000")) {
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number, "6000", "3000")) {
 
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {

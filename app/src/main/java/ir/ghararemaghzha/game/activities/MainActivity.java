@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .getQuestions("Bearer " + token, number, "3000", "3000")
+                .getQuestions("Bearer " + token, number, "6000", "3000")
                 .enqueue(new Callback<QuestionResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
@@ -567,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadScore(String score) {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if(passed<10) {
+        if(passed>0 && passed<10) {
             String number = MySharedPreference.getInstance(this).getNumber();
             String token = MySharedPreference.getInstance(this).getAccessToken();
             if (number.isEmpty() || token.isEmpty()) {
@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadAnswers() {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if(passed<10) {
+        if(passed>0 && passed<10) {
             RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
             for (QuestionModel model : models)
                 uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster());

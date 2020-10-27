@@ -93,14 +93,15 @@
     <string name="profile_invite_failed">خطا در ثبت کد معرف، لطفا دوباره امتحان کنید</string>
 
     <string name="start_title">شروع مسابقه</string>
-    <string name="start_profile_title">حساب کاربری من</string>
+    <string name="start_profile_title">حساب کاربری</string>
     <string name="start_profile_subtitle">مشاهده امتیازات کسب شده</string>
     <string name="start_start_title">شروع مسابقه</string>
     <string name="start_start_subtitle">پاسخ به سوالات باقیمانده</string>
-    <string name="start_highscore_title">برترین کاربران</string>
+    <string name="start_highscore_title">کاربران برتر</string>
     <string name="start_highscore_subtitle">مشاهده لیست کاربران برتر</string>
     <string name="start_info">شما دارای %s سوال بدون پاسخ هستید!</string>
     <string name="start_info_passed">زمان مسابقه به پایان رسیده است!</string>
+    <string name="start_info_notstarted">مسابقه شروع نشده!</string>
 
     <string name="camera_permission_title">استفاده از دوربین</string>
     <string name="camera_permission_message">برای گرفتن عکس از طریق دوربین به این مجوز نیاز است</string>

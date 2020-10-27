@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@color/light_background"
-        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        app:cardElevation="12dp"
+        app:cardCornerRadius="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/start_slider">
@@ -38,243 +36,137 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/vazir"
-            android:padding="6dp"
+            android:padding="12dp"
             android:text="@string/start_info"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
     </com.google.android.material.card.MaterialCardView>
 
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/start_start_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:soundEffectsEnabled="true"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="8dp"
-        app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toTopOf="@id/start_highscore_card"
+    <com.skyfishjy.library.RippleBackground
+        android:id="@+id/start_start_ripple"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_info_card"
-        app:layout_constraintVertical_chainStyle="spread">
+        app:layout_constraintTop_toBottomOf="@+id/start_info_card"
+        app:rb_color="#ffb504"
+        app:rb_duration="3000"
+        app:rb_radius="37dp"
+        app:rb_rippleAmount="3"
+        app:rb_scale="5">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/start_start"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/round_start"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
-                android:id="@+id/start_start_icon"
-                android:layout_width="90dp"
-                android:layout_height="100dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/start_start_logo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/brain"
+                app:layout_constraintBottom_toTopOf="@id/start_start_text"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/start" />
-
-            <ImageView
-                android:id="@+id/start_start_left"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_left"
-                app:tint="@color/dark2" />
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/start_start_title"
+                android:id="@+id/start_start_text"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
-                android:gravity="center"
                 android:text="@string/start_start_title"
-                android:textColor="@color/dark2"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/start_start_subtitle"
-                app:layout_constraintLeft_toRightOf="@+id/start_start_left"
-                app:layout_constraintRight_toLeftOf="@id/start_start_icon"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/start_start_subtitle"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/start_start_subtitle"
-                android:textColor="@color/dark2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/start_start_left"
-                app:layout_constraintRight_toLeftOf="@id/start_start_icon"
-                app:layout_constraintTop_toBottomOf="@id/start_start_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/start_highscore_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:soundEffectsEnabled="true"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="8dp"
-        app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toTopOf="@id/start_profile_card"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_start_card"
-        app:layout_constraintVertical_chainStyle="spread">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/start_highscore_icon"
-                android:layout_width="90dp"
-                android:layout_height="100dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/highscore" />
-
-            <ImageView
-                android:id="@+id/start_highscore_left"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_left"
-                app:tint="@color/dark4" />
+                app:layout_constraintRight_toRightOf="parent"
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/start_highscore_title"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/start_highscore_title"
-                android:textColor="@color/dark4"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/start_highscore_subtitle"
-                app:layout_constraintLeft_toRightOf="@+id/start_highscore_left"
-                app:layout_constraintRight_toLeftOf="@+id/start_highscore_icon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/start_start_logo" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/start_highscore_subtitle"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/start_highscore_subtitle"
-                android:textColor="@color/dark4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/start_highscore_left"
-                app:layout_constraintRight_toLeftOf="@+id/start_highscore_icon"
-                app:layout_constraintTop_toBottomOf="@id/start_highscore_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </com.skyfishjy.library.RippleBackground>
 
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/start_profile_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/start_highscore"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintRight_toLeftOf="@id/start_profile"
+        android:background="@drawable/round_start2"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:soundEffectsEnabled="true"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="8dp"
-        app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start_start_ripple">
+
+        <ImageView
+            android:id="@+id/start_highscore_logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/highscore2"
+            app:layout_constraintBottom_toTopOf="@id/start_highscore_text"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/start_highscore_text"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:text="@string/start_highscore_title"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/start_highscore_logo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/start_profile"
+        android:layout_width="150dp"
+        app:layout_constraintLeft_toRightOf="@id/start_highscore"
+        android:layout_height="150dp"
+        android:background="@drawable/round_start2"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_highscore_card"
-        app:layout_constraintVertical_chainStyle="spread">
+        app:layout_constraintTop_toBottomOf="@id/start_start_ripple">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/start_profile_logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:tint="@color/white"
+            android:src="@drawable/ic_main_profile"
+            app:layout_constraintBottom_toTopOf="@id/start_profile_text"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-            <ImageView
-                android:id="@+id/start_profile_icon"
-                android:layout_width="90dp"
-                android:layout_height="100dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/profile_edit" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/start_profile_text"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/vazir"
+            android:text="@string/start_profile_title"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/start_profile_logo" />
 
-            <ImageView
-                android:id="@+id/start_profile_left"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_left"
-                app:tint="@color/dark3" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/start_profile_title"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/start_profile_title"
-                android:textColor="@color/dark3"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/start_profile_subtitle"
-                app:layout_constraintLeft_toRightOf="@+id/start_profile_left"
-                app:layout_constraintRight_toLeftOf="@+id/start_profile_icon"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/start_profile_subtitle"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/start_profile_subtitle"
-                android:textColor="@color/dark3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/start_profile_left"
-                app:layout_constraintRight_toLeftOf="@+id/start_profile_icon"
-                app:layout_constraintTop_toBottomOf="@id/start_profile_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
