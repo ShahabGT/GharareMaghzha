@@ -23,6 +23,7 @@ class MyApplication : Application() {
         val config = RealmConfiguration.Builder()
                 .name("myRealm.realm")
                 .schemaVersion(3)
+                .allowWritesOnUiThread(true)
                 .deleteRealmIfMigrationNeeded()
                 .build()
         Realm.setDefaultConfiguration(config)

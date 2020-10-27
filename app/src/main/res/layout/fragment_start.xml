@@ -56,25 +56,22 @@
         app:rb_rippleAmount="3"
         app:rb_scale="5">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/start_start"
             android:layout_width="230dp"
             android:layout_height="230dp"
             android:layout_centerInParent="true"
             android:background="@drawable/round_start"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/start_start_logo"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/brain"
-                app:layout_constraintBottom_toTopOf="@id/start_start_text"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+                android:src="@drawable/brain" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_start_text"
@@ -83,38 +80,30 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="@string/start_start_title"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                android:textColor="@color/black" />
 
-                app:layout_constraintTop_toBottomOf="@id/start_start_logo" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </com.skyfishjy.library.RippleBackground>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/start_highscore"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:layout_constraintRight_toLeftOf="@id/start_profile"
         android:background="@drawable/round_start2"
         android:clickable="true"
         android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/start_profile"
         app:layout_constraintTop_toBottomOf="@id/start_start_ripple">
 
         <ImageView
             android:id="@+id/start_highscore_logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/highscore2"
-            app:layout_constraintBottom_toTopOf="@id/start_highscore_text"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:src="@drawable/highscore2" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/start_highscore_text"
@@ -123,22 +112,20 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/vazir"
             android:text="@string/start_highscore_title"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:textColor="@color/white" />
 
-            app:layout_constraintTop_toBottomOf="@id/start_highscore_logo" />
+    </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/start_profile"
         android:layout_width="150dp"
-        app:layout_constraintLeft_toRightOf="@id/start_highscore"
         android:layout_height="150dp"
         android:background="@drawable/round_start2"
         android:clickable="true"
         android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toRightOf="@id/start_highscore"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/start_start_ripple">
 
@@ -146,13 +133,8 @@
             android:id="@+id/start_profile_logo"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            app:tint="@color/white"
             android:src="@drawable/ic_main_profile"
-            app:layout_constraintBottom_toTopOf="@id/start_profile_text"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:tint="@color/white" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/start_profile_text"
@@ -161,12 +143,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/vazir"
             android:text="@string/start_profile_title"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/start_profile_logo" />
+            android:textColor="@color/white" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

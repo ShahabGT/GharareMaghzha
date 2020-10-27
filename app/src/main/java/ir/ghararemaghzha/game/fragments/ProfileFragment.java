@@ -20,16 +20,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
+import com.tmall.ultraviewpager.UltraViewPager;
+import com.tmall.ultraviewpager.transformer.UltraDepthScaleTransformer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.adapters.ProfileViewPager;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.dialogs.UserDetailsDialog;
+import ir.ghararemaghzha.game.models.ProfileModel;
 import ir.ghararemaghzha.game.models.QuestionModel;
 
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
@@ -41,6 +48,7 @@ public class ProfileFragment extends Fragment {
     private FragmentActivity activity;
     private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, remainingTimeTitle;
     private MaterialCardView buy, edit, stat, scoreHelper;
+    private View v;
 
     private Realm db;
 
@@ -69,10 +77,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        v = inflater.inflate(R.layout.fragment_profile, container, false);
         context = getContext();
         activity = getActivity();
-        init(v);
+        init();
 
         return v;
     }
@@ -83,9 +91,8 @@ public class ProfileFragment extends Fragment {
         navController = Navigation.findNavController(view);
     }
 
-    private void init(View v) {
+    private void init() {
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.profile_title);
-
 
         db = Realm.getDefaultInstance();
         myScore = v.findViewById(R.id.profile_score);
@@ -95,41 +102,82 @@ public class ProfileFragment extends Fragment {
         remainingTimeTitle = v.findViewById(R.id.profile_time_title);
 
 
-        buy = v.findViewById(R.id.profile_buy_card);
-        edit = v.findViewById(R.id.profile_edit_card);
-        stat = v.findViewById(R.id.profile_stat_card);
-        scoreHelper = v.findViewById(R.id.profile_scorehelper_card);
+        buy = v.findViewById(R.id.profile_buy);
+        edit = v.findViewById(R.id.profile_edit);
+        stat = v.findViewById(R.id.profile_stat);
+        scoreHelper = v.findViewById(R.id.profile_scorehelper);
 
         updateUI();
 
         onClicks();
     }
 
+    private void initViewPager(List<ProfileModel> data) {
+        UltraViewPager ultraViewPager = v.findViewById(R.id.profile_recycler);
+        ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL);
+        ultraViewPager.setPageTransformer(true, new UltraDepthScaleTransformer());
+        ultraViewPager.setMultiScreen(0.6f);
+        ultraViewPager.setItemRatio(1.0f);
+        ultraViewPager.setRatio(1.4f);
+        ultraViewPager.setMaxHeight(900);
+        ultraViewPager.setAutoMeasureHeight(true);
+        ultraViewPager.setInfiniteLoop(true);
+        ultraViewPager.setAdapter(new ProfileViewPager(context,data));
+        ultraViewPager.setAutoScroll(4000);
+
+
+    }
+
     private void updateUI() {
+        List<ProfileModel> data = new ArrayList<>();
         myScore.setText(MySharedPreference.getInstance(context).getScore());
+        data.add(new ProfileModel(
+                context.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()),
+                MySharedPreference.getInstance(context).getUsername(),
+                MySharedPreference.getInstance(context).getScore()));
         int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
 
         if (passed < 0) {
             remainingTimeTitle.setText(context.getString(R.string.profile_time_card_tostart));
             remainingTime.setText(context.getString(R.string.profile_time,
                     String.valueOf(Math.abs(passed))));
+            data.add(new ProfileModel(R.drawable.image_placeholder,context.getString(R.string.profile_time_card_tostart)
+                    ,context.getString(R.string.profile_time,
+                    String.valueOf(Math.abs(passed)))));
+
 
         } else {
-            remainingTimeTitle.setText(context.getString(R.string.profile_time_card));
-            if (passed == 0)
-                remainingTime.setText(context.getString(R.string.profile_time_lastday));
-            if (passed >= 10)
-                remainingTime.setText(context.getString(R.string.profile_time_end));
-            else
-                remainingTime.setText(context.getString(R.string.profile_time, String.valueOf(10 - passed)));
+            ProfileModel model = new ProfileModel(R.drawable.image_placeholder,context.getString(R.string.profile_time_card),"");
 
+            remainingTimeTitle.setText(context.getString(R.string.profile_time_card));
+            if (passed == 9) {
+                remainingTime.setText(context.getString(R.string.profile_time_lastday));
+                model.setSubtitle(context.getString(R.string.profile_time_lastday));
+            }else if (passed >= 10) {
+                model.setSubtitle(context.getString(R.string.profile_time_end));
+                remainingTime.setText(context.getString(R.string.profile_time_end));
+            }else {
+                remainingTime.setText(context.getString(R.string.profile_time, String.valueOf(10 - passed)));
+                model.setSubtitle(context.getString(R.string.profile_time, String.valueOf(10 - passed)));
+            }
+            data.add(model);
         }
 
 
         totalQuestions.setText(String.valueOf(db.where(QuestionModel.class).findAll().size()));
+        data.add(new ProfileModel(R.drawable.image_placeholder,"کل سوالات",
+                String.valueOf(db.where(QuestionModel.class).findAll().size())));
+
         remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class)
                 .equalTo("bought",true)
                 .and().equalTo("userAnswer", "-1").findAll().size()));
+
+        data.add(new ProfileModel(R.drawable.image_placeholder,"سوالات من",
+                String.valueOf(db.where(QuestionModel.class)
+                        .equalTo("bought",true)
+                        .and().equalTo("userAnswer", "-1").findAll().size())));
+
+        initViewPager(data);
 
     }
 
@@ -147,7 +195,7 @@ public class ProfileFragment extends Fragment {
 
     private void showDetailsDialog(String userId) {
         UserDetailsDialog dialog = new UserDetailsDialog(activity, userId);
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.setCancelable(true);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;

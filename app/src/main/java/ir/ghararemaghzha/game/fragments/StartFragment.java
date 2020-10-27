@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,7 @@ public class StartFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private MaterialTextView info;
-    private ConstraintLayout profile, highscore, start;
+    private LinearLayout profile, highscore, start;
     private UltraViewPager ultraViewPager;
     private NavController navController;
 
@@ -57,6 +58,7 @@ public class StartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_start, container, false);
+        ((RippleBackground)v.findViewById(R.id.start_start_ripple)).startRippleAnimation();
         context = getContext();
         activity = getActivity();
         init(v);
@@ -100,7 +102,6 @@ public class StartFragment extends Fragment {
         highscore = v.findViewById(R.id.start_highscore);
         start = v.findViewById(R.id.start_start);
         ultraViewPager = v.findViewById(R.id.start_slider);
-        ((RippleBackground)v.findViewById(R.id.start_start_ripple)).startRippleAnimation();
 
         onClicks();
         getSlider();

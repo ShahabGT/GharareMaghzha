@@ -48,12 +48,12 @@
         app:constraintSetStart="@+id/start"
         app:duration="150"
         app:motionInterpolator="linear">
-
-        <OnSwipe
-            app:dragDirection="dragLeft"
-            app:touchAnchorId="@+id/main_content"
-            app:touchAnchorSide="left" />
-
+        <!--
+                <OnSwipe
+                    app:dragDirection="dragLeft"
+                    app:touchAnchorId="@+id/main_content"
+                    app:touchAnchorSide="left" />
+        !-->
         <OnClick app:targetId="@+id/toolbar_menu" />
     </Transition>
 
@@ -62,12 +62,12 @@
         app:constraintSetStart="@id/end"
         app:duration="150"
         app:motionInterpolator="linear">
-
-        <OnSwipe
-            app:dragDirection="dragRight"
-            app:touchAnchorId="@id/main_view"
-            app:touchAnchorSide="right" />
-
+        <!--
+                <OnSwipe
+                    app:dragDirection="dragRight"
+                    app:touchAnchorId="@id/main_view"
+                    app:touchAnchorSide="right" />
+        !-->
         <OnClick app:targetId="@+id/main_view" />
     </Transition>
 </MotionScene>

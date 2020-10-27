@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,13 +10,31 @@
     android:focusable="true"
     tools:context=".fragments.ProfileFragment">
 
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/profile_guide20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+    <com.tmall.ultraviewpager.UltraViewPager
+        android:id="@+id/profile_recycler"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:layout_width="match_parent"
+        android:elevation="10dp"
+        android:background="@color/light_background"
+        app:layout_constraintBottom_toBottomOf="@id/profile_guide40"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="0dp"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/profile_guide35"
@@ -36,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.37" />
+        app:layout_constraintGuide_percent="0.36935705" />
 
 
     <com.google.android.material.card.MaterialCardView
@@ -293,301 +312,157 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profile_edit_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/profile_stat"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toTopOf="@id/profile_stat_card"
-        app:layout_constraintLeft_toLeftOf="@id/profile_time_card"
-        app:layout_constraintRight_toRightOf="@id/profile_remaining_card"
-        app:layout_constraintTop_toBottomOf="@id/profile_remaining_card"
-        app:layout_constraintVertical_chainStyle="spread">
+        app:cardCornerRadius="28dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/profile_buy"
+        app:layout_constraintRight_toLeftOf="@+id/profile_edit"
+        app:layout_constraintTop_toBottomOf="@id/profile_guide40">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/profile_edit_icon"
-                android:layout_width="60dp"
-                android:layout_height="70dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/profile_edit" />
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@drawable/tick" />
 
-            <ImageView
-                android:id="@+id/profile_edit_left"
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_left"
-                app:tint="@color/green" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_edit_title"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/profile_edit_title"
-                android:textColor="@color/dark3"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/profile_edit_subtitle"
-                app:layout_constraintLeft_toRightOf="@+id/profile_edit_left"
-                app:layout_constraintRight_toLeftOf="@+id/profile_edit_icon"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_edit_subtitle"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/profile_edit_subtitle"
-                android:textColor="@color/dark3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/profile_edit_left"
-                app:layout_constraintRight_toLeftOf="@+id/profile_edit_icon"
-                app:layout_constraintTop_toBottomOf="@id/profile_edit_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profile_stat_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:soundEffectsEnabled="true"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toTopOf="@id/profile_scorehelper_card"
-        app:layout_constraintLeft_toLeftOf="@id/profile_time_card"
-        app:layout_constraintRight_toRightOf="@id/profile_remaining_card"
-        app:layout_constraintTop_toBottomOf="@id/profile_edit_card"
-        app:layout_constraintVertical_chainStyle="spread">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/profile_stat_icon"
-                android:layout_width="60dp"
-                android:layout_height="70dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/stat" />
-
-            <ImageView
-                android:id="@+id/profile_stat_left"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_left"
-                app:tint="@color/blue" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_stat_title"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
                 android:text="@string/profile_stat_title"
-                android:textColor="@color/dark4"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/profile_stat_subtitle"
-                app:layout_constraintLeft_toRightOf="@+id/profile_stat_left"
-                app:layout_constraintRight_toLeftOf="@+id/profile_stat_icon"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_stat_subtitle"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/profile_stat_subtitle"
-                android:textColor="@color/dark4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/profile_stat_left"
-                app:layout_constraintRight_toLeftOf="@+id/profile_stat_icon"
-                app:layout_constraintTop_toBottomOf="@id/profile_stat_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textColor="@color/black" />
 
 
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profile_scorehelper_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/profile_edit"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:cardPreventCornerOverlap="true"
-        app:layout_constraintBottom_toTopOf="@id/profile_buy_card"
-        app:layout_constraintLeft_toLeftOf="@id/profile_time_card"
-        app:layout_constraintRight_toRightOf="@id/profile_remaining_card"
-        app:layout_constraintTop_toBottomOf="@id/profile_stat_card"
-        app:layout_constraintVertical_chainStyle="spread">
+        app:cardCornerRadius="28dp"
+        app:layout_constraintVertical_chainStyle="packed"
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintBottom_toTopOf="@+id/profile_scorehelper"
+        app:layout_constraintLeft_toRightOf="@id/profile_stat"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_guide40">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/profile_mystat_icon"
-                android:layout_width="60dp"
-                android:layout_height="70dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/score" />
+                android:layout_width="55dp"
+                android:layout_height="65dp"
+                android:src="@drawable/user" />
 
-            <ImageView
-                android:id="@+id/profile_mystat_left"
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_left"
-                app:tint="@color/dark2" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_mystat_title"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/profile_scorehelper_title"
-                android:textColor="@color/dark2"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/profile_mystat_subtitle"
-                app:layout_constraintLeft_toRightOf="@+id/profile_mystat_left"
-                app:layout_constraintRight_toLeftOf="@+id/profile_mystat_icon"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_mystat_subtitle"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/profile_scorehelper_subtitle"
-                android:textColor="@color/dark2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/profile_mystat_left"
-                app:layout_constraintRight_toLeftOf="@+id/profile_mystat_icon"
-                app:layout_constraintTop_toBottomOf="@id/profile_mystat_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:text="@string/profile_edit_title"
+                android:textColor="@color/black" />
 
 
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profile_buy_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:soundEffectsEnabled="true"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:cardPreventCornerOverlap="true"
+        android:id="@+id/profile_buy"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/profile_time_card"
-        app:layout_constraintRight_toRightOf="@id/profile_remaining_card"
-        app:layout_constraintTop_toBottomOf="@id/profile_scorehelper_card">
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:soundEffectsEnabled="true"
+        app:cardCornerRadius="28dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/profile_scorehelper"
+        app:layout_constraintTop_toBottomOf="@+id/profile_stat">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/profile_buy_icon"
-                android:layout_width="60dp"
-                android:layout_height="70dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/buy_questions" />
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@drawable/cart" />
 
-            <ImageView
-                android:id="@+id/profile_buy_left"
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_left"
-                app:tint="@color/red" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_buy_title"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
-                android:gravity="center"
                 android:text="@string/profile_buy_title"
-                android:textColor="@color/dark5"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/profile_buy_subtitle"
-                app:layout_constraintLeft_toRightOf="@+id/profile_buy_left"
-                app:layout_constraintRight_toLeftOf="@+id/profile_buy_icon"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textColor="@color/black" />
+
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/profile_scorehelper"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="22dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:soundEffectsEnabled="true"
+        app:cardCornerRadius="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/profile_buy"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@drawable/score2" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profile_buy_subtitle"
                 style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:text="@string/profile_buy_subtitle"
-                android:textColor="@color/dark5"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/profile_buy_left"
-                app:layout_constraintRight_toLeftOf="@id/profile_buy_icon"
-                app:layout_constraintTop_toBottomOf="@id/profile_buy_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:text="@string/profile_scorehelper_title"
+                android:textColor="@color/black" />
 
 
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
 
