@@ -5,6 +5,7 @@
     android:id="@+id/row_profile_card"
     android:layout_width="180dp"
     android:layout_height="200dp"
+    app:cardBackgroundColor="#ffb504"
     app:cardCornerRadius="28dp">
 
     <LinearLayout
@@ -23,6 +24,7 @@
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:fontFamily="@font/vazir"
             android:text="@string/profile_stat_title"
             android:textColor="@color/black" />

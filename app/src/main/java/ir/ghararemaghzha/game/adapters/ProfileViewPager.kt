@@ -29,12 +29,18 @@ class ProfileViewPager(var context: Context, var data: List<ProfileModel>) : Pag
     //    layout.findViewById<ImageView>(R.id.row_profile_img).setImageResource(model.image)
         layout.findViewById<MaterialTextView>(R.id.row_profile_title).text = model.title
         layout.findViewById<MaterialTextView>(R.id.row_profile_subtitle).text = model.subtitle
-        Glide.with(context)
-                .load(model.image)
-                .circleCrop()
-                .placeholder(R.drawable.placeholder)
-                .into(layout.findViewById(R.id.row_profile_img))
-
+        if(position==0) {
+            Glide.with(context)
+                    .load(model.image)
+                    .circleCrop()
+                    .placeholder(R.drawable.placeholder)
+                    .into(layout.findViewById(R.id.row_profile_img))
+        }else{
+            Glide.with(context)
+                    .load(model.image)
+                    .placeholder(R.drawable.placeholder)
+                    .into(layout.findViewById(R.id.row_profile_img))
+        }
         container.addView(layout)
         return layout
     }

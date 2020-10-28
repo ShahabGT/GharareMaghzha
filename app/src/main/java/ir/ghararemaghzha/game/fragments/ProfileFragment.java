@@ -46,7 +46,6 @@ public class ProfileFragment extends Fragment {
     private NavController navController;
     private Context context;
     private FragmentActivity activity;
-    private MaterialTextView myScore, totalQuestions, remainingQuestion, remainingTime, remainingTimeTitle;
     private MaterialCardView buy, edit, stat, scoreHelper;
     private View v;
 
@@ -95,11 +94,6 @@ public class ProfileFragment extends Fragment {
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.profile_title);
 
         db = Realm.getDefaultInstance();
-        myScore = v.findViewById(R.id.profile_score);
-        totalQuestions = v.findViewById(R.id.profile_questions);
-        remainingQuestion = v.findViewById(R.id.profile_remaining);
-        remainingTime = v.findViewById(R.id.profile_time);
-        remainingTimeTitle = v.findViewById(R.id.profile_time_title);
 
 
         buy = v.findViewById(R.id.profile_buy);
@@ -130,49 +124,36 @@ public class ProfileFragment extends Fragment {
 
     private void updateUI() {
         List<ProfileModel> data = new ArrayList<>();
-        myScore.setText(MySharedPreference.getInstance(context).getScore());
         data.add(new ProfileModel(
                 context.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()),
                 MySharedPreference.getInstance(context).getUsername(),
-                MySharedPreference.getInstance(context).getScore()));
+                "امتیاز من: "+MySharedPreference.getInstance(context).getScore()));
         int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
 
         if (passed < 0) {
-            remainingTimeTitle.setText(context.getString(R.string.profile_time_card_tostart));
-            remainingTime.setText(context.getString(R.string.profile_time,
-                    String.valueOf(Math.abs(passed))));
-            data.add(new ProfileModel(R.drawable.image_placeholder,context.getString(R.string.profile_time_card_tostart)
-                    ,context.getString(R.string.profile_time,
-                    String.valueOf(Math.abs(passed)))));
+
+            data.add(new ProfileModel(R.drawable.profile_time,
+                    context.getString(R.string.profile_time_card_tostart),
+                    context.getString(R.string.profile_time, String.valueOf(Math.abs(passed)))));
 
 
         } else {
-            ProfileModel model = new ProfileModel(R.drawable.image_placeholder,context.getString(R.string.profile_time_card),"");
-
-            remainingTimeTitle.setText(context.getString(R.string.profile_time_card));
+            ProfileModel model = new ProfileModel(R.drawable.profile_time,context.getString(R.string.profile_time_card),"");
             if (passed == 9) {
-                remainingTime.setText(context.getString(R.string.profile_time_lastday));
                 model.setSubtitle(context.getString(R.string.profile_time_lastday));
             }else if (passed >= 10) {
                 model.setSubtitle(context.getString(R.string.profile_time_end));
-                remainingTime.setText(context.getString(R.string.profile_time_end));
             }else {
-                remainingTime.setText(context.getString(R.string.profile_time, String.valueOf(10 - passed)));
                 model.setSubtitle(context.getString(R.string.profile_time, String.valueOf(10 - passed)));
             }
             data.add(model);
         }
 
 
-        totalQuestions.setText(String.valueOf(db.where(QuestionModel.class).findAll().size()));
-        data.add(new ProfileModel(R.drawable.image_placeholder,"کل سوالات",
+        data.add(new ProfileModel(R.drawable.profile_total,"سوالات این دوره",
                 String.valueOf(db.where(QuestionModel.class).findAll().size())));
 
-        remainingQuestion.setText(String.valueOf(db.where(QuestionModel.class)
-                .equalTo("bought",true)
-                .and().equalTo("userAnswer", "-1").findAll().size()));
-
-        data.add(new ProfileModel(R.drawable.image_placeholder,"سوالات من",
+        data.add(new ProfileModel(R.drawable.profile_remain,"سوالات من",
                 String.valueOf(db.where(QuestionModel.class)
                         .equalTo("bought",true)
                         .and().equalTo("userAnswer", "-1").findAll().size())));
