@@ -337,6 +337,8 @@ public class MainActivity extends AppCompatActivity {
             MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
         }
         if (db.isEmpty()) {
+       //     MySharedPreference.getInstance(MainActivity.this).clearCounter(this,false);
+       //     MySharedPreference.getInstance(this).setScore("0");
             getData();
         } else {
             updateMessages();
@@ -431,16 +433,25 @@ public class MainActivity extends AppCompatActivity {
                                 int newScore = Integer.parseInt(response.body().getScoreCount());
                                 int oldScore = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getScore());
 
-                                if (newScore == 0 || newScore > oldScore)
+                                if (newVersion > myVersion) {
+                                    if (response.body().getVersionEssential().equals("1")) {
+                                        showNewVersionDialog("1");
+                                        return;
+                                    }else
+                                        showNewVersionDialog("0");
+
+                                }
+
+
+                                if(newScore==-1) {
+                                    MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(0));
+                                    uploadScore(String.valueOf(0));
+                                }else if ( newScore > oldScore)
                                     MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
                                 else if (oldScore > newScore)
                                     uploadScore(String.valueOf(oldScore));
 
-                                if (newVersion > myVersion)
-                                    if (response.body().getVersionEssential().equals("1"))
-                                        showNewVersionDialog("1");
-                                    else
-                                        showNewVersionDialog("0");
+
                                 sendBroadcast(refreshIntent);
 
                                 int serverBooster = Integer.parseInt(response.body().getUserBooster());
@@ -567,7 +578,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadScore(String score) {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if(passed>0 && passed<10) {
+        if(passed>=0 && passed<10) {
             String number = MySharedPreference.getInstance(this).getNumber();
             String token = MySharedPreference.getInstance(this).getAccessToken();
             if (number.isEmpty() || token.isEmpty()) {
@@ -575,7 +586,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             RetrofitClient.getInstance().getApi()
-                    .sendScore("Bearer " + token, number, score)
+                    .sendScore("Bearer " + token, number, score,3)
                     .enqueue(new Callback<GeneralResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -594,11 +605,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadAnswers() {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if(passed>0 && passed<10) {
+        if(passed>=0 && passed<10) {
             RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
             for (QuestionModel model : models)
                 uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster());
-
         }
     }
 
@@ -611,7 +621,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster)
+                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster,3)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {

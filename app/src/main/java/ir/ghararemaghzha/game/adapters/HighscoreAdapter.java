@@ -28,10 +28,10 @@ import ir.ghararemaghzha.game.models.UserRankModel;
 
 public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.ViewHolder> {
 
-    private FragmentActivity context;
-    private List<HighscoreModel> data;
-    private UserRankModel user;
-    private boolean showUser;
+    private final FragmentActivity context;
+    private final List<HighscoreModel> data;
+    private final UserRankModel user;
+    private final boolean showUser;
 
     public HighscoreAdapter(FragmentActivity context, List<HighscoreModel> data, UserRankModel user, boolean showUser) {
         this.context = context;
@@ -53,7 +53,10 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
         if (position < data.size()) {
             HighscoreModel model = data.get(position);
             h.name.setText(model.getUserName());
-            h.score.setText(model.getScoreCount());
+            if (model.getScoreCount().equals("-1"))
+                h.score.setText("0");
+            else
+                h.score.setText(model.getScoreCount());
             h.rank.setText(String.valueOf(position + 1));
 
             if (position < 5) {
@@ -95,7 +98,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
         if (!showUser)
             return data.size();
         else
-            return data.size()+1;
+            return data.size() + 1;
     }
 
     private void showDetailsDialog(String userId) {
