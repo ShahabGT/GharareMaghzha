@@ -10,10 +10,17 @@
     android:focusable="true"
     tools:context=".fragments.StartFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guide60"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.70" />
+
     <com.tmall.ultraviewpager.UltraViewPager
         android:id="@+id/start_slider"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         android:background="@color/light_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -24,7 +31,7 @@
         android:id="@+id/start_info_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         app:cardCornerRadius="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -36,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/vazir"
-            android:padding="12dp"
+            android:padding="6dp"
             android:text="@string/start_info"
             android:textColor="@color/black"
             android:textStyle="bold" />
@@ -45,10 +52,11 @@
 
     <com.skyfishjy.library.RippleBackground
         android:id="@+id/start_start_ripple"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/start_guide60"
         app:layout_constraintTop_toBottomOf="@+id/start_info_card"
         app:rb_color="#ffb504"
         app:rb_duration="3000"
@@ -58,8 +66,8 @@
 
         <LinearLayout
             android:id="@+id/start_start"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
             android:layout_centerInParent="true"
             android:background="@drawable/round_start"
             android:clickable="true"
@@ -88,26 +96,29 @@
 
     <LinearLayout
         android:id="@+id/start_highscore"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:background="@drawable/round_start2"
         android:clickable="true"
         android:focusable="true"
+        android:layout_margin="16dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/start_profile"
-        app:layout_constraintTop_toBottomOf="@id/start_start_ripple">
+        app:layout_constraintTop_toBottomOf="@id/start_guide60">
 
         <ImageView
             android:id="@+id/start_highscore_logo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/highscore2" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/start_highscore_text"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/vazir"
@@ -118,27 +129,30 @@
 
     <LinearLayout
         android:id="@+id/start_profile"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:background="@drawable/round_start2"
         android:clickable="true"
         android:focusable="true"
+        android:layout_margin="16dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintLeft_toRightOf="@id/start_highscore"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/start_start_ripple">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start_guide60">
 
         <ImageView
             android:id="@+id/start_profile_logo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/ic_main_profile"
             app:tint="@color/white" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/start_profile_text"
-            style="@style/TextAppearance.AppCompat.Medium"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/vazir"

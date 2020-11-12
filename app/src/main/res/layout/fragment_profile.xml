@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,31 +15,87 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide45h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide65h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.68" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide70h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.71" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide90h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.94" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.47" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide55"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.53" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profile_guide90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
     <com.tmall.ultraviewpager.UltraViewPager
         android:id="@+id/profile_recycler"
-        android:gravity="center"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@color/light_background"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@id/profile_guide40"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_height="0dp"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profile_stat"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
         app:cardCornerRadius="28dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintBottom_toTopOf="@+id/profile_buy"
-        app:layout_constraintRight_toLeftOf="@+id/profile_edit"
-        app:layout_constraintTop_toBottomOf="@id/profile_guide40">
+        app:layout_constraintBottom_toBottomOf="@id/profile_guide65h"
+        app:layout_constraintLeft_toLeftOf="@id/profile_guide10"
+        app:layout_constraintRight_toRightOf="@+id/profile_guide45"
+        app:layout_constraintTop_toTopOf="@id/profile_guide45h">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,13 +104,14 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:src="@drawable/tick" />
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
+                android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:text="@string/profile_stat_title"
@@ -67,19 +123,17 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profile_edit"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
         app:cardCornerRadius="28dp"
-        app:layout_constraintVertical_chainStyle="packed"
-
-        app:layout_constraintBottom_toTopOf="@+id/profile_scorehelper"
-        app:layout_constraintLeft_toRightOf="@id/profile_stat"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_guide40">
+        app:layout_constraintBottom_toBottomOf="@id/profile_guide65h"
+        app:layout_constraintLeft_toLeftOf="@id/profile_guide55"
+        app:layout_constraintRight_toRightOf="@+id/profile_guide90"
+        app:layout_constraintTop_toTopOf="@id/profile_guide45h">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,7 +143,7 @@
 
             <ImageView
                 android:layout_width="55dp"
-                android:layout_height="65dp"
+                android:layout_height="55dp"
                 android:src="@drawable/user" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -97,6 +151,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
+                android:textStyle="bold"
+
                 android:text="@string/profile_edit_title"
                 android:textColor="@color/black" />
 
@@ -106,18 +162,17 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profile_buy"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="22dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
         app:cardCornerRadius="28dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/profile_scorehelper"
-        app:layout_constraintTop_toBottomOf="@+id/profile_stat">
+        app:layout_constraintBottom_toBottomOf="@id/profile_guide90h"
+        app:layout_constraintLeft_toLeftOf="@id/profile_guide10"
+        app:layout_constraintRight_toRightOf="@+id/profile_guide45"
+        app:layout_constraintTop_toTopOf="@id/profile_guide70h">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,12 +181,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:src="@drawable/cart" />
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
@@ -144,18 +200,17 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profile_scorehelper"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="22dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:soundEffectsEnabled="true"
         app:cardCornerRadius="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/profile_buy"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit">
+        app:layout_constraintBottom_toBottomOf="@id/profile_guide90h"
+        app:layout_constraintLeft_toLeftOf="@id/profile_guide55"
+        app:layout_constraintRight_toRightOf="@+id/profile_guide90"
+        app:layout_constraintTop_toTopOf="@id/profile_guide70h">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -164,12 +219,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:src="@drawable/score2" />
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"

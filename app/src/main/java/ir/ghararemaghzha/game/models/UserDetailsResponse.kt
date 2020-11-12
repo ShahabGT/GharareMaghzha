@@ -9,6 +9,10 @@ data class UserDetailsResponse(
         val incorrect: Int,
         val plan: String,
         val booster: String,
+        val rank: String,
+        val level1: String,
+        val level2: String,
+        val level3: String,
         @SerializedName("user_data") val userData: UserDataModel
 )
 

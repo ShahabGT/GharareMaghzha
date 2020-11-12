@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             db.executeTransaction(realm -> realm.insertOrUpdate(data));
                             dialog.dismiss();
-                            updateMessages();
+                            updateDatabase(true);
                             checkTime();
                         } else {
                             dialog.dismiss();
@@ -337,8 +337,8 @@ public class MainActivity extends AppCompatActivity {
             MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
         }
         if (db.isEmpty()) {
-       //     MySharedPreference.getInstance(MainActivity.this).clearCounter(this,false);
-       //     MySharedPreference.getInstance(this).setScore("0");
+            MySharedPreference.getInstance(MainActivity.this).clearCounter(this,false);
+            MySharedPreference.getInstance(this).setScore("0");
             getData();
         } else {
             updateMessages();

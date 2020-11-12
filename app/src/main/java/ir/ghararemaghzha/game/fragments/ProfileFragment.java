@@ -112,7 +112,7 @@ public class ProfileFragment extends Fragment {
         ultraViewPager.setPageTransformer(true, new UltraDepthScaleTransformer());
         ultraViewPager.setMultiScreen(0.6f);
         ultraViewPager.setItemRatio(1.0f);
-        ultraViewPager.setRatio(1.6f);
+      //  ultraViewPager.setRatio(1.6f);
       //  ultraViewPager.setMaxHeight(800);
      //   ultraViewPager.setAutoMeasureHeight(true);
         ultraViewPager.setInfiniteLoop(true);
