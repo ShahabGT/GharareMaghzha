@@ -20,5 +20,8 @@ object Const {
     var GHARAREHMAGHZHA_BROADCAST_REFRESH = "ir.ghararemaghzha.game.REFRESH"
 
     @JvmField
+    var GHARAREHMAGHZHA_BROADCAST_MESSAGE = "ir.ghararemaghzha.game.MESSAGE"
+
+    @JvmField
     var GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA = "ir.ghararemaghzha.game.Support_BROADCAST"
 }

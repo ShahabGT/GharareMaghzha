@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textview.MaterialTextView;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -29,9 +30,10 @@ public class UserDetailsDialog extends Dialog {
 
     private final Activity context;
     private final String userId;
-    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent, booster;
+    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent, booster,rateText;
     private ProgressBar answersProgress, questionsProgress;
     private ImageView avatar;
+    private ScaleRatingBar ratingBar;
 
     private ConstraintLayout loading;
 
@@ -51,6 +53,12 @@ public class UserDetailsDialog extends Dialog {
     private void init() {
         loading = findViewById(R.id.details_loading);
 
+        ratingBar = findViewById(R.id.details_rate);
+        ratingBar.setRating(0f);
+        ratingBar.setClickable(false);
+        ratingBar.setScrollable(false);
+        ratingBar.setStarPadding(8);
+        rateText = findViewById(R.id.details_rate_text);
         name = findViewById(R.id.details_name);
         code = findViewById(R.id.details_code);
         rank = findViewById(R.id.details_rank);
@@ -144,6 +152,20 @@ public class UserDetailsDialog extends Dialog {
                                 answersPercent.setText("%" + aPercent);
 
                                 questionsPercent.setText("%" + qPercent);
+
+                                int rate = Integer.parseInt(response.body().getRank());
+                                int level1 = Integer.parseInt(response.body().getLevel1());
+                                int level2 = Integer.parseInt(response.body().getLevel2());
+                                int level3 = Integer.parseInt(response.body().getLevel3());
+                                rateText.setText(context.getString(R.string.details_rate,rate));
+                                if(rate<level1){
+                                    ratingBar.setRating(0f);
+                                }else if (rate>=level1 && rate<=level2)
+                                    ratingBar.setRating(1f);
+                                else if (rate>level2 && rate<=level3)
+                                    ratingBar.setRating(2f);
+                                else
+                                    ratingBar.setRating(3f);
 
                                 loading.setVisibility(View.GONE);
                             } else {

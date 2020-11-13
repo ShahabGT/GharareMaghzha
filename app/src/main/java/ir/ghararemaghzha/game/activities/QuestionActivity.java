@@ -43,6 +43,7 @@ import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.QuestionModel;
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -189,6 +190,7 @@ public class QuestionActivity extends AppCompatActivity {
         if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
             MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
             MySharedPreference.getInstance(this).clearCounter(this,false);
+            Utils.updateScoreBooster(QuestionActivity.this,"0");
         }
         db = Realm.getDefaultInstance();
         data = db.where(QuestionModel.class).equalTo("visible", true)

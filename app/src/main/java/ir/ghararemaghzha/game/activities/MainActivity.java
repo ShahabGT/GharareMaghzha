@@ -55,7 +55,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_MESSAGE;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .getQuestions("Bearer " + token, number, "6000", "3000")
+                .getQuestions("Bearer " + token, number, "9000", "3000")
                 .enqueue(new Callback<QuestionResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
@@ -351,6 +353,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(intent.getExtras()!=null && intent.getExtras().getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE,"default").equals("new")){
+       //     navController.navigate(R.id.action_global_messagesFragment);
+            bnv.setSelectedItemId(R.id.menu_message);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         unregisterReceiver(notificationBroadCast);
         super.onDestroy();
@@ -471,6 +482,7 @@ public class MainActivity extends AppCompatActivity {
                                                 Integer.parseInt(expireDate[4]));
                                     }
                                 }
+                                MySharedPreference.getInstance(MainActivity.this).setCounter(300-Integer.parseInt(response.body().getScoreBoosterCount()));
 
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this, true);

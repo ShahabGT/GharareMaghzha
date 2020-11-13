@@ -238,6 +238,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="details_questions">%d از %d سوال</string>
     <string name="details_code">کد کاربری: %s</string>
     <string name="details_booster">سوالات جواب داده شده با نیترو: %s</string>
+    <string name="details_rate">امتیاز کلی: %d</string>
 
     <string name="booster_notif_title">پکیج نیترو امتیاز</string>
     <string name="booster_notif_body">مدت زمان اعتبار پکیج نیترو امتیاز شما به پایان رسید.</string>

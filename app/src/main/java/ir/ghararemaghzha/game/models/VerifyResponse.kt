@@ -12,5 +12,6 @@ data class VerifyResponse(
         @SerializedName("user_booster_expire") val userBoosterExpire: String,
         @SerializedName("user_booster") val userBooster: String,
         @SerializedName("booster_value") val boosterValue: String,
+        @SerializedName("score_booster_count") val scoreBoosterCount: String
 )
 

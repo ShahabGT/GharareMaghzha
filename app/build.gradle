@@ -8,7 +8,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.5"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "ir.ghararemaghzha.game"
@@ -97,6 +97,7 @@ dependencies {
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
 
     implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'
+    implementation 'com.github.ome450901:SimpleRatingBar:1.5.0'
 
 }
 

@@ -174,4 +174,11 @@ class ApiRepository(
             number: String,
             info: String
     ) = safeApiCall { api.info(Token, number,info) }
+
+
+    suspend fun scoreBooster(
+            Token: String,
+            number: String,
+            scoreBooster: String
+    ) = safeApiCall { api.scoreBooster(Token, number,scoreBooster) }
 }

@@ -40,7 +40,50 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <com.willy.ratingbar.ScaleRatingBar
+                android:id="@+id/details_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srb_numStars="3"
+                app:srb_minimumStars="0"
+                app:srb_rating="0"
+                app:srb_starWidth="30dp"
+                app:srb_starHeight="30dp"
+                app:srb_starPadding="15dp"
+                app:srb_stepSize="1"
+                app:srb_isIndicator="false"
+                app:srb_clickable="true"
+                app:layout_constraintTop_toBottomOf="@id/details_avatar"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:srb_scrollable="true"
+                app:srb_clearRatingEnabled="true"
+                app:srb_drawableEmpty="@drawable/empty"
+                app:srb_drawableFilled="@drawable/filled"/>
+            <View
+                android:elevation="5dp"
+                android:focusable="true"
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="@id/details_rank"
+                app:layout_constraintTop_toTopOf="@id/details_rank"
+                app:layout_constraintRight_toRightOf="@id/details_rank"
+                app:layout_constraintLeft_toLeftOf="@id/details_rank"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/details_rate_text"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:padding="4dp"
+                android:text=""
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_rate" />
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/details_name"
                 style="@style/TextAppearance.AppCompat.Medium"
@@ -48,22 +91,24 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:text=""
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_avatar" />
+                app:layout_constraintTop_toBottomOf="@id/details_rate_text" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/details_code"
                 style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="0dp"
+                android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
-                android:padding="8dp"
                 android:text=""
+                android:paddingBottom="10dp"
                 android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

@@ -58,6 +58,8 @@ import retrofit2.Response;
 
 import static android.content.Context.ALARM_SERVICE;
 import static ir.ghararemaghzha.game.classes.Const.FCM_TOPIC;
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_MESSAGE;
+import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
 
 public class Utils {
 
@@ -261,6 +263,30 @@ public class Utils {
 
     }
 
+    public static void updateScoreBooster(Context context, String count) {
+        String number = MySharedPreference.getInstance(context).getNumber();
+        String token = MySharedPreference.getInstance(context).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            if (context instanceof Activity)
+                Utils.logout((Activity) context, true);
+            return;
+        }
+        RetrofitClient.getInstance().getApi()
+                .scoreBooster("Bearer " + token, number, count)
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
+
+                    }
+                });
+
+    }
+
     public static int getNextKey(Realm db) {
         try {
             Number number = db.where(MessageModel.class).max("messageId");
@@ -325,13 +351,15 @@ public class Utils {
         Intent intent = new Intent(context.getApplicationContext(), BoosterReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
+        updateScoreBooster(context, "0");
     }
 
     public static void createNotification(Context context, String title, String message, String clickAction) {
         Intent intent;
-        if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION"))
+        if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION")) {
             intent = new Intent(context, MainActivity.class);
-        else
+            intent.putExtra(GHARAREHMAGHZHA_BROADCAST_MESSAGE,"new");
+        }else
             intent = new Intent(context, SupportActivity.class);
 
 
