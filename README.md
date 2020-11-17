@@ -1,7 +1,7 @@
 
 # GharareMaghzha
 <p align="center">
-  <img src="banner.jpeg" width="350" />
+  <img src="ghmagh1.jpg" width="350" />
 </p>
 
 # Download
