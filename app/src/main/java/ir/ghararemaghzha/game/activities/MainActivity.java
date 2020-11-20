@@ -482,7 +482,7 @@ public class MainActivity extends AppCompatActivity {
                                                 Integer.parseInt(expireDate[2]),
                                                 Integer.parseInt(expireDate[3]),
                                                 Integer.parseInt(expireDate[4]));
-                                        MySharedPreference.getInstance(MainActivity.this).setCounter(300 - Integer.parseInt(response.body().getScoreBoosterCount()));
+                                    //    MySharedPreference.getInstance(MainActivity.this).setCounter(300 - Integer.parseInt(response.body().getScoreBoosterCount()));
 
                                     }
                                 }

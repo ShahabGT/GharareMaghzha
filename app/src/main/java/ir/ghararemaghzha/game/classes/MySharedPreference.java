@@ -61,7 +61,7 @@ public class MySharedPreference {
         return sharedPreferences.getInt("counter", 0);
     }
 
-    public synchronized void counterIncrease(Context context) {
+    public void counterIncrease(Context context) {
         int counter = sharedPreferences.getInt("counter", 0);
         if (counter < 299) {
             sharedPreferences.edit().putInt("counter", counter + 1).apply();
@@ -250,11 +250,11 @@ public class MySharedPreference {
     }
 
     public void setBooster(int booster) {
-        sharedPreferences.edit().putInt("booster", booster).apply();
+        sharedPreferences.edit().putInt("userbooster", booster).apply();
     }
 
     public int getBooster() {
-        return sharedPreferences.getInt("booster", 0);
+        return sharedPreferences.getInt("userbooster", 0);
     }
 
     public void setBoosterDate(String boosterDate) {

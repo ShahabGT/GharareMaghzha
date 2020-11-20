@@ -148,7 +148,7 @@ public class Utils {
     }
 
     public static String moneySeparator(String text) {
-
+        if(text==null) return "";
         int len = text.length();
         if (len > 3) {
             StringBuilder res = new StringBuilder();
