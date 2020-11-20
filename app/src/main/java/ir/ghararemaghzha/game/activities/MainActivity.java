@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -24,6 +25,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+
 import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -31,8 +33,10 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 import java.util.Objects;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -57,7 +61,6 @@ import retrofit2.Response;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_MESSAGE;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
-import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -323,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClicks() {
-        findViewById(R.id.toolbar_insta).setOnClickListener(v->{
+        findViewById(R.id.toolbar_insta).setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(getString(R.string.instagram_url)));
@@ -339,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
             MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
         }
         if (db.isEmpty()) {
-            MySharedPreference.getInstance(MainActivity.this).clearCounter(this,false);
+            MySharedPreference.getInstance(MainActivity.this).clearCounter(this, false);
             MySharedPreference.getInstance(this).setScore("0");
             getData();
         } else {
@@ -355,8 +358,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if(intent.getExtras()!=null && intent.getExtras().getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE,"default").equals("new")){
-       //     navController.navigate(R.id.action_global_messagesFragment);
+        if (intent.getExtras() != null && intent.getExtras().getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE, "default").equals("new")) {
             bnv.setSelectedItemId(R.id.menu_message);
         }
     }
@@ -448,16 +450,16 @@ public class MainActivity extends AppCompatActivity {
                                     if (response.body().getVersionEssential().equals("1")) {
                                         showNewVersionDialog("1");
                                         return;
-                                    }else
+                                    } else
                                         showNewVersionDialog("0");
 
                                 }
 
 
-                                if(newScore==-1) {
+                                if (newScore == -1) {
                                     MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(0));
                                     uploadScore(String.valueOf(0));
-                                }else if ( newScore > oldScore)
+                                } else if (newScore > oldScore)
                                     MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
                                 else if (oldScore > newScore)
                                     uploadScore(String.valueOf(oldScore));
@@ -480,9 +482,10 @@ public class MainActivity extends AppCompatActivity {
                                                 Integer.parseInt(expireDate[2]),
                                                 Integer.parseInt(expireDate[3]),
                                                 Integer.parseInt(expireDate[4]));
+                                        MySharedPreference.getInstance(MainActivity.this).setCounter(300 - Integer.parseInt(response.body().getScoreBoosterCount()));
+
                                     }
                                 }
-                                MySharedPreference.getInstance(MainActivity.this).setCounter(300-Integer.parseInt(response.body().getScoreBoosterCount()));
 
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this, true);
@@ -503,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateDatabase(boolean shouldUpdate) {
         int day = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
         if (day >= 0 && day < 10) {
-            if (shouldUpdate | day != MySharedPreference.getInstance(this).getLastUpdate()) {
+            if (shouldUpdate || day != MySharedPreference.getInstance(this).getLastUpdate()) {
                 final int range;
                 switch (day) {
                     case 1:
@@ -551,7 +554,6 @@ public class MainActivity extends AppCompatActivity {
                 MySharedPreference.getInstance(this).clearCounter(this, false);
             }
         }
-
     }
 
     private void getQuestions(int plan) {
@@ -590,7 +592,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadScore(String score) {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if(passed>=0 && passed<10) {
+        if (passed >= 0 && passed < 10) {
             String number = MySharedPreference.getInstance(this).getNumber();
             String token = MySharedPreference.getInstance(this).getAccessToken();
             if (number.isEmpty() || token.isEmpty()) {
@@ -598,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             RetrofitClient.getInstance().getApi()
-                    .sendScore("Bearer " + token, number, score,3)
+                    .sendScore("Bearer " + token, number, score, 4)
                     .enqueue(new Callback<GeneralResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -617,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadAnswers() {
         int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
-        if(passed>=0 && passed<10) {
+        if (passed >= 0 && passed < 10) {
             RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
             for (QuestionModel model : models)
                 uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster());
@@ -633,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster,3)
+                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, 4)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {

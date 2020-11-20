@@ -80,7 +80,7 @@ public class InviteFragment extends Fragment {
 
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             fCount = Float.parseFloat(response.body().getCount())+0f;
-                            int remaining = 10 - (int) fCount;
+                            int remaining = 20 - (int) fCount;
                             count.setText(getString(R.string.invite_star_title, remaining));
                             progressBar.setProgress(fCount);
                             value.setText(getString(R.string.invite_info_text1, response.body().getValue()));

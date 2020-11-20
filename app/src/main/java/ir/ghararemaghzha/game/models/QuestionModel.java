@@ -25,7 +25,7 @@ public class QuestionModel extends RealmObject {
     private String questionId;
 
     @SerializedName("sort_id")
-    private String sortId;
+    private int sortId;
 
     @SerializedName("question_text")
     private String questionText;
@@ -163,11 +163,11 @@ public class QuestionModel extends RealmObject {
         this.bought = bought;
     }
 
-    public String getSortId() {
+    public int getSortId() {
         return sortId;
     }
 
-    public void setSortId(String sortId) {
+    public void setSortId(int sortId) {
         this.sortId = sortId;
     }
 }

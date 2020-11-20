@@ -210,7 +210,7 @@
     <string name="invite_title">معرفی به دوستان</string>
     <string name="invite_info_title">با معرفی دوستان خود به قرار مغزها بصورت رایگان امتیاز خود را افزایش دهید</string>
     <string name="invite_info_text1">با معرفی هر نفر %s امتیاز دریافت کنید</string>
-    <string name="invite_info_text2">سقف معرفی دوستان 10 نفر می باشد</string>
+    <string name="invite_info_text2">سقف معرفی دوستان 20 نفر می باشد</string>
     <string name="invite_invite_title">کد معرفی شما:</string>
     <string name="invite_star_title">%d نفر مانده!</string>
     <string name="invite_count">%s نفر</string>
@@ -241,7 +241,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="details_rate">امتیاز کلی: %d</string>
 
     <string name="booster_notif_title">پکیج نیترو امتیاز</string>
-    <string name="booster_notif_body">مدت زمان اعتبار پکیج نیترو امتیاز شما به پایان رسید.</string>
+    <string name="booster_notif_body">مدت اعتبار پکیج نیترو امتیاز شما به پایان رسید.</string>
 
     <string name="score_helper_title">نیترو امتیاز</string>
     <string name="score1_title">پاسخ به سوالات</string>

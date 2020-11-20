@@ -29,6 +29,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.pm.PackageInfoCompat;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.DateFormat;
@@ -122,14 +123,13 @@ public class Utils {
 
     public static String getFbToken(Context context) {
         if (MySharedPreference.getInstance(context).getFbToken().isEmpty()) {
-            FirebaseInstanceId.getInstance().getInstanceId()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            assert task.getResult() != null;
-                            String token = task.getResult().getToken();
-                            MySharedPreference.getInstance(context).setFbToken(token);
-                        }
-                    });
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String token = task.getResult();
+                    MySharedPreference.getInstance(context).setFbToken(token);
+                }
+            });
+
         }
         return MySharedPreference.getInstance(context).getFbToken();
     }
@@ -235,7 +235,7 @@ public class Utils {
         realm.beginTransaction();
         realm.deleteAll();
         realm.commitTransaction();
-        cancelAlarm(activity);
+        cancelAlarm(activity,true);
         activity.startActivity(new Intent(activity, SplashActivity.class));
         activity.finish();
     }
@@ -244,7 +244,7 @@ public class Utils {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(context, true);
+            logout(context, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -268,7 +268,7 @@ public class Utils {
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             if (context instanceof Activity)
-                Utils.logout((Activity) context, true);
+                logout((Activity) context, true);
             return;
         }
         RetrofitClient.getInstance().getApi()
@@ -326,7 +326,7 @@ public class Utils {
 
 
     public static void setAlarm(Context context, int year, int month, int day, int hour, int minute) {
-        cancelAlarm(context);
+        cancelAlarm(context,false);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
         c.set(Calendar.YEAR, year);
@@ -346,11 +346,12 @@ public class Utils {
 
     }
 
-    public static void cancelAlarm(Context context) {
+    public static void cancelAlarm(Context context,boolean logout) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context.getApplicationContext(), BoosterReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
+        if(!logout)
         updateScoreBooster(context, "0");
     }
 

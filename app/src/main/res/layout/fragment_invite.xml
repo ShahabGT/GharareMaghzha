@@ -56,7 +56,7 @@
                 app:layout_constraintTop_toBottomOf="@id/invite_count"
                 app:rcBackgroundColor="#DDD"
                 app:rcBackgroundPadding="8dp"
-                app:rcMax="10"
+                app:rcMax="20"
                 app:rcProgress="0"
                 app:rcProgressColor="@color/blue"
                 app:rcRadius="15dp"
@@ -82,7 +82,7 @@
                     android:fontFamily="@font/vazir"
                     android:gravity="right"
                     android:padding="2dp"
-                    android:text="5 نفر"
+                    android:text="10 نفر"
                     android:textColor="@color/black" />
 
                 <View
@@ -99,7 +99,7 @@
                     android:fontFamily="@font/vazir"
                     android:gravity="right"
                     android:padding="2dp"
-                    android:text="10 نفر"
+                    android:text="20 نفر"
                     android:textColor="@color/black" />
 
                 <View

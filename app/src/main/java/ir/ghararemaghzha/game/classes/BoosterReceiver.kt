@@ -11,7 +11,7 @@ class BoosterReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent!!.action == "refreshBoosterStatus") {
-            Utils.updateScoreBooster(context,"0")
+         //   Utils.updateScoreBooster(context,"0")
             MySharedPreference.getInstance(context).clearCounter(context,false)
             MySharedPreference.getInstance(context).boosterValue = 1f
             val title= context?.getString(R.string.booster_notif_title)

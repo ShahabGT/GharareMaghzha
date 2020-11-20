@@ -16,7 +16,7 @@ class MyApplication : Application() {
         Realm.init(this)
         val config = RealmConfiguration.Builder()
                 .name("myRealm.realm")
-                .schemaVersion(4)
+                .schemaVersion(5)
                 .allowWritesOnUiThread(true)
                 .deleteRealmIfMigrationNeeded()
                 .build()
