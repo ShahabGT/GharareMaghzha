@@ -536,7 +536,7 @@ public class QuestionActivity extends AppCompatActivity {
         if (hasBooster) b = "1";
 
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer, b,4)
+                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer, b,5)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -619,7 +619,7 @@ public class QuestionActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .sendScore("Bearer " + token, number, String.valueOf(gameScore),4)
+                .sendScore("Bearer " + token, number, String.valueOf(gameScore),5)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {

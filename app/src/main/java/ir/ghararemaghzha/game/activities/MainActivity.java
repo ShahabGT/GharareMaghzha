@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .getQuestions("Bearer " + token, number, "9000", "3000")
+                .getQuestions("Bearer " + token, number, "12000", "3000")
                 .enqueue(new Callback<QuestionResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
@@ -600,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             RetrofitClient.getInstance().getApi()
-                    .sendScore("Bearer " + token, number, score, 4)
+                    .sendScore("Bearer " + token, number, score, 5)
                     .enqueue(new Callback<GeneralResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -635,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, 4)
+                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, 5)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
