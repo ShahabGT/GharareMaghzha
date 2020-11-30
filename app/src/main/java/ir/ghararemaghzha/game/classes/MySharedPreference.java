@@ -64,8 +64,9 @@ public class MySharedPreference {
     public void counterIncrease(Context context) {
         int counter = sharedPreferences.getInt("counter", 0);
         if (counter < 299) {
-            sharedPreferences.edit().putInt("counter", counter + 1).apply();
-            Utils.updateScoreBooster(context, 300 - (counter + 1) + "");
+            counter++;
+            sharedPreferences.edit().putInt("counter", counter).apply();
+            Utils.updateScoreBooster(context, 300 - counter);
         } else
             clearCounter(context, true);
 
@@ -73,10 +74,9 @@ public class MySharedPreference {
 
     public void clearCounter(Context context, boolean showNotification) {
         sharedPreferences.edit().putInt("counter", 0).apply();
-        Utils.updateScoreBooster(context, "0");
-        if (showNotification && Utils.isBoosterValid(MySharedPreference.getInstance(context).getBoosterDate())) {
+        Utils.updateScoreBooster(context, 0);
+        if (showNotification) {
             MySharedPreference.getInstance(context).setBoosterValue(1f);
-            Utils.cancelAlarm(context, true);
             Utils.createNotification(context, context.getString(R.string.booster_notif_title), context.getString(R.string.booster_notif_body), "ir.ghararemaghzha.game.TARGET_NOTIFICATION");
             saveToDB(context);
         }

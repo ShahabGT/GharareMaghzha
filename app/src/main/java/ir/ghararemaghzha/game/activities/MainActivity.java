@@ -469,23 +469,33 @@ public class MainActivity extends AppCompatActivity {
 
                                 int serverBooster = Integer.parseInt(response.body().getUserBooster());
                                 int localBooster = MySharedPreference.getInstance(MainActivity.this).getBooster();
-                                if (serverBooster != 0 && serverBooster > localBooster) {
-                                    if (Utils.isBoosterValid(response.body().getUserBoosterExpire())) {
-                                        MySharedPreference.getInstance(MainActivity.this).clearCounter(MainActivity.this, false);
-                                        MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
-                                        MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
-                                        MySharedPreference.getInstance(MainActivity.this).setBoosterDate(response.body().getUserBoosterExpire());
-                                        String[] expireDate = response.body().getUserBoosterExpire().replace(" ", ":").replace("-", ":").split(":");
-                                        Utils.setAlarm(MainActivity.this,
-                                                Integer.parseInt(expireDate[0]),
-                                                Integer.parseInt(expireDate[1]),
-                                                Integer.parseInt(expireDate[2]),
-                                                Integer.parseInt(expireDate[3]),
-                                                Integer.parseInt(expireDate[4]));
-                                    //    MySharedPreference.getInstance(MainActivity.this).setCounter(300 - Integer.parseInt(response.body().getScoreBoosterCount()));
+                                int serverBoosterCount = Integer.parseInt(response.body().getScoreBoosterCount());
+                                if (serverBooster > 0 && serverBoosterCount > 0) {
+                                    MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
+                                    MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
+                                    MySharedPreference.getInstance(MainActivity.this).setCounter(300 - serverBoosterCount);
 
-                                    }
+                                }else{
+                                    MySharedPreference.getInstance(MainActivity.this).setBoosterValue(1f);
                                 }
+//                                if (serverBooster != 0 && serverBooster > localBooster) {
+//                                    if (Utils.isBoosterValid(response.body().getUserBoosterExpire())) {
+//                                        MySharedPreference.getInstance(MainActivity.this).clearCounter(MainActivity.this, false);
+//                                        MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
+//                                        MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
+//                                        MySharedPreference.getInstance(MainActivity.this).setBoosterDate(response.body().getUserBoosterExpire());
+//                                        String[] expireDate = response.body().getUserBoosterExpire().replace(" ", ":").replace("-", ":").split(":");
+//                                        Utils.setAlarm(MainActivity.this,
+//                                                Integer.parseInt(expireDate[0]),
+//                                                Integer.parseInt(expireDate[1]),
+//                                                Integer.parseInt(expireDate[2]),
+//                                                Integer.parseInt(expireDate[3]),
+//                                                Integer.parseInt(expireDate[4]));
+//                                    //    MySharedPreference.getInstance(MainActivity.this).setCounter(300 - Integer.parseInt(response.body().getScoreBoosterCount()));
+//
+//                                    }
+//                                }
+
 
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this, true);

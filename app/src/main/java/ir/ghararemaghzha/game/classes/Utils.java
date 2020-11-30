@@ -235,7 +235,7 @@ public class Utils {
         realm.beginTransaction();
         realm.deleteAll();
         realm.commitTransaction();
-        cancelAlarm(activity,true);
+      //  cancelAlarm(activity,true);
         activity.startActivity(new Intent(activity, SplashActivity.class));
         activity.finish();
     }
@@ -263,7 +263,7 @@ public class Utils {
 
     }
 
-    public static void updateScoreBooster(Context context, String count) {
+    public static void updateScoreBooster(Context context, int count) {
         String number = MySharedPreference.getInstance(context).getNumber();
         String token = MySharedPreference.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
@@ -322,37 +322,6 @@ public class Utils {
         intent.putExtra(Intent.EXTRA_TEXT, title);
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.general_share)));
 
-    }
-
-
-    public static void setAlarm(Context context, int year, int month, int day, int hour, int minute) {
-        cancelAlarm(context,false);
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month - 1);
-        c.set(Calendar.DAY_OF_MONTH, day);
-        c.set(Calendar.HOUR_OF_DAY, hour);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, 0);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-
-        Intent i = new Intent(context.getApplicationContext(), BoosterReceiver.class);
-        i.setAction("refreshBoosterStatus");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, i, PendingIntent.FLAG_UPDATE_CURRENT);
-        // alarmManager.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
-        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), pendingIntent), pendingIntent);
-
-    }
-
-    public static void cancelAlarm(Context context,boolean logout) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context.getApplicationContext(), BoosterReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.cancel(pendingIntent);
-        if(!logout)
-        updateScoreBooster(context, "0");
     }
 
     public static void createNotification(Context context, String title, String message, String clickAction) {

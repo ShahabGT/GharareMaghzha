@@ -171,7 +171,7 @@
     <string name="buy_five_count">2500 \n سوال</string>
     <string name="buy_price">%s تومان</string>
     <string name="buy_plan_title">پکیج %s تایی سوال</string>
-    <string name="buy_booster_title">افزایش %s برابری امتیاز سوال ها برای 24 ساعت</string>
+    <string name="buy_booster_title">افزایش %s برابری امتیاز سوال ها برای 300 سوال</string>
     <string name="buy_booster_title_invalid">تعداد استفاده شما به پایان رسیده</string>
     <string name="buy_booster_title_inuse">پکیج نیترو امتیاز برای شما فعال می باشد</string>
 
@@ -238,6 +238,8 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="details_questions">%d از %d سوال</string>
     <string name="details_code">کد کاربری: %s</string>
     <string name="details_booster">سوالات جواب داده شده با نیترو: %s</string>
+    <string name="details_nitro">نتیرو استفاده شده</string>
+    <string name="details_nitro2">%s سوال</string>
     <string name="details_rate">امتیاز کلی: %d</string>
 
     <string name="booster_notif_title">پکیج نیترو امتیاز</string>
@@ -248,10 +250,10 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا 500 سوال به صورت رایگان برای شما فعال می باشد.</string>
     <string name="score1_button">ورود به صفحه سوالات</string>
     <string name="score2_title">معرفی به دوستان</string>
-    <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 2000 امتیاز افزایش می یابد. حداکثر 10 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
+    <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 2000 امتیاز افزایش می یابد. حداکثر 20 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
     <string name="score2_button">ورود به صفحه معرفی به دوستان</string>
     <string name="score3_title">پکیج نیترو امتیاز</string>
-    <string name="score3_subtitle">با خریداری پکیج نیترو امتیاز، مقدار امتیاز هر سوال به مدت 24 ساعت یا حداکثر 300 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 5 بار این پکیج قابل خریداری می باشد.</string>
+    <string name="score3_subtitle">با خریداری پکیج نیترو امتیاز، مقدار امتیاز هر سوال به تعداد 300 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 5 بار این پکیج قابل خریداری می باشد.</string>
     <string name="score3_button">ورود به صفحه خرید</string>
 
 
@@ -262,7 +264,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="tap_target_start_title">شروع مسابقه</string>
     <string name="tap_target_start_des">در این صفحه می توانید بازی رو شروع کنید و امتیاز خود را افزایش دهید. در ابتدا 500 سوال به صورت رایگان در اختیار شما قرار گرفته است</string>
     <string name="tap_target_buy_title">خرید</string>
-    <string name="tap_target_buy_des">در این صفحه می توانید تعداد سوالات خود را افزایش دهید. حداکثر تعداد سوال در هر دوره 3000 سوال می باشد. همچنین می توانید پکیج نیترو امتیاز 24 ساعته را خریداری نمایید</string>
+    <string name="tap_target_buy_des">در این صفحه می توانید تعداد سوالات خود را افزایش دهید. حداکثر تعداد سوال در هر دوره 3000 سوال می باشد. همچنین می توانید پکیج نیترو امتیاز را خریداری نمایید</string>
     <string name="tap_target_message_title">پیام ها</string>
     <string name="tap_target_message_des">در این صفحه می توانید پیام های مدیریت را مشاهده کنید</string>
     <string name="tap_target_menu_title">منو</string>

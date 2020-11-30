@@ -118,13 +118,13 @@ public class QuestionActivity extends AppCompatActivity {
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_autonext), getString(R.string.tap_target_question_next_title), getString(R.string.tap_target_question_next_des))
-                                .cancelable(false)
-                                .tintTarget(false)
-                                .dimColor(R.color.black)
-                                .outerCircleColor(R.color.colorPrimary)
-                                .targetCircleColor(R.color.white)
-                                .textColor(android.R.color.black),
+//                        TapTarget.forView(findViewById(R.id.question_autonext), getString(R.string.tap_target_question_next_title), getString(R.string.tap_target_question_next_des))
+//                                .cancelable(false)
+//                                .tintTarget(false)
+//                                .dimColor(R.color.black)
+//                                .outerCircleColor(R.color.colorPrimary)
+//                                .targetCircleColor(R.color.white)
+//                                .textColor(android.R.color.black),
                         TapTarget.forView(findViewById(R.id.question_booster), getString(R.string.tap_target_question_booster_title), getString(R.string.tap_target_question_booster_des))
                                 .cancelable(false)
                                 .tintTarget(false)
@@ -187,11 +187,11 @@ public class QuestionActivity extends AppCompatActivity {
 
 
     private void init() {
-        if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
-            MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
-            MySharedPreference.getInstance(this).clearCounter(this,false);
-            Utils.updateScoreBooster(QuestionActivity.this,"0");
-        }
+//        if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
+//            MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
+//            MySharedPreference.getInstance(this).clearCounter(this,false);
+//            Utils.updateScoreBooster(QuestionActivity.this,0);
+//        }
         db = Realm.getDefaultInstance();
         data = db.where(QuestionModel.class).equalTo("visible", true)
                 .and().equalTo("userAnswer", "-1").findAll();
@@ -201,9 +201,9 @@ public class QuestionActivity extends AppCompatActivity {
         music.setImageResource(musicSetting ? R.drawable.vector_music_on : R.drawable.vector_music_off);
 
         autoNext = findViewById(R.id.question_autonext);
-        autoNextSetting = MySettingsPreference.getInstance(this).getAutoNext();
-        autoNext.setImageResource(autoNextSetting ? R.drawable.auto_next_on : R.drawable.auto_next_off);
-
+     //   autoNextSetting = MySettingsPreference.getInstance(this).getAutoNext();
+    //    autoNext.setImageResource(autoNextSetting ? R.drawable.auto_next_on : R.drawable.auto_next_off);
+        autoNextSetting=true;
 
         next = findViewById(R.id.question_next);
         questionPoints = findViewById(R.id.question_points);

@@ -13,6 +13,7 @@ data class UserDetailsResponse(
         val level1: String,
         val level2: String,
         val level3: String,
+        val level4: String,
         @SerializedName("user_data") val userData: UserDataModel
 )
 

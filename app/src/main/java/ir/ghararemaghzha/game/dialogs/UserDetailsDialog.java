@@ -103,9 +103,9 @@ public class UserDetailsDialog extends Dialog {
                                 rank.setText(response.body().getUserData().getUserRank());
                                 score.setText(response.body().getUserData().getScoreCount());
                                 if (Integer.parseInt(response.body().getBooster()) < 1500)
-                                    booster.setText(context.getString(R.string.details_booster, response.body().getBooster()));
+                                    answers.setText(context.getString(R.string.details_nitro2, response.body().getBooster()));
                                 else
-                                    booster.setText(context.getString(R.string.details_booster, "1500"));
+                                    answers.setText(context.getString(R.string.details_nitro2, "1500"));
 
                                 Glide.with(context)
                                         .load(context.getString(R.string.avatar_url, response.body().getUserData().getUserAvatar()))
@@ -114,42 +114,38 @@ public class UserDetailsDialog extends Dialog {
                                         .into(avatar);
 
                                 int totalQuestions = (Integer.parseInt(response.body().getPlan()) * 500) + 500;
-
                                 int answeredQuestions = response.body().getCorrect() + response.body().getIncorrect();
+                                int nitroUsed = Integer.parseInt(response.body().getBooster());
+
                                 if (answeredQuestions <= 3000) {
-                                    answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), response.body().getIncorrect()));
                                     questions.setText(context.getString(R.string.details_questions, answeredQuestions, totalQuestions));
                                 } else {
-                                    int incorrect = response.body().getIncorrect() - (answeredQuestions - 3000);
-                                    answers.setText(context.getString(R.string.details_answers, response.body().getCorrect(), incorrect));
                                     questions.setText(context.getString(R.string.details_questions, 3000, totalQuestions));
-
                                 }
 
-                                int aPercent;
                                 int qPercent;
+                                int nPercent;
                                 if (answeredQuestions > 0 && answeredQuestions <= 3000) {
-                                    aPercent = (response.body().getCorrect() * 100) / answeredQuestions;
                                     qPercent = (answeredQuestions * 100) / totalQuestions;
+                                    nPercent = (nitroUsed * 100) / 1500;
                                 } else if (answeredQuestions > 3000) {
-                                    aPercent = (response.body().getCorrect() * 100) / 3000;
                                     qPercent = (answeredQuestions * 100) / totalQuestions;
+                                    nPercent = (nitroUsed * 100) / 1500;
                                 } else {
                                     qPercent = 0;
-                                    aPercent = 0;
+                                    nPercent=0;
                                 }
                                 new Handler().postDelayed(() -> {
                                     if (Build.VERSION.SDK_INT >= 24) {
-                                        answersProgress.setProgress(aPercent, true);
+                                        answersProgress.setProgress(nPercent, true);
                                         questionsProgress.setProgress(qPercent, true);
                                     } else {
-                                        answersProgress.setProgress(aPercent);
+                                        answersProgress.setProgress(nPercent);
                                         questionsProgress.setProgress(qPercent);
                                     }
                                 }, 500);
 
-
-                                answersPercent.setText("%" + aPercent);
+                                answersPercent.setText("%" + nPercent);
 
                                 questionsPercent.setText("%" + qPercent);
 
@@ -157,15 +153,19 @@ public class UserDetailsDialog extends Dialog {
                                 int level1 = Integer.parseInt(response.body().getLevel1());
                                 int level2 = Integer.parseInt(response.body().getLevel2());
                                 int level3 = Integer.parseInt(response.body().getLevel3());
+                                int level4 = Integer.parseInt(response.body().getLevel4());
                                 rateText.setText(context.getString(R.string.details_rate,rate));
                                 if(rate<level1){
                                     ratingBar.setRating(0f);
-                                }else if (rate>=level1 && rate<=level2)
+                                }else if (rate>=level1 && rate<level2)
                                     ratingBar.setRating(1f);
-                                else if (rate>level2 && rate<=level3)
+                                else if (rate>=level2 && rate<level3)
                                     ratingBar.setRating(2f);
-                                else
+                                else if (rate>=level3 && rate<level4)
                                     ratingBar.setRating(3f);
+                                else
+                                    ratingBar.setRating(4f);
+
 
                                 loading.setVisibility(View.GONE);
                             } else {
