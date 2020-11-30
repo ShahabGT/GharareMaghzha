@@ -15,22 +15,27 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/details_guide"
+                app:layout_constraintGuide_percent="0.5"
+                android:layout_height="wrap_content"/>
 
             <ImageView
                 android:id="@+id/details_close"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_margin="12dp"
-                android:background="@drawable/round"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="6dp"
                 android:soundEffectsEnabled="true"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/vector_close"
-                app:tint="@color/red" />
+                app:srcCompat="@drawable/vector_arrow_left"
+                app:tint="@color/black" />
 
             <ImageView
                 android:id="@+id/details_avatar"
@@ -40,135 +45,228 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <com.willy.ratingbar.ScaleRatingBar
                 android:id="@+id/details_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srb_numStars="4"
-                app:srb_minimumStars="0"
-                app:srb_rating="0"
-                app:srb_starWidth="30dp"
-                app:srb_starHeight="30dp"
-                app:srb_starPadding="15dp"
-                app:srb_stepSize="1"
-                app:srb_isIndicator="false"
-                app:srb_clickable="true"
-                app:layout_constraintTop_toBottomOf="@id/details_avatar"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:srb_scrollable="true"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_avatar"
                 app:srb_clearRatingEnabled="true"
+                app:srb_clickable="true"
                 app:srb_drawableEmpty="@drawable/empty"
-                app:srb_drawableFilled="@drawable/filled"/>
+                app:srb_drawableFilled="@drawable/filled"
+                app:srb_isIndicator="false"
+                app:srb_minimumStars="0"
+                app:srb_numStars="4"
+                app:srb_rating="0"
+                app:srb_scrollable="true"
+                app:srb_starHeight="25dp"
+                app:srb_starPadding="10dp"
+                app:srb_starWidth="25dp"
+                app:srb_stepSize="1" />
+
             <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clickable="true"
                 android:elevation="5dp"
                 android:focusable="true"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="@id/details_rank"
-                app:layout_constraintTop_toTopOf="@id/details_rank"
-                app:layout_constraintRight_toRightOf="@id/details_rank"
-                app:layout_constraintLeft_toLeftOf="@id/details_rank"
-                android:layout_width="0dp"
-                android:layout_height="0dp"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/details_rate_text"
-                style="@style/TextAppearance.AppCompat.Small"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:padding="4dp"
-                android:text=""
-                android:textColor="@color/black"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_rate" />
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/details_name"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:padding="4dp"
-                android:text=""
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_rate_text" />
+                app:layout_constraintBottom_toBottomOf="@id/details_rank1"
+                app:layout_constraintLeft_toLeftOf="@id/details_rank1"
+                app:layout_constraintRight_toRightOf="@id/details_rank1"
+                app:layout_constraintTop_toTopOf="@id/details_rank1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/details_code"
                 style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="0dp"
-                android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:text=""
-                android:paddingBottom="10dp"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_name" />
+                app:layout_constraintTop_toBottomOf="@id/details_rate" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/details_season_title"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/details_season_title"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="@id/details_guide"
+                app:layout_constraintTop_toBottomOf="@+id/details_code" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/details_rate_text"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/details_season"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:paddingLeft="24dp"
+                android:paddingTop="4dp"
+                android:paddingRight="24dp"
+                android:paddingBottom="4dp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@+id/details_season_title"
+                app:layout_constraintRight_toRightOf="@+id/details_season_title"
+                app:layout_constraintTop_toBottomOf="@id/details_season_title" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/details_total_title"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/details_total_title"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@+id/details_guide"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details_code" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/details_total"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/details_total"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:paddingLeft="24dp"
+                android:paddingTop="4dp"
+                android:paddingRight="24dp"
+                android:paddingBottom="4dp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@+id/details_total_title"
+                app:layout_constraintRight_toRightOf="@+id/details_total_title"
+                app:layout_constraintTop_toBottomOf="@id/details_total_title" />
+
+            <ImageView
+                android:id="@+id/details_name_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/details_round"
+                android:padding="10dp"
+                android:src="@drawable/user"
+                app:layout_constraintLeft_toLeftOf="@id/details_guide"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_total"
+                app:tint="@color/white" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/details_name1"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/details_name1"
+                android:fontFamily="@font/vazir"
+                android:layout_marginRight="12dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/details_name"
+                android:textColor="@color/white"
+                app:layout_constraintLeft_toRightOf="@id/details_name2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_name_img" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/details_name2"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/details_name2"
+                android:fontFamily="@font/vazir"
+                android:layout_marginLeft="8dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:text="@string/details_name"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/details_name1"
+                app:layout_constraintLeft_toLeftOf="@+id/details_guide"
+                app:layout_constraintRight_toLeftOf="@+id/details_name1"
+                app:layout_constraintTop_toTopOf="@id/details_name1" />
 
             <ImageView
                 android:id="@+id/details_rank_img"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/rank"
-                app:layout_constraintLeft_toRightOf="@id/details_score_img"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_code" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/podium"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="@id/details_guide"
+                app:layout_constraintTop_toBottomOf="@id/details_total" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/details_rank"
+                android:id="@+id/details_rank1"
                 style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/details_rank1"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="0"
-                android:textColor="@color/black"
-                app:layout_constraintLeft_toLeftOf="@+id/details_rank_img"
-                app:layout_constraintRight_toRightOf="@+id/details_rank_img"
+                android:text="@string/details_rank"
+                android:textColor="@color/white"
+                app:layout_constraintLeft_toRightOf="@id/details_rank2"
+                app:layout_constraintRight_toRightOf="@+id/details_guide"
                 app:layout_constraintTop_toBottomOf="@id/details_rank_img" />
 
-            <ImageView
-                android:id="@+id/details_score_img"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/star"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/details_rank_img"
-                app:layout_constraintTop_toBottomOf="@id/details_code" />
-
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/details_score"
+                android:id="@+id/details_rank2"
                 style="@style/TextAppearance.AppCompat.Small"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/details_rank2"
                 android:fontFamily="@font/vazir"
+                android:layout_marginLeft="12dp"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="0"
+                android:text="@string/details_rank"
                 android:textColor="@color/black"
-                app:layout_constraintLeft_toLeftOf="@+id/details_score_img"
-                app:layout_constraintRight_toRightOf="@+id/details_score_img"
-                app:layout_constraintTop_toBottomOf="@id/details_score_img" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/details_rank1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/details_rank1"
+                app:layout_constraintTop_toTopOf="@id/details_rank1" />
 
             <View
                 android:id="@+id/details_view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="8dp"
+                android:layout_margin="12dp"
                 android:background="#DDD"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_score" />
+                app:layout_constraintTop_toBottomOf="@id/details_name2" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/details_questions_title"
@@ -217,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
-                android:padding="8dp"
+                android:padding="6dp"
                 android:text="0"
                 android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="@+id/details_questions_progress"
@@ -271,39 +369,22 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/vazir"
                 android:gravity="center"
-                android:padding="8dp"
+                android:padding="6dp"
                 android:text="0"
                 android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="@+id/details_answers_progress"
                 app:layout_constraintRight_toRightOf="@+id/details_answers_progress"
                 app:layout_constraintTop_toBottomOf="@id/details_answers_progress" />
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/details_answers_booster"
-                style="@style/TextAppearance.AppCompat.Small"
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="center"
-                android:padding="8dp"
-                android:drawableTint="@color/dark6"
-                android:drawableRight="@drawable/vector_booster"
-                android:text="@string/details_booster"
-                android:textColor="@color/black"
-                android:layout_marginTop="6dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_answers" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/details_loading"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#99FFFFFF"
-                android:visibility="gone"
                 android:clickable="true"
                 android:elevation="20dp"
                 android:focusable="true"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

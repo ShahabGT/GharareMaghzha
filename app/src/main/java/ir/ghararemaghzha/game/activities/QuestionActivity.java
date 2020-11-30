@@ -25,7 +25,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -43,7 +42,6 @@ import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.QuestionModel;
-import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,7 +53,6 @@ public class QuestionActivity extends AppCompatActivity {
     private int time = 15;
     private CountDownTimer downTimer, nextTimer;
     private ProgressBar progressBar;
-    private MaterialButton next;
     private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, score, questionPoints, questionRemain;
     private MaterialCardView answer1c, answer2c, answer3c, answer4c, questionc;
     private RealmResults<QuestionModel> data;
@@ -69,9 +66,7 @@ public class QuestionActivity extends AppCompatActivity {
     private int gameScore = 0;
     private boolean shouldRandomize;
     private ImageView music;
-    private ImageView autoNext;
     private boolean musicSetting;
-    private boolean autoNextSetting;
     private boolean hasBooster = false;
     private boolean foreground = false;
 
@@ -118,13 +113,6 @@ public class QuestionActivity extends AppCompatActivity {
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-//                        TapTarget.forView(findViewById(R.id.question_autonext), getString(R.string.tap_target_question_next_title), getString(R.string.tap_target_question_next_des))
-//                                .cancelable(false)
-//                                .tintTarget(false)
-//                                .dimColor(R.color.black)
-//                                .outerCircleColor(R.color.colorPrimary)
-//                                .targetCircleColor(R.color.white)
-//                                .textColor(android.R.color.black),
                         TapTarget.forView(findViewById(R.id.question_booster), getString(R.string.tap_target_question_booster_title), getString(R.string.tap_target_question_booster_des))
                                 .cancelable(false)
                                 .tintTarget(false)
@@ -159,13 +147,6 @@ public class QuestionActivity extends AppCompatActivity {
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
-                                .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_next), getString(R.string.tap_target_question_next_question_title), getString(R.string.tap_target_question_next_question_des))
-                                .cancelable(false)
-                                .tintTarget(false)
-                                .dimColor(R.color.black)
-                                .outerCircleColor(R.color.colorPrimary)
-                                .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black)
                 ).listener(new TapTargetSequence.Listener() {
 
@@ -187,11 +168,7 @@ public class QuestionActivity extends AppCompatActivity {
 
 
     private void init() {
-//        if (!Utils.isBoosterValid(MySharedPreference.getInstance(this).getBoosterDate())) {
-//            MySharedPreference.getInstance(this).setBoosterValue(Float.parseFloat("1"));
-//            MySharedPreference.getInstance(this).clearCounter(this,false);
-//            Utils.updateScoreBooster(QuestionActivity.this,0);
-//        }
+
         db = Realm.getDefaultInstance();
         data = db.where(QuestionModel.class).equalTo("visible", true)
                 .and().equalTo("userAnswer", "-1").findAll();
@@ -200,12 +177,6 @@ public class QuestionActivity extends AppCompatActivity {
         musicSetting = MySettingsPreference.getInstance(this).getMusic();
         music.setImageResource(musicSetting ? R.drawable.vector_music_on : R.drawable.vector_music_off);
 
-        autoNext = findViewById(R.id.question_autonext);
-     //   autoNextSetting = MySettingsPreference.getInstance(this).getAutoNext();
-    //    autoNext.setImageResource(autoNextSetting ? R.drawable.auto_next_on : R.drawable.auto_next_off);
-        autoNextSetting=true;
-
-        next = findViewById(R.id.question_next);
         questionPoints = findViewById(R.id.question_points);
         questionRemain = findViewById(R.id.question_remaining);
 
@@ -255,7 +226,7 @@ public class QuestionActivity extends AppCompatActivity {
                 answer2c.setEnabled(false);
                 answer3c.setEnabled(false);
                 answer4c.setEnabled(false);
-                if (autoNextSetting && foreground)
+                if (foreground)
                     nextQuestion();
             }
         };
@@ -266,7 +237,6 @@ public class QuestionActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                next.setEnabled(true);
                 nextTimer.cancel();
             }
         };
@@ -305,16 +275,9 @@ public class QuestionActivity extends AppCompatActivity {
             }
         });
 
-        autoNext.setOnClickListener(v -> {
-            autoNextSetting = !autoNextSetting;
-            autoNext.setImageResource(autoNextSetting ? R.drawable.auto_next_on : R.drawable.auto_next_off);
-
-            MySettingsPreference.getInstance(this).setAutoNext(autoNextSetting);
-        });
-
-
         answer1c.setOnClickListener(v -> {
-            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+            if (MySharedPreference.getInstance(this).getBoosterValue() != 1f)
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -342,11 +305,12 @@ public class QuestionActivity extends AppCompatActivity {
                 playSound(wrongSound);
 
             }
-            if (autoNextSetting)
-                new Handler().postDelayed(this::nextQuestion, 1000);
+            new Handler().postDelayed(this::nextQuestion, 1000);
         });
         answer2c.setOnClickListener(v -> {
-            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+            if (MySharedPreference.getInstance(this).getBoosterValue() != 1f)
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -372,12 +336,14 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer2c);
                 playSound(wrongSound);
             }
-            if (autoNextSetting) new Handler().postDelayed(this::nextQuestion, 1000);
+            new Handler().postDelayed(this::nextQuestion, 1000);
 
 
         });
         answer3c.setOnClickListener(v -> {
-            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+            if (MySharedPreference.getInstance(this).getBoosterValue() != 1f)
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -402,12 +368,14 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer3c);
                 playSound(wrongSound);
             }
-            if (autoNextSetting) new Handler().postDelayed(this::nextQuestion, 1000);
+            new Handler().postDelayed(this::nextQuestion, 1000);
 
 
         });
         answer4c.setOnClickListener(v -> {
-            MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+            if(MySharedPreference.getInstance(this).getBoosterValue()!=1f)
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -432,11 +400,10 @@ public class QuestionActivity extends AppCompatActivity {
                 YoYo.with(Techniques.Shake).duration(500).playOn(answer4c);
                 playSound(wrongSound);
             }
-            if (autoNextSetting) new Handler().postDelayed(this::nextQuestion, 1000);
+            new Handler().postDelayed(this::nextQuestion, 1000);
 
 
         });
-        next.setOnClickListener(v -> nextQuestion());
         findViewById(R.id.question_close).setOnClickListener(v -> QuestionActivity.this.finish());
 
     }
@@ -536,7 +503,7 @@ public class QuestionActivity extends AppCompatActivity {
         if (hasBooster) b = "1";
 
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer, b,5)
+                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer, b, 5)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -619,7 +586,7 @@ public class QuestionActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .sendScore("Bearer " + token, number, String.valueOf(gameScore),5)
+                .sendScore("Bearer " + token, number, String.valueOf(gameScore), 5)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -644,7 +611,7 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(br,new IntentFilter(GHARAREHMAGHZHA_BROADCAST_END));
+        registerReceiver(br, new IntentFilter(GHARAREHMAGHZHA_BROADCAST_END));
         foreground = true;
         if (mediaPlayer != null && musicSetting)
             mediaPlayer.start();

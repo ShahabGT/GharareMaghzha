@@ -89,7 +89,7 @@ public class StartFragment extends Fragment {
             info.setText(R.string.start_info_notstarted);
         else {
             info.setText(context.getString(R.string.start_info_passed));
-            start.setEnabled(false);
+    //        start.setEnabled(false);
         }
         Utils.updateServerQuestions(activity, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
     }
@@ -134,19 +134,19 @@ public class StartFragment extends Fragment {
                 navController.navigate(R.id.action_menu_start_to_menu_highscore)
         );
         start.setOnClickListener(v -> {
-            int passed = Integer.parseInt(MySharedPreference.getInstance(activity).getDaysPassed());
-            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
-            int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
-            if (size > 0)
+//            int passed = Integer.parseInt(MySharedPreference.getInstance(activity).getDaysPassed());
+//            int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
+//            int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
+//            if (size > 0)
                 startActivity(new Intent(activity, QuestionActivity.class));
-            else if (remaining == 0)
-                Toast.makeText(context, context.getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show();
-            else if(passed<0)
-                Toast.makeText(context, context.getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show();
-            else if(passed>9)
-                Toast.makeText(context, context.getString(R.string.start_info_passed), Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(context, context.getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
+//            else if (remaining == 0)
+//                Toast.makeText(context, context.getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show();
+//            else if(passed<0)
+//                Toast.makeText(context, context.getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show();
+//            else if(passed>9)
+//                Toast.makeText(context, context.getString(R.string.start_info_passed), Toast.LENGTH_LONG).show();
+//            else
+//                Toast.makeText(context, context.getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show();
         });
 
     }

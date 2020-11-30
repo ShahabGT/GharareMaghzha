@@ -66,9 +66,6 @@ public class BuyFragment extends Fragment {
     }
 
     private void init(View v) {
-        if (!Utils.isBoosterValid(MySharedPreference.getInstance(context).getBoosterDate())) {
-            MySharedPreference.getInstance(context).setBoosterValue(Float.parseFloat("1"));
-        }
         ((MaterialTextView) activity.findViewById(R.id.toolbar_title)).setText(R.string.buy_title);
 
         recyclerView = v.findViewById(R.id.buy_recycler);

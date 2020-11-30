@@ -239,6 +239,10 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="details_code">کد کاربری: %s</string>
     <string name="details_booster">سوالات جواب داده شده با نیترو: %s</string>
     <string name="details_nitro">نتیرو استفاده شده</string>
+    <string name="details_total_title">مجموع کل امتیازات</string>
+    <string name="details_season_title">امتیاز این دوره</string>
+    <string name="details_name">نام کاربر</string>
+    <string name="details_rank">رتبه کاربر</string>
     <string name="details_nitro2">%s سوال</string>
     <string name="details_rate">امتیاز کلی: %d</string>
 

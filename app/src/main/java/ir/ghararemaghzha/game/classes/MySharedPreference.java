@@ -75,8 +75,9 @@ public class MySharedPreference {
     public void clearCounter(Context context, boolean showNotification) {
         sharedPreferences.edit().putInt("counter", 0).apply();
         Utils.updateScoreBooster(context, 0);
+        setBoosterValue(1f);
+
         if (showNotification) {
-            MySharedPreference.getInstance(context).setBoosterValue(1f);
             Utils.createNotification(context, context.getString(R.string.booster_notif_title), context.getString(R.string.booster_notif_body), "ir.ghararemaghzha.game.TARGET_NOTIFICATION");
             saveToDB(context);
         }

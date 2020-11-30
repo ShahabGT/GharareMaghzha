@@ -30,7 +30,7 @@ public class UserDetailsDialog extends Dialog {
 
     private final Activity context;
     private final String userId;
-    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent, booster,rateText;
+    private MaterialTextView name, code, rank, score, questions, answers, questionsPercent, answersPercent, rateText;
     private ProgressBar answersProgress, questionsProgress;
     private ImageView avatar;
     private ScaleRatingBar ratingBar;
@@ -58,12 +58,11 @@ public class UserDetailsDialog extends Dialog {
         ratingBar.setClickable(false);
         ratingBar.setScrollable(false);
         ratingBar.setStarPadding(8);
-        rateText = findViewById(R.id.details_rate_text);
-        name = findViewById(R.id.details_name);
+        rateText = findViewById(R.id.details_total);
+        name = findViewById(R.id.details_name2);
         code = findViewById(R.id.details_code);
-        rank = findViewById(R.id.details_rank);
-        score = findViewById(R.id.details_score);
-        booster = findViewById(R.id.details_answers_booster);
+        rank = findViewById(R.id.details_rank2);
+        score = findViewById(R.id.details_rate_text);
         questions = findViewById(R.id.details_questions);
         questionsPercent = findViewById(R.id.details_questions_percent);
         answers = findViewById(R.id.details_answers);
@@ -133,7 +132,7 @@ public class UserDetailsDialog extends Dialog {
                                     nPercent = (nitroUsed * 100) / 1500;
                                 } else {
                                     qPercent = 0;
-                                    nPercent=0;
+                                    nPercent = 0;
                                 }
                                 new Handler().postDelayed(() -> {
                                     if (Build.VERSION.SDK_INT >= 24) {
@@ -154,14 +153,14 @@ public class UserDetailsDialog extends Dialog {
                                 int level2 = Integer.parseInt(response.body().getLevel2());
                                 int level3 = Integer.parseInt(response.body().getLevel3());
                                 int level4 = Integer.parseInt(response.body().getLevel4());
-                                rateText.setText(context.getString(R.string.details_rate,rate));
-                                if(rate<level1){
+                                rateText.setText( String.valueOf(rate));
+                                if (rate < level1) {
                                     ratingBar.setRating(0f);
-                                }else if (rate>=level1 && rate<level2)
+                                } else if (rate < level2)
                                     ratingBar.setRating(1f);
-                                else if (rate>=level2 && rate<level3)
+                                else if (rate < level3)
                                     ratingBar.setRating(2f);
-                                else if (rate>=level3 && rate<level4)
+                                else if (rate < level4)
                                     ratingBar.setRating(3f);
                                 else
                                     ratingBar.setRating(4f);
