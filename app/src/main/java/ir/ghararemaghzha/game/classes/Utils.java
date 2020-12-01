@@ -102,25 +102,6 @@ public class Utils {
         return res;
     }
 
-    public static boolean isBoosterValid(String boosterDate) {
-        if (boosterDate.isEmpty()) return false;
-        boolean res = true;
-        Date d = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        String systemDate = dateFormat.format(d);
-        try {
-            d = dateFormat.parse(boosterDate);
-            long server = d != null ? d.getTime() : 0;
-            d = dateFormat.parse(systemDate);
-            long system = d == null ? 0 : d.getTime();
-
-            if (system > server) res = false;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
     public static String getFbToken(Context context) {
         if (MySharedPreference.getInstance(context).getFbToken().isEmpty()) {
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
@@ -235,7 +216,6 @@ public class Utils {
         realm.beginTransaction();
         realm.deleteAll();
         realm.commitTransaction();
-      //  cancelAlarm(activity,true);
         activity.startActivity(new Intent(activity, SplashActivity.class));
         activity.finish();
     }
@@ -329,10 +309,10 @@ public class Utils {
         if (clickAction.equals("ir.ghararemaghzha.game.TARGET_NOTIFICATION")) {
             intent = new Intent(context, MainActivity.class);
             intent.putExtra(GHARAREHMAGHZHA_BROADCAST_MESSAGE,"new");
-        }else
+        }else {
             intent = new Intent(context, SupportActivity.class);
-
-
+            intent.putExtra(GHARAREHMAGHZHA_BROADCAST_MESSAGE,"chat");
+        }
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         createNotificationChannel(context);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Const.CHANNEL_CODE);

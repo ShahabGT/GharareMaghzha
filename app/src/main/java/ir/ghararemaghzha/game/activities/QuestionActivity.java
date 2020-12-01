@@ -54,7 +54,7 @@ public class QuestionActivity extends AppCompatActivity {
     private CountDownTimer downTimer, nextTimer;
     private ProgressBar progressBar;
     private MaterialTextView timeText, question, answer1, answer2, answer3, answer4, score, questionPoints, questionRemain;
-    private MaterialCardView answer1c, answer2c, answer3c, answer4c, questionc;
+    private MaterialCardView answer1c, answer2c, answer3c, answer4c, questionCard;
     private RealmResults<QuestionModel> data;
     private List<Integer> randomAnswers;
     private String correctAnswer = "";
@@ -189,7 +189,7 @@ public class QuestionActivity extends AppCompatActivity {
         }
 
         question = findViewById(R.id.question_question);
-        questionc = findViewById(R.id.question_question_card);
+        questionCard = findViewById(R.id.question_question_card);
         answer1 = findViewById(R.id.question_answer1);
         answer1c = findViewById(R.id.question_answer1_card);
         answer2 = findViewById(R.id.question_answer2);
@@ -409,7 +409,7 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void enterAnimations() {
-        YoYo.with(Techniques.Landing).duration(1500).playOn(questionc);
+        YoYo.with(Techniques.Landing).duration(1500).playOn(questionCard);
         YoYo.with(Techniques.Landing).duration(1500).playOn(answer1c);
         YoYo.with(Techniques.Landing).duration(1500).playOn(answer2c);
         YoYo.with(Techniques.Landing).duration(1500).playOn(answer3c);

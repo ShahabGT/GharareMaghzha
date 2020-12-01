@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, RecyclerView.ViewHolder> {
 
-    private FragmentActivity context;
+    private final FragmentActivity context;
     private final static int TYPE_ME = 1;
     private final static int TYPE_OTHER = 2;
 
@@ -131,8 +131,8 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
     }
 
     static class OtherViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView date,time;
-        private EmojiTextView message;
+        private final MaterialTextView date,time;
+        private final EmojiTextView message;
 
         public OtherViewHolder(@NonNull View v) {
             super(v);
@@ -143,9 +143,9 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
     }
 
     static class MeViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView  date,time;
-        private EmojiTextView message;
-        private ImageView stat;
+        private final MaterialTextView  date,time;
+        private final EmojiTextView message;
+        private final ImageView stat;
 
         public MeViewHolder(@NonNull View v) {
             super(v);

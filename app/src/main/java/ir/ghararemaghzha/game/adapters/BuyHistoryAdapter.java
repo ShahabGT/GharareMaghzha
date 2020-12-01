@@ -19,8 +19,8 @@ import ir.ghararemaghzha.game.models.BuyHistoryModel;
 
 public class BuyHistoryAdapter extends RecyclerView.Adapter<BuyHistoryAdapter.ViewHolder> {
 
-    private List<BuyHistoryModel> data;
-    private Context context;
+    private final List<BuyHistoryModel> data;
+    private final Context context;
 
     public BuyHistoryAdapter(Context context, List<BuyHistoryModel> data) {
         this.data = data;
@@ -89,7 +89,7 @@ public class BuyHistoryAdapter extends RecyclerView.Adapter<BuyHistoryAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView title, price, date, influencer, stat, resCode;
+        private final MaterialTextView title, price, date, influencer, stat, resCode;
 
         public ViewHolder(@NonNull View v) {
             super(v);

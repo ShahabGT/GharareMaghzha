@@ -26,7 +26,6 @@ class ProfileViewPager(var context: Context, var data: List<ProfileModel>) : Pag
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val layout = LayoutInflater.from(container.context).inflate(R.layout.row_profile, null) as MaterialCardView
         val model = data[position]
-    //    layout.findViewById<ImageView>(R.id.row_profile_img).setImageResource(model.image)
         layout.findViewById<MaterialTextView>(R.id.row_profile_title).text = model.title
         layout.findViewById<MaterialTextView>(R.id.row_profile_subtitle).text = model.subtitle
         if(position==0) {

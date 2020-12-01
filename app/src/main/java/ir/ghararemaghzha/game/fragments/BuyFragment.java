@@ -45,7 +45,6 @@ public class BuyFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private ConstraintLayout loading;
-
     private RecyclerView recyclerView;
     private BuyAdapter adapter;
 
@@ -146,8 +145,7 @@ public class BuyFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         loading.setVisibility(View.GONE);
-                        if (response.isSuccessful() && response.body() != null
-                                && response.body().getMerchantId() != null && !response.body().getMerchantId().isEmpty()) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().getMerchantId().isEmpty()) {
                             String merchant = response.body().getMerchantId();
                             String url = "https://ghararehmaghzha.ir/api/buy/buy?merchant=" + merchant;
                             Intent i = new Intent(Intent.ACTION_VIEW);

@@ -17,7 +17,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -25,7 +24,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-
 import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -33,10 +31,8 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-
 import java.util.ArrayList;
 import java.util.Objects;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -65,8 +61,6 @@ import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REF
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
-
-
     private TimeDialog timeDialog;
     private ImageView newChat, newToolbar;
     private boolean doubleBackToExitPressedOnce;
@@ -255,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
         findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> {
-            //   startActivity(new Intent(this, BuyHistoryActivity.class));
             navController.navigate(R.id.action_global_buyHistoryFragment);
             motionLayout.transitionToStart();
         });
@@ -264,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
             motionLayout.transitionToStart();
         });
         findViewById(R.id.navigation_invite).setOnClickListener(v -> {
-            // startActivity(new Intent(this, InviteActivity.class));
             navController.navigate(R.id.action_global_inviteFragment);
             motionLayout.transitionToStart();
         });
@@ -338,6 +330,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        getExtraIntent();
         if (db.isEmpty()) {
             MySharedPreference.getInstance(MainActivity.this).clearCounter(this, false);
             MySharedPreference.getInstance(this).setScore("0");
@@ -355,8 +348,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getExtras() != null && intent.getExtras().getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE, "default").equals("new")) {
-            bnv.setSelectedItemId(R.id.menu_message);
+        setIntent(intent);
+    }
+
+    private void getExtraIntent(){
+        Intent intent = getIntent();
+        if (intent!=null && intent.getExtras() != null) {
+            String in = intent.getExtras().getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE, "default");
+            if (in != null && in.equals("new"))
+                bnv.setSelectedItemId(R.id.menu_message);
+            else if (in != null && in.equals("chat")) {
+                startActivity(new Intent(MainActivity.this, SupportActivity.class));
+            }
         }
     }
 
@@ -471,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
                                     MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
                                     MySharedPreference.getInstance(MainActivity.this).setCounter(300 - serverBoosterCount);
 
-                                }else{
+                                } else {
                                     MySharedPreference.getInstance(MainActivity.this).setBoosterValue(1f);
                                 }
 

@@ -26,11 +26,11 @@ import ir.ghararemaghzha.game.models.PlanModel;
 
 public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
 
-    private Context context;
-    private List<PlanModel> data;
-    private BuyInterface buyInterface;
-    private static int HEADER_TYPE = 0;
-    private static int LIST_TYPE = 1;
+    private final Context context;
+    private final List<PlanModel> data;
+    private final BuyInterface buyInterface;
+    private static final int HEADER_TYPE = 0;
+    private static final int LIST_TYPE = 1;
 
     public BuyAdapter(Context context, List<PlanModel> data, BuyInterface buyInterface) {
         this.buyInterface = buyInterface;
@@ -217,10 +217,10 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView title, price;
-        private MaterialButton buy;
+        private final MaterialTextView title, price;
+        private final MaterialButton buy;
         private ImageView bg;
-        private int viewType;
+        private final int viewType;
 
 
         public ViewHolder(@NonNull View v, int type) {

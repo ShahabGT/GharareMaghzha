@@ -114,8 +114,8 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView name, score, rank;
-        private ImageView avatar;
+        private final MaterialTextView name, score, rank;
+        private final ImageView avatar;
 
         public ViewHolder(@NonNull View v) {
             super(v);
