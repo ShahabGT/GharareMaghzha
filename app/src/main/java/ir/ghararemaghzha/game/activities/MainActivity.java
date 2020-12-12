@@ -44,6 +44,7 @@ import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NewVersionDialog;
 import ir.ghararemaghzha.game.dialogs.RulesDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
+import ir.ghararemaghzha.game.models.AppOpenResponse;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
 import ir.ghararemaghzha.game.models.QuestionModel;
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                             db.executeTransaction(realm -> realm.insertOrUpdate(data));
                             dialog.dismiss();
                             updateDatabase(true);
-                            checkTime();
+                            appOpen();
                         } else {
                             dialog.dismiss();
                             Utils.showInternetError(MainActivity.this, () -> getData());
@@ -337,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
             getData();
         } else {
             updateMessages();
-            checkTime();
+            appOpen();
         }
 
         setAvatars(this);
@@ -383,42 +384,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkTime() {
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(MainActivity.this, true);
-            return;
-        }
-        if (timeDialog != null)
-            timeDialog.dismiss();
-        RetrofitClient.getInstance().getApi()
-                .getServerTime("Bearer " + token, number)
-                .enqueue(new Callback<TimeResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<TimeResponse> call, @NonNull Response<TimeResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            if (!Utils.isTimeAcceptable(response.body().getTime())) {
-                                timeDialog = Utils.showTimeError(MainActivity.this);
-                            } else {
-                                MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
-                                verify();
-                            }
-                        } else if (response.code() == 401) {
-                            Utils.logout(MainActivity.this, true);
-                        } else
-                            Utils.showInternetError(MainActivity.this, () -> checkTime());
-
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<TimeResponse> call, @NonNull Throwable t) {
-                        Utils.showInternetError(MainActivity.this, () -> checkTime());
-                    }
-                });
-    }
-
-    private void verify() {
+    private void appOpen() {
         String number = MySharedPreference.getInstance(this).getNumber();
         String token = MySharedPreference.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
@@ -427,12 +393,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         RetrofitClient.getInstance().getApi()
-                .validate("Bearer " + token, number)
-                .enqueue(new Callback<VerifyResponse>() {
+                .appOpen("Bearer " + token, number)
+                .enqueue(new Callback<AppOpenResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<VerifyResponse> call, @NonNull Response<VerifyResponse> response) {
+                    public void onResponse(@NonNull Call<AppOpenResponse> call, @NonNull Response<AppOpenResponse> response) {
                         if (response.body() != null)
                             if (response.isSuccessful() && response.body().getResult().equals("success")) {
+                                if (!Utils.isTimeAcceptable(response.body().getTime())) {
+                                    timeDialog = Utils.showTimeError(MainActivity.this);
+                                    return;
+                                } else {
+                                    MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
+                                }
                                 int newPlan = Integer.parseInt(response.body().getUserPlan());
                                 int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
                                 if (newPlan > oldPlan) {
@@ -481,14 +453,14 @@ public class MainActivity extends AppCompatActivity {
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this, true);
                             } else
-                                Utils.showInternetError(MainActivity.this, () -> verify());
+                                Utils.showInternetError(MainActivity.this, () -> appOpen());
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<VerifyResponse> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<AppOpenResponse> call, @NonNull Throwable t) {
                         firebaseDebug("failed");
 
-                        Utils.showInternetError(MainActivity.this, () -> verify());
+                        Utils.showInternetError(MainActivity.this, () -> appOpen());
 
                     }
                 });
