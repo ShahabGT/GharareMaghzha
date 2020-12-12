@@ -14,6 +14,13 @@ interface NetworkApi {
             @Field("number") number: String
     ): VerifyResponse
 
+    @FormUrlEncoded
+    @POST("appopen")
+    suspend fun appOpen(
+            @Header("Authorization") Token: String,
+            @Field("number") number: String
+    ): AppOpenResponse
+
 
     @FormUrlEncoded
     @POST("register")

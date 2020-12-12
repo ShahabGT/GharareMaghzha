@@ -11,6 +11,10 @@ class ApiRepository(
             number: String
     ) = safeApiCall { api.validate(Token, number) }
 
+    suspend fun appOpen(
+            Token: String,
+            number: String
+    ) = safeApiCall { api.appOpen(Token, number) }
 
     suspend fun registerUser(
             name: String,

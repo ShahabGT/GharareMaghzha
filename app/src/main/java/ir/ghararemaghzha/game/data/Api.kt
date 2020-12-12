@@ -14,6 +14,13 @@ interface Api {
             @Field("number") number: String
     ): Call<VerifyResponse>
 
+    @FormUrlEncoded
+    @POST("appopen")
+    fun appOpen(
+            @Header("Authorization") Token: String,
+            @Field("number") number: String
+    ): Call<AppOpenResponse>
+
 
     @FormUrlEncoded
     @POST("register")
