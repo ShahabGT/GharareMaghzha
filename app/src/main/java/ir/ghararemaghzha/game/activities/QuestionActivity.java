@@ -36,6 +36,7 @@ import java.util.Random;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySettingsPreference;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
@@ -277,7 +278,7 @@ public class QuestionActivity extends AppCompatActivity {
 
         answer1c.setOnClickListener(v -> {
             if (MySharedPreference.getInstance(this).getBoosterValue() != 1f)
-                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease();
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
             progressBar.setProgress(0);
@@ -309,7 +310,7 @@ public class QuestionActivity extends AppCompatActivity {
         });
         answer2c.setOnClickListener(v -> {
             if (MySharedPreference.getInstance(this).getBoosterValue() != 1f)
-                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease();
 
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
@@ -342,7 +343,7 @@ public class QuestionActivity extends AppCompatActivity {
         });
         answer3c.setOnClickListener(v -> {
             if (MySharedPreference.getInstance(this).getBoosterValue() != 1f)
-                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease();
 
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
@@ -374,7 +375,7 @@ public class QuestionActivity extends AppCompatActivity {
         });
         answer4c.setOnClickListener(v -> {
             if(MySharedPreference.getInstance(this).getBoosterValue()!=1f)
-                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease(QuestionActivity.this);
+                MySharedPreference.getInstance(QuestionActivity.this).counterIncrease();
 
             downTimer.cancel();
             timeText.setText(String.valueOf(0));
@@ -503,7 +504,7 @@ public class QuestionActivity extends AppCompatActivity {
         if (hasBooster) b = "1";
 
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer, b, 5)
+                .answerQuestion("Bearer " + token, number, model.getQuestionId(), userAnswer, b, Const.SEASON)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -586,7 +587,7 @@ public class QuestionActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .sendScore("Bearer " + token, number, String.valueOf(gameScore), 5)
+                .sendScore("Bearer " + token, number, String.valueOf(gameScore), Const.SEASON)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {

@@ -8,6 +8,9 @@ object Const {
     var NOTIFICATION_ID = 113
 
     @JvmField
+    var SEASON = 5
+
+    @JvmField
     var FCM_TOPIC = "ghrarehmaghzha_users"
 
     @JvmField

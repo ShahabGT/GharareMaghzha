@@ -141,7 +141,7 @@ interface Api {
             @Header("Authorization") Token: String,
             @Field("number") number: String,
             @Field("score") score: String,
-            @Field("season") season: Int,
+            @Field("season") season: Int
     ): Call<GeneralResponse>
 
     @FormUrlEncoded

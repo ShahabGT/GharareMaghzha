@@ -10,24 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.viewpager.widget.PagerAdapter;
-
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 import com.skyfishjy.library.RippleBackground;
 import com.tmall.ultraviewpager.UltraViewPager;
-
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
-import ir.ghararemaghzha.game.activities.QuestionActivity;
+import ir.ghararemaghzha.game.activities.QuestionsActivity;
 import ir.ghararemaghzha.game.adapters.MainViewPager;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
@@ -138,7 +133,7 @@ public class StartFragment extends Fragment {
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
             int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
             if (size > 0)
-                startActivity(new Intent(activity, QuestionActivity.class));
+                startActivity(new Intent(activity, QuestionsActivity.class));
             else if (remaining == 0)
                 Toast.makeText(context, context.getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show();
             else if(passed<0)
@@ -160,16 +155,13 @@ public class StartFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null
                                 && response.body().getResult().equals("success") && !response.body().getMessage().equals("empty")) {
                             initViewPager(new MainViewPager(activity, response.body().getData()), response.body().getData().size());
-                        }else{
+                        }else
                             ultraViewPager.setVisibility(View.GONE);
 
-                        }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<SliderResponse> call, @NonNull Throwable t) {
-
-                    }
+                    public void onFailure(@NonNull Call<SliderResponse> call, @NonNull Throwable t) { }
                 });
     }
 }

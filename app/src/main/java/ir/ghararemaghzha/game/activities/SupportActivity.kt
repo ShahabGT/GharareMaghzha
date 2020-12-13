@@ -23,6 +23,7 @@ import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ChatAdapter
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST
 import ir.ghararemaghzha.game.classes.MySharedPreference
+import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.classes.Utils.*
 import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
@@ -44,6 +45,8 @@ class SupportActivity : AppCompatActivity() {
     private lateinit var send: ImageView
     private lateinit var db: Realm
     private var isLoading = false
+    private var number:String=""
+    private var token:String=""
 
     private val br = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -68,8 +71,16 @@ class SupportActivity : AppCompatActivity() {
         setContentView(R.layout.activity_support)
         init()
     }
+    private fun getUserDetails(){
+        number = MySharedPreference.getInstance(this).number
+        token = MySharedPreference.getInstance(this).accessToken
+        if (number.isEmpty() || token.isEmpty()) {
+            logout(this, true)
+        }
+    }
 
     private fun init() {
+        getUserDetails()
         MySharedPreference.getInstance(this).unreadChats = 0
         db = Realm.getDefaultInstance()
         val intent = Intent()
@@ -148,12 +159,6 @@ class SupportActivity : AppCompatActivity() {
     }
 
     private suspend fun sendMessage(message: String, key: Int) {
-        val number = MySharedPreference.getInstance(this).number
-        val token = MySharedPreference.getInstance(this).accessToken
-        if (number.isEmpty() || token.isEmpty()) {
-            logout(this, true)
-        }
-
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).sendMessage("Bearer $token", number, message)) {
             is Resource.Success -> {
                 val myDb = Realm.getDefaultInstance()
@@ -195,13 +200,8 @@ class SupportActivity : AppCompatActivity() {
 
     private suspend fun getChatData() {
         isLoading = true
-        val number = MySharedPreference.getInstance(this).number
-        val token = MySharedPreference.getInstance(this).accessToken
         val lastUpdate = MySharedPreference.getInstance(this).lastUpdateChat
         val nowDate = currentDate()
-        if (number.isEmpty() || token.isEmpty()) {
-            logout(this, true)
-        }
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getMessages("Bearer $token", number, lastUpdate)) {
             is Resource.Success -> {

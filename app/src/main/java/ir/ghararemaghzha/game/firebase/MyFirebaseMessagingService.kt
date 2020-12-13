@@ -45,10 +45,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val model = MessageModel()
             val date = data["time"]
             model.stat = 1
-            model.message = body
+            model.message = body ?: ""
             model.title = title
-            model.sender = sender
-            model.date = date
+            model.sender = sender ?: ""
+            model.date = date ?: ""
             model.read = 0
             val db = Realm.getDefaultInstance()
             model.messageId = getNextKey(db)

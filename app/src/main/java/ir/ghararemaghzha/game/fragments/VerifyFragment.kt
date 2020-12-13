@@ -130,13 +130,11 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
         timer = object : CountDownTimer(timerTime, 1000L) {
             override fun onTick(millisUntilFinished: Long) {
                 resend.text = convertToTimeFormat(millisUntilFinished)
-
             }
 
             override fun onFinish() {
                 resend.isEnabled = true
                 resend.setText(R.string.verify_resend)
-
             }
         }
         timer.start()
@@ -233,19 +231,19 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     dialog.dismiss()
                     if (res.value.message != "empty") {
                         val data: MutableCollection<QuestionModel> = mutableListOf()
-                        val userPlan = MySharedPreference.getInstance(ctx).plan.toInt()
-                        var size = 500
-                        when (userPlan) {
-                            1 -> size += 500
-                            2 -> size += 1000
-                            3 -> size += 1500
-                            4 -> size += 2000
-                            5 -> size += 2500
+                        val size = when (MySharedPreference.getInstance(ctx).plan.toInt()) {
+                            0 -> 500
+                            1 -> 1000
+                            2 -> 1500
+                            3 -> 2000
+                            4 -> 2500
+                            5 -> 3000
+                            else -> 500
                         }
                         for ((index, model) in res.value.data.withIndex()) {
-                            model.isUploaded = model.userAnswer != "-1"
-                            model.isVisible = false
-                            model.isBought = index < size
+                            model.uploaded = model.userAnswer != "-1"
+                            model.visible = false
+                            model.bought = index < size
                             data.add(model)
                         }
                         db.executeTransaction { it.insertOrUpdate(data) }
@@ -256,11 +254,9 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                         logEvent()
                         view?.findNavController()!!.navigate(R.id.action_verifyFragment_to_mainActivity)
                         act.finish()
-
-
-                    } else {
+                    } else
                         Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
-                    }
+
 
                 }
 
@@ -271,11 +267,10 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     verify.isEnabled = true
                     verify.setText(R.string.verify_verify)
                     dialog.dismiss()
-                    if (res.isNetworkError) {
+                    if (res.isNetworkError)
                         Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
-                    } else {
+                    else
                         Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
-                    }
                 }
             }
         }

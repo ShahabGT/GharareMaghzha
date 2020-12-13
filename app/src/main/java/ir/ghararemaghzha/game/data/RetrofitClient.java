@@ -15,7 +15,7 @@ public class RetrofitClient {
 
     private RetrofitClient(){
         Dispatcher dispatcher = new Dispatcher();
-        dispatcher.setMaxRequests(3);
+        dispatcher.setMaxRequests(4);
 
         Interceptor interceptor = chain -> chain.proceed(chain.request());
         OkHttpClient client = new OkHttpClient.Builder()

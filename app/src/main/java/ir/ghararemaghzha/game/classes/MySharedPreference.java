@@ -18,6 +18,7 @@ public class MySharedPreference {
 
     private static MySharedPreference instance;
     private static SharedPreferences sharedPreferences;
+    private Context context;
 
 
     public static MySharedPreference getInstance(Context context) {
@@ -30,6 +31,7 @@ public class MySharedPreference {
 
     private MySharedPreference(Context context) {
         try {
+            this.context=context;
             MasterKey masterKey = new MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build();
             sharedPreferences = EncryptedSharedPreferences.create(
                     context,
@@ -61,29 +63,29 @@ public class MySharedPreference {
         return sharedPreferences.getInt("counter", 0);
     }
 
-    public void counterIncrease(Context context) {
+    public void counterIncrease() {
         int counter = sharedPreferences.getInt("counter", 0);
         if (counter < 299) {
             counter++;
             sharedPreferences.edit().putInt("counter", counter).apply();
             Utils.updateScoreBooster(context, 300 - counter);
         } else
-            clearCounter(context, true);
+            clearCounter( true);
 
     }
 
-    public void clearCounter(Context context, boolean showNotification) {
+    public void clearCounter(boolean showNotification) {
         sharedPreferences.edit().putInt("counter", 0).apply();
         Utils.updateScoreBooster(context, 0);
         setBoosterValue(1f);
 
         if (showNotification) {
             Utils.createNotification(context, context.getString(R.string.booster_notif_title), context.getString(R.string.booster_notif_body), "ir.ghararemaghzha.game.TARGET_NOTIFICATION");
-            saveToDB(context);
+            saveToDB();
         }
     }
 
-    private void saveToDB(Context context) {
+    private void saveToDB() {
         MessageModel model = new MessageModel();
         model.setStat(1);
         model.setMessage(context.getString(R.string.booster_notif_body));

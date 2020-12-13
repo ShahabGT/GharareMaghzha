@@ -37,6 +37,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import ir.ghararemaghzha.game.R;
+import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
@@ -333,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         getExtraIntent();
         if (db.isEmpty()) {
-            MySharedPreference.getInstance(MainActivity.this).clearCounter(this, false);
+            MySharedPreference.getInstance(MainActivity.this).clearCounter( false);
             MySharedPreference.getInstance(this).setScore("0");
             getData();
         } else {
@@ -391,6 +392,8 @@ public class MainActivity extends AppCompatActivity {
             Utils.logout(MainActivity.this, true);
             return;
         }
+        if (timeDialog != null)
+            timeDialog.dismiss();
 
         RetrofitClient.getInstance().getApi()
                 .appOpen("Bearer " + token, number)
@@ -561,7 +564,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             RetrofitClient.getInstance().getApi()
-                    .sendScore("Bearer " + token, number, score, 5)
+                    .sendScore("Bearer " + token, number, score, Const.SEASON)
                     .enqueue(new Callback<GeneralResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -596,7 +599,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, 5)
+                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, Const.SEASON)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {

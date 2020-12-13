@@ -108,15 +108,17 @@ class ApiRepository(
             number: String,
             questionId: String,
             userAnswer: String,
-            booster: String
-    ) = safeApiCall { api.answerQuestion(Token, number, questionId, userAnswer,booster) }
+            booster: String,
+            season: Int
+    ) = safeApiCall { api.answerQuestion(Token, number, questionId, userAnswer,booster,season) }
 
 
     suspend fun sendScore(
             Token: String,
             number: String,
-            score: String
-    ) = safeApiCall { api.sendScore(Token, number, score) }
+            score: String,
+            season: Int
+    ) = safeApiCall { api.sendScore(Token, number, score,season) }
 
 
     suspend fun sendQuestionCount(

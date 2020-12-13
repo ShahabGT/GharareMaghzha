@@ -18,7 +18,7 @@ class RemoteDataSource {
             api: Class<Api>
     ): Api {
         val dispatcher = Dispatcher()
-        dispatcher.maxRequests = 3
+        dispatcher.maxRequests = 4
 
         val interceptor = Interceptor { chain: Interceptor.Chain -> chain.proceed(chain.request()) }
         val client = OkHttpClient.Builder()

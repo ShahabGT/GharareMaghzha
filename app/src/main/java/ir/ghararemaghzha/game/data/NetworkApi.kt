@@ -131,7 +131,8 @@ interface NetworkApi {
             @Field("number") number: String,
             @Field("question_id") questionId: String,
             @Field("user_answer") userAnswer: String,
-            @Field("user_answer_booster") booster: String
+            @Field("user_answer_booster") booster: String,
+            @Field("season") season: Int
     ): GeneralResponse
 
     @FormUrlEncoded
@@ -139,7 +140,8 @@ interface NetworkApi {
     suspend fun sendScore(
             @Header("Authorization") Token: String,
             @Field("number") number: String,
-            @Field("score") score: String
+            @Field("score") score: String,
+            @Field("season") season: Int
     ): GeneralResponse
 
     @FormUrlEncoded
