@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
-import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.MySharedPreference
@@ -15,9 +14,7 @@ import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
+
 
 class RulesDialog(context: Activity) : Dialog(context) {
 

@@ -186,7 +186,7 @@ class QuestionsActivity : AppCompatActivity() {
         data = db.where(QuestionModel::class.java).equalTo("visible", true)
                 .and().equalTo("userAnswer", "-1").findAll()
         music = findViewById(R.id.question_music)
-        musicSetting = MySettingsPreference.getInstance(this).music
+        musicSetting = MySettingsPreference.getInstance(this).getMusic()
         music.setImageResource(if (musicSetting) R.drawable.vector_music_on else R.drawable.vector_music_off)
         questionPoints = findViewById(R.id.question_points)
         questionRemain = findViewById(R.id.question_remaining)

@@ -26,13 +26,13 @@ import retrofit2.Response;
 
 public class BuyDialog extends Dialog {
 
-    private FragmentActivity context;
+    private final FragmentActivity context;
     private String amount;
-    private String plan;
-    private BuyInterface buyInterface;
+    private final String plan;
+    private final BuyInterface buyInterface;
     private String influencerId="";
     private String influencerAmount="";
-    private boolean isScoreBooster;
+    private final boolean isScoreBooster;
 
 
     public BuyDialog(@NonNull FragmentActivity context, String amount, String plan, BuyInterface buyInterface,boolean isScoreBooster) {

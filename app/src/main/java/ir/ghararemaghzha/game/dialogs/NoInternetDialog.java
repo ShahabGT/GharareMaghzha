@@ -12,8 +12,8 @@ import ir.ghararemaghzha.game.classes.RetryInterface;
 import ir.ghararemaghzha.game.classes.Utils;
 
 public class NoInternetDialog extends Dialog {
-    private Context context;
-    private RetryInterface retryInterface;
+    private final Context context;
+    private final RetryInterface retryInterface;
 
     public NoInternetDialog(@NonNull Context context, RetryInterface retryInterface) {
         super(context);
