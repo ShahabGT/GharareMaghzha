@@ -67,7 +67,7 @@ public class BuyHistoryFragment extends Fragment {
             return;
         }
         loading.setVisibility(View.VISIBLE);
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .getBuyHistory("Bearer " + token, number)
                 .enqueue(new Callback<BuyHistoryResponse>() {
                     @Override

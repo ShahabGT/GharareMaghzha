@@ -38,6 +38,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
     dependenciesInfo {
         includeInApk false
         includeInBundle false
@@ -82,7 +85,7 @@ dependencies {
 
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'

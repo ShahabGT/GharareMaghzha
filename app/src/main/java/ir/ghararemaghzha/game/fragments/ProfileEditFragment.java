@@ -337,7 +337,7 @@ public class ProfileEditFragment extends Fragment {
 
         String avatarName = MySharedPreference.getInstance(context).getUserId() + Utils.currentDate().replace("-", "").replace(":", "").replace(" ", "");
 
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .alterAvatar("Bearer " + token, number, "change", pic, avatarName).enqueue(new Callback<GeneralResponse>() {
             @Override
             public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -383,7 +383,7 @@ public class ProfileEditFragment extends Fragment {
             Utils.logout(activity, true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .alterAvatar("Bearer " + token, number, "remove", "", avatarName).enqueue(new Callback<GeneralResponse>() {
             @Override
             public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -425,7 +425,7 @@ public class ProfileEditFragment extends Fragment {
             Utils.logout(activity, true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .updateProfile("Bearer " + token, number, name, email, bday, sex, inviteCode)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override

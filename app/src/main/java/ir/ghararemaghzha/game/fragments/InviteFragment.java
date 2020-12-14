@@ -17,6 +17,7 @@ import com.google.android.material.textview.MaterialTextView;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
+import ir.ghararemaghzha.game.data.RemoteDataSource;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import retrofit2.Call;
@@ -70,8 +71,7 @@ public class InviteFragment extends Fragment {
             return;
         }
         loading.setVisibility(View.VISIBLE);
-
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .getInvites("Bearer " + token, number)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override

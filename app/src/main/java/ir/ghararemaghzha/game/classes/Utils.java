@@ -47,6 +47,7 @@ import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.SplashActivity;
 import ir.ghararemaghzha.game.activities.SupportActivity;
+import ir.ghararemaghzha.game.data.RemoteDataSource;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
@@ -227,7 +228,7 @@ public class Utils {
             logout(context, true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .sendQuestionCount("Bearer " + token, number, questionCount)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
@@ -251,7 +252,7 @@ public class Utils {
                 logout((Activity) context, true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .scoreBooster("Bearer " + token, number, count)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override

@@ -80,7 +80,7 @@ public class HighscoreFragment extends Fragment {
         }
         loading.setVisibility(View.VISIBLE);
 
-        RetrofitClient.getInstance().getApi().getHighscoreList("Bearer " + token, number)
+        RetrofitClient.Companion.getInstance().getApi().getHighscoreList("Bearer " + token, number)
                 .enqueue(new Callback<HighscoreResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<HighscoreResponse> call, @NonNull Response<HighscoreResponse> response) {

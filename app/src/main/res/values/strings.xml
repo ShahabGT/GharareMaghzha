@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">قرار مغزها</string>
-    <string name="avatar_url">https://ghararehmaghzha.ir/api/avatars/%s.jpg</string>
-    <string name="slider_image_url">https://ghararehmaghzha.ir/api/slider/%s.jpg</string>
+
     <string name="en_digits">abcdefghijklmnopqrstuvwxyz1234567890</string>
     <string name="numbers">1234567980</string>
-    <string name="instagram_url">https://instagram.com/ghararehmaghzha</string>
 
     <string name="access_error">لطفا دوباره وارد حساب کاربری خود شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
@@ -305,19 +303,5 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
 
     <string name="questions_notification_title">سوالات شما تمام شد!</string>
     <string name="questions_notification_body">سوالات امروز شما تمام شد، برای جواب دادن به سوالات بیشتر تا فردا صبر کنید</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>

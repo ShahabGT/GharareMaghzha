@@ -1,9 +1,9 @@
 package ir.ghararemaghzha.game.classes
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-
 
 class MySettingsPreference private constructor(ctx: Context) {
     private val masterKey = MasterKey.Builder(ctx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
@@ -25,15 +25,15 @@ class MySettingsPreference private constructor(ctx: Context) {
                 }
     }
 
-    fun setMusic(state: Boolean) = sp.edit().putBoolean("music", state).apply()
+    fun setMusic(state: Boolean) = sp.edit { putBoolean("music",state) }
 
     fun getMusic() = sp.getBoolean("music", true)
 
-    fun setNotification(state: Boolean) = sp.edit().putBoolean("Notification", state).apply()
+    fun setNotification(state: Boolean) = sp.edit {putBoolean("Notification", state) }
 
     fun getNotification() = sp.getBoolean("Notification", true)
 
-    fun setAutoNext(state: Boolean) = sp.edit().putBoolean("AutoNext", state).apply()
+    fun setAutoNext(state: Boolean) = sp.edit{putBoolean("AutoNext", state)}
 
     fun getAutoNext() = sp.getBoolean("AutoNext", false)
 

@@ -165,7 +165,7 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
             Utils.logout(context,true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .sendMessage("Bearer " + token, number, message)
                 .enqueue(new Callback<TimeResponse>() {
                     @Override

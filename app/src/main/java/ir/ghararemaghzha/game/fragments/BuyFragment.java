@@ -98,7 +98,7 @@ public class BuyFragment extends Fragment {
             return;
         }
 
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .getPlans("Bearer " + token, number)
                 .enqueue(new Callback<PlanResponse>() {
                     @Override
@@ -139,7 +139,7 @@ public class BuyFragment extends Fragment {
             return;
         }
         loading.setVisibility(View.VISIBLE);
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .initBuy("Bearer " + token, number, plan, influencerId, influencerAmount, amount)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override

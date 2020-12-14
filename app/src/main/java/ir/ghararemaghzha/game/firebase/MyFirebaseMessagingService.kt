@@ -61,7 +61,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             MySharedPreference.getInstance(this).unreadChats = MySharedPreference.getInstance(this).unreadChats + 1
         }
         sendBroadcast(intent)
-        if (MySettingsPreference.getInstance(this).notification) {
+        if (MySettingsPreference.getInstance(this).getNotification()) {
             if (title != "support")
                 if (notificationBody.contains("<link>", true))
                     notificationBody = notificationBody.substring(0, notificationBody.indexOf("<link>") - 1)

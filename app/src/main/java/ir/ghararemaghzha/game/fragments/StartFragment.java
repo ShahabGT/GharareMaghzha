@@ -147,7 +147,7 @@ public class StartFragment extends Fragment {
     }
 
     private void getSlider() {
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .getSlider()
                 .enqueue(new Callback<SliderResponse>() {
                     @Override

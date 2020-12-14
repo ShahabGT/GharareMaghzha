@@ -90,7 +90,7 @@ public class UserDetailsDialog extends Dialog {
             Utils.logout(context, true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .getUserDetails("Bearer " + token, number, userId)
                 .enqueue(new Callback<UserDetailsResponse>() {
                     @Override

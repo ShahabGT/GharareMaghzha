@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             Utils.logout(MainActivity.this, true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .getQuestions("Bearer " + token, number, "12000", "3000")
                 .enqueue(new Callback<QuestionResponse>() {
                     @Override
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
         if (timeDialog != null)
             timeDialog.dismiss();
 
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .appOpen("Bearer " + token, number)
                 .enqueue(new Callback<AppOpenResponse>() {
                     @Override
@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
                 Utils.logout(MainActivity.this, true);
                 return;
             }
-            RetrofitClient.getInstance().getApi()
+            RetrofitClient.Companion.getInstance().getApi()
                     .sendScore("Bearer " + token, number, score, Const.SEASON)
                     .enqueue(new Callback<GeneralResponse>() {
                         @Override
@@ -598,7 +598,7 @@ public class MainActivity extends AppCompatActivity {
             Utils.logout(MainActivity.this, true);
             return;
         }
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, Const.SEASON)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override

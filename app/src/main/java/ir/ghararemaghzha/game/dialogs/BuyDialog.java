@@ -125,7 +125,7 @@ public class BuyDialog extends Dialog {
         giftcode.setEnabled(false);
         giftcodeCheck.setEnabled(false);
 
-        RetrofitClient.getInstance().getApi()
+        RetrofitClient.Companion.getInstance().getApi()
                 .searchInfluencer("Bearer "+token,number,code)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
