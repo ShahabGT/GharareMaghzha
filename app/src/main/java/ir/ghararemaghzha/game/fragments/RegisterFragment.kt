@@ -197,7 +197,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     SmsRetriever.getClient(act).startSmsRetriever()
                     val b = Bundle()
                     b.putString("number", number)
-                    // navController.navigate(R.id.action_registerFragment_to_verifyFragment)
                     view?.findNavController()!!.navigate(R.id.action_registerFragment_to_verifyFragment, b)
 
                 }

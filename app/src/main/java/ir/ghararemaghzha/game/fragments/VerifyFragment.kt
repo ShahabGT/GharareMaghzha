@@ -179,19 +179,20 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 val score = res.value.userScore
                 val plan = res.value.userPlan
 
-                MySharedPreference.getInstance(ctx).number = number
-                MySharedPreference.getInstance(ctx).username = userName
-                MySharedPreference.getInstance(ctx).accessToken = accessToken
-                MySharedPreference.getInstance(ctx).userCode = userCode
-                MySharedPreference.getInstance(ctx).score = score
-                MySharedPreference.getInstance(ctx).plan = plan
+                MySharedPreference.getInstance(ctx).setNumber(number)
+                MySharedPreference.getInstance(ctx).setUsername(userName)
+                MySharedPreference.getInstance(ctx).setAccessToken(accessToken)
+                MySharedPreference.getInstance(ctx).setUserCode(userCode)
+                MySharedPreference.getInstance(ctx).setScore(score)
+                MySharedPreference.getInstance(ctx).setPlan(plan)
 
-                MySharedPreference.getInstance(ctx).userSex = res.value.userSex
-                MySharedPreference.getInstance(ctx).userBday = res.value.userBday
-                MySharedPreference.getInstance(ctx).userEmail = res.value.userEmail
-                MySharedPreference.getInstance(ctx).userInvite = res.value.userInvite
+                MySharedPreference.getInstance(ctx).setUserSex(res.value.userSex ?: "")
+                MySharedPreference.getInstance(ctx).setUserBday(res.value.userBday ?: "")
+                MySharedPreference.getInstance(ctx).setUserEmail(res.value.userEmail ?: "")
+                MySharedPreference.getInstance(ctx).setUserInvite(res.value.userInvite ?: "")
                 if (!res.value.userAvatar.isNullOrEmpty())
-                    MySharedPreference.getInstance(ctx).userAvatar = res.value.userAvatar
+                    MySharedPreference.getInstance(ctx).setUserAvatar(res.value.userAvatar)
+
                 withContext(Dispatchers.Main) {
                     dialog = Utils.showGetDataLoading(ctx)
                 }
@@ -231,7 +232,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     dialog.dismiss()
                     if (res.value.message != "empty") {
                         val data: MutableCollection<QuestionModel> = mutableListOf()
-                        val size = when (MySharedPreference.getInstance(ctx).plan.toInt()) {
+                        val size = when (MySharedPreference.getInstance(ctx).getPlan().toInt()) {
                             0 -> 500
                             1 -> 1000
                             2 -> 1500
@@ -248,7 +249,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                         }
                         db.executeTransaction { it.insertOrUpdate(data) }
 
-                        MySharedPreference.getInstance(ctx).userId = userId
+                        MySharedPreference.getInstance(ctx).setUserId(userId)
                         Toast.makeText(ctx, ctx.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                         logEvent()

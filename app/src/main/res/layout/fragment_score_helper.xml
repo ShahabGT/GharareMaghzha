@@ -7,7 +7,6 @@
     android:clickable="true"
     android:focusable="true"
     android:background="@color/light_background"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ScoreHelperFragment">
 
     <com.tmall.ultraviewpager.UltraViewPager

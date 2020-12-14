@@ -27,9 +27,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 
 class AboutFragment : Fragment(R.layout.fragment_about) {
     private lateinit var ctx: Context
@@ -110,8 +107,8 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
     }
 
     private suspend fun getData() {
-        val number = MySharedPreference.getInstance(ctx).number
-        val token = MySharedPreference.getInstance(ctx).accessToken
+        val number = MySharedPreference.Companion.getInstance(ctx).getNumber()
+        val token = MySharedPreference.Companion.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(act, true)
         }

@@ -23,9 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Objects;
 
 import ir.ghararemaghzha.game.R;
@@ -91,8 +88,8 @@ public class BuyFragment extends Fragment {
 
     private void getData() {
 
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(activity, true);
             return;
@@ -132,8 +129,8 @@ public class BuyFragment extends Fragment {
     }
 
     private void initBuy(String plan, String influencerId, String influencerAmount, String amount) {
-        String number = MySharedPreference.getInstance(activity).getNumber();
-        String token = MySharedPreference.getInstance(activity).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(activity).getNumber();
+        String token = MySharedPreference.Companion.getInstance(activity).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(activity, true);
             return;

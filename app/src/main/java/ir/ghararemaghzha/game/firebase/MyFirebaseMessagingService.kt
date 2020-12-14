@@ -19,7 +19,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
         if (p0.isNotEmpty())
-            MySharedPreference.getInstance(this).fbToken = p0
+            MySharedPreference.Companion.getInstance(this).setFbToken( p0)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -58,7 +58,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
         } else {
-            MySharedPreference.getInstance(this).unreadChats = MySharedPreference.getInstance(this).unreadChats + 1
+            MySharedPreference.getInstance(this).setUnreadChats(MySharedPreference.getInstance(this).getUnreadChats() + 1)
         }
         sendBroadcast(intent)
         if (MySettingsPreference.getInstance(this).getNotification()) {

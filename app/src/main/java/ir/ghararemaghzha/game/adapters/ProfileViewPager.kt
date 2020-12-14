@@ -4,13 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
-import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.models.ProfileModel
 
 class ProfileViewPager(var context: Context, var data: List<ProfileModel>) : PagerAdapter() {

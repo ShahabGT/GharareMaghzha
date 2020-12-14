@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -17,7 +16,6 @@ import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.BuyInterface;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
-import ir.ghararemaghzha.game.data.RemoteDataSource;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import retrofit2.Call;
@@ -116,8 +114,8 @@ public class BuyDialog extends Dialog {
 
 
     private void searchInfluencer(String code) {
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(context,true);
             return;

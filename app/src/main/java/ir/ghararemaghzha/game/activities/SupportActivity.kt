@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
-import android.os.Message
 import android.util.Base64
 import android.view.Window
 import android.view.WindowInsets
@@ -23,7 +22,6 @@ import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ChatAdapter
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST
 import ir.ghararemaghzha.game.classes.MySharedPreference
-import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.classes.Utils.*
 import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
@@ -72,8 +70,8 @@ class SupportActivity : AppCompatActivity() {
         init()
     }
     private fun getUserDetails(){
-        number = MySharedPreference.getInstance(this).number
-        token = MySharedPreference.getInstance(this).accessToken
+        number = MySharedPreference.getInstance(this).getNumber()
+        token = MySharedPreference.getInstance(this).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             logout(this, true)
         }
@@ -81,7 +79,7 @@ class SupportActivity : AppCompatActivity() {
 
     private fun init() {
         getUserDetails()
-        MySharedPreference.getInstance(this).unreadChats = 0
+        MySharedPreference.getInstance(this).setUnreadChats( 0)
         db = Realm.getDefaultInstance()
         val intent = Intent()
         intent.action = GHARAREHMAGHZHA_BROADCAST
@@ -138,7 +136,7 @@ class SupportActivity : AppCompatActivity() {
 
             if (txt.isNotEmpty()) {
                 message.setText("")
-                val userId = MySharedPreference.getInstance(this).userId
+                val userId = MySharedPreference.getInstance(this).getUserId()
                 val model = MessageModel()
                 model.date = currentDate()
                 model.stat = 0
@@ -200,14 +198,14 @@ class SupportActivity : AppCompatActivity() {
 
     private suspend fun getChatData() {
         isLoading = true
-        val lastUpdate = MySharedPreference.getInstance(this).lastUpdateChat
+        val lastUpdate = MySharedPreference.getInstance(this).getLastUpdateChat()
         val nowDate = currentDate()
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getMessages("Bearer $token", number, lastUpdate)) {
             is Resource.Success -> {
 
                 if (res.value.message == "ok") {
-                    MySharedPreference.getInstance(this).lastUpdateChat = nowDate
+                    MySharedPreference.getInstance(this).setLastUpdateChat(nowDate)
                     val myDb = Realm.getDefaultInstance()
                     val data:MutableCollection<MessageModel> = mutableListOf()
                     res.value.data.forEach {

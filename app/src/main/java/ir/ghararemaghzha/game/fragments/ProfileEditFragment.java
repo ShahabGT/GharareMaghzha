@@ -111,11 +111,11 @@ public class ProfileEditFragment extends Fragment {
 
         loading = v.findViewById(R.id.profile_loading);
 
-        name.setText(MySharedPreference.getInstance(context).getUsername());
-        number.setText(MySharedPreference.getInstance(context).getNumber());
-        bday.setText(MySharedPreference.getInstance(context).getUserBday());
-        email.setText(MySharedPreference.getInstance(context).getUserEmail());
-        String sex = MySharedPreference.getInstance(context).getUserSex();
+        name.setText(MySharedPreference.Companion.getInstance(context).getUsername());
+        number.setText(MySharedPreference.Companion.getInstance(context).getNumber());
+        bday.setText(MySharedPreference.Companion.getInstance(context).getUserBday());
+        email.setText(MySharedPreference.Companion.getInstance(context).getUserEmail());
+        String sex = MySharedPreference.Companion.getInstance(context).getUserSex();
         if (sex.equals("male")) {
             male.setChecked(true);
             female.setChecked(false);
@@ -124,20 +124,20 @@ public class ProfileEditFragment extends Fragment {
             female.setChecked(true);
         }
 
-        if (!MySharedPreference.getInstance(context).getUserInvite().isEmpty()) {
-            invite.setText(MySharedPreference.getInstance(context).getUserInvite());
+        if (!MySharedPreference.Companion.getInstance(context).getUserInvite().isEmpty()) {
+            invite.setText(MySharedPreference.Companion.getInstance(context).getUserInvite());
             invite.setEnabled(false);
             inviteLayout.setEnabled(false);
         }
 
 
         Glide.with(this)
-                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(context).getUserAvatar()))
+                .load(getString(R.string.avatar_url, MySharedPreference.Companion.getInstance(context).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
                 .into(avatar);
 
-        if (MySharedPreference.getInstance(context).getUserAvatar().isEmpty())
+        if (MySharedPreference.Companion.getInstance(context).getUserAvatar().isEmpty())
             avatarRemove.setVisibility(View.GONE);
 
         onClicks();
@@ -164,7 +164,7 @@ public class ProfileEditFragment extends Fragment {
         );
         avatarRemove.setOnClickListener(v -> {
             if (Utils.checkInternet(activity)) {
-                String avatarName = MySharedPreference.getInstance(context).getUserAvatar();
+                String avatarName = MySharedPreference.Companion.getInstance(context).getUserAvatar();
                 if (avatarName != null && !avatarName.isEmpty())
                     removeAvatar(avatarName);
 
@@ -318,8 +318,8 @@ public class ProfileEditFragment extends Fragment {
     private void changeAvatar(Uri image) {
         save.setEnabled(false);
         loading.setVisibility(View.VISIBLE);
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(activity, true);
             return;
@@ -335,7 +335,7 @@ public class ProfileEditFragment extends Fragment {
             return;
         }
 
-        String avatarName = MySharedPreference.getInstance(context).getUserId() + Utils.currentDate().replace("-", "").replace(":", "").replace(" ", "");
+        String avatarName = MySharedPreference.Companion.getInstance(context).getUserId() + Utils.currentDate().replace("-", "").replace(":", "").replace(" ", "");
 
         RetrofitClient.Companion.getInstance().getApi()
                 .alterAvatar("Bearer " + token, number, "change", pic, avatarName).enqueue(new Callback<GeneralResponse>() {
@@ -346,7 +346,7 @@ public class ProfileEditFragment extends Fragment {
                 loading.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                     Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
-                    MySharedPreference.getInstance(context).setUserAvatar(avatarName);
+                    MySharedPreference.Companion.getInstance(context).setUserAvatar(avatarName);
                     Glide.with(context)
                             .load(getString(R.string.avatar_url, avatarName))
                             .circleCrop()
@@ -377,8 +377,8 @@ public class ProfileEditFragment extends Fragment {
     private void removeAvatar(String avatarName) {
         save.setEnabled(false);
         loading.setVisibility(View.VISIBLE);
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(activity, true);
             return;
@@ -391,9 +391,9 @@ public class ProfileEditFragment extends Fragment {
                 loading.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                     Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
-                    MySharedPreference.getInstance(context).setUserAvatar("");
+                    MySharedPreference.Companion.getInstance(context).setUserAvatar("");
                     Glide.with(context)
-                            .load(getString(R.string.avatar_url, MySharedPreference.getInstance(context).getUserAvatar()))
+                            .load(getString(R.string.avatar_url, MySharedPreference.Companion.getInstance(context).getUserAvatar()))
                             .circleCrop()
                             .placeholder(R.drawable.placeholder)
                             .into(avatar);
@@ -419,8 +419,8 @@ public class ProfileEditFragment extends Fragment {
         save.setEnabled(false);
         loading.setVisibility(View.VISIBLE);
         save.setText("...");
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(activity, true);
             return;
@@ -435,10 +435,10 @@ public class ProfileEditFragment extends Fragment {
                         loading.setVisibility(View.GONE);
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show();
-                            MySharedPreference.getInstance(context).setUsername(name);
-                            MySharedPreference.getInstance(context).setUserEmail(email);
-                            MySharedPreference.getInstance(context).setUserSex(sex);
-                            MySharedPreference.getInstance(context).setUserBday(bday);
+                            MySharedPreference.Companion.getInstance(context).setUsername(name);
+                            MySharedPreference.Companion.getInstance(context).setUserEmail(email);
+                            MySharedPreference.Companion.getInstance(context).setUserSex(sex);
+                            MySharedPreference.Companion.getInstance(context).setUserBday(bday);
 
                             switch (response.body().getMessage()) {
                                 case "invite not found":
@@ -448,7 +448,7 @@ public class ProfileEditFragment extends Fragment {
                                     Toast.makeText(context, getString(R.string.profile_invite_failed), Toast.LENGTH_SHORT).show();
                                     break;
                                 case "invite ok":
-                                    MySharedPreference.getInstance(context).setUserInvite(inviteCode);
+                                    MySharedPreference.Companion.getInstance(context).setUserInvite(inviteCode);
                                     invite.setEnabled(false);
                                     inviteLayout.setEnabled(false);
 

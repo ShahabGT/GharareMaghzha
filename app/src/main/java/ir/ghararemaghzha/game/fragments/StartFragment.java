@@ -74,7 +74,7 @@ public class StartFragment extends Fragment {
     }
 
     private void updateInfo() {
-        int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
+        int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(context).getDaysPassed());
         if (passed >= 0 && passed < 10)
             info.setText(context.getString(R.string.start_info, String.valueOf(db.where(QuestionModel.class)
                     .equalTo("visible", true)
@@ -129,7 +129,7 @@ public class StartFragment extends Fragment {
                 navController.navigate(R.id.action_menu_start_to_menu_highscore)
         );
         start.setOnClickListener(v -> {
-            int passed = Integer.parseInt(MySharedPreference.getInstance(activity).getDaysPassed());
+            int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(activity).getDaysPassed());
             int remaining = db.where(QuestionModel.class).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size();
             int size = db.where(QuestionModel.class).equalTo("visible", true).findAll().size();
             if (size > 0)
@@ -157,7 +157,6 @@ public class StartFragment extends Fragment {
                             initViewPager(new MainViewPager(activity, response.body().getData()), response.body().getData().size());
                         }else
                             ultraViewPager.setVisibility(View.GONE);
-
                     }
 
                     @Override

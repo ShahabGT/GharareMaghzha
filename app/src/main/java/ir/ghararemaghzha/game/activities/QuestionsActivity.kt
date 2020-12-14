@@ -103,7 +103,7 @@ class QuestionsActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_question)
 
-        if (MySharedPreference.getInstance(this).isFirstTimeQuestion)
+        if (MySharedPreference.getInstance(this).isFirstTimeQuestion())
             helpInfo()
         else
             init()
@@ -173,8 +173,8 @@ class QuestionsActivity : AppCompatActivity() {
     }
 
     private fun getUserDetails(){
-        number = MySharedPreference.getInstance(this).number
-        token = MySharedPreference.getInstance(this).accessToken
+        number = MySharedPreference.getInstance(this).getNumber()
+        token = MySharedPreference.getInstance(this).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(this, true)
         }
@@ -203,7 +203,7 @@ class QuestionsActivity : AppCompatActivity() {
         answer4 = findViewById(R.id.question_answer4)
         answer4c = findViewById(R.id.question_answer4_card)
         score = findViewById(R.id.question_score)
-        gameScore = MySharedPreference.getInstance(this).score.toInt()
+        gameScore = MySharedPreference.getInstance(this).getScore().toInt()
         score.text = gameScore.toString()
         progressBar = findViewById(R.id.question_progress_bar)
         progressBar.progress = progress.toInt()
@@ -287,7 +287,7 @@ class QuestionsActivity : AppCompatActivity() {
     }
 
     private fun answer(which:Int,button:MaterialTextView,buttonCard:MaterialCardView){
-        if (MySharedPreference.getInstance(this).boosterValue != 1f) MySharedPreference.getInstance(this@QuestionsActivity).counterIncrease()
+        if (MySharedPreference.getInstance(this).getBoosterValue() != 1f) MySharedPreference.getInstance(this@QuestionsActivity).counterIncrease()
         downTimer.cancel()
         timeText.text = 0.toString()
         progressBar.progress = 0
@@ -307,9 +307,9 @@ class QuestionsActivity : AppCompatActivity() {
             playSound(correctSound)
             val qPoint = model.questionPoints.toInt()
             YoYo.with(Techniques.Bounce).duration(500).playOn(score)
-            gameScore += (qPoint * MySharedPreference.getInstance(this).boosterValue).toInt()
+            gameScore += (qPoint * MySharedPreference.getInstance(this).getBoosterValue()).toInt()
             score.text = gameScore.toString()
-            MySharedPreference.getInstance(this@QuestionsActivity).score = gameScore.toString()
+            MySharedPreference.getInstance(this@QuestionsActivity).setScore( gameScore.toString())
             CoroutineScope(Dispatchers.IO).launch {
                 uploadScore(gameScore.toString())
             }
@@ -337,7 +337,7 @@ class QuestionsActivity : AppCompatActivity() {
             return
         }
         if (Utils.checkInternet(this)) {
-            if (MySharedPreference.getInstance(this).boosterValue == 1f) {
+            if (MySharedPreference.getInstance(this).getBoosterValue() == 1f) {
                 booster.visibility = View.GONE
                 hasBooster = false
             } else {

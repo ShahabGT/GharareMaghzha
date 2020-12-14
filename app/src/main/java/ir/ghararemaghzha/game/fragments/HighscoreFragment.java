@@ -1,35 +1,27 @@
 package ir.ghararemaghzha.game.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.textview.MaterialTextView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.adapters.HighscoreAdapter;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
-import ir.ghararemaghzha.game.dialogs.UserDetailsDialog;
 import ir.ghararemaghzha.game.models.HighscoreModel;
 import ir.ghararemaghzha.game.models.HighscoreResponse;
 import retrofit2.Call;
@@ -72,8 +64,8 @@ public class HighscoreFragment extends Fragment {
 
 
     private void getData() {
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(activity,true);
             return;

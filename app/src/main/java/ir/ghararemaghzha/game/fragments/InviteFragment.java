@@ -17,7 +17,6 @@ import com.google.android.material.textview.MaterialTextView;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
-import ir.ghararemaghzha.game.data.RemoteDataSource;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import retrofit2.Call;
@@ -54,18 +53,18 @@ public class InviteFragment extends Fragment {
         value = v.findViewById(R.id.invite_info_text1);
         progressBar = v.findViewById(R.id.invite_progress);
 
-        ((MaterialTextView) v.findViewById(R.id.invite_code)).setText(MySharedPreference.getInstance(context).getUserCode());
+        ((MaterialTextView) v.findViewById(R.id.invite_code)).setText(MySharedPreference.Companion.getInstance(context).getUserCode());
         getData();
         onClicks(v);
     }
 
     private void onClicks(View v) {
-        v.findViewById(R.id.invite_share).setOnClickListener(vv -> Utils.shareCode(activity, getString(R.string.invite_share, MySharedPreference.getInstance(context).getUserCode())));
+        v.findViewById(R.id.invite_share).setOnClickListener(vv -> Utils.shareCode(activity, getString(R.string.invite_share, MySharedPreference.Companion.getInstance(context).getUserCode())));
     }
 
     private void getData() {
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(activity, true);
             return;

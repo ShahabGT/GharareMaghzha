@@ -104,16 +104,16 @@ public class Utils {
     }
 
     public static String getFbToken(Context context) {
-        if (MySharedPreference.getInstance(context).getFbToken().isEmpty()) {
+        if (MySharedPreference.Companion.getInstance(context).getFbToken().isEmpty()) {
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     String token = task.getResult();
-                    MySharedPreference.getInstance(context).setFbToken(token);
+                    MySharedPreference.Companion.getInstance(context).setFbToken(token);
                 }
             });
 
         }
-        return MySharedPreference.getInstance(context).getFbToken();
+        return MySharedPreference.Companion.getInstance(context).getFbToken();
     }
 
     public static void hideKeyboard(Activity activity) {
@@ -211,7 +211,7 @@ public class Utils {
     public static void logout(Activity activity, boolean showMessage) {
         if (showMessage)
             Toast.makeText(activity, activity.getString(R.string.access_error), Toast.LENGTH_LONG).show();
-        MySharedPreference.getInstance(activity).clear();
+        MySharedPreference.Companion.getInstance(activity).clear();
         FirebaseMessaging.getInstance().unsubscribeFromTopic(FCM_TOPIC);
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -222,8 +222,8 @@ public class Utils {
     }
 
     public static void updateServerQuestions(Activity context, String questionCount) {
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             logout(context, true);
             return;
@@ -245,8 +245,8 @@ public class Utils {
     }
 
     public static void updateScoreBooster(Context context, int count) {
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             if (context instanceof Activity)
                 logout((Activity) context, true);

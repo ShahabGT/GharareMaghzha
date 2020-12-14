@@ -34,8 +34,8 @@ class RulesDialog(context: Activity) : Dialog(context) {
 
 
     private suspend fun getData() {
-        val number = MySharedPreference.getInstance(ctx).number
-        val token = MySharedPreference.getInstance(ctx).accessToken
+        val number = MySharedPreference.Companion.getInstance(ctx).getNumber()
+        val token = MySharedPreference.Companion.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(ctx, true)
         }

@@ -3,7 +3,6 @@ package ir.ghararemaghzha.game.activities
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.graphics.drawable.AnimationDrawable
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -12,10 +11,8 @@ import android.os.Looper
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.view.animation.AnimationSet
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.MySharedPreference
 
@@ -57,7 +54,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Handler(Looper.getMainLooper()).postDelayed({
-            val userId = MySharedPreference.getInstance(this).userId
+            val userId = MySharedPreference.getInstance(this).getUserId()
 
             if (userId.isEmpty())
                 startActivity(Intent(this, RegisterActivity::class.java))

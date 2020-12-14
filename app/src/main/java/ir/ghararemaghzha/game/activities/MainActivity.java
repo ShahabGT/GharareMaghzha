@@ -50,8 +50,6 @@ import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
 import ir.ghararemaghzha.game.models.QuestionModel;
 import ir.ghararemaghzha.game.models.QuestionResponse;
-import ir.ghararemaghzha.game.models.TimeResponse;
-import ir.ghararemaghzha.game.models.VerifyResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         db = Realm.getDefaultInstance();
 
         init();
-        if (MySharedPreference.getInstance(this).isFirstTime())
+        if (MySharedPreference.Companion.getInstance(this).isFirstTime())
             helpInfo();
         else
             firebaseDebug("ok");
@@ -105,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData() {
         GetDataDialog dialog = Utils.showGetDataLoading(MainActivity.this);
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(this).getNumber();
+        String token = MySharedPreference.Companion.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(MainActivity.this, true);
             return;
@@ -117,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            String userPlan = MySharedPreference.getInstance(MainActivity.this).getPlan();
+                            String userPlan = MySharedPreference.Companion.getInstance(MainActivity.this).getPlan();
                             int size = 500;
                             switch (userPlan) {
                                 case "1":
@@ -215,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSequenceFinish() {
-                MySharedPreference.getInstance(MainActivity.this).setFirstTime();
+                MySharedPreference.Companion.getInstance(MainActivity.this).setFirstTime();
                 firebaseDebug("ok");
 
             }
@@ -232,22 +230,22 @@ public class MainActivity extends AppCompatActivity {
 
     public static void setAvatars(Activity activity) {
         Glide.with(activity)
-                .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
+                .load(activity.getString(R.string.avatar_url, MySharedPreference.Companion.getInstance(activity).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
                 .into((ImageView) activity.findViewById(R.id.navigation_avatar));
 
         Glide.with(activity)
-                .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
+                .load(activity.getString(R.string.avatar_url, MySharedPreference.Companion.getInstance(activity).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
                 .into((ImageView) activity.findViewById(R.id.toolbar_avatar));
     }
 
     private void navigationDrawer() {
-        ((MaterialTextView) findViewById(R.id.navigation_name)).setText(MySharedPreference.getInstance(this).getUsername());
-        ((MaterialTextView) findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode()));
-        ((MaterialTextView) findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore()));
+        ((MaterialTextView) findViewById(R.id.navigation_name)).setText(MySharedPreference.Companion.getInstance(this).getUsername());
+        ((MaterialTextView) findViewById(R.id.navigation_code)).setText(getString(R.string.profile_code, MySharedPreference.Companion.getInstance(this).getUserCode()));
+        ((MaterialTextView) findViewById(R.id.navigation_score)).setText(getString(R.string.highscore_score, MySharedPreference.Companion.getInstance(this).getScore()));
 
         findViewById(R.id.navigation_exit).setOnClickListener(v -> Utils.logout(this, false));
         findViewById(R.id.navigation_buyhistory).setOnClickListener(v -> {
@@ -334,8 +332,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         getExtraIntent();
         if (db.isEmpty()) {
-            MySharedPreference.getInstance(MainActivity.this).clearCounter( false);
-            MySharedPreference.getInstance(this).setScore("0");
+            MySharedPreference.Companion.getInstance(MainActivity.this).clearCounter( false);
+            MySharedPreference.Companion.getInstance(this).setScore("0");
             getData();
         } else {
             updateMessages();
@@ -376,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
         BadgeDrawable badgeDrawable = bnv.getOrCreateBadge(R.id.menu_message);
         badgeDrawable.setVisible(size > 0);
 
-        if (MySharedPreference.getInstance(MainActivity.this).getUnreadChats() > 0) {
+        if (MySharedPreference.Companion.getInstance(MainActivity.this).getUnreadChats() > 0) {
             newChat.setVisibility(View.VISIBLE);
             newToolbar.setVisibility(View.VISIBLE);
         } else {
@@ -386,8 +384,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void appOpen() {
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(this).getNumber();
+        String token = MySharedPreference.Companion.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(MainActivity.this, true);
             return;
@@ -406,10 +404,10 @@ public class MainActivity extends AppCompatActivity {
                                     timeDialog = Utils.showTimeError(MainActivity.this);
                                     return;
                                 } else {
-                                    MySharedPreference.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
                                 }
                                 int newPlan = Integer.parseInt(response.body().getUserPlan());
-                                int oldPlan = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getPlan());
+                                int oldPlan = Integer.parseInt(MySharedPreference.Companion.getInstance(MainActivity.this).getPlan());
                                 if (newPlan > oldPlan) {
                                     dataDialog = Utils.showGetDataLoading(MainActivity.this);
                                     getQuestions(newPlan);
@@ -419,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
                                 int myVersion = Utils.getVersionCode(MainActivity.this);
                                 int newVersion = Integer.parseInt(response.body().getVersion());
                                 int newScore = Integer.parseInt(response.body().getScoreCount());
-                                int oldScore = Integer.parseInt(MySharedPreference.getInstance(MainActivity.this).getScore());
+                                int oldScore = Integer.parseInt(MySharedPreference.Companion.getInstance(MainActivity.this).getScore());
 
                                 if (newVersion > myVersion) {
                                     if (response.body().getVersionEssential().equals("1")) {
@@ -432,10 +430,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 if (newScore == -1) {
-                                    MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(0));
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setScore(String.valueOf(0));
                                     uploadScore(String.valueOf(0));
                                 } else if (newScore > oldScore)
-                                    MySharedPreference.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
                                 else if (oldScore > newScore)
                                     uploadScore(String.valueOf(oldScore));
 
@@ -445,12 +443,12 @@ public class MainActivity extends AppCompatActivity {
                                 int serverBooster = Integer.parseInt(response.body().getUserBooster());
                                 int serverBoosterCount = Integer.parseInt(response.body().getScoreBoosterCount());
                                 if (serverBooster > 0 && serverBoosterCount > 0) {
-                                    MySharedPreference.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
-                                    MySharedPreference.getInstance(MainActivity.this).setBooster(serverBooster);
-                                    MySharedPreference.getInstance(MainActivity.this).setCounter(300 - serverBoosterCount);
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setBooster(serverBooster);
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setCounter(300 - serverBoosterCount);
 
                                 } else {
-                                    MySharedPreference.getInstance(MainActivity.this).setBoosterValue(1f);
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(1f);
                                 }
 
                             } else if (response.code() == 401) {
@@ -470,9 +468,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDatabase(boolean shouldUpdate) {
-        int day = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        int day = Integer.parseInt(MySharedPreference.Companion.getInstance(this).getDaysPassed());
         if (day >= 0 && day < 10) {
-            if (shouldUpdate || day != MySharedPreference.getInstance(this).getLastUpdate()) {
+            if (shouldUpdate || day != MySharedPreference.Companion.getInstance(this).getLastUpdate()) {
                 final int range;
                 switch (day) {
                     case 1:
@@ -515,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
                     questions.setBoolean("visible", true);
                 });
                 sendBroadcast(refreshIntent);
-                MySharedPreference.getInstance(this).setLastUpdate(day);
+                MySharedPreference.Companion.getInstance(this).setLastUpdate(day);
             }
         }
     }
@@ -549,16 +547,16 @@ public class MainActivity extends AppCompatActivity {
 
             questions.setBoolean("bought", true);
         });
-        MySharedPreference.getInstance(MainActivity.this).setPlan(String.valueOf(plan));
+        MySharedPreference.Companion.getInstance(MainActivity.this).setPlan(String.valueOf(plan));
         if (dataDialog != null) dataDialog.dismiss();
         updateDatabase(true);
     }
 
     private void uploadScore(String score) {
-        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(this).getDaysPassed());
         if (passed >= 0 && passed < 10) {
-            String number = MySharedPreference.getInstance(this).getNumber();
-            String token = MySharedPreference.getInstance(this).getAccessToken();
+            String number = MySharedPreference.Companion.getInstance(this).getNumber();
+            String token = MySharedPreference.Companion.getInstance(this).getAccessToken();
             if (number.isEmpty() || token.isEmpty()) {
                 Utils.logout(MainActivity.this, true);
                 return;
@@ -582,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void uploadAnswers() {
-        int passed = Integer.parseInt(MySharedPreference.getInstance(this).getDaysPassed());
+        int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(this).getDaysPassed());
         if (passed >= 0 && passed < 10) {
             RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
             for (QuestionModel model : models)
@@ -592,8 +590,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadAnswer(String questionId, String userAnswer, String booster) {
 
-        String number = MySharedPreference.getInstance(this).getNumber();
-        String token = MySharedPreference.getInstance(this).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(this).getNumber();
+        String token = MySharedPreference.Companion.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(MainActivity.this, true);
             return;

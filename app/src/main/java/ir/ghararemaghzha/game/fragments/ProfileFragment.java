@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
@@ -122,10 +121,10 @@ public class ProfileFragment extends Fragment {
     private void updateUI() {
         List<ProfileModel> data = new ArrayList<>();
         data.add(new ProfileModel(
-                context.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()),
-                MySharedPreference.getInstance(context).getUsername(),
-                "امتیاز من: "+MySharedPreference.getInstance(context).getScore()));
-        int passed = Integer.parseInt(MySharedPreference.getInstance(context).getDaysPassed());
+                context.getString(R.string.avatar_url, MySharedPreference.Companion.getInstance(activity).getUserAvatar()),
+                MySharedPreference.Companion.getInstance(context).getUsername(),
+                "امتیاز من: "+MySharedPreference.Companion.getInstance(context).getScore()));
+        int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(context).getDaysPassed());
 
         if (passed < 0) {
 
@@ -166,7 +165,7 @@ public class ProfileFragment extends Fragment {
 
         edit.setOnClickListener(v -> navController.navigate(R.id.action_global_profileEditFragment));
 
-        stat.setOnClickListener(v -> showDetailsDialog(MySharedPreference.getInstance(context).getUserId()));
+        stat.setOnClickListener(v -> showDetailsDialog(MySharedPreference.Companion.getInstance(context).getUserId()));
         
         scoreHelper.setOnClickListener(v -> navController.navigate(R.id.action_global_scoreHelperFragment));
     }

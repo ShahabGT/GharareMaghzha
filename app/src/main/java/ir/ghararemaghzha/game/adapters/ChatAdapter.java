@@ -159,8 +159,8 @@ public class ChatAdapter extends RealmRecyclerViewAdapter<MessageModel, Recycler
 
     private void sendMessage(String message, int key, int pos) {
         Realm db = Realm.getDefaultInstance();
-        String number = MySharedPreference.getInstance(context).getNumber();
-        String token = MySharedPreference.getInstance(context).getAccessToken();
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(context,true);
             return;
