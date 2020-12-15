@@ -76,14 +76,14 @@ public class BuyAdapter extends RecyclerView.Adapter<BuyAdapter.ViewHolder> {
         PlanModel model = data.get(position);
         if (model != null) {
             anim(h.buy);
-            int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(context).getDaysPassed());
+            int passed = MySharedPreference.Companion.getInstance(context).getDaysPassed();
 
             if (h.viewType == LIST_TYPE) {
                 h.title.setText(context.getString(R.string.buy_plan_title, model.getPlanCount()));
                 h.price.setText(context.getString(R.string.buy_price, Utils.moneySeparator(model.getPlanPrice())));
 
                 h.buy.setOnClickListener(view -> buyInterface.buy(model.getPlanId(), model.getPlanPrice(), null, null, false));
-                int userPlan = Integer.parseInt(MySharedPreference.Companion.getInstance(context).getPlan());
+                int userPlan = MySharedPreference.Companion.getInstance(context).getPlan();
                 switch (position) {
                     case 1:
                         ImageViewCompat.setImageTintList(h.bg, ColorStateList.valueOf(context.getResources().getColor(R.color.light1)));

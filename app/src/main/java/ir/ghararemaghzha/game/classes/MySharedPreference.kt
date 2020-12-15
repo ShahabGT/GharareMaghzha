@@ -7,9 +7,6 @@ import androidx.security.crypto.MasterKey
 import io.realm.Realm
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.models.MessageModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MySharedPreference private constructor(ctx: Context) {
     private val context = ctx
@@ -51,7 +48,7 @@ class MySharedPreference private constructor(ctx: Context) {
         var counter = sp.getInt("counter", 0)
         if (counter < 299) {
             counter++
-            sp.edit { putInt("counter", counter) }
+            sp.edit(commit = true) {putInt("counter", counter) }
             Utils.updateScoreBooster(context, 300 - counter)
         } else clearCounter(true)
     }
@@ -62,7 +59,7 @@ class MySharedPreference private constructor(ctx: Context) {
         setBoosterValue(1f)
         if (showNotification) {
             Utils.createNotification(context, context.getString(R.string.booster_notif_title), context.getString(R.string.booster_notif_body), "ir.ghararemaghzha.game.TARGET_NOTIFICATION")
-            CoroutineScope(Dispatchers.IO).launch { saveToDB() }
+            saveToDB()
         }
     }
 
@@ -82,126 +79,66 @@ class MySharedPreference private constructor(ctx: Context) {
     }
 
     fun isFirstTime() = sp.getBoolean("isFirstTime", true)
-
     fun setFirstTime() = sp.edit { putBoolean("isFirstTime", false) }
 
     fun isFirstTimeQuestion() = sp.getBoolean("isFirstTimeQuestion", true)
-
     fun setFirstTimeQuestion() = sp.edit { putBoolean("isFirstTimeQuestion", false) }
 
     fun setAccessToken(accessToken: String) = sp.edit { putString("accessToken", accessToken) }
-
     fun getAccessToken() = sp.getString("accessToken", "") ?: ""
 
     fun setUsername(username: String) = sp.edit { putString("username", username) }
-
     fun getUsername() = sp.getString("username", "") ?: ""
 
     fun setNumber(number: String) = sp.edit { putString("number", number) }
-
-
     fun getNumber() = sp.getString("number", "") ?: ""
 
-
     fun setUserId(userId: String) = sp.edit { putString("userId", userId) }
-
-
     fun getUserId() = sp.getString("userId", "") ?: ""
 
-
     fun setUserCode(userCode: String) = sp.edit { putString("userCode", userCode) }
-
-
     fun getUserCode() = sp.getString("userCode", "") ?: ""
 
-
     fun setFbToken(fbToken: String) = sp.edit { putString("fbToken", fbToken) }
-
-
     fun getFbToken() = sp.getString("fbToken", "") ?: ""
 
-
     fun setScore(score: String) = sp.edit { putString("score", score) }
-
-
     fun getScore() = sp.getString("score", "0") ?: "0"
 
+    fun setPlan(plan: Int) = sp.edit { putInt("plan", plan) }
+    fun getPlan() = sp.getInt("plan", 0)
 
-    fun setPlan(plan: String) = sp.edit { putString("plan", plan) }
-
-
-    fun getPlan() = sp.getString("plan", "0") ?: "0"
-
-
-    fun setDaysPassed(daysPassed: String) = sp.edit { putString("daysPassed", daysPassed) }
-
-
-    fun getDaysPassed() = sp.getString("daysPassed", "-1") ?: "-1"
-
+    fun setDaysPassed(daysPassed: Int) = sp.edit { putInt("daysPassed", daysPassed) }
+    fun getDaysPassed() = sp.getInt("daysPassed", -1)
 
     fun setLastUpdate(lastUpdate: Int) = sp.edit { putInt("lastUpdate", lastUpdate) }
-
-
     fun getLastUpdate() = sp.getInt("lastUpdate", -1)
 
-
     fun setLastUpdateChat(lastUpdate: String) = sp.edit { putString("lastUpdateChat", lastUpdate) }
-
-
     fun getLastUpdateChat() = sp.getString("lastUpdateChat", "0") ?: "0"
 
-
-    fun setUserBday(UserBday: String) = sp.edit { putString("UserBday", UserBday) }
-
-
-    fun getUserBday() = sp.getString("UserBday", "") ?: ""
-
+    fun setUserBirthday(userBirthday: String) = sp.edit { putString("UserBday", userBirthday) }
+    fun getUserBirthday() = sp.getString("UserBday", "") ?: ""
 
     fun setUserSex(UserSex: String) = sp.edit { putString("UserSex", UserSex) }
-
-
     fun getUserSex() = sp.getString("UserSex", "") ?: ""
 
-
     fun setUserEmail(Email: String) = sp.edit { putString("Email", Email) }
-
-
     fun getUserEmail() = sp.getString("Email", "") ?: ""
 
-
     fun setUserInvite(invite: String) = sp.edit { putString("invite", invite) }
-
-
     fun getUserInvite() = sp.getString("invite", "") ?: ""
 
-
     fun setUserAvatar(Avatar: String) = sp.edit { putString("Avatar", Avatar) }
-
-
     fun getUserAvatar() = sp.getString("Avatar", "") ?: ""
 
-
     fun setUnreadChats(num: Int) = sp.edit { putInt("chats", num) }
-
-
     fun getUnreadChats() = sp.getInt("chats", 0)
 
-
     fun setBooster(booster: Int) = sp.edit { putInt("userbooster", booster) }
-
-
     fun getBooster() = sp.getInt("userbooster", 0)
 
-
-    fun setBoosterDate(boosterDate: String) = sp.edit { putString("boosterDate", boosterDate) }
-
-
-    fun getBoosterDate() = sp.getString("boosterDate", "") ?: ""
-
-
     fun setBoosterValue(boosterValue: Float) = sp.edit { putFloat("boosterValue", boosterValue) }
-
-
     fun getBoosterValue() = sp.getFloat("boosterValue", 1f)
 
 

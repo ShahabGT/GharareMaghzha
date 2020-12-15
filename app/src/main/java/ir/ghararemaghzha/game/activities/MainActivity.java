@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -24,6 +25,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+
 import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -31,9 +33,11 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
@@ -115,25 +119,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            String userPlan = MySharedPreference.Companion.getInstance(MainActivity.this).getPlan();
-                            int size = 500;
-                            switch (userPlan) {
-                                case "1":
-                                    size += 500;
-                                    break;
-                                case "2":
-                                    size += 1000;
-                                    break;
-                                case "3":
-                                    size += 1500;
-                                    break;
-                                case "4":
-                                    size += 2000;
-                                    break;
-                                case "5":
-                                    size += 2500;
-                                    break;
-                            }
+                            int userPlan = MySharedPreference.Companion.getInstance(MainActivity.this).getPlan();
+                            int size = (userPlan * 500) + 500;
+
                             List<QuestionModel> data = new ArrayList<>();
                             for (int i = 0; i < response.body().getData().size(); i++) {
                                 QuestionModel m = response.body().getData().get(i);
@@ -144,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                                 m.setVisible(false);
                                 data.add(m);
                             }
-                            db.executeTransaction(realm -> realm.insertOrUpdate(data));
+                            db.executeTransaction(realm -> realm.insert(data));
                             dialog.dismiss();
                             updateDatabase(true);
                             appOpen();
@@ -332,8 +320,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         getExtraIntent();
         if (db.isEmpty()) {
-            MySharedPreference.Companion.getInstance(MainActivity.this).clearCounter( false);
+            MySharedPreference.Companion.getInstance(MainActivity.this).clearCounter(false);
             MySharedPreference.Companion.getInstance(this).setScore("0");
+            MySharedPreference.Companion.getInstance(this).setPlan(0);
             getData();
         } else {
             updateMessages();
@@ -351,9 +340,9 @@ public class MainActivity extends AppCompatActivity {
         setIntent(intent);
     }
 
-    private void getExtraIntent(){
+    private void getExtraIntent() {
         Intent intent = getIntent();
-        if (intent!=null && intent.getExtras() != null) {
+        if (intent != null && intent.getExtras() != null) {
             String in = intent.getExtras().getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE, "default");
             if (in != null && in.equals("new"))
                 bnv.setSelectedItemId(R.id.menu_message);
@@ -404,10 +393,10 @@ public class MainActivity extends AppCompatActivity {
                                     timeDialog = Utils.showTimeError(MainActivity.this);
                                     return;
                                 } else {
-                                    MySharedPreference.Companion.getInstance(MainActivity.this).setDaysPassed(response.body().getPassed());
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setDaysPassed(Integer.parseInt(response.body().getPassed()));
                                 }
                                 int newPlan = Integer.parseInt(response.body().getUserPlan());
-                                int oldPlan = Integer.parseInt(MySharedPreference.Companion.getInstance(MainActivity.this).getPlan());
+                                int oldPlan = MySharedPreference.Companion.getInstance(MainActivity.this).getPlan();
                                 if (newPlan > oldPlan) {
                                     dataDialog = Utils.showGetDataLoading(MainActivity.this);
                                     getQuestions(newPlan);
@@ -441,12 +430,14 @@ public class MainActivity extends AppCompatActivity {
                                 sendBroadcast(refreshIntent);
 
                                 int serverBooster = Integer.parseInt(response.body().getUserBooster());
+                                int localBooster = MySharedPreference.Companion.getInstance(MainActivity.this).getBooster();
                                 int serverBoosterCount = Integer.parseInt(response.body().getScoreBoosterCount());
                                 if (serverBooster > 0 && serverBoosterCount > 0) {
-                                    MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
-                                    MySharedPreference.Companion.getInstance(MainActivity.this).setBooster(serverBooster);
-                                    MySharedPreference.Companion.getInstance(MainActivity.this).setCounter(300 - serverBoosterCount);
-
+                                    if (serverBooster > localBooster) {
+                                        MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
+                                        MySharedPreference.Companion.getInstance(MainActivity.this).setBooster(serverBooster);
+                                        MySharedPreference.Companion.getInstance(MainActivity.this).setCounter(300 - serverBoosterCount);
+                                    }
                                 } else {
                                     MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(1f);
                                 }
@@ -460,7 +451,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<AppOpenResponse> call, @NonNull Throwable t) {
                         firebaseDebug("failed");
-
                         Utils.showInternetError(MainActivity.this, () -> appOpen());
 
                     }
@@ -468,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDatabase(boolean shouldUpdate) {
-        int day = Integer.parseInt(MySharedPreference.Companion.getInstance(this).getDaysPassed());
+        int day = MySharedPreference.Companion.getInstance(this).getDaysPassed();
         if (day >= 0 && day < 10) {
             if (shouldUpdate || day != MySharedPreference.Companion.getInstance(this).getLastUpdate()) {
                 final int range;
@@ -519,26 +509,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getQuestions(int plan) {
-        final int size;
-        switch (plan) {
-            case 1:
-                size = 1000;
-                break;
-            case 2:
-                size = 1500;
-                break;
-            case 3:
-                size = 2000;
-                break;
-            case 4:
-                size = 2500;
-                break;
-            case 5:
-                size = 3000;
-                break;
-            default:
-                size = 0;
-        }
+        MySharedPreference.Companion.getInstance(MainActivity.this).setPlan(plan);
+
+        int size = (plan * 500) + 500;
 
         db.executeTransaction(realm -> {
             RealmResults<QuestionModel> questions = realm.where(QuestionModel.class)
@@ -547,13 +520,12 @@ public class MainActivity extends AppCompatActivity {
 
             questions.setBoolean("bought", true);
         });
-        MySharedPreference.Companion.getInstance(MainActivity.this).setPlan(String.valueOf(plan));
         if (dataDialog != null) dataDialog.dismiss();
         updateDatabase(true);
     }
 
     private void uploadScore(String score) {
-        int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(this).getDaysPassed());
+        int passed = MySharedPreference.Companion.getInstance(this).getDaysPassed();
         if (passed >= 0 && passed < 10) {
             String number = MySharedPreference.Companion.getInstance(this).getNumber();
             String token = MySharedPreference.Companion.getInstance(this).getAccessToken();
@@ -579,7 +551,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void uploadAnswers() {
-        int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(this).getDaysPassed());
+        int passed = MySharedPreference.Companion.getInstance(this).getDaysPassed();
         if (passed >= 0 && passed < 10) {
             RealmResults<QuestionModel> models = db.where(QuestionModel.class).equalTo("visible", false).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
             for (QuestionModel model : models)

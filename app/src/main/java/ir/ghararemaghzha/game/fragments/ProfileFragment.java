@@ -124,7 +124,7 @@ public class ProfileFragment extends Fragment {
                 context.getString(R.string.avatar_url, MySharedPreference.Companion.getInstance(activity).getUserAvatar()),
                 MySharedPreference.Companion.getInstance(context).getUsername(),
                 "امتیاز من: "+MySharedPreference.Companion.getInstance(context).getScore()));
-        int passed = Integer.parseInt(MySharedPreference.Companion.getInstance(context).getDaysPassed());
+        int passed = MySharedPreference.Companion.getInstance(context).getDaysPassed();
 
         if (passed < 0) {
 

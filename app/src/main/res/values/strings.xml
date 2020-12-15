@@ -245,7 +245,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="details_rate">امتیاز کلی: %d</string>
 
     <string name="booster_notif_title">پکیج نیترو امتیاز</string>
-    <string name="booster_notif_body">مدت اعتبار پکیج نیترو امتیاز شما به پایان رسید.</string>
+    <string name="booster_notif_body">اعتبار پکیج نیترو امتیاز شما به پایان رسید.</string>
 
     <string name="score_helper_title">نیترو امتیاز</string>
     <string name="score1_title">پاسخ به سوالات</string>

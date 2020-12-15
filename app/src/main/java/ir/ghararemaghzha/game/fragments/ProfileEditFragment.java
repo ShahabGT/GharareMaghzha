@@ -113,7 +113,7 @@ public class ProfileEditFragment extends Fragment {
 
         name.setText(MySharedPreference.Companion.getInstance(context).getUsername());
         number.setText(MySharedPreference.Companion.getInstance(context).getNumber());
-        bday.setText(MySharedPreference.Companion.getInstance(context).getUserBday());
+        bday.setText(MySharedPreference.Companion.getInstance(context).getUserBirthday());
         email.setText(MySharedPreference.Companion.getInstance(context).getUserEmail());
         String sex = MySharedPreference.Companion.getInstance(context).getUserSex();
         if (sex.equals("male")) {
@@ -438,7 +438,7 @@ public class ProfileEditFragment extends Fragment {
                             MySharedPreference.Companion.getInstance(context).setUsername(name);
                             MySharedPreference.Companion.getInstance(context).setUserEmail(email);
                             MySharedPreference.Companion.getInstance(context).setUserSex(sex);
-                            MySharedPreference.Companion.getInstance(context).setUserBday(bday);
+                            MySharedPreference.Companion.getInstance(context).setUserBirthday(bday);
 
                             switch (response.body().getMessage()) {
                                 case "invite not found":

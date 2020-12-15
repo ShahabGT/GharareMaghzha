@@ -177,7 +177,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 accessToken = res.value.token
                 val userCode = res.value.userCode
                 val score = res.value.userScore
-                val plan = res.value.userPlan
+                val plan = res.value.userPlan.toInt()
 
                 MySharedPreference.getInstance(ctx).setNumber(number)
                 MySharedPreference.getInstance(ctx).setUsername(userName)
@@ -187,7 +187,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 MySharedPreference.getInstance(ctx).setPlan(plan)
 
                 MySharedPreference.getInstance(ctx).setUserSex(res.value.userSex ?: "")
-                MySharedPreference.getInstance(ctx).setUserBday(res.value.userBday ?: "")
+                MySharedPreference.getInstance(ctx).setUserBirthday(res.value.userBday ?: "")
                 MySharedPreference.getInstance(ctx).setUserEmail(res.value.userEmail ?: "")
                 MySharedPreference.getInstance(ctx).setUserInvite(res.value.userInvite ?: "")
                 if (!res.value.userAvatar.isNullOrEmpty())
@@ -232,7 +232,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     dialog.dismiss()
                     if (res.value.message != "empty") {
                         val data: MutableCollection<QuestionModel> = mutableListOf()
-                        val size = when (MySharedPreference.getInstance(ctx).getPlan().toInt()) {
+                        val size = when (MySharedPreference.getInstance(ctx).getPlan()) {
                             0 -> 500
                             1 -> 1000
                             2 -> 1500
@@ -247,7 +247,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                             model.bought = index < size
                             data.add(model)
                         }
-                        db.executeTransaction { it.insertOrUpdate(data) }
+                        db.executeTransaction { it.insert(data) }
 
                         MySharedPreference.getInstance(ctx).setUserId(userId)
                         Toast.makeText(ctx, ctx.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
