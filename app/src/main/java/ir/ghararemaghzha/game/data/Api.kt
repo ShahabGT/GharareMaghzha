@@ -78,8 +78,8 @@ interface Api {
     fun getQuestions(
             @Header("Authorization") Token: String,
             @Field("number") number: String,
-            @Field("start") start: String,
-            @Field("size") size: String
+            @Field("start") start: Int,
+            @Field("size") size: Int
     ): Call<QuestionResponse>
 
     @FormUrlEncoded

@@ -9,14 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.bumptech.glide.Glide;
 import com.google.android.material.textview.MaterialTextView;
 import com.willy.ratingbar.ScaleRatingBar;
-
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;

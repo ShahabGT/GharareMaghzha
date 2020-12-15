@@ -1,6 +1,5 @@
 package ir.ghararemaghzha.game.activities;
 
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,7 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -25,7 +23,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-
 import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -33,11 +30,9 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
@@ -61,6 +56,8 @@ import retrofit2.Response;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_MESSAGE;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
+import static ir.ghararemaghzha.game.classes.Const.SIZE;
+import static ir.ghararemaghzha.game.classes.Const.START;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -114,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.Companion.getInstance().getApi()
-                .getQuestions("Bearer " + token, number, "12000", "3000")
+                .getQuestions("Bearer " + token, number, START, SIZE)
                 .enqueue(new Callback<QuestionResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {

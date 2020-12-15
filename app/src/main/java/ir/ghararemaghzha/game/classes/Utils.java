@@ -1,7 +1,6 @@
 package ir.ghararemaghzha.game.classes;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -233,14 +232,10 @@ public class Utils {
                 .scoreBooster("Bearer " + token, number, count)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
-
-                    }
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) { }
 
                     @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
-
-                    }
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) { }
                 });
 
     }

@@ -62,8 +62,8 @@ class ApiRepository(
     suspend fun getQuestions(
             Token: String,
             number: String,
-            start: String,
-            size: String
+            start: Int,
+            size: Int
     ) = safeApiCall { api.getQuestions(Token, number, start, size) }
 
 

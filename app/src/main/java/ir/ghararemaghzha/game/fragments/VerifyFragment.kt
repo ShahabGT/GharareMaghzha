@@ -23,6 +23,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import io.realm.Realm
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.Const.FCM_TOPIC
+import ir.ghararemaghzha.game.classes.Const.SIZE
+import ir.ghararemaghzha.game.classes.Const.START
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.classes.Utils.convertToTimeFormat
@@ -47,7 +49,6 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     private lateinit var verify: MaterialButton
     private lateinit var timer: CountDownTimer
     private var timerTime = 120000L
-
     private lateinit var userName: String
     private lateinit var accessToken: String
     private var number: String = ""
@@ -222,7 +223,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     }
 
     private suspend fun getQuestions() {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number, "12000", "3000")) {
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number, START, SIZE)) {
 
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {
@@ -232,15 +233,8 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     dialog.dismiss()
                     if (res.value.message != "empty") {
                         val data: MutableCollection<QuestionModel> = mutableListOf()
-                        val size = when (MySharedPreference.getInstance(ctx).getPlan()) {
-                            0 -> 500
-                            1 -> 1000
-                            2 -> 1500
-                            3 -> 2000
-                            4 -> 2500
-                            5 -> 3000
-                            else -> 500
-                        }
+                        val plan = MySharedPreference.getInstance(ctx).getPlan()
+                        val size = (plan*500)+500
                         for ((index, model) in res.value.data.withIndex()) {
                             model.uploaded = model.userAnswer != "-1"
                             model.visible = false
@@ -257,8 +251,6 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                         act.finish()
                     } else
                         Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
-
-
                 }
 
 
