@@ -45,13 +45,6 @@ class ApiRepository(
     ) = safeApiCall { api.getServerTime(Token, number) }
 
 
-    suspend fun updateLastUpdate(
-            Token: String,
-            number: String,
-            lastUpdate: String
-    ) = safeApiCall { api.updateLastUpdate(Token, number, lastUpdate) }
-
-
     suspend fun sendMessage(
             Token: String,
             number: String,

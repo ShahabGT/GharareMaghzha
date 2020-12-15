@@ -32,10 +32,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import io.realm.Sort;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                                     size += 2500;
                                     break;
                             }
-                            ArrayList<QuestionModel> data = new ArrayList<>();
+                            List<QuestionModel> data = new ArrayList<>();
                             for (int i = 0; i < response.body().getData().size(); i++) {
                                 QuestionModel m = response.body().getData().get(i);
                                 m.setVisible(false);
@@ -507,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
                 db.executeTransaction(realm -> {
                     RealmResults<QuestionModel> questions = realm.where(QuestionModel.class)
                             .equalTo("bought", true)
-                            .sort("sortId", Sort.ASCENDING)
+                            .sort("sortId")
                             .limit(range).findAll();
 
                     questions.setBoolean("visible", true);
@@ -542,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.executeTransaction(realm -> {
             RealmResults<QuestionModel> questions = realm.where(QuestionModel.class)
-                    .sort("sortId", Sort.ASCENDING)
+                    .sort("sortId")
                     .limit(size).findAll();
 
             questions.setBoolean("bought", true);
@@ -573,7 +573,6 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
-
                         }
                     });
         }
@@ -603,8 +602,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
                             db.beginTransaction();
-                            RealmResults<QuestionModel> result = db.where(QuestionModel.class).equalTo("questionId", questionId).findAll();
-                            Objects.requireNonNull(result.first()).setUploaded(true);
+                            QuestionModel result = db.where(QuestionModel.class).equalTo("questionId", questionId).findFirst();
+                            result.setUploaded(true);
                             db.commitTransaction();
 
                         } else if (response.code() == 401) {
@@ -620,7 +619,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         if (motionLayout.getCurrentState() == R.id.end) {
             motionLayout.transitionToStart();
             return;

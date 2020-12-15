@@ -221,29 +221,6 @@ public class Utils {
         activity.finish();
     }
 
-    public static void updateServerQuestions(Activity context, String questionCount) {
-        String number = MySharedPreference.Companion.getInstance(context).getNumber();
-        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            logout(context, true);
-            return;
-        }
-        RetrofitClient.Companion.getInstance().getApi()
-                .sendQuestionCount("Bearer " + token, number, questionCount)
-                .enqueue(new Callback<GeneralResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
-
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) {
-
-                    }
-                });
-
-    }
-
     public static void updateScoreBooster(Context context, int count) {
         String number = MySharedPreference.Companion.getInstance(context).getNumber();
         String token = MySharedPreference.Companion.getInstance(context).getAccessToken();

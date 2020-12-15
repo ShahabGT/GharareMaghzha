@@ -130,7 +130,7 @@ class MySharedPreference private constructor(ctx: Context) {
     fun setPlan(plan: String) = sp.edit { putString("plan", plan) }
 
 
-    fun getPlan() = sp.getString("plan", "") ?: ""
+    fun getPlan() = sp.getString("plan", "0") ?: "0"
 
 
     fun setDaysPassed(daysPassed: String) = sp.edit { putString("daysPassed", daysPassed) }

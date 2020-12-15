@@ -56,14 +56,6 @@ interface NetworkApi {
             @Field("number") number: String
     ): TimeResponse
 
-    @FormUrlEncoded
-    @POST("updatetime")
-    suspend fun updateLastUpdate(
-            @Header("Authorization") Token: String,
-            @Field("number") number: String,
-            @Field("last_update") lastUpdate: String
-    ): GeneralResponse
-
 
     @FormUrlEncoded
     @POST("chat")

@@ -86,7 +86,6 @@ public class StartFragment extends Fragment {
             info.setText(context.getString(R.string.start_info_passed));
             start.setEnabled(false);
         }
-        Utils.updateServerQuestions(activity, String.valueOf(db.where(QuestionModel.class).equalTo("visible", true).findAll().size()));
     }
 
     private void init(View v) {

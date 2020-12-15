@@ -46,7 +46,6 @@ class QuestionsActivity : AppCompatActivity() {
     private var progress: Double = 100.0
     private var time = 15
     private lateinit var downTimer: CountDownTimer
-    private lateinit var nextTimer: CountDownTimer
     private lateinit var progressBar: ProgressBar
     private lateinit var booster: ImageView
     private lateinit var timeText: MaterialTextView
@@ -227,12 +226,6 @@ class QuestionsActivity : AppCompatActivity() {
                 if (foreground) nextQuestion()
             }
         }
-        nextTimer = object : CountDownTimer(2500, 1000) {
-            override fun onTick(l: Long) {}
-            override fun onFinish() {
-                nextTimer.cancel()
-            }
-        }
         onClicks()
         nextQuestion()
         val attributes = AudioAttributes.Builder()
@@ -318,7 +311,7 @@ class QuestionsActivity : AppCompatActivity() {
             YoYo.with(Techniques.Shake).duration(500).playOn(buttonCard)
             playSound(wrongSound)
         }
-        Handler(Looper.getMainLooper()).postDelayed({ nextQuestion() }, 1000)
+        Handler(Looper.getMainLooper()).postDelayed({ nextQuestion() }, 1500)
     }
 
     private fun enterAnimations() {
@@ -346,7 +339,6 @@ class QuestionsActivity : AppCompatActivity() {
             questionRemain.text = getString(R.string.question_remaining, (data.size - 1).toString())
             model = getRandom()
             downTimer.cancel()
-            nextTimer.start()
             enterAnimations()
             answer1c.isEnabled = true
             answer1c.setCardBackgroundColor(resources.getColor(R.color.white))
@@ -390,7 +382,6 @@ class QuestionsActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 uploadAnswer("0",qId)
             }
-            Utils.updateServerQuestions(this, db.where(QuestionModel::class.java).equalTo("visible", true).findAll().size.toString())
         } else {
             Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
             onBackPressed()
@@ -450,7 +441,6 @@ class QuestionsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        nextTimer.cancel()
         downTimer.cancel()
         soundPool.release()
         mediaPlayer.release()

@@ -57,15 +57,6 @@ interface Api {
     ): Call<TimeResponse>
 
     @FormUrlEncoded
-    @POST("updatetime")
-    fun updateLastUpdate(
-            @Header("Authorization") Token: String,
-            @Field("number") number: String,
-            @Field("last_update") lastUpdate: String
-    ): Call<GeneralResponse>
-
-
-    @FormUrlEncoded
     @POST("chat")
     fun sendMessage(
             @Header("Authorization") Token: String,
