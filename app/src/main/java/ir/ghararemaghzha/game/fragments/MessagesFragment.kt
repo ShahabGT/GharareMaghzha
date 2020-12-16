@@ -46,7 +46,7 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
         if (data.isEmpty())
             v.findViewById<View>(R.id.message_empty).visibility = View.VISIBLE
         else {
-            val adapter = IncomingAdapter(ctx,view?.findNavController(), data)
+            val adapter = IncomingAdapter(ctx,view?.findNavController()!!, data)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
         }
