@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/light_background">
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/invite_progress_card"
         android:layout_width="match_parent"
@@ -252,11 +251,11 @@
         android:elevation="20dp"
         android:focusable="true"
         android:visibility="gone"
+        android:background="@color/light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <ProgressBar
             android:layout_width="100dp"
