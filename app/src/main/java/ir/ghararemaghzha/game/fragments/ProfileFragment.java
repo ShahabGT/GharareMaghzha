@@ -47,7 +47,6 @@ public class ProfileFragment extends Fragment {
     private FragmentActivity activity;
     private MaterialCardView buy, edit, stat, scoreHelper;
     private View v;
-
     private Realm db;
 
     private final BroadcastReceiver br = new BroadcastReceiver() {
@@ -180,11 +179,5 @@ public class ProfileFragment extends Fragment {
         dialog.show();
         Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (db != null) db.close();
     }
 }
