@@ -86,6 +86,7 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
         val token = MySharedPreference.getInstance(context).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(context as Activity, true)
+            return
         }
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getUserDetails("Bearer $token", number, userId)) {
