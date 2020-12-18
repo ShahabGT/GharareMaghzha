@@ -54,6 +54,7 @@ class BuyHistoryFragment : Fragment(R.layout.fragment_buy_history) {
         val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(requireActivity(), true)
+            return
         }
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getBuyHistory("Bearer $token", number)) {

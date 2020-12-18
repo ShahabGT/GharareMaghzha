@@ -53,6 +53,7 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
         val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(requireActivity(), true)
+            return
         }
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getInvites("Bearer $token", number)) {
