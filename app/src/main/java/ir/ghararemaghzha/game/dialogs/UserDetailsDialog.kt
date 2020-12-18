@@ -29,7 +29,6 @@ import kotlinx.coroutines.withContext
 
 class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dialog(ctx) {
 
-
     private lateinit var name: MaterialTextView
     private lateinit var code: MaterialTextView
     private lateinit var rank: MaterialTextView

@@ -15,12 +15,9 @@ import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
 import kotlinx.coroutines.*
 
-
 class RulesDialog(context: Activity) : Dialog(context) {
 
-    private val ctx = context
     private lateinit var text :MaterialTextView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +31,11 @@ class RulesDialog(context: Activity) : Dialog(context) {
 
 
     private suspend fun getData() {
-        val number = MySharedPreference.Companion.getInstance(ctx).getNumber()
-        val token = MySharedPreference.Companion.getInstance(ctx).getAccessToken()
+        val number = MySharedPreference.getInstance(context).getNumber()
+        val token = MySharedPreference.getInstance(context).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(ctx, true)
+            Utils.logout(context as Activity, true)
+            return
         }
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).info("Bearer $token", number, "rules")) {
             is Resource.Success -> {
@@ -48,15 +46,11 @@ class RulesDialog(context: Activity) : Dialog(context) {
             is Resource.Failure -> {
                 withContext(Dispatchers.Main) {
                     dismiss()
-                    Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
-
+                    Toast.makeText(context, R.string.general_error, Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
-
-
-
 }
 
 

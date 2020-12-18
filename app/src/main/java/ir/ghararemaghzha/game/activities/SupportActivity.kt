@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.nio.charset.StandardCharsets
 
-
 class SupportActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
