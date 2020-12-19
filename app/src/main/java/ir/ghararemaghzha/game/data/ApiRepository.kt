@@ -146,6 +146,11 @@ class ApiRepository(
             number: String
     ) = safeApiCall { api.getPlans(Token, number) }
 
+    suspend fun getNitro(
+            Token: String,
+            number: String
+    ) = safeApiCall { api.getNitro(Token, number) }
+
 
     suspend fun getInvites(
             Token: String,

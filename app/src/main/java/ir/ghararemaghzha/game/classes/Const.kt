@@ -14,7 +14,7 @@ object Const {
     var START = 15000
 
     @JvmField
-    var SIZE = 3000
+    var SIZE = 1000
 
     @JvmField
     var FCM_TOPIC = "ghrarehmaghzha_users"

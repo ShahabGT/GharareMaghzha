@@ -25,6 +25,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.Const
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_END
@@ -79,7 +80,6 @@ class QuestionsActivity : AppCompatActivity() {
     private var foreground = false
     private var number:String=""
     private var token:String=""
-
     private val br: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Toast.makeText(this@QuestionsActivity, R.string.general_end, Toast.LENGTH_LONG).show()
@@ -182,8 +182,7 @@ class QuestionsActivity : AppCompatActivity() {
     private fun init() {
         getUserDetails()
         db = Realm.getDefaultInstance()
-        data = db.where(QuestionModel::class.java).equalTo("visible", true)
-                .and().equalTo("userAnswer", "-1").findAll()
+        data = db.where(QuestionModel::class.java).equalTo("userAnswer", "-1").findAll()
         music = findViewById(R.id.question_music)
         musicSetting = MySettingsPreference.getInstance(this).getMusic()
         music.setImageResource(if (musicSetting) R.drawable.vector_music_on else R.drawable.vector_music_off)
@@ -391,11 +390,16 @@ class QuestionsActivity : AppCompatActivity() {
     private fun setAnswer(userAnswer: String) {
         var b = "0"
         if (hasBooster) b = "1"
-        db.beginTransaction()
-        val result = db.where(QuestionModel::class.java).equalTo("questionId", model.questionId).findFirst()
-        result?.userAnswer = userAnswer
-        result?.userBooster = b
-        db.commitTransaction()
+        db.executeTransaction {
+            val result = it.where<QuestionModel>().equalTo("questionId", model.questionId).findFirst()
+            result?.userAnswer = userAnswer
+            result?.userBooster = b
+        }
+//        db.beginTransaction()
+//        val result = db.where<QuestionModel>().equalTo("questionId", model.questionId).findFirst()
+//        result?.userAnswer = userAnswer
+//        result?.userBooster = b
+//        db.commitTransaction()
     }
 
     private fun randomNumbers(): List<Int> {
@@ -465,10 +469,14 @@ class QuestionsActivity : AppCompatActivity() {
             is Resource.Success -> {
                 if (res.value.message == "success") {
                     withContext(Dispatchers.Main) {
-                        db.beginTransaction()
-                        val result = db.where(QuestionModel::class.java).equalTo("questionId", model.questionId).findFirst()
-                        result?.uploaded = true
-                        db.commitTransaction()
+                        db.executeTransaction {
+                            val result = it.where<QuestionModel>().equalTo("questionId", model.questionId).findFirst()
+                            result?.uploaded = true
+                        }
+//                        db.beginTransaction()
+//                        val result = db.where(QuestionModel::class.java).equalTo("questionId", model.questionId).findFirst()
+//                        result?.uploaded = true
+//                        db.commitTransaction()
                     }
 
                 }

@@ -34,11 +34,6 @@ class HighscoreAdapter(private val context: FragmentActivity,
             h.name.text = userName
             if (scoreCount == "-1") h.score.text = "0" else h.score.text = scoreCount
             h.rank.text = (position + 1).toString()
-            if (position < 5) {
-                h.rank.background = ContextCompat.getDrawable(context, R.drawable.oval)
-            } else {
-                h.rank.background = null
-            }
             h.itemView.setBackgroundColor(context.resources.getColor(R.color.white))
             Glide.with(context)
                     .load(context.getString(R.string.avatar_url, userAvatar))

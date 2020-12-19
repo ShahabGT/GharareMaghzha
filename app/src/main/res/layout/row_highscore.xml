@@ -10,7 +10,6 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/oval"
         android:fontFamily="@font/vazir"
         android:gravity="center"
         android:maxLines="1"

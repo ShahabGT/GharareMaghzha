@@ -25,8 +25,8 @@
     <string name="general_name">نام و نام خانوادگی</string>
     <string name="general_code">کد تایید</string>
     <string name="general_exit">برای خروج کلید بازگشت رو دوباره بفشارید</string>
-    <string name="general_noquestions">سوالات امروز شما تمام شده است!</string>
-    <string name="general_noquestions_at_all">میزان سوالات شما به اتمام رسیده! در صورت نیاز سوال جدید بخرید</string>
+    <string name="general_noquestions">سوالات شما تمام شده است!</string>
+    <string name="general_noquestions_at_all">میزان سوالات شما به اتمام رسیده!</string>
     <string name="amount_model">%s تومان</string>
     <string name="discount_model">%s %</string>
 
@@ -75,8 +75,8 @@
     <string name="profile_stat_subtitle">مشاهده آمار و اطلاعات</string>
     <string name="profile_scorehelper_title">امتیاز ها</string>
     <string name="profile_scorehelper_subtitle">مشاهده نحوه امتیاز گیری</string>
-    <string name="profile_buy_title">خرید سوال</string>
-    <string name="profile_buy_subtitle">خرید بسته سوالات</string>
+    <string name="profile_buy_title">خرید نیترو</string>
+    <string name="profile_buy_subtitle">خرید نیترو</string>
     <string name="profile_code">کد کاربری: %s</string>
     <string name="profile_time">%s روز</string>
     <string name="profile_time_lastday">روز آخر</string>
@@ -98,7 +98,7 @@
     <string name="start_highscore_title">کاربران برتر</string>
     <string name="start_highscore_subtitle">مشاهده لیست کاربران برتر</string>
     <string name="start_info">شما دارای %s سوال بدون پاسخ هستید!</string>
-    <string name="start_info_passed">زمان مسابقه به پایان رسیده است!</string>
+    <string name="start_info_passed">زمان مسابقه به پایان رسیده!</string>
     <string name="start_info_notstarted">مسابقه شروع نشده!</string>
 
     <string name="camera_permission_title">استفاده از دوربین</string>
@@ -160,7 +160,7 @@
 
     <string name="chat_text">متن مورد نظر</string>
 
-    <string name="buy_title">خرید سوال</string>
+    <string name="buy_title">خرید نیترو</string>
     <string name="buy_des">با خرید هریک از پکیج های زیر تعداد سوالات خریداری شده به حساب کاربری شما اضافه می شود</string>
     <string name="buy_one_count">500 \n سوال</string>
     <string name="buy_two_count">1000 \n سوال</string>
@@ -169,11 +169,18 @@
     <string name="buy_five_count">2500 \n سوال</string>
     <string name="buy_price">%s تومان</string>
     <string name="buy_plan_title">پکیج %s تایی سوال</string>
-    <string name="buy_booster_title">افزایش %s برابری امتیاز سوال ها برای 300 سوال</string>
+    <string name="buy_booster_title">افزایش %s برابری امتیاز سوال ها برای 200 سوال</string>
     <string name="buy_booster_title_invalid">تعداد استفاده شما به پایان رسیده</string>
     <string name="buy_booster_title_inuse">پکیج نیترو امتیاز برای شما فعال می باشد</string>
 
     <string name="buy_buy">خرید</string>
+
+    <string name="nitro_title">افزایش %s برابری امتیاز سوال ها \n برای 200 سوال</string>
+    <string name="nitro_price">قیمت: %s تومان</string>
+    <string name="nitro_price2">نیترو فعال می باشد</string>
+    <string name="nitro_price3">حداکثر نیترو استفاده شده!</string>
+    <string name="nitro_price4">زمان مسابقه به پایان رسیده!</string>
+    <string name="nitro_progress_title">تعداد نیترو های خریداری شده</string>
 
     <string name="buy_dialog_text">مبلغ قابل پرداخت:</string>
     <string name="buy_dialog_discount_text">مبلغ قابل پرداخت با %d درصد تخفیف:</string>
@@ -249,13 +256,13 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
 
     <string name="score_helper_title">نیترو امتیاز</string>
     <string name="score1_title">پاسخ به سوالات</string>
-    <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا 500 سوال به صورت رایگان برای شما فعال می باشد.</string>
+    <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا تمامی سوالات به صورت رایگان برای شما فعال می باشد.</string>
     <string name="score1_button">ورود به صفحه سوالات</string>
     <string name="score2_title">معرفی به دوستان</string>
     <string name="score2_subtitle">با معرفی دوستان خود به قرار مغزها و در صورت ثبت کد کاربری شما به عنوان معرف خودشان امتیاز شما 2000 امتیاز افزایش می یابد. حداکثر 20 نفر میتوانند شما را به عنوان معرف خود انتخاب کنند.</string>
     <string name="score2_button">ورود به صفحه معرفی به دوستان</string>
     <string name="score3_title">پکیج نیترو امتیاز</string>
-    <string name="score3_subtitle">با خریداری پکیج نیترو امتیاز، مقدار امتیاز هر سوال به تعداد 300 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 5 بار این پکیج قابل خریداری می باشد.</string>
+    <string name="score3_subtitle">با خریداری پکیج نیترو امتیاز، مقدار امتیاز هر سوال به تعداد 200 سوال به میزان قابل توجه ای افزایش پیدا می کند. در طول هر دوره فقط 5 بار این پکیج قابل خریداری می باشد.</string>
     <string name="score3_button">ورود به صفحه خرید</string>
 
 
@@ -264,9 +271,9 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="tap_target_highscore_title">کاربران</string>
     <string name="tap_target_highscore_des">در این صفحه کاربران با بالاترین امتیاز را مشاهده می کنید</string>
     <string name="tap_target_start_title">شروع مسابقه</string>
-    <string name="tap_target_start_des">در این صفحه می توانید بازی رو شروع کنید و امتیاز خود را افزایش دهید. در ابتدا 500 سوال به صورت رایگان در اختیار شما قرار گرفته است</string>
-    <string name="tap_target_buy_title">خرید</string>
-    <string name="tap_target_buy_des">در این صفحه می توانید تعداد سوالات خود را افزایش دهید. حداکثر تعداد سوال در هر دوره 3000 سوال می باشد. همچنین می توانید پکیج نیترو امتیاز را خریداری نمایید</string>
+    <string name="tap_target_start_des">در این صفحه می توانید بازی رو شروع کنید و امتیاز خود را افزایش دهید.</string>
+    <string name="tap_target_buy_title">خرید نیترو</string>
+    <string name="tap_target_buy_des">در این صفحه می توانید پکیج نیترو خریداری کنید. نیترو امتیاز هر سوال به طرز چشمگیری افزایش می دهد.</string>
     <string name="tap_target_message_title">پیام ها</string>
     <string name="tap_target_message_des">در این صفحه می توانید پیام های مدیریت را مشاهده کنید</string>
     <string name="tap_target_menu_title">منو</string>
@@ -302,6 +309,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="info_btn">بستن</string>
 
     <string name="questions_notification_title">سوالات شما تمام شد!</string>
-    <string name="questions_notification_body">سوالات امروز شما تمام شد، برای جواب دادن به سوالات بیشتر تا فردا صبر کنید</string>
+    <string name="questions_notification_body">سوالات این دوره شما تمام شد! برای کسب امتیاز بیشتر دوستان خودتون رو به بازی معرفی کنید و امتیاز بگیرید!</string>
+
 
 </resources>

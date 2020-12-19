@@ -46,10 +46,10 @@ class MySharedPreference private constructor(ctx: Context) {
 
     fun counterIncrease() {
         var counter = sp.getInt("counter", 0)
-        if (counter < 299) {
+        if (counter < 199) {
             counter++
             sp.edit(commit = true) {putInt("counter", counter) }
-            Utils.updateScoreBooster(context, 300 - counter)
+            Utils.updateScoreBooster(context, 200 - counter)
         } else clearCounter(true)
     }
 
@@ -105,14 +105,8 @@ class MySharedPreference private constructor(ctx: Context) {
     fun setScore(score: String) = sp.edit { putString("score", score) }
     fun getScore() = sp.getString("score", "0") ?: "0"
 
-    fun setPlan(plan: Int) = sp.edit { putInt("plan", plan) }
-    fun getPlan() = sp.getInt("plan", 0)
-
     fun setDaysPassed(daysPassed: Int) = sp.edit { putInt("daysPassed", daysPassed) }
     fun getDaysPassed() = sp.getInt("daysPassed", -1)
-
-    fun setLastUpdate(lastUpdate: Int) = sp.edit { putInt("lastUpdate", lastUpdate) }
-    fun getLastUpdate() = sp.getInt("lastUpdate", -1)
 
     fun setLastUpdateChat(lastUpdate: String) = sp.edit { putString("lastUpdateChat", lastUpdate) }
     fun getLastUpdateChat() = sp.getString("lastUpdateChat", "0") ?: "0"

@@ -96,7 +96,7 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                         code.text = context.getString(R.string.details_code, res.value.userData.userCode)
                         rank.text = res.value.userData.userRank
                         score.text = res.value.userData.scoreCount
-                        if (res.value.booster.toInt() < 1500) answers.text = context.getString(R.string.details_nitro2, res.value.booster) else answers.text = context.getString(R.string.details_nitro2, "1500")
+                        if (res.value.booster.toInt() < 1000) answers.text = context.getString(R.string.details_nitro2, res.value.booster) else answers.text = context.getString(R.string.details_nitro2, "1000")
 
                         Glide.with(context)
                                 .load(context.getString(R.string.avatar_url, res.value.userData.userAvatar))
@@ -104,26 +104,30 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                                 .placeholder(R.drawable.placeholder)
                                 .into(avatar)
 
-                        val totalQuestions: Int = res.value.plan.toInt() * 500 + 500
+                        val totalQuestions = 1000
                         val answeredQuestions: Int = res.value.correct + res.value.incorrect
-                        val nitroUsed: Int = res.value.booster.toInt()
 
-                        if (answeredQuestions <= 3000) {
+                        val nitroUsed = if(res.value.booster.toInt()>1000)
+                            1000
+                        else
+                            res.value.booster.toInt()
+
+                        if (answeredQuestions <= 1000) {
                             questions.text = context.getString(R.string.details_questions, answeredQuestions, totalQuestions)
                         } else {
-                            questions.text = context.getString(R.string.details_questions, 3000, totalQuestions)
+                            questions.text = context.getString(R.string.details_questions, 1000, totalQuestions)
                         }
 
                         val qPercent: Int
                         val nPercent: Int
                         when {
-                            answeredQuestions in 1..3000 -> {
+                            answeredQuestions in 1..1000 -> {
                                 qPercent = answeredQuestions * 100 / totalQuestions
-                                nPercent = nitroUsed * 100 / 1500
+                                nPercent = nitroUsed * 100 / 1000
                             }
-                            answeredQuestions > 3000 -> {
-                                qPercent = answeredQuestions * 100 / totalQuestions
-                                nPercent = nitroUsed * 100 / 1500
+                            answeredQuestions > 1000 -> {
+                                qPercent = 100
+                                nPercent = nitroUsed * 100 / 1000
                             }
                             else -> {
                                 qPercent = 0

@@ -17,6 +17,7 @@ import androidx.emoji.widget.EmojiEditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
+import io.realm.kotlin.where
 import io.realm.Sort
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ChatAdapter
@@ -42,8 +43,8 @@ class SupportActivity : AppCompatActivity() {
     private lateinit var send: ImageView
     private lateinit var db: Realm
     private var isLoading = false
-    private var number:String=""
-    private var token:String=""
+    private var number: String = ""
+    private var token: String = ""
 
     private val br = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -68,7 +69,8 @@ class SupportActivity : AppCompatActivity() {
         setContentView(R.layout.activity_support)
         init()
     }
-    private fun getUserDetails(){
+
+    private fun getUserDetails() {
         number = MySharedPreference.getInstance(this).getNumber()
         token = MySharedPreference.getInstance(this).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
@@ -78,7 +80,7 @@ class SupportActivity : AppCompatActivity() {
 
     private fun init() {
         getUserDetails()
-        MySharedPreference.getInstance(this).setUnreadChats( 0)
+        MySharedPreference.getInstance(this).setUnreadChats(0)
         db = Realm.getDefaultInstance()
         val intent = Intent()
         intent.action = GHARAREHMAGHZHA_BROADCAST
@@ -101,22 +103,16 @@ class SupportActivity : AppCompatActivity() {
             if (bottom < oldBottom) {
                 recyclerView.post {
                     recyclerView.scrollToPosition(0)
-
                 }
             }
-
         }
-
         CoroutineScope(Dispatchers.IO).launch {
             if (!isLoading)
                 getChatData()
         }
-
         send = findViewById(R.id.chat_send)
         message = findViewById(R.id.chat_text)
-
         onClicks()
-
     }
 
     override fun onResume() {
@@ -158,35 +154,39 @@ class SupportActivity : AppCompatActivity() {
     private suspend fun sendMessage(message: String, key: Int) {
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).sendMessage("Bearer $token", number, message)) {
             is Resource.Success -> {
-                val myDb = Realm.getDefaultInstance()
+                withContext(Dispatchers.Main) {
 
-                if (res.value.result == "success") {
-                    myDb.beginTransaction()
-                    val models = myDb.where(MessageModel::class.java).equalTo("messageId", key).findAll()
-                    models.first()?.stat = 1
-                    myDb.commitTransaction()
-                } else {
-                    myDb.beginTransaction()
-                    val models = myDb.where(MessageModel::class.java).equalTo("messageId", key).findAll()
-                    models.first()?.stat = -1
-                    myDb.commitTransaction()
+                    if (res.value.result == "success") {
+                        db.executeTransaction {
+                            val models = it.where<MessageModel>().equalTo("messageId", key).findFirst()
+                            models?.stat = 1
+                        }
+                    } else {
+                        db.executeTransaction {
+                            val models = it.where<MessageModel>().equalTo("messageId", key).findFirst()
+                            models?.stat = -1
+                        }
+                    }
                 }
             }
             is Resource.Failure -> {
-                val myDb = Realm.getDefaultInstance()
                 if (res.isNetworkError) {
-                    myDb.beginTransaction()
-                    val models = myDb.where(MessageModel::class.java).equalTo("messageId", key).findAll()
-                    models.first()?.stat = -1
-                    myDb.commitTransaction()
+                    withContext(Dispatchers.Main) {
+                        db.executeTransaction {
+                            val models = it.where<MessageModel>().equalTo("messageId", key).findFirst()
+                            models?.stat = -1
+                        }
+                    }
                 } else {
-                    when (res.errorCode) {
-                        401 -> logout(this, true)
-                        else -> {
-                            myDb.beginTransaction()
-                            val models = myDb.where(MessageModel::class.java).equalTo("messageId", key).findAll()
-                            models.first()?.stat = -1
-                            myDb.commitTransaction()
+                    withContext(Dispatchers.Main) {
+                        when (res.errorCode) {
+                            401 -> logout(this@SupportActivity, true)
+                            else -> {
+                                db.executeTransaction {
+                                    val models = it.where<MessageModel>().equalTo("messageId", key).findFirst()
+                                    models?.stat = -1
+                                }
+                            }
                         }
                     }
                 }
@@ -204,29 +204,27 @@ class SupportActivity : AppCompatActivity() {
             is Resource.Success -> {
 
                 if (res.value.message == "ok") {
-                    MySharedPreference.getInstance(this).setLastUpdateChat(nowDate)
-                    val myDb = Realm.getDefaultInstance()
-                    val data:MutableCollection<MessageModel> = mutableListOf()
-                    res.value.data.forEach {
-                        it.stat = 1
-                        it.read = 1
-                        it.title="new"
-                        it.messageId = getNextKey(myDb)
-                        data.add(it)
-                    }
-                    myDb.executeTransaction { it.insert(data) }
-
                     withContext(Dispatchers.Main) {
+                        MySharedPreference.getInstance(this@SupportActivity).setLastUpdateChat(nowDate)
+                        val data: MutableCollection<MessageModel> = mutableListOf()
+                        res.value.data.forEach {
+                            it.stat = 1
+                            it.read = 1
+                            it.title = "new"
+                            it.messageId = getNextKey(db)
+                            data.add(it)
+                        }
+                        db.executeTransaction { it.insert(data) }
                         recyclerView.scrollToPosition(0)
-
                     }
                 }
                 isLoading = false
-
             }
             is Resource.Failure -> {
-                isLoading = false
-                if (!res.isNetworkError && res.errorCode == 401) logout(this, true)
+                withContext(Dispatchers.Main) {
+                    isLoading = false
+                    if (!res.isNetworkError && res.errorCode == 401) logout(this@SupportActivity, true)
+                }
             }
         }
     }
@@ -234,6 +232,5 @@ class SupportActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         unregisterReceiver(br)
-
     }
 }

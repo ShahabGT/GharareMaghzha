@@ -10,6 +10,7 @@
     <SwitchPreferenceCompat
         android:summary="@string/settings_auto_next_summery"
         app:allowDividerBelow="true"
+        app:isPreferenceVisible="false"
         app:icon="@drawable/ic_settings_next"
         app:key="next"
         app:title="@string/settings_auto_next" />

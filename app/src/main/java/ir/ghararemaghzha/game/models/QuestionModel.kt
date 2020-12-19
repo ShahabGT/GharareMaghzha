@@ -17,9 +17,6 @@ open class QuestionModel(
         @SerializedName("question_points") var questionPoints: String="",
         @SerializedName("user_answer") var userAnswer: String="",
         @SerializedName("user_answer_booster") var userBooster: String="",
-
-        var visible: Boolean=false,
         var uploaded: Boolean=false,
-        var bought: Boolean=false
 
 ) : RealmObject()

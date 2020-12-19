@@ -173,6 +173,12 @@ interface NetworkApi {
             @Field("number") number: String
     ): PlanResponse
 
+    @FormUrlEncoded
+    @POST("nitro")
+    suspend fun getNitro(
+            @Header("Authorization") Token: String,
+            @Field("number") number: String
+    ): NitroResponse
 
     @FormUrlEncoded
     @POST("invites")

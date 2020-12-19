@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/menu_buy"
-        android:name="ir.ghararemaghzha.game.fragments.BuyFragment"
+        android:name="ir.ghararemaghzha.game.fragments.NitroFragment"
         android:label="BuyFragment"
         tools:layout="@layout/fragment_buy" />
     <fragment

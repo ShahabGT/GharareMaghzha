@@ -185,7 +185,6 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 MySharedPreference.getInstance(ctx).setAccessToken(accessToken)
                 MySharedPreference.getInstance(ctx).setUserCode(userCode)
                 MySharedPreference.getInstance(ctx).setScore(score)
-                MySharedPreference.getInstance(ctx).setPlan(plan)
 
                 MySharedPreference.getInstance(ctx).setUserSex(res.value.userSex ?: "")
                 MySharedPreference.getInstance(ctx).setUserBirthday(res.value.userBday ?: "")
@@ -233,15 +232,11 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     dialog.dismiss()
                     if (res.value.message != "empty") {
                         val data: MutableCollection<QuestionModel> = mutableListOf()
-                        val plan = MySharedPreference.getInstance(ctx).getPlan()
-                        val size = (plan*500)+500
-                        for ((index, model) in res.value.data.withIndex()) {
+                        for ( model in res.value.data) {
                             model.uploaded = model.userAnswer != "-1"
-                            model.visible = false
-                            model.bought = index < size
                             data.add(model)
                         }
-                        db.executeTransaction { it.insert(data) }
+                        db.executeTransaction { it.insertOrUpdate(data) }
 
                         MySharedPreference.getInstance(ctx).setUserId(userId)
                         Toast.makeText(ctx, ctx.getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()

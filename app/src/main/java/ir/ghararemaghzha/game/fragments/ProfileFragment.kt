@@ -104,19 +104,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         } else {
             val model = ProfileModel(R.drawable.profile_time, requireContext().getString(R.string.profile_time_card), "")
             when {
-                passed == 9 -> model.subtitle = requireContext().getString(R.string.profile_time_lastday)
+                passed == 6 -> model.subtitle = requireContext().getString(R.string.profile_time_lastday)
 
-                passed >= 10 -> model.subtitle = requireContext().getString(R.string.profile_time_end)
+                passed >= 7 -> model.subtitle = requireContext().getString(R.string.profile_time_end)
 
-                else -> model.subtitle = requireContext().getString(R.string.profile_time, (10 - passed).toString())
+                else -> model.subtitle = requireContext().getString(R.string.profile_time, (7 - passed).toString())
             }
 
             data.add(model)
         }
         data.add(ProfileModel(R.drawable.profile_total, "سوالات این دوره", db.where(QuestionModel::class.java).findAll().size.toString()))
         data.add(ProfileModel(R.drawable.profile_remain, "سوالات من", db.where(QuestionModel::class.java)
-                .equalTo("bought", true)
-                .and().equalTo("userAnswer", "-1").findAll().size.toString()))
+                .equalTo("userAnswer", "-1").findAll().size.toString()))
         initViewPager(data)
     }
 

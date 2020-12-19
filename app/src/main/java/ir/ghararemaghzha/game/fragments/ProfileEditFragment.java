@@ -50,7 +50,10 @@ public class ProfileEditFragment extends Fragment {
     private Context context;
     private FragmentActivity activity;
     private ImageView avatar;
-    private TextInputEditText name, number, email, bday, invite;
+    private TextInputEditText name;
+    private TextInputEditText email;
+    private TextInputEditText bday;
+    private TextInputEditText invite;
     private TextInputLayout inviteLayout;
     private View bdayView;
     private MaterialTextView avatarChange, avatarRemove;
@@ -97,7 +100,7 @@ public class ProfileEditFragment extends Fragment {
         name = v.findViewById(R.id.profile_name);
         invite = v.findViewById(R.id.profile_invite);
         inviteLayout = v.findViewById(R.id.profile_invite_layout);
-        number = v.findViewById(R.id.profile_number);
+        TextInputEditText number = v.findViewById(R.id.profile_number);
         email = v.findViewById(R.id.profile_email);
         bday = v.findViewById(R.id.profile_bday);
         bdayView = v.findViewById(R.id.profile_bday_view);
@@ -165,7 +168,7 @@ public class ProfileEditFragment extends Fragment {
         avatarRemove.setOnClickListener(v -> {
             if (Utils.checkInternet(activity)) {
                 String avatarName = MySharedPreference.Companion.getInstance(context).getUserAvatar();
-                if (avatarName != null && !avatarName.isEmpty())
+                if (!avatarName.isEmpty())
                     removeAvatar(avatarName);
 
             } else
@@ -199,10 +202,6 @@ public class ProfileEditFragment extends Fragment {
                 Toast.makeText(context, getString(R.string.general_name_form_error), Toast.LENGTH_SHORT).show();
             else if (!e.isEmpty() && !Utils.isEmailValid(e))
                 Toast.makeText(context, getString(R.string.general_email_form_error), Toast.LENGTH_SHORT).show();
-//            else if (b.isEmpty())
-//                Toast.makeText(context, getString(R.string.general_bday_form_error), Toast.LENGTH_SHORT).show();
-//            else if (s.isEmpty())
-//                Toast.makeText(context, getString(R.string.general_sex_form_error), Toast.LENGTH_SHORT).show();
             else if (Utils.checkInternet(activity))
                 updateProfile(n, e, b, s, i);
             else

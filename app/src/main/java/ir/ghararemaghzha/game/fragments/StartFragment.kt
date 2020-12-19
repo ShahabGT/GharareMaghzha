@@ -67,9 +67,8 @@ class StartFragment : Fragment(R.layout.fragment_start) {
     private fun updateInfo() {
         val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
         when {
-            passed in 0..9 -> info.text = requireContext().getString(R.string.start_info, db.where(QuestionModel::class.java)
-                    .equalTo("visible", true)
-                    .and().equalTo("userAnswer", "-1")
+            passed in 0..6 -> info.text = requireContext().getString(R.string.start_info, db.where(QuestionModel::class.java)
+                    .equalTo("userAnswer", "-1")
                     .findAll().size.toString())
             passed < 0 -> info.setText(R.string.start_info_notstarted)
             else -> {
@@ -103,17 +102,13 @@ class StartFragment : Fragment(R.layout.fragment_start) {
         highscore.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_highscore) }
         start.setOnClickListener {
             val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
-            val remaining = db.where(QuestionModel::class.java).equalTo("userAnswer", "-1").and().equalTo("visible", false).findAll().size
-            val size = db.where(QuestionModel::class.java).equalTo("visible", true).findAll().size
-
+            val remaining = db.where(QuestionModel::class.java).equalTo("userAnswer", "-1").findAll().size
             when {
-                size > 0 -> startActivity(Intent(activity, QuestionsActivity::class.java))
-                remaining == 0 -> Toast.makeText(context, requireContext().getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show()
                 passed < 0 -> Toast.makeText(context, requireContext().getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show()
-                passed > 9 -> Toast.makeText(context, requireContext().getString(R.string.start_info_passed), Toast.LENGTH_LONG).show()
-                else -> Toast.makeText(context, requireContext().getString(R.string.general_noquestions), Toast.LENGTH_SHORT).show()
+                passed > 6 -> Toast.makeText(context, requireContext().getString(R.string.start_info_passed), Toast.LENGTH_LONG).show()
+                remaining == 0 -> Toast.makeText(context, requireContext().getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show()
+                remaining > 0 -> startActivity(Intent(activity, QuestionsActivity::class.java))
             }
-
         }
     }
 
@@ -128,7 +123,6 @@ class StartFragment : Fragment(R.layout.fragment_start) {
                     withContext(Dispatchers.Main) {
                         ultraViewPager.visibility = View.GONE
                     }
-
             }
             is Resource.Failure -> {
                 withContext(Dispatchers.Main) {
