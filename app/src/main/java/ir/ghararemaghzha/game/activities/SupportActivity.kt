@@ -207,14 +207,14 @@ class SupportActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         MySharedPreference.getInstance(this@SupportActivity).setLastUpdateChat(nowDate)
                         val data: MutableCollection<MessageModel> = mutableListOf()
-                        res.value.data.forEach {
-                            it.stat = 1
-                            it.read = 1
-                            it.title = "new"
-                            it.messageId = getNextKey(db)
-                            data.add(it)
+                        for(model in res.value.data){
+                            model.stat = 1
+                            model.read = 1
+                            model.title = "new"
+                            model.messageId = getNextKey(db)
+                            data.add(model)
                         }
-                        db.executeTransaction { it.insert(data) }
+                        db.executeTransaction { it.insertOrUpdate(data) }
                         recyclerView.scrollToPosition(0)
                     }
                 }

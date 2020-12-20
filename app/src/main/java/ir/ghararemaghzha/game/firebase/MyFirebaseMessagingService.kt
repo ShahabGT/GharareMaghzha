@@ -32,7 +32,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         intent.action = GHARAREHMAGHZHA_BROADCAST
         intent.putExtra(GHARAREHMAGHZHA_BROADCAST_SUPPORT_EXTRA, "new")
 
-        if (!title.isEmpty() && !notificationBody.isNotEmpty()) {
+        if (title.isNotEmpty() && notificationBody.isNotEmpty()) {
 
             if (title == "ended" && data["body"] == "ended") {
                 val i = Intent()

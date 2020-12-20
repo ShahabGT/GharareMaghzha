@@ -40,8 +40,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class VerifyFragment : Fragment(R.layout.fragment_verify) {
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
-
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var ctx: Context
     private lateinit var act: FragmentActivity
     private lateinit var resend: MaterialTextView
@@ -59,7 +58,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
 
     private val rec = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val c = intent!!.extras?.getString("code")
+            val c = intent?.extras?.getString("code")
             if (c?.length == 6)
                 code.setText(c)
         }
@@ -178,7 +177,6 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 accessToken = res.value.token
                 val userCode = res.value.userCode
                 val score = res.value.userScore
-                val plan = res.value.userPlan.toInt()
 
                 MySharedPreference.getInstance(ctx).setNumber(number)
                 MySharedPreference.getInstance(ctx).setUsername(userName)
@@ -273,6 +271,6 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, userId)
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, userName)
-        mFirebaseAnalytics?.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
     }
 }
