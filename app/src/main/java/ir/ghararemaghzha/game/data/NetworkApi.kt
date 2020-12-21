@@ -78,9 +78,7 @@ interface NetworkApi {
     @POST("questions")
     suspend fun getQuestions(
             @Header("Authorization") Token: String,
-            @Field("number") number: String,
-            @Field("start") start: Int,
-            @Field("size") size: Int
+            @Field("number") number: String
     ): QuestionResponse
 
     @FormUrlEncoded

@@ -85,7 +85,7 @@ class SupportActivity : AppCompatActivity() {
         val intent = Intent()
         intent.action = GHARAREHMAGHZHA_BROADCAST
         db.executeTransaction {
-            val results = it.where(MessageModel::class.java).notEqualTo("sender", "admin").equalTo("read", "0".toInt()).findAll()
+            val results = it.where<MessageModel>().notEqualTo("sender", "admin").equalTo("read", "0".toInt()).findAll()
             results.setInt("read", 1)
             sendBroadcast(intent)
         }
@@ -97,7 +97,7 @@ class SupportActivity : AppCompatActivity() {
         layoutManager.reverseLayout = true
         recyclerView.layoutManager = layoutManager
 
-        adapter = ChatAdapter(this, db.where(MessageModel::class.java).notEqualTo("sender", "admin").sort("date", Sort.DESCENDING).findAll(), true)
+        adapter = ChatAdapter(this, db.where<MessageModel>().notEqualTo("sender", "admin").sort("date", Sort.DESCENDING).findAll(), true)
         recyclerView.adapter = adapter
         recyclerView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {

@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
@@ -23,8 +23,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import io.realm.Realm
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.Const.FCM_TOPIC
-import ir.ghararemaghzha.game.classes.Const.SIZE
-import ir.ghararemaghzha.game.classes.Const.START
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.classes.Utils.convertToTimeFormat
@@ -59,8 +57,19 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     private val rec = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val c = intent?.extras?.getString("code")
-            if (c?.length == 6)
+            if (c?.length == 6) {
                 code.setText(c)
+                if (Utils.checkInternet(ctx)) {
+                    verify.isEnabled = false
+                    verify.text = "..."
+                    Utils.hideKeyboard(act)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        doVerify(c)
+                    }
+                } else
+                    Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+
+            }
         }
     }
 
@@ -91,18 +100,12 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
         initTimer()
         onClicks()
 
-        code.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.length == 6) Utils.hideKeyboard(act)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s?.length == 6) Utils.hideKeyboard(act)
-            }
-        })
+        code.doAfterTextChanged {
+            if (it?.length == 6) Utils.hideKeyboard(act)
+        }
+        code.doOnTextChanged { s, _, _, _ ->
+            if (s?.length == 6) Utils.hideKeyboard(act)
+        }
     }
 
     private fun onClicks() {
@@ -176,7 +179,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 userName = res.value.userName
                 accessToken = res.value.token
                 val userCode = res.value.userCode
-                val score = res.value.userScore
+                val score = res.value.userScore.toInt()
 
                 MySharedPreference.getInstance(ctx).setNumber(number)
                 MySharedPreference.getInstance(ctx).setUsername(userName)
@@ -220,7 +223,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     }
 
     private suspend fun getQuestions() {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number, START, SIZE)) {
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getQuestions("Bearer $accessToken", number)) {
 
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {

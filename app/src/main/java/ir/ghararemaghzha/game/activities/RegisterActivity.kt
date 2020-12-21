@@ -13,7 +13,6 @@ import com.google.android.gms.common.api.Status
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.Utils
 
-
 class RegisterActivity : AppCompatActivity() {
     private val smsConsentRequest = 325
 
@@ -33,12 +32,10 @@ class RegisterActivity : AppCompatActivity() {
         registerReceiver(smsVerificationReceiver, intentFilter)
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(smsVerificationReceiver)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -59,21 +56,15 @@ class RegisterActivity : AppCompatActivity() {
 
     private val smsVerificationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (SmsRetriever.SMS_RETRIEVED_ACTION == intent!!.action) {
+            if (SmsRetriever.SMS_RETRIEVED_ACTION == intent?.action) {
                 val extras = intent.extras
                 val smsRetrieverStatus = extras?.get(SmsRetriever.EXTRA_STATUS) as Status
 
                 if (smsRetrieverStatus.statusCode == CommonStatusCodes.SUCCESS) {
                     val consentIntent = extras.getParcelable<Intent>(SmsRetriever.EXTRA_CONSENT_INTENT)
-                    try {
-                        startActivityForResult(consentIntent, smsConsentRequest)
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                    }
+                    startActivityForResult(consentIntent, smsConsentRequest)
                 }
             }
         }
     }
-
-
 }

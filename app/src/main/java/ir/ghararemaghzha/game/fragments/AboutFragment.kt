@@ -41,9 +41,8 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
         init(view)
     }
 
-
     private fun init(v: View) {
-        (act.findViewById<View>(R.id.toolbar_title) as MaterialTextView).setText(R.string.about_title)
+        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.about_title)
         text = v.findViewById(R.id.about_text)
         val tradeMark: MaterialTextView = v.findViewById(R.id.about_trademark1)
         val tradeMark2: MaterialTextView = v.findViewById(R.id.about_trademark2)
@@ -107,8 +106,8 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
     }
 
     private suspend fun getData() {
-        val number = MySharedPreference.Companion.getInstance(ctx).getNumber()
-        val token = MySharedPreference.Companion.getInstance(ctx).getAccessToken()
+        val number = MySharedPreference.getInstance(ctx).getNumber()
+        val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(act, true)
         }
@@ -126,15 +125,15 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
         }
     }
     private fun onClicks(v: View) {
-        (v.findViewById(R.id.about_email) as ImageView).setOnClickListener {
+        v.findViewById<ImageView>(R.id.about_email).setOnClickListener {
             val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                     "mailto", "support@ghararehmaghzha.ir", null))
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("ghararehmaghzha@radical-app.ir"))
             startActivity(Intent.createChooser(emailIntent, "ارسال ایمیل از طریق"))
         }
-        (v.findViewById(R.id.about_telegram) as ImageView).setOnClickListener { intentAction("https://t.me/ghararehmaghzha") }
-        (v.findViewById(R.id.about_instagram) as ImageView).setOnClickListener { intentAction("https://instagram.com/ghararehmaghzha") }
-        (v.findViewById(R.id.about_website) as ImageView).setOnClickListener { intentAction("https://ghararehmaghzha.ir") }
+        v.findViewById<ImageView>(R.id.about_telegram).setOnClickListener { intentAction("https://t.me/ghararehmaghzha") }
+        v.findViewById<ImageView>(R.id.about_instagram).setOnClickListener { intentAction("https://instagram.com/ghararehmaghzha") }
+        v.findViewById<ImageView>(R.id.about_website) .setOnClickListener { intentAction("https://ghararehmaghzha.ir") }
     }
 
     private fun intentAction(id: String) {

@@ -145,7 +145,7 @@
     <string name="highscore_third_title">نفر سوم</string>
     <string name="highscore_fourth_title">نفر چهارم</string>
     <string name="highscore_fifth_title">نفر پنجم</string>
-    <string name="highscore_score">%s امتیاز</string>
+    <string name="highscore_score">%d امتیاز</string>
     <string name="highscore_you">شما</string>
 
     <string name="message_incoming">پیام ها</string>

@@ -7,7 +7,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.text.*
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.Gravity
@@ -15,6 +17,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
@@ -57,9 +61,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         if (arguments != null)
             loginNumber = requireArguments().getString("number", "")
         init(view)
-
     }
-
 
     private fun init(v: View) {
         name = v.findViewById(R.id.reg_name)
@@ -68,7 +70,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         login = v.findViewById(R.id.reg_login)
         ruleText = v.findViewById(R.id.reg_rules_text)
         ruleCheck = v.findViewById(R.id.reg_rules_check)
-
 
         val tradeMarkText = ctx.getString(R.string.registerfragment_rules)
         val spannableString = SpannableString(tradeMarkText)
@@ -91,33 +92,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         ruleText.text = spannableString
         ruleText.movementMethod = LinkMovementMethod.getInstance()
 
-
-
-        if (loginNumber.isEmpty()) {
-            try {
-                requestHint()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        } else
+        if (loginNumber.isEmpty())
+            requestHint()
+        else
             number.setText(loginNumber)
 
-        number.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s!!.length == 11) Utils.hideKeyboard(act)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s!!.length == 11) Utils.hideKeyboard(act)
-            }
-        })
+        number.doOnTextChanged { s, _, _, _ -> if (s?.length == 11) Utils.hideKeyboard(act) }
+        number.doAfterTextChanged { if (it?.length == 11) Utils.hideKeyboard(act) }
 
         onClicks()
-
     }
 
     private fun onClicks() {
@@ -125,9 +108,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             val nu = number.text.toString()
             val na = name.text.toString()
 
-            if(!ruleCheck.isChecked) {
+            if (!ruleCheck.isChecked) {
                 Toast.makeText(ctx, R.string.registerfragment_rules_error, Toast.LENGTH_SHORT).show()
-            }else if (nu.length < 11 || !nu.startsWith("09")) {
+            } else if (nu.length < 11 || !nu.startsWith("09")) {
                 Toast.makeText(ctx, R.string.general_number_error, Toast.LENGTH_SHORT).show()
             } else if (na.length < 6) {
                 Toast.makeText(ctx, R.string.general_name_error, Toast.LENGTH_SHORT).show()
@@ -142,21 +125,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     }
                 } else
                     Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
-
-
             }
-
         }
-
-        login.setOnClickListener { view?.findNavController()!!.popBackStack() }
-
-
+        login.setOnClickListener { view?.findNavController()?.popBackStack() }
     }
 
     private fun showRulesDialog() {
         val dialog = RulesDialog(act)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         dialog.window?.setGravity(Gravity.CENTER)
         dialog.show()
         val window = dialog.window
@@ -177,18 +154,17 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         if (requestCode == resolveHint) {
             if (resultCode == RESULT_OK) {
                 val credential = data?.getParcelableExtra<Credential>(Credential.EXTRA_KEY)
-
-                var n = credential!!.id
-                if (n.startsWith("+98"))
-                    n = "0" + n.substring(3)
-                else if (n.startsWith("0098"))
-                    n = "0" + n.substring(4)
-                number.setText(n)
-
+                if (credential != null) {
+                    var n = credential.id
+                    if (n.startsWith("+98"))
+                        n = "0" + n.substring(3)
+                    else if (n.startsWith("0098"))
+                        n = "0" + n.substring(4)
+                    number.setText(n)
+                }
             }
         }
     }
-
 
     private suspend fun doRegister(name: String, number: String) {
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).registerUser(name, number)) {
@@ -197,8 +173,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     SmsRetriever.getClient(act).startSmsRetriever()
                     val b = Bundle()
                     b.putString("number", number)
-                    view?.findNavController()!!.navigate(R.id.action_registerFragment_to_verifyFragment, b)
-
+                    view?.findNavController()?.navigate(R.id.action_registerFragment_to_verifyFragment, b)
                 }
             }
             is Resource.Failure -> {
@@ -218,5 +193,4 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
     }
-
 }

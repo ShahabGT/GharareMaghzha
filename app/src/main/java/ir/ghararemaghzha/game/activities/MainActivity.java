@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -23,6 +24,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+
 import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -30,9 +32,11 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
@@ -56,8 +60,6 @@ import retrofit2.Response;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_MESSAGE;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
-import static ir.ghararemaghzha.game.classes.Const.SIZE;
-import static ir.ghararemaghzha.game.classes.Const.START;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.Companion.getInstance().getApi()
-                .getQuestions("Bearer " + token, number, START, SIZE)
+                .getQuestions("Bearer " + token, number)
                 .enqueue(new Callback<QuestionResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<QuestionResponse> call, @NonNull Response<QuestionResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             List<QuestionModel> data = new ArrayList<>();
-                            for(QuestionModel m :response.body().getData()){
+                            for (QuestionModel m : response.body().getData()) {
                                 m.setUploaded(!m.getUserAnswer().equals("-1"));
                                 data.add(m);
                             }
@@ -264,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void init() {
 
         bnv = findViewById(R.id.main_bnv);
@@ -283,10 +284,9 @@ public class MainActivity extends AppCompatActivity {
         newToolbar = findViewById(R.id.toolbar_new);
         avatar = findViewById(R.id.toolbar_avatar);
         onClicks();
-        uploadAnswers();
+
         navigationDrawer();
         registerReceiver(notificationBroadCast, new IntentFilter(GHARAREHMAGHZHA_BROADCAST));
-
 
     }
 
@@ -305,8 +305,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         getExtraIntent();
         if (db.isEmpty()) {
+
             MySharedPreference.Companion.getInstance(MainActivity.this).clearCounter(false);
-            MySharedPreference.Companion.getInstance(this).setScore("0");
+            MySharedPreference.Companion.getInstance(this).setScore(0);
+            MySharedPreference.Companion.getInstance(this).setBoosterValue(1f);
+
             getData();
         } else {
             updateMessages();
@@ -338,8 +341,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(notificationBroadCast);
         super.onDestroy();
+        unregisterReceiver(notificationBroadCast);
     }
 
     private void updateMessages() {
@@ -380,10 +383,18 @@ public class MainActivity extends AppCompatActivity {
                                     MySharedPreference.Companion.getInstance(MainActivity.this).setDaysPassed(Integer.parseInt(response.body().getPassed()));
                                 }
 
+                                int newSeason = Integer.parseInt(response.body().getSeason());
+                                int oldSeason = MySharedPreference.Companion.getInstance(MainActivity.this).getSeason();
+
+                                if (oldSeason == 0) {
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setSeason(newSeason);
+                                } else if (newSeason > oldSeason) {
+                                    resetForNewSeason(newSeason);
+                                    return;
+                                }
+
                                 int myVersion = Utils.getVersionCode(MainActivity.this);
                                 int newVersion = Integer.parseInt(response.body().getVersion());
-                                int newScore = Integer.parseInt(response.body().getScoreCount());
-                                int oldScore = Integer.parseInt(MySharedPreference.Companion.getInstance(MainActivity.this).getScore());
 
                                 if (newVersion > myVersion) {
                                     if (response.body().getVersionEssential().equals("1")) {
@@ -393,11 +404,14 @@ public class MainActivity extends AppCompatActivity {
                                         showNewVersionDialog("0");
                                 }
 
+                                int newScore = Integer.parseInt(response.body().getScoreCount());
+                                int oldScore = MySharedPreference.Companion.getInstance(MainActivity.this).getScore();
+
                                 if (newScore == -1) {
-                                    MySharedPreference.Companion.getInstance(MainActivity.this).setScore(String.valueOf(0));
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setScore(0);
                                     uploadScore(String.valueOf(0));
                                 } else if (newScore > oldScore)
-                                    MySharedPreference.Companion.getInstance(MainActivity.this).setScore(String.valueOf(newScore));
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setScore(newScore);
                                 else if (oldScore > newScore)
                                     uploadScore(String.valueOf(oldScore));
 
@@ -407,11 +421,13 @@ public class MainActivity extends AppCompatActivity {
                                 int serverBooster = Integer.parseInt(response.body().getUserBooster());
                                 int serverBoosterCount = Integer.parseInt(response.body().getScoreBoosterCount());
                                 if (serverBooster > 0 && serverBoosterCount > 0) {
-                                        MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
-                                        MySharedPreference.Companion.getInstance(MainActivity.this).setCounter(200 - serverBoosterCount);
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
+                                    MySharedPreference.Companion.getInstance(MainActivity.this).setCounter(200 - serverBoosterCount);
                                 } else {
                                     MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(1f);
                                 }
+
+                                uploadAnswers();
 
                             } else if (response.code() == 401) {
                                 Utils.logout(MainActivity.this, true);
@@ -426,6 +442,17 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void resetForNewSeason(int newSeason) {
+        MySharedPreference.Companion.getInstance(this).setScore(0);
+        MySharedPreference.Companion.getInstance(this).clearCounter(false);
+        MySharedPreference.Companion.getInstance(this).setBoosterValue(1f);
+        MySharedPreference.Companion.getInstance(this).setSeason(newSeason);
+        final RealmResults<QuestionModel> results = db.where(QuestionModel.class).findAll();
+        db.executeTransaction(realm -> results.deleteAllFromRealm());
+        getData();
+
     }
 
     private void uploadScore(String score) {
@@ -476,9 +503,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
                         if (response.isSuccessful() && response.body() != null && response.body().getResult().equals("success")) {
-                            db.executeTransaction(it->{
+                            db.executeTransaction(it -> {
                                 QuestionModel result = db.where(QuestionModel.class).equalTo("questionId", questionId).findFirst();
-                                result.setUploaded(true);
+                                if (result != null)
+                                    result.setUploaded(true);
                             });
                         } else if (response.code() == 401) {
                             Utils.logout(MainActivity.this, true);

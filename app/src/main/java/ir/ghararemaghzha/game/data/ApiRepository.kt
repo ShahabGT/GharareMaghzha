@@ -61,10 +61,8 @@ class ApiRepository(
 
     suspend fun getQuestions(
             Token: String,
-            number: String,
-            start: Int,
-            size: Int
-    ) = safeApiCall { api.getQuestions(Token, number, start, size) }
+            number: String
+    ) = safeApiCall { api.getQuestions(Token, number) }
 
 
     suspend fun getHighscoreList(

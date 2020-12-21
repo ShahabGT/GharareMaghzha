@@ -102,8 +102,8 @@ class MySharedPreference private constructor(ctx: Context) {
     fun setFbToken(fbToken: String) = sp.edit { putString("fbToken", fbToken) }
     fun getFbToken() = sp.getString("fbToken", "") ?: ""
 
-    fun setScore(score: String) = sp.edit { putString("score", score) }
-    fun getScore() = sp.getString("score", "0") ?: "0"
+    fun setScore(score: Int) = sp.edit { putInt("score", score) }
+    fun getScore() = sp.getInt("score", 0)
 
     fun setDaysPassed(daysPassed: Int) = sp.edit { putInt("daysPassed", daysPassed) }
     fun getDaysPassed() = sp.getInt("daysPassed", -1)
@@ -129,8 +129,8 @@ class MySharedPreference private constructor(ctx: Context) {
     fun setUnreadChats(num: Int) = sp.edit { putInt("chats", num) }
     fun getUnreadChats() = sp.getInt("chats", 0)
 
-    fun setBooster(booster: Int) = sp.edit { putInt("userbooster", booster) }
-    fun getBooster() = sp.getInt("userbooster", 0)
+    fun setSeason(season: Int) = sp.edit { putInt("season", season) }
+    fun getSeason() = sp.getInt("season", 0)
 
     fun setBoosterValue(boosterValue: Float) = sp.edit { putFloat("boosterValue", boosterValue) }
     fun getBoosterValue() = sp.getFloat("boosterValue", 1f)

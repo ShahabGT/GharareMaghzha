@@ -8,8 +8,7 @@ import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import ir.ghararemaghzha.game.R
 
-class NewVersionDialog(context: FragmentActivity) : Dialog(context) {
-    private val ctx = context
+class NewVersionDialog(ctx: FragmentActivity) : Dialog(ctx) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,17 +16,14 @@ class NewVersionDialog(context: FragmentActivity) : Dialog(context) {
         onClicks()
     }
 
-
     private fun onClicks() {
         findViewById<ImageView>(R.id.newversion_dialog_playstore).setOnClickListener {
-
-            val appPackageName = ctx.packageName
+            val appPackageName = context.packageName
             try {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
             } catch (e: Exception) {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
             }
-
         }
 
         findViewById<ImageView>(R.id.newversion_dialog_direct).setOnClickListener{

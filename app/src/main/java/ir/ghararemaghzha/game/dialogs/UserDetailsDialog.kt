@@ -2,7 +2,6 @@ package ir.ghararemaghzha.game.dialogs
 
 import android.app.Activity
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -136,13 +135,8 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                         }
 
                         Handler(Looper.getMainLooper()).postDelayed({
-                            if (Build.VERSION.SDK_INT >= 24) {
-                                answersProgress.setProgress(nPercent, true)
-                                questionsProgress.setProgress(qPercent, true)
-                            } else {
                                 answersProgress.progress = nPercent
                                 questionsProgress.progress = qPercent
-                            }
                         }, 500)
 
                         answersPercent.text = "%$nPercent"

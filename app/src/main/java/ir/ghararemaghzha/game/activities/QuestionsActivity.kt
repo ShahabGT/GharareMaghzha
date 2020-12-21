@@ -301,7 +301,7 @@ class QuestionsActivity : AppCompatActivity() {
             YoYo.with(Techniques.Bounce).duration(500).playOn(score)
             gameScore += (qPoint * MySharedPreference.getInstance(this).getBoosterValue()).toInt()
             score.text = gameScore.toString()
-            MySharedPreference.getInstance(this@QuestionsActivity).setScore( gameScore.toString())
+            MySharedPreference.getInstance(this@QuestionsActivity).setScore(gameScore)
             CoroutineScope(Dispatchers.IO).launch {
                 uploadScore(gameScore.toString())
             }

@@ -17,18 +17,15 @@ import kotlinx.coroutines.*
 
 class RulesDialog(context: Activity) : Dialog(context) {
 
-    private lateinit var text :MaterialTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_rules)
-        text =findViewById(R.id.rules_text)
         findViewById<ImageView>(R.id.rules_close).setOnClickListener { dismiss() }
         CoroutineScope(Dispatchers.IO).launch {
             getData()
         }
     }
-
 
     private suspend fun getData() {
         val number = MySharedPreference.getInstance(context).getNumber()
@@ -40,13 +37,13 @@ class RulesDialog(context: Activity) : Dialog(context) {
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).info("Bearer $token", number, "rules")) {
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {
-                    text.text = res.value.data
+                    findViewById<MaterialTextView>(R.id.rules_text).text = res.value.data
                 }
             }
             is Resource.Failure -> {
                 withContext(Dispatchers.Main) {
-                    dismiss()
                     Toast.makeText(context, R.string.general_error, Toast.LENGTH_SHORT).show()
+                    dismiss()
                 }
             }
         }

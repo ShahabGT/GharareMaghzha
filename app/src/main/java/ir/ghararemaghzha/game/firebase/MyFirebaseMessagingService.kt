@@ -13,7 +13,6 @@ import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.classes.Utils.getNextKey
 import ir.ghararemaghzha.game.models.MessageModel
 
-
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
@@ -73,6 +72,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
     }
-
-
 }

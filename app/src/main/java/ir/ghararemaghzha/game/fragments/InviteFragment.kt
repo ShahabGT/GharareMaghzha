@@ -27,7 +27,6 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
     private lateinit var progressBar: RoundCornerProgressBar
     private lateinit var loading: ConstraintLayout
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init(view)
@@ -79,9 +78,7 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
                         Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
-
             }
-
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {

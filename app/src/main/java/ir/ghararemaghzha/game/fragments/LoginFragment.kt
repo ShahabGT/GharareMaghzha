@@ -4,16 +4,13 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
@@ -32,7 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val resolveHint = 521
@@ -46,7 +42,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         ctx = requireContext()
         act = requireActivity()
         init(view)
@@ -57,27 +52,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         number = v.findViewById(R.id.login_number)
         verify = v.findViewById(R.id.login_verify)
 
-        try {
-            requestHint()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        number.doOnTextChanged { s, _, _, _ ->  if (s?.length == 11) Utils.hideKeyboard(act)  }
+        number.doAfterTextChanged { if (it?.length == 11) Utils.hideKeyboard(act) }
 
+        requestHint()
         onClicks()
-
-        number.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s!!.length == 11) Utils.hideKeyboard(act)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if (s!!.length == 11) Utils.hideKeyboard(act)
-            }
-        })
-
     }
 
     private fun onClicks() {
@@ -97,15 +76,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }else
                     Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
             }
-
-
         }
 
         register.setOnClickListener {
             view?.findNavController()!!.navigate(R.id.action_loginFragment_to_registerFragment)
         }
-
-
     }
 
     private suspend fun doLogin(number: String) {
@@ -115,8 +90,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     SmsRetriever.getClient(act).startSmsRetriever()
                     val b = Bundle()
                     b.putString("number", number)
-                    view?.findNavController()!!.navigate(R.id.action_loginFragment_to_verifyFragment,b)
-
+                    view?.findNavController()?.navigate(R.id.action_loginFragment_to_verifyFragment,b)
                 }
             }
             is Resource.Failure -> {
@@ -132,7 +106,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 Toast.makeText(ctx, R.string.loginfragment_nouser, Toast.LENGTH_SHORT).show()
                                 val b = Bundle()
                                 b.putString("number", number)
-                                view?.findNavController()!!.navigate(R.id.action_loginFragment_to_registerFragment,b)
+                                view?.findNavController()?.navigate(R.id.action_loginFragment_to_registerFragment,b)
 
                             }
                             403 -> Toast.makeText(ctx, R.string.loginfragment_blocked, Toast.LENGTH_LONG).show()
@@ -157,18 +131,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == resolveHint) {
             if (resultCode == RESULT_OK) {
-                val credential = data!!.getParcelableExtra<Credential>(Credential.EXTRA_KEY)
-
-                var n = credential!!.id
-                if (n.startsWith("+98"))
-                    n = "0" + n.substring(3)
-                else if (n.startsWith("0098"))
-                    n = "0" + n.substring(4)
-                number.setText(n)
-
+                val credential = data?.getParcelableExtra<Credential>(Credential.EXTRA_KEY)
+                if(credential!=null) {
+                    var n = credential.id
+                    if (n.startsWith("+98"))
+                        n = "0" + n.substring(3)
+                    else if (n.startsWith("0098"))
+                        n = "0" + n.substring(4)
+                    number.setText(n)
+                }
             }
         }
     }
-
-
 }

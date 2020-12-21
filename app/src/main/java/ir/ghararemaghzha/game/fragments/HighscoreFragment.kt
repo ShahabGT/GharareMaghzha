@@ -84,7 +84,6 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
             }
 
             is Resource.Failure -> {
-
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
                         Utils.showInternetError(context, object : RetryInterface {
@@ -102,10 +101,7 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
                         Utils.logout(activity, true)
                     }
                 }
-
             }
         }
     }
-
-
 }

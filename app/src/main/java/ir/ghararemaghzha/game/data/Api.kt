@@ -77,9 +77,7 @@ interface Api {
     @POST("questions")
     fun getQuestions(
             @Header("Authorization") Token: String,
-            @Field("number") number: String,
-            @Field("start") start: Int,
-            @Field("size") size: Int
+            @Field("number") number: String
     ): Call<QuestionResponse>
 
     @FormUrlEncoded
