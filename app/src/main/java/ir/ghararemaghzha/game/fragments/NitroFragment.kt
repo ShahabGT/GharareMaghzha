@@ -57,10 +57,6 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
         progressBar = v.findViewById(R.id.nitro_progress)
         loading = v.findViewById(R.id.nitro_loading)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            getData()
-        }
-
         buy.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 initBuy("7", "", "", amount)
@@ -68,18 +64,13 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
         }
     }
 
-    private fun showBuyDialog(planPrice: String, Plan: String, buyInterface: BuyInterface, isScoreBooster: Boolean) {
-        val dialog = BuyDialog(requireActivity(), planPrice, Plan, buyInterface, isScoreBooster)
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.setCancelable(true)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-        dialog.window?.setGravity(Gravity.CENTER)
-        dialog.show()
-        val window = dialog.window
-        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+    override fun onResume() {
+        super.onResume()
+        loading.visibility=View.VISIBLE
+        CoroutineScope(Dispatchers.IO).launch {
+            getData()
+        }
     }
-
 
     private suspend fun getData() {
         val number = MySharedPreference.getInstance(requireContext()).getNumber()

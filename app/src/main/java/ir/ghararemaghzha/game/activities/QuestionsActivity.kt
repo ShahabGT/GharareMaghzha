@@ -395,11 +395,6 @@ class QuestionsActivity : AppCompatActivity() {
             result?.userAnswer = userAnswer
             result?.userBooster = b
         }
-//        db.beginTransaction()
-//        val result = db.where<QuestionModel>().equalTo("questionId", model.questionId).findFirst()
-//        result?.userAnswer = userAnswer
-//        result?.userBooster = b
-//        db.commitTransaction()
     }
 
     private fun randomNumbers(): List<Int> {
@@ -473,10 +468,6 @@ class QuestionsActivity : AppCompatActivity() {
                             val result = it.where<QuestionModel>().equalTo("questionId", model.questionId).findFirst()
                             result?.uploaded = true
                         }
-//                        db.beginTransaction()
-//                        val result = db.where(QuestionModel::class.java).equalTo("questionId", model.questionId).findFirst()
-//                        result?.uploaded = true
-//                        db.commitTransaction()
                     }
 
                 }

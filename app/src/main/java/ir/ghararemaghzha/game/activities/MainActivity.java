@@ -405,14 +405,10 @@ public class MainActivity extends AppCompatActivity {
                                 sendBroadcast(refreshIntent);
 
                                 int serverBooster = Integer.parseInt(response.body().getUserBooster());
-                                int localBooster = MySharedPreference.Companion.getInstance(MainActivity.this).getBooster();
                                 int serverBoosterCount = Integer.parseInt(response.body().getScoreBoosterCount());
                                 if (serverBooster > 0 && serverBoosterCount > 0) {
-                                    if (serverBooster > localBooster) {
                                         MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(Float.parseFloat(response.body().getBoosterValue()));
-                                        MySharedPreference.Companion.getInstance(MainActivity.this).setBooster(serverBooster);
                                         MySharedPreference.Companion.getInstance(MainActivity.this).setCounter(200 - serverBoosterCount);
-                                    }
                                 } else {
                                     MySharedPreference.Companion.getInstance(MainActivity.this).setBoosterValue(1f);
                                 }

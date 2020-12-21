@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@color/light_background"
+    android:layout_height="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     tools:context=".fragments.NitroFragment">
@@ -13,7 +19,7 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/nitro_anim"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="230dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +43,59 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nitro_anim" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/nitro_buy_card"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nitro_title">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/buybg2"
+            android:layout_height="150dp">
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/nitro_price"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir"
+                android:gravity="right"
+                android:padding="12dp"
+                android:text="پکیج 1000تایی سوال"
+                android:textColor="@color/dark1"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nitro_buy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/vector_cart"
+                android:drawableTint="@color/white"
+                android:layout_marginLeft="12dp"
+                android:fontFamily="@font/vazir"
+                android:layout_marginBottom="12dp"
+                android:text="@string/buy_buy"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@color/dark1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -46,7 +104,7 @@
         app:cardCornerRadius="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nitro_title">
+        app:layout_constraintTop_toBottomOf="@id/nitro_buy_card">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -186,64 +244,12 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/nitro_buy_card"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nitro_progress_card">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:background="@drawable/buybg2"
-            android:layout_height="150dp">
-
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/nitro_price"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/vazir"
-                android:gravity="right"
-                android:padding="12dp"
-                android:text="پکیج 1000تایی سوال"
-                android:textColor="@color/dark1"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/nitro_buy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/vector_cart"
-                android:drawableTint="@color/white"
-                android:layout_marginLeft="12dp"
-                android:fontFamily="@font/vazir"
-                android:layout_marginBottom="12dp"
-                android:text="@string/buy_buy"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:backgroundTint="@color/dark1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/nitro_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/light_background"
         android:clickable="true"
         android:elevation="20dp"
@@ -265,3 +271,5 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
