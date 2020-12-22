@@ -135,5 +135,6 @@ class MySharedPreference private constructor(ctx: Context) {
     fun setBoosterValue(boosterValue: Float) = sp.edit { putFloat("boosterValue", boosterValue) }
     fun getBoosterValue() = sp.getFloat("boosterValue", 1f)
 
-
+    fun getContactsPermission() = sp.getBoolean("contactsPermission", false)
+    fun setContactsPermission() = sp.edit { putBoolean("contactsPermission", true) }
 }

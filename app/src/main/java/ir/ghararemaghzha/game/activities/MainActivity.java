@@ -36,11 +36,9 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import ir.ghararemaghzha.game.R;
-import ir.ghararemaghzha.game.classes.Const;
 import ir.ghararemaghzha.game.classes.MySharedPreference;
 import ir.ghararemaghzha.game.classes.Utils;
 import ir.ghararemaghzha.game.data.RetrofitClient;
@@ -465,7 +463,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             RetrofitClient.Companion.getInstance().getApi()
-                    .sendScore("Bearer " + token, number, score, Const.SEASON)
+                    .sendScore("Bearer " + token, number, score, MySharedPreference.Companion.getInstance(MainActivity.this).getSeason())
                     .enqueue(new Callback<GeneralResponse>() {
                         @Override
                         public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {
@@ -483,14 +481,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void uploadAnswers() {
         int passed = MySharedPreference.Companion.getInstance(this).getDaysPassed();
+        int season = MySharedPreference.Companion.getInstance(this).getSeason();
         if (passed >= 0 && passed < 7) {
             RealmResults<QuestionModel> models = db.where(QuestionModel.class).notEqualTo("userAnswer", "-1").equalTo("uploaded", false).findAll();
             for (QuestionModel model : models)
-                uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster());
+                uploadAnswer(model.getQuestionId(), model.getUserAnswer(), model.getUserBooster(),season);
         }
     }
 
-    private void uploadAnswer(String questionId, String userAnswer, String booster) {
+    private void uploadAnswer(String questionId, String userAnswer, String booster,int season) {
         String number = MySharedPreference.Companion.getInstance(this).getNumber();
         String token = MySharedPreference.Companion.getInstance(this).getAccessToken();
         if (number.isEmpty() || token.isEmpty()) {
@@ -498,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         RetrofitClient.Companion.getInstance().getApi()
-                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, Const.SEASON)
+                .answerQuestion("Bearer " + token, number, questionId, userAnswer, booster, season)
                 .enqueue(new Callback<GeneralResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) {

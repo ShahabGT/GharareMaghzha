@@ -219,6 +219,12 @@ interface NetworkApi {
             @Field("number") number: String,
             @Field("scorebooster") scoreBooster: String,
     ): GeneralResponse
+
+    @POST("contacts")
+    suspend fun syncContacts(
+            @Header("Authorization") Token: String,
+            @Body body: ContactBody
+    ): ContactsResponse
 }
 
 

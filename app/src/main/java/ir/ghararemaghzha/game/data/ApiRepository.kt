@@ -1,5 +1,6 @@
 package ir.ghararemaghzha.game.data
 
+import ir.ghararemaghzha.game.models.ContactBody
 import retrofit2.http.Field
 
 class ApiRepository(
@@ -101,7 +102,7 @@ class ApiRepository(
             userAnswer: String,
             booster: String,
             season: Int
-    ) = safeApiCall { api.answerQuestion(Token, number, questionId, userAnswer,booster,season) }
+    ) = safeApiCall { api.answerQuestion(Token, number, questionId, userAnswer, booster, season) }
 
 
     suspend fun sendScore(
@@ -109,7 +110,7 @@ class ApiRepository(
             number: String,
             score: String,
             season: Int
-    ) = safeApiCall { api.sendScore(Token, number, score,season) }
+    ) = safeApiCall { api.sendScore(Token, number, score, season) }
 
 
     suspend fun sendQuestionCount(
@@ -169,18 +170,23 @@ class ApiRepository(
             Token: String,
             number: String,
             questionId: String
-    ) = safeApiCall { api.report(Token, number,questionId) }
+    ) = safeApiCall { api.report(Token, number, questionId) }
 
     suspend fun info(
             Token: String,
             number: String,
             info: String
-    ) = safeApiCall { api.info(Token, number,info) }
+    ) = safeApiCall { api.info(Token, number, info) }
 
 
     suspend fun scoreBooster(
             Token: String,
             number: String,
             scoreBooster: String
-    ) = safeApiCall { api.scoreBooster(Token, number,scoreBooster) }
+    ) = safeApiCall { api.scoreBooster(Token, number, scoreBooster) }
+
+    suspend fun syncContacts(
+            Token: String,
+            body: ContactBody
+    ) = safeApiCall { api.syncContacts(Token, body) }
 }

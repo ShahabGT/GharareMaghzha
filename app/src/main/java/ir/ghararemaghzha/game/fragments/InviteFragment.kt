@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
@@ -26,9 +28,11 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
     private lateinit var value: MaterialTextView
     private lateinit var progressBar: RoundCornerProgressBar
     private lateinit var loading: ConstraintLayout
+    private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
         init(view)
     }
 
@@ -39,9 +43,11 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
         value = v.findViewById(R.id.invite_info_text1)
         progressBar = v.findViewById(R.id.invite_progress)
         v.findViewById<MaterialTextView>(R.id.invite_code).text = MySharedPreference.getInstance(requireContext()).getUserCode()
-        v.findViewById<MaterialButton>(R.id.invite_share).setOnClickListener { Utils.shareCode(activity, getString(R.string.invite_share, MySharedPreference.getInstance(requireContext()).getUserCode())) }
+        v.findViewById<MaterialButton>(R.id.invite_share).setOnClickListener {
+            navController.navigate(R.id.action_inviteFragment_to_contactsFragment)
+            //  Utils.shareCode(activity, getString(R.string.invite_share, MySharedPreference.getInstance(requireContext()).getUserCode()))
+        }
         loading.visibility = View.VISIBLE
-
         CoroutineScope(Dispatchers.IO).launch {
             getData()
         }

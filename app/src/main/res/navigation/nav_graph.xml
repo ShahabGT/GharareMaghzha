@@ -81,7 +81,11 @@
         android:id="@+id/inviteFragment"
         android:name="ir.ghararemaghzha.game.fragments.InviteFragment"
         android:label="InviteFragment"
-        tools:layout="@layout/fragment_invite" />
+        tools:layout="@layout/fragment_invite" >
+        <action
+            android:id="@+id/action_inviteFragment_to_contactsFragment"
+            app:destination="@id/contactsFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_inviteFragment"
         app:destination="@id/inviteFragment" />
@@ -114,4 +118,9 @@
     <action
         android:id="@+id/action_global_messagesFragment"
         app:destination="@id/menu_message" />
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="ir.ghararemaghzha.game.fragments.ContactsFragment"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" />
 </navigation>

@@ -311,5 +311,11 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="questions_notification_title">سوالات شما تمام شد!</string>
     <string name="questions_notification_body">سوالات این دوره شما تمام شد! برای کسب امتیاز بیشتر دوستان خودتون رو به بازی معرفی کنید و امتیاز بگیرید!</string>
 
+    <string name="permission_contacts_toast">لطفا اجازه دسترسی به مخاطبین را فعال کنید!</string>
+    <string name="permission_contacts">دسترسی به مخاطبین</string>
+    <string name="permission_contacts_message">برای نمایش دوستان خود که در بازی قرار مغز ها عضو هستند، نیاز به دسترسی خواندن مخاطبین هست</string>
+    <string name="permission_allow">اجازه می دهم</string>
+    <string name="permission_dismiss">فعلا نه!</string>
+
 
 </resources>

@@ -27,7 +27,6 @@ import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
-import ir.ghararemaghzha.game.classes.Const
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_END
 import ir.ghararemaghzha.game.classes.MySettingsPreference
 import ir.ghararemaghzha.game.classes.MySharedPreference
@@ -78,8 +77,9 @@ class QuestionsActivity : AppCompatActivity() {
     private var musicSetting = false
     private var hasBooster = false
     private var foreground = false
-    private var number:String=""
-    private var token:String=""
+    private var number: String = ""
+    private var token: String = ""
+    private var season: Int = 0
     private val br: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Toast.makeText(this@QuestionsActivity, R.string.general_end, Toast.LENGTH_LONG).show()
@@ -97,7 +97,7 @@ class QuestionsActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             window.insetsController?.hide(WindowInsets.Type.statusBars())
-         else
+        else
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         setContentView(R.layout.activity_question)
@@ -171,10 +171,11 @@ class QuestionsActivity : AppCompatActivity() {
                 }).start()
     }
 
-    private fun getUserDetails(){
+    private fun getUserDetails() {
         number = MySharedPreference.getInstance(this).getNumber()
         token = MySharedPreference.getInstance(this).getAccessToken()
-        if (number.isEmpty() || token.isEmpty()) {
+        season = MySharedPreference.getInstance(this).getSeason()
+        if (number.isEmpty() || token.isEmpty() || season == 0) {
             Utils.logout(this, true)
         }
     }
@@ -201,7 +202,7 @@ class QuestionsActivity : AppCompatActivity() {
         answer4 = findViewById(R.id.question_answer4)
         answer4c = findViewById(R.id.question_answer4_card)
         score = findViewById(R.id.question_score)
-        gameScore = MySharedPreference.getInstance(this).getScore().toInt()
+        gameScore = MySharedPreference.getInstance(this).getScore()
         score.text = gameScore.toString()
         progressBar = findViewById(R.id.question_progress_bar)
         progressBar.progress = progress.toInt()
@@ -212,7 +213,7 @@ class QuestionsActivity : AppCompatActivity() {
                 progress -= 6.6
                 timeText.text = time.toString()
                 progressBar.progress = progress.toInt()
-                if (l < 6000) timeText.setTextColor(resources.getColor(R.color.random1))
+                if (l < 6000) setViewTextColor(timeText, R.color.random1)//timeText.setTextColor(resources.getColor(R.color.random1))
             }
 
             override fun onFinish() {
@@ -264,21 +265,21 @@ class QuestionsActivity : AppCompatActivity() {
             }
         }
         answer1c.setOnClickListener {
-            answer(0,answer1,answer1c)
+            answer(0, answer1, answer1c)
         }
         answer2c.setOnClickListener {
-            answer(1,answer2,answer2c)
+            answer(1, answer2, answer2c)
         }
         answer3c.setOnClickListener {
-            answer(2,answer3,answer3c)
+            answer(2, answer3, answer3c)
         }
         answer4c.setOnClickListener {
-            answer(3,answer4,answer4c)
+            answer(3, answer4, answer4c)
         }
         findViewById<View>(R.id.question_close).setOnClickListener { this@QuestionsActivity.finish() }
     }
 
-    private fun answer(which:Int,button:MaterialTextView,buttonCard:MaterialCardView){
+    private fun answer(which: Int, button: MaterialTextView, buttonCard: MaterialCardView) {
         if (MySharedPreference.getInstance(this).getBoosterValue() != 1f) MySharedPreference.getInstance(this@QuestionsActivity).counterIncrease()
         downTimer.cancel()
         timeText.text = 0.toString()
@@ -291,10 +292,11 @@ class QuestionsActivity : AppCompatActivity() {
         setAnswer(answerId)
         val qId = model.questionId
         CoroutineScope(Dispatchers.IO).launch {
-            uploadAnswer(answerId,qId)
+            uploadAnswer(answerId, qId)
         }
         if (button.text.toString() == correctAnswer) {
-            buttonCard.setCardBackgroundColor(resources.getColor(R.color.green))
+            setViewColor(buttonCard, R.color.green)
+            //  buttonCard.setCardBackgroundColor(resources.getColor(R.color.green))
             YoYo.with(Techniques.Tada).duration(500).playOn(buttonCard)
             playSound(correctSound)
             val qPoint = model.questionPoints.toInt()
@@ -306,7 +308,8 @@ class QuestionsActivity : AppCompatActivity() {
                 uploadScore(gameScore.toString())
             }
         } else {
-            buttonCard.setCardBackgroundColor(resources.getColor(R.color.red))
+            setViewColor(buttonCard, R.color.red)
+            //  buttonCard.setCardBackgroundColor(resources.getColor(R.color.red))
             YoYo.with(Techniques.Shake).duration(500).playOn(buttonCard)
             playSound(wrongSound)
         }
@@ -340,17 +343,22 @@ class QuestionsActivity : AppCompatActivity() {
             downTimer.cancel()
             enterAnimations()
             answer1c.isEnabled = true
-            answer1c.setCardBackgroundColor(resources.getColor(R.color.white))
+            setViewColor(answer1c, R.color.white)
+            //answer1c.setCardBackgroundColor(resources.getColor(R.color.white))
             answer2c.isEnabled = true
-            answer2c.setCardBackgroundColor(resources.getColor(R.color.white))
+            setViewColor(answer2c, R.color.white)
+            //  answer2c.setCardBackgroundColor(resources.getColor(R.color.white))
             answer3c.isEnabled = true
-            answer3c.setCardBackgroundColor(resources.getColor(R.color.white))
+            setViewColor(answer3c, R.color.white)
+            //  answer3c.setCardBackgroundColor(resources.getColor(R.color.white))
             answer4c.isEnabled = true
-            answer4c.setCardBackgroundColor(resources.getColor(R.color.white))
+            setViewColor(answer4c, R.color.white)
+            //  answer4c.setCardBackgroundColor(resources.getColor(R.color.white))
             time = 15
             progress = 100.0
             timeText.text = time.toString()
-            timeText.setTextColor(resources.getColor(R.color.black))
+            //timeText.setTextColor(resources.getColor(R.color.black))
+            setViewTextColor(timeText, R.color.black)
             progressBar.progress = 100
             randomAnswers = randomNumbers()
             question.text = model.questionText
@@ -379,12 +387,28 @@ class QuestionsActivity : AppCompatActivity() {
             setAnswer("0")
             val qId = model.questionId
             CoroutineScope(Dispatchers.IO).launch {
-                uploadAnswer("0",qId)
+                uploadAnswer("0", qId)
             }
         } else {
             Toast.makeText(this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
             onBackPressed()
         }
+    }
+
+    @Suppress("deprecation")
+    private fun setViewColor(v: MaterialCardView, color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            v.setCardBackgroundColor(resources.getColor(color, null))
+        else
+            v.setCardBackgroundColor(resources.getColor(color))
+    }
+
+    @Suppress("deprecation")
+    private fun setViewTextColor(v: MaterialTextView, color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            v.setTextColor(resources.getColor(color, null))
+        else
+            v.setTextColor(resources.getColor(color))
     }
 
     private fun setAnswer(userAnswer: String) {
@@ -456,11 +480,11 @@ class QuestionsActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun uploadAnswer(userAnswer: String,questionId:String) {
+    private suspend fun uploadAnswer(userAnswer: String, questionId: String) {
         var b = "0"
         if (hasBooster) b = "1"
 
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).answerQuestion("Bearer $token", number,questionId, userAnswer, b, Const.SEASON)) {
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).answerQuestion("Bearer $token", number, questionId, userAnswer, b, season)) {
             is Resource.Success -> {
                 if (res.value.message == "success") {
                     withContext(Dispatchers.Main) {
@@ -481,8 +505,8 @@ class QuestionsActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun uploadScore(gameScore:String) {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).sendScore("Bearer $token", number, gameScore, Const.SEASON)) {
+    private suspend fun uploadScore(gameScore: String) {
+        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).sendScore("Bearer $token", number, gameScore, season)) {
             is Resource.Failure -> {
                 if (res.errorCode == 401)
                     withContext(Dispatchers.Main) {
