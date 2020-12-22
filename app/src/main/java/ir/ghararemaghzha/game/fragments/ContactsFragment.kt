@@ -11,14 +11,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
-import com.google.gson.Gson
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ir.ghararemaghzha.game.R
+import ir.ghararemaghzha.game.adapters.ContactsAdapter
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.RetryInterface
 import ir.ghararemaghzha.game.classes.Utils
@@ -28,18 +29,25 @@ import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
 import ir.ghararemaghzha.game.models.ContactBody
 import ir.ghararemaghzha.game.models.ContactBodyModel
+import ir.ghararemaghzha.game.models.ContactsModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
     private val readContactsRequestCode = 5162
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ContactsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById(R.id.contacts_recycler)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         requestContacts()
     }
 
@@ -92,15 +100,16 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         val newList: ArrayList<Contacts> = ArrayList()
         for (element in list) {
             if (element.number.startsWith("+98"))
-                element.number=element.number.replace("+98", "0")
+                element.number = element.number.replace("+98", "0")
             else if (element.number.startsWith("0098"))
-                element.number=element.number.replaceFirst("0098", "0")
+                element.number = element.number.replaceFirst("0098", "0")
             if (!newList.any { it.number == element.number })
                 newList.add(element)
 
         }
         return newList
     }
+
     private fun getContacts(): ArrayList<Contacts> {
         val data = mutableListOf<Contacts>()
         val cr: ContentResolver = requireActivity().contentResolver
@@ -126,7 +135,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                                         .getString(pCur
                                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ", "").replace("-", "")
                                 if (phoneNo.isNotEmpty() && phoneNo.length > 10) {
-                                    data.add(Contacts(name,phoneNo))
+                                    data.add(Contacts(name, phoneNo))
                                 }
                             }
                         }
@@ -138,7 +147,8 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         }
         return removeDuplicates(data)
     }
-    private fun showContacts(){
+
+    private fun showContacts() {
         val c = getContacts()
         CoroutineScope(Dispatchers.IO).launch {
             getData(c)
@@ -146,7 +156,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     }
 
 
-    private suspend fun getData(data : ArrayList<Contacts>) {
+    private suspend fun getData(data: ArrayList<Contacts>) {
         val number = MySharedPreference.getInstance(requireContext()).getNumber()
         val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
@@ -155,20 +165,25 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         }
         val contacts = mutableListOf<ContactBodyModel>()
         data.forEach {
-            contacts.add(ContactBodyModel(it.number))
+            contacts.add(ContactBodyModel(it.number,it.name))
         }
-        val body =ContactBody(number,contacts)
+        val body = ContactBody(number, contacts)
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).syncContacts("Bearer $token", body)) {
             is Resource.Success -> {
-                if(res.value.result=="success")
-                    withContext(Dispatchers.Main){
-                        val message = res.value.message
-                        val result = res.value.result
+                if (res.value.result == "success")
+                    withContext(Dispatchers.Main) {
                         val data = res.value.data.sortedByDescending { it.id }
-                        Toast.makeText(requireContext(),"success",Toast.LENGTH_SHORT).show()
-
-
+                        data.forEach{it.type=1}
+                        val co = mutableListOf<ContactsModel>()
+                        co.add(ContactsModel(id="title1",type = 0))
+                        val firstIndex = data.indexOfFirst { it.id=="0"}
+                        for(model in data){
+                            co.add(model)
+                        }
+                        co.add(firstIndex+1,ContactsModel(id="title2",type = 0))
+                        adapter = ContactsAdapter(requireContext(), co)
+                        recyclerView.adapter = adapter
                     }
             }
             is Resource.Failure -> {
@@ -185,7 +200,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
-                     //   loading.visibility = View.GONE
+                        //   loading.visibility = View.GONE
                         Utils.logout(activity, true)
                     }
                 }
@@ -193,5 +208,5 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         }
     }
 
-    data class Contacts(val name:String, var number:String)
+    data class Contacts(val name: String, var number: String)
 }
