@@ -14,7 +14,7 @@ import ir.ghararemaghzha.game.dialogs.UserDetailsDialog
 import ir.ghararemaghzha.game.models.HighscoreModel
 import ir.ghararemaghzha.game.models.UserRankModel
 
-class HighscoreAdapter(private val context: FragmentActivity,
+class HighscoreAdapter(private val ctx: FragmentActivity,
                        private val data: List<HighscoreModel>,
                        private val user: UserRankModel,
                        private val showUser: Boolean) : RecyclerView.Adapter<HighscoreAdapter.ViewHolder>() {
@@ -34,24 +34,24 @@ class HighscoreAdapter(private val context: FragmentActivity,
             h.name.text = userName
             if (scoreCount == "-1") h.score.text = "0" else h.score.text = scoreCount
             h.rank.text = (position + 1).toString()
-            h.itemView.setBackgroundColor(context.resources.getColor(R.color.white))
-            Glide.with(context)
-                    .load(context.getString(R.string.avatar_url, userAvatar))
+            h.itemView.setBackgroundColor(ctx.resources.getColor(R.color.white))
+            Glide.with(ctx)
+                    .load(ctx.getString(R.string.avatar_url, userAvatar))
                     .circleCrop()
                     .placeholder(R.drawable.placeholder)
                     .into(h.avatar)
             h.itemView.setOnClickListener { showDetailsDialog(userId) }
             if (!showUser && userId == user.userId) {
-                h.itemView.setBackgroundColor(context.resources.getColor(R.color.alpha4))
+                h.itemView.setBackgroundColor(ctx.resources.getColor(R.color.alpha4))
                 h.name.text = "شما"
             }
         } else if (showUser) {
             h.name.text = "شما"
             h.score.text = user.scoreCount
             h.rank.text = user.userRank
-            h.itemView.setBackgroundColor(context.resources.getColor(R.color.alpha4))
-            Glide.with(context)
-                    .load(context.getString(R.string.avatar_url, user.userAvatar))
+            h.itemView.setBackgroundColor(ctx.resources.getColor(R.color.alpha4))
+            Glide.with(ctx)
+                    .load(ctx.getString(R.string.avatar_url, user.userAvatar))
                     .circleCrop()
                     .placeholder(R.drawable.placeholder)
                     .into(h.avatar)
@@ -64,8 +64,8 @@ class HighscoreAdapter(private val context: FragmentActivity,
     }
 
     private fun showDetailsDialog(userId: String) {
-        val dialog = UserDetailsDialog(context, userId)
-        dialog.setCanceledOnTouchOutside(true)
+        val dialog = UserDetailsDialog(ctx, userId)
+        dialog.setCanceledOnTouchOutside(false)
         dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation

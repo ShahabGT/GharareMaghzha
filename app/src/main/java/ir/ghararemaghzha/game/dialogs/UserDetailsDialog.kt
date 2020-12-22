@@ -49,6 +49,7 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
         init()
 
     }
+
     private fun init() {
         loading = findViewById(R.id.details_loading)
         ratingBar = findViewById(R.id.details_rate)
@@ -94,7 +95,12 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                         name.text = res.value.userData.userName
                         code.text = context.getString(R.string.details_code, res.value.userData.userCode)
                         rank.text = res.value.userData.userRank
-                        score.text = res.value.userData.scoreCount
+
+                        if (res.value.userData.scoreCount != "-1")
+                            score.text = res.value.userData.scoreCount
+                        else
+                            score.text = "0"
+
                         if (res.value.booster.toInt() < 1000) answers.text = context.getString(R.string.details_nitro2, res.value.booster) else answers.text = context.getString(R.string.details_nitro2, "1000")
 
                         Glide.with(context)
@@ -106,7 +112,7 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                         val totalQuestions = 1000
                         val answeredQuestions: Int = res.value.correct + res.value.incorrect
 
-                        val nitroUsed = if(res.value.booster.toInt()>1000)
+                        val nitroUsed = if (res.value.booster.toInt() > 1000)
                             1000
                         else
                             res.value.booster.toInt()
@@ -135,8 +141,8 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                         }
 
                         Handler(Looper.getMainLooper()).postDelayed({
-                                answersProgress.progress = nPercent
-                                questionsProgress.progress = qPercent
+                            answersProgress.progress = nPercent
+                            questionsProgress.progress = qPercent
                         }, 500)
 
                         answersPercent.text = "%$nPercent"

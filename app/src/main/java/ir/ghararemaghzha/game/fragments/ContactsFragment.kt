@@ -18,6 +18,9 @@ import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textview.MaterialTextView
+import io.realm.Realm
+import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ContactsAdapter
 import ir.ghararemaghzha.game.classes.MySharedPreference
@@ -34,8 +37,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ContactsFragment : Fragment(R.layout.fragment_contacts) {
@@ -43,11 +44,24 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     private val readContactsRequestCode = 5162
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ContactsAdapter
+    private lateinit var db: Realm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.contacts_recycler)
+        init(view)
+
+    }
+
+    private fun init(v: View) {
+        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.contacts_title)
+
+        db = Realm.getDefaultInstance()
+        recyclerView = v.findViewById(R.id.contacts_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val data = db.where<ContactsModel>().findAll()
+        adapter = ContactsAdapter(requireActivity(), data)
+        recyclerView.adapter = adapter
+        //    if (data.size == 0)
         requestContacts()
     }
 
@@ -165,25 +179,35 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         }
         val contacts = mutableListOf<ContactBodyModel>()
         data.forEach {
-            contacts.add(ContactBodyModel(it.number,it.name))
+            contacts.add(ContactBodyModel(it.number, it.name))
         }
         val body = ContactBody(number, contacts)
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).syncContacts("Bearer $token", body)) {
             is Resource.Success -> {
                 if (res.value.result == "success")
-                    withContext(Dispatchers.Main) {
-                        val data = res.value.data.sortedByDescending { it.id }
-                        data.forEach{it.type=1}
-                        val co = mutableListOf<ContactsModel>()
-                        co.add(ContactsModel(id="title1",type = 0))
-                        val firstIndex = data.indexOfFirst { it.id=="0"}
-                        for(model in data){
-                            co.add(model)
+
+                    if (res.value.data.isNotEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            val results = db.where<ContactsModel>().findAll()
+                            db.executeTransaction { results.deleteAllFromRealm()}
+                            adapter.notifyDataSetChanged()
+                            val networkData = res.value.data.sortedByDescending { it.id }
+
+                            networkData.forEach { it.type = 1 }
+                            val co = mutableListOf<ContactsModel>()
+                            var index = 0
+                            co.add(0, ContactsModel(id = getString(R.string.contacts_title1), type = 0))
+                            for (model in networkData) {
+                                co.add(model)
+                            }
+                            val firstIndex = networkData.indexOfFirst { it.id == "0" }
+                            co.add(firstIndex + 1, ContactsModel(id = getString(R.string.contacts_title2), type = 0))
+
+                            for(model in co) model.contactId=index++
+
+                            db.executeTransaction {it.insertOrUpdate(co)}
                         }
-                        co.add(firstIndex+1,ContactsModel(id="title2",type = 0))
-                        adapter = ContactsAdapter(requireContext(), co)
-                        recyclerView.adapter = adapter
                     }
             }
             is Resource.Failure -> {

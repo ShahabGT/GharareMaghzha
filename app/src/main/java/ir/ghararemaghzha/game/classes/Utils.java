@@ -51,6 +51,7 @@ import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
+import ir.ghararemaghzha.game.models.ContactsModel;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
 import retrofit2.Call;
@@ -253,6 +254,19 @@ public class Utils {
         }
     }
 
+    public static int getNextKeyContacts(Realm db) {
+        try {
+            Number number = db.where(ContactsModel.class).max("contactId");
+            if (number != null) {
+                return number.intValue() + 1;
+            } else {
+                return 0;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return 0;
+        }
+    }
+
     public static boolean isEmailValid(String email) {
         Pattern pattern;
         boolean res;
@@ -269,10 +283,11 @@ public class Utils {
         return res;
     }
 
-    public static void shareCode(Context context, String title) {
+    public static void shareCode(Context context, String title, String number) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, title);
+        intent.putExtra(Intent.EXTRA_PHONE_NUMBER, number);
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.general_share)));
 
     }

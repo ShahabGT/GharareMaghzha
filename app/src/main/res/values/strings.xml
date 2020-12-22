@@ -317,5 +317,8 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="permission_allow">اجازه می دهم</string>
     <string name="permission_dismiss">فعلا نه!</string>
 
+    <string name="contacts_title">مخاطبین من</string>
+    <string name="contacts_title1">مخاطبین فعال در قرار مغزها</string>
+    <string name="contacts_title2">بقیه مخاطبین</string>
 
 </resources>
