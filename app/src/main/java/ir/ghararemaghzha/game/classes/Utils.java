@@ -21,47 +21,35 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.pm.PackageInfoCompat;
-
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import io.realm.Realm;
 import ir.ghararemaghzha.game.R;
 import ir.ghararemaghzha.game.activities.MainActivity;
 import ir.ghararemaghzha.game.activities.SplashActivity;
 import ir.ghararemaghzha.game.activities.SupportActivity;
-import ir.ghararemaghzha.game.data.RemoteDataSource;
 import ir.ghararemaghzha.game.data.RetrofitClient;
 import ir.ghararemaghzha.game.dialogs.GetDataDialog;
 import ir.ghararemaghzha.game.dialogs.NoInternetDialog;
 import ir.ghararemaghzha.game.dialogs.TimeDialog;
-import ir.ghararemaghzha.game.models.ContactsModel;
 import ir.ghararemaghzha.game.models.GeneralResponse;
 import ir.ghararemaghzha.game.models.MessageModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Context.ALARM_SERVICE;
 import static ir.ghararemaghzha.game.classes.Const.FCM_TOPIC;
 import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_MESSAGE;
-import static ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH;
 
 public class Utils {
 
@@ -244,19 +232,6 @@ public class Utils {
     public static int getNextKey(Realm db) {
         try {
             Number number = db.where(MessageModel.class).max("messageId");
-            if (number != null) {
-                return number.intValue() + 1;
-            } else {
-                return 0;
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return 0;
-        }
-    }
-
-    public static int getNextKeyContacts(Realm db) {
-        try {
-            Number number = db.where(ContactsModel.class).max("contactId");
             if (number != null) {
                 return number.intValue() + 1;
             } else {

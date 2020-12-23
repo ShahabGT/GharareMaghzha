@@ -44,8 +44,10 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
         progressBar = v.findViewById(R.id.invite_progress)
         v.findViewById<MaterialTextView>(R.id.invite_code).text = MySharedPreference.getInstance(requireContext()).getUserCode()
         v.findViewById<MaterialButton>(R.id.invite_share).setOnClickListener {
+              Utils.shareCode(requireContext(), getString(R.string.invite_share, MySharedPreference.getInstance(requireContext()).getUserCode()),"")
+        }
+        v.findViewById<MaterialButton>(R.id.invite_contacts).setOnClickListener {
             navController.navigate(R.id.action_inviteFragment_to_contactsFragment)
-            //  Utils.shareCode(activity, getString(R.string.invite_share, MySharedPreference.getInstance(requireContext()).getUserCode()))
         }
         loading.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {

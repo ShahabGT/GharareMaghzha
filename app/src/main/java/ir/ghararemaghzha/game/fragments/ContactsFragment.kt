@@ -205,37 +205,35 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).syncContacts("Bearer $token", body)) {
             is Resource.Success -> {
-                if (res.value.result == "success")
+                if (res.value.result == "success" && res.value.data.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        val results = db.where<ContactsModel>().findAll()
+                        db.executeTransaction { results.deleteAllFromRealm() }
+                        adapter.notifyDataSetChanged()
+                        val networkData = res.value.data.sortedByDescending { it.id }
 
-                    if (res.value.data.isNotEmpty()) {
-                        withContext(Dispatchers.Main) {
-                            val results = db.where<ContactsModel>().findAll()
-                            db.executeTransaction { results.deleteAllFromRealm() }
-                            adapter.notifyDataSetChanged()
-                            val networkData = res.value.data.sortedByDescending { it.id }
-
-                            networkData.forEach { it.type = 1 }
-                            val co = mutableListOf<ContactsModel>()
-                            var index = 0
-                            co.add(0, ContactsModel(id = getString(R.string.contacts_title1), type = 0))
-                            for (model in networkData) {
-                                co.add(model)
-                            }
-                            val firstIndex = networkData.indexOfFirst { it.id == "0" }
-                            co.add(firstIndex + 1, ContactsModel(id = getString(R.string.contacts_title2), type = 0))
-
-                            for (model in co) model.contactId = index++
-
-                            db.executeTransaction { it.insertOrUpdate(co) }
-                            loading.visibility = View.GONE
-                            empty.visibility = View.GONE
+                        networkData.forEach { it.type = 1 }
+                        val co = mutableListOf<ContactsModel>()
+                        var index = 0
+                        co.add(0, ContactsModel(id = getString(R.string.contacts_title1), type = 0))
+                        for (model in networkData) {
+                            co.add(model)
                         }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            loading.visibility = View.GONE
-                            empty.visibility = View.VISIBLE
-                        }
+                        val firstIndex = networkData.indexOfFirst { it.id == "0" }
+                        co.add(firstIndex + 1, ContactsModel(id = getString(R.string.contacts_title2), type = 0))
+
+                        for (model in co) model.contactId = index++
+
+                        db.executeTransaction { it.insertOrUpdate(co) }
+                        loading.visibility = View.GONE
+                        empty.visibility = View.GONE
                     }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        loading.visibility = View.GONE
+                        empty.visibility = View.VISIBLE
+                    }
+                }
             }
             is Resource.Failure -> {
                 if (res.isNetworkError) {

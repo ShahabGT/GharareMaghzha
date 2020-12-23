@@ -97,7 +97,7 @@ class SupportActivity : AppCompatActivity() {
         layoutManager.reverseLayout = true
         recyclerView.layoutManager = layoutManager
 
-        adapter = ChatAdapter(this, db.where<MessageModel>().notEqualTo("sender", "admin").sort("date", Sort.DESCENDING).findAll(), true)
+        adapter = ChatAdapter(this, db.where<MessageModel>().notEqualTo("sender", "admin").sort("date", Sort.DESCENDING).findAll())
         recyclerView.adapter = adapter
         recyclerView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {
