@@ -182,7 +182,7 @@ class ApiRepository(
     suspend fun scoreBooster(
             Token: String,
             number: String,
-            scoreBooster: String
+            scoreBooster: Int
     ) = safeApiCall { api.scoreBooster(Token, number, scoreBooster) }
 
     suspend fun syncContacts(

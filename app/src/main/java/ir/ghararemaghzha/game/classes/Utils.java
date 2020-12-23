@@ -209,25 +209,6 @@ public class Utils {
         activity.finish();
     }
 
-    public static void updateScoreBooster(Context context, int count) {
-        String number = MySharedPreference.Companion.getInstance(context).getNumber();
-        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
-        if (number.isEmpty() || token.isEmpty()) {
-            if (context instanceof Activity)
-                logout((Activity) context, true);
-            return;
-        }
-        RetrofitClient.Companion.getInstance().getApi()
-                .scoreBooster("Bearer " + token, number, count)
-                .enqueue(new Callback<GeneralResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) { }
-
-                    @Override
-                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) { }
-                });
-
-    }
 
     public static int getNextKey(Realm db) {
         try {
@@ -311,6 +292,26 @@ public class Utils {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);
         }
+    }
+
+    public static void updateScoreBooster(Context context, int count) {
+        String number = MySharedPreference.Companion.getInstance(context).getNumber();
+        String token = MySharedPreference.Companion.getInstance(context).getAccessToken();
+        if (number.isEmpty() || token.isEmpty()) {
+            if (context instanceof Activity)
+                logout((Activity) context, true);
+            return;
+        }
+        RetrofitClient.Companion.getInstance().getApi()
+                .scoreBooster("Bearer " + token, number, count)
+                .enqueue(new Callback<GeneralResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<GeneralResponse> call, @NonNull Response<GeneralResponse> response) { }
+
+                    @Override
+                    public void onFailure(@NonNull Call<GeneralResponse> call, @NonNull Throwable t) { }
+                });
+
     }
 
 }

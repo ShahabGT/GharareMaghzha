@@ -217,7 +217,7 @@ interface NetworkApi {
     suspend fun scoreBooster(
             @Header("Authorization") Token: String,
             @Field("number") number: String,
-            @Field("scorebooster") scoreBooster: String,
+            @Field("scorebooster") scoreBooster: Int,
     ): GeneralResponse
 
     @POST("contacts")

@@ -207,11 +207,12 @@ class SupportActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         MySharedPreference.getInstance(this@SupportActivity).setLastUpdateChat(nowDate)
                         val data: MutableCollection<MessageModel> = mutableListOf()
+                        var index = getNextKey(db)
                         for(model in res.value.data){
                             model.stat = 1
                             model.read = 1
                             model.title = "new"
-                            model.messageId = getNextKey(db)
+                            model.messageId = index++
                             data.add(model)
                         }
                         db.executeTransaction { it.insertOrUpdate(data) }
