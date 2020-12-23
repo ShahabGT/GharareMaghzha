@@ -251,7 +251,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
                         empty.visibility = View.GONE
-                        Utils.logout(activity, true)
+                        Utils.logout(requireActivity(), true)
                     }
                 }
             }

@@ -23,7 +23,7 @@ import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ChatAdapter
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST
 import ir.ghararemaghzha.game.classes.MySharedPreference
-import ir.ghararemaghzha.game.classes.Utils.*
+import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
@@ -48,7 +48,7 @@ class SupportActivity : AppCompatActivity() {
 
     private val br = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            removeNotification(this@SupportActivity)
+            Utils.removeNotification(this@SupportActivity)
             CoroutineScope(Dispatchers.IO).launch {
                 if (!isLoading)
                     getChatData()
@@ -74,7 +74,7 @@ class SupportActivity : AppCompatActivity() {
         number = MySharedPreference.getInstance(this).getNumber()
         token = MySharedPreference.getInstance(this).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            logout(this, true)
+            Utils.logout(this, true)
         }
     }
 
@@ -133,15 +133,15 @@ class SupportActivity : AppCompatActivity() {
                 message.setText("")
                 val userId = MySharedPreference.getInstance(this).getUserId()
                 val model = MessageModel()
-                model.date = currentDate()
+                model.date = Utils.currentDate()
                 model.stat = 0
                 model.message = body
                 model.receiver = "1"
                 model.read = 1
                 model.sender = userId
                 model.title = "new"
-                val key = getNextKey(db)
-                model.messageId = getNextKey(db)
+                val key = Utils.getNextKey(db)
+                model.messageId = Utils.getNextKey(db)
                 db.executeTransaction { it.insert(model) }
                 CoroutineScope(Dispatchers.IO).launch {
                     sendMessage(body, key)
@@ -180,7 +180,7 @@ class SupportActivity : AppCompatActivity() {
                 } else {
                     withContext(Dispatchers.Main) {
                         when (res.errorCode) {
-                            401 -> logout(this@SupportActivity, true)
+                            401 -> Utils.logout(this@SupportActivity, true)
                             else -> {
                                 db.executeTransaction {
                                     val models = it.where<MessageModel>().equalTo("messageId", key).findFirst()
@@ -198,7 +198,7 @@ class SupportActivity : AppCompatActivity() {
     private suspend fun getChatData() {
         isLoading = true
         val lastUpdate = MySharedPreference.getInstance(this).getLastUpdateChat()
-        val nowDate = currentDate()
+        val nowDate = Utils.currentDate()
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getMessages("Bearer $token", number, lastUpdate)) {
             is Resource.Success -> {
@@ -207,7 +207,7 @@ class SupportActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         MySharedPreference.getInstance(this@SupportActivity).setLastUpdateChat(nowDate)
                         val data: MutableCollection<MessageModel> = mutableListOf()
-                        var index = getNextKey(db)
+                        var index = Utils.getNextKey(db)
                         for(model in res.value.data){
                             model.stat = 1
                             model.read = 1
@@ -224,7 +224,7 @@ class SupportActivity : AppCompatActivity() {
             is Resource.Failure -> {
                 withContext(Dispatchers.Main) {
                     isLoading = false
-                    if (!res.isNetworkError && res.errorCode == 401) logout(this@SupportActivity, true)
+                    if (!res.isNetworkError && res.errorCode == 401) Utils.logout(this@SupportActivity, true)
                 }
             }
         }

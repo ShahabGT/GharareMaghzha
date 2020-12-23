@@ -77,7 +77,7 @@ class BuyHistoryFragment : Fragment(R.layout.fragment_buy_history) {
 
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
+                        Utils.showInternetError(requireContext(), object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
@@ -89,7 +89,7 @@ class BuyHistoryFragment : Fragment(R.layout.fragment_buy_history) {
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Utils.logout(activity, true)
+                        Utils.logout(requireActivity(), true)
                     }
                 }
 

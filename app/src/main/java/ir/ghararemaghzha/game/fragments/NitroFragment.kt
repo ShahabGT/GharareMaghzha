@@ -1,13 +1,9 @@
 package ir.ghararemaghzha.game.fragments
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -15,7 +11,6 @@ import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
-import ir.ghararemaghzha.game.classes.BuyInterface
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.RetryInterface
 import ir.ghararemaghzha.game.classes.Utils
@@ -23,7 +18,6 @@ import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
-import ir.ghararemaghzha.game.dialogs.BuyDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -115,7 +109,7 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
+                        Utils.showInternetError(requireContext(), object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
@@ -131,7 +125,7 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
 
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
+                        Utils.showInternetError(requireContext(), object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
@@ -144,7 +138,7 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Utils.logout(activity, true)
+                        Utils.logout(requireActivity(), true)
                     }
                 }
 
@@ -174,7 +168,7 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
                 } else {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -183,12 +177,12 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Utils.logout(activity, true)
+                        Utils.logout(requireActivity(), true)
                     }
                 }
 

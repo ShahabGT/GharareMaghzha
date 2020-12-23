@@ -71,7 +71,7 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
 
                 } else {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
+                        Utils.showInternetError(requireContext(), object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
@@ -86,7 +86,7 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
+                        Utils.showInternetError(requireContext(), object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
@@ -98,7 +98,7 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Utils.logout(activity, true)
+                        Utils.logout(requireActivity(), true)
                     }
                 }
             }

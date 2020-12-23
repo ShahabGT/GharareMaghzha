@@ -10,7 +10,6 @@ import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_SUPPORT_EX
 import ir.ghararemaghzha.game.classes.MySettingsPreference
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.Utils
-import ir.ghararemaghzha.game.classes.Utils.getNextKey
 import ir.ghararemaghzha.game.models.MessageModel
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -52,7 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 model.date = date ?: ""
                 model.read = 0
                 val db = Realm.getDefaultInstance()
-                model.messageId = getNextKey(db)
+                model.messageId = Utils.getNextKey(db)
                 db.beginTransaction()
                 db.insert(model)
                 db.commitTransaction()

@@ -42,8 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
-    private lateinit var ctx: Context
-    private lateinit var act: FragmentActivity
+
     private val resolveHint = 521
     private lateinit var login: MaterialTextView
     private lateinit var ruleText: MaterialTextView
@@ -56,8 +55,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ctx = requireContext()
-        act = requireActivity()
         if (arguments != null)
             loginNumber = requireArguments().getString("number", "")
         init(view)
@@ -71,7 +68,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         ruleText = v.findViewById(R.id.reg_rules_text)
         ruleCheck = v.findViewById(R.id.reg_rules_check)
 
-        val tradeMarkText = ctx.getString(R.string.registerfragment_rules)
+        val tradeMarkText = getString(R.string.registerfragment_rules)
         val spannableString = SpannableString(tradeMarkText)
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
@@ -97,8 +94,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         else
             number.setText(loginNumber)
 
-        number.doOnTextChanged { s, _, _, _ -> if (s?.length == 11) Utils.hideKeyboard(act) }
-        number.doAfterTextChanged { if (it?.length == 11) Utils.hideKeyboard(act) }
+        number.doOnTextChanged { s, _, _, _ -> if (s?.length == 11) Utils.hideKeyboard(requireActivity()) }
+        number.doAfterTextChanged { if (it?.length == 11) Utils.hideKeyboard(requireActivity()) }
 
         onClicks()
     }
@@ -109,14 +106,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             val na = name.text.toString()
 
             if (!ruleCheck.isChecked) {
-                Toast.makeText(ctx, R.string.registerfragment_rules_error, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.registerfragment_rules_error, Toast.LENGTH_SHORT).show()
             } else if (nu.length < 11 || !nu.startsWith("09")) {
-                Toast.makeText(ctx, R.string.general_number_error, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.general_number_error, Toast.LENGTH_SHORT).show()
             } else if (na.length < 6) {
-                Toast.makeText(ctx, R.string.general_name_error, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.general_name_error, Toast.LENGTH_SHORT).show()
             } else {
-                if (Utils.checkInternet(ctx)) {
-                    Utils.hideKeyboard(act)
+                if (Utils.checkInternet(requireContext())) {
+                    Utils.hideKeyboard(requireActivity())
                     verify.isEnabled = false
                     verify.text = "..."
                     login.isEnabled = false
@@ -124,14 +121,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         doRegister(na, nu)
                     }
                 } else
-                    Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.general_internet_error, Toast.LENGTH_SHORT).show()
             }
         }
         login.setOnClickListener { view?.findNavController()?.popBackStack() }
     }
 
     private fun showRulesDialog() {
-        val dialog = RulesDialog(act)
+        val dialog = RulesDialog(requireActivity())
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         dialog.window?.setGravity(Gravity.CENTER)
@@ -144,7 +141,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         val hintRequest = HintRequest.Builder()
                 .setPhoneNumberIdentifierSupported(true)
                 .build()
-        val intent = Credentials.getClient(ctx).getHintPickerIntent(hintRequest)
+        val intent = Credentials.getClient(requireContext()).getHintPickerIntent(hintRequest)
         startIntentSenderForResult(intent.intentSender,
                 resolveHint, null, 0, 0, 0, null)
     }
@@ -170,7 +167,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).registerUser(name, number)) {
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {
-                    SmsRetriever.getClient(act).startSmsRetriever()
+                    SmsRetriever.getClient(requireActivity()).startSmsRetriever()
                     val b = Bundle()
                     b.putString("number", number)
                     view?.findNavController()?.navigate(R.id.action_registerFragment_to_verifyFragment, b)
@@ -182,11 +179,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     verify.setText(R.string.loginfragment_verify)
                     login.isEnabled = true
                     if (res.isNetworkError) {
-                        Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), R.string.general_internet_error, Toast.LENGTH_SHORT).show()
                     } else {
                         when (res.errorCode) {
-                            409 -> Toast.makeText(ctx, R.string.registerfragment_conflict, Toast.LENGTH_LONG).show()
-                            else -> Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
+                            409 -> Toast.makeText(requireContext(), R.string.registerfragment_conflict, Toast.LENGTH_LONG).show()
+                            else -> Toast.makeText(requireContext(), R.string.general_error, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

@@ -76,7 +76,7 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
+                        Utils.showInternetError(requireContext(), object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
@@ -90,7 +90,7 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
+                        Utils.showInternetError(requireContext(), object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
@@ -102,7 +102,7 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Utils.logout(activity, true)
+                        Utils.logout(requireActivity(), true)
                     }
                 }
             }

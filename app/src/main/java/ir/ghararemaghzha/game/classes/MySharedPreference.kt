@@ -7,6 +7,9 @@ import androidx.security.crypto.MasterKey
 import io.realm.Realm
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.models.MessageModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MySharedPreference private constructor(ctx: Context) {
     private val context = ctx
@@ -48,14 +51,18 @@ class MySharedPreference private constructor(ctx: Context) {
         var counter = sp.getInt("counter", 0)
         if (counter < 199) {
             counter++
-            sp.edit(commit = true) {putInt("counter", counter) }
-            Utils.updateScoreBooster(context, 200 - counter)
+            sp.edit(commit = true) { putInt("counter", counter) }
+            CoroutineScope(Dispatchers.IO).launch {
+                Utils.updateScoreBooster(context, 200 - counter)
+            }
         } else clearCounter(true)
     }
 
     fun clearCounter(showNotification: Boolean) {
         sp.edit { putInt("counter", 0) }
-        Utils.updateScoreBooster(context, 0)
+        CoroutineScope(Dispatchers.IO).launch {
+            Utils.updateScoreBooster(context, 0)
+        }
         setBoosterValue(1f)
         if (showNotification) {
             Utils.createNotification(context, context.getString(R.string.booster_notif_title), context.getString(R.string.booster_notif_body), "ir.ghararemaghzha.game.TARGET_NOTIFICATION")
