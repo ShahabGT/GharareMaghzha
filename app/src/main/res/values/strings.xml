@@ -220,6 +220,7 @@
     <string name="invite_star_title">%d نفر مانده!</string>
     <string name="invite_count">%s نفر</string>
     <string name="invite_share_title">اشتراک گذاری</string>
+    <string name="invite_contacts">مشاهده و دعوت از دوستان</string>
     <string name="invite_share">اپلیکیشن قرار مغزها رو دیدی؟ حتما نصبش کن \n
 کد معرف من: %s  \n
 دانلود بصورت مستقیم: \n
@@ -320,5 +321,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="contacts_title">مخاطبین من</string>
     <string name="contacts_title1">مخاطبین فعال در قرار مغزها</string>
     <string name="contacts_title2">بقیه مخاطبین</string>
+    <string name="contacts_empty">مخاطبی پیدا نشد</string>
+    <string name="contacts_empty_retry">تلاش مجدد!</string>
 
 </resources>

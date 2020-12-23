@@ -12,19 +12,21 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 import io.realm.Realm
 import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ContactsAdapter
 import ir.ghararemaghzha.game.classes.MySharedPreference
-import ir.ghararemaghzha.game.classes.RetryInterface
 import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
@@ -45,6 +47,8 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ContactsAdapter
     private lateinit var db: Realm
+    private lateinit var loading: ConstraintLayout
+    private lateinit var empty: LinearLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,15 +58,25 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
     private fun init(v: View) {
         requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.contacts_title)
-
         db = Realm.getDefaultInstance()
+
+        loading = v.findViewById(R.id.contacts_loading)
+        empty = v.findViewById(R.id.contacts_empty)
+        v.findViewById<MaterialButton>(R.id.contacts_empty_retry).setOnClickListener {
+            requestContacts()
+        }
+
         recyclerView = v.findViewById(R.id.contacts_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val data = db.where<ContactsModel>().findAll()
         adapter = ContactsAdapter(requireActivity(), data)
         recyclerView.adapter = adapter
-        //    if (data.size == 0)
-        requestContacts()
+        if (data.size == 0)
+            requestContacts()
+        else {
+            loading.visibility = View.GONE
+            empty.visibility = View.GONE
+        }
     }
 
     private fun requestContacts() =
@@ -106,6 +120,9 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         if (requestCode == readContactsRequestCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 showContacts()
+            } else {
+                loading.visibility = View.GONE
+                empty.visibility = View.VISIBLE
             }
         }
     }
@@ -163,7 +180,10 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     }
 
     private fun showContacts() {
+        loading.visibility = View.VISIBLE
+        empty.visibility = View.GONE
         val c = getContacts()
+
         CoroutineScope(Dispatchers.IO).launch {
             getData(c)
         }
@@ -190,7 +210,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                     if (res.value.data.isNotEmpty()) {
                         withContext(Dispatchers.Main) {
                             val results = db.where<ContactsModel>().findAll()
-                            db.executeTransaction { results.deleteAllFromRealm()}
+                            db.executeTransaction { results.deleteAllFromRealm() }
                             adapter.notifyDataSetChanged()
                             val networkData = res.value.data.sortedByDescending { it.id }
 
@@ -204,27 +224,35 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                             val firstIndex = networkData.indexOfFirst { it.id == "0" }
                             co.add(firstIndex + 1, ContactsModel(id = getString(R.string.contacts_title2), type = 0))
 
-                            for(model in co) model.contactId=index++
+                            for (model in co) model.contactId = index++
 
-                            db.executeTransaction {it.insertOrUpdate(co)}
+                            db.executeTransaction { it.insertOrUpdate(co) }
+                            loading.visibility = View.GONE
+                            empty.visibility = View.GONE
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            loading.visibility = View.GONE
+                            empty.visibility = View.VISIBLE
                         }
                     }
             }
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(context, object : RetryInterface {
-                            override fun retry() {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    getData(data)
-                                }
-                            }
-                        })
+                        if (db.where<ContactsModel>().findAll().size == 0) {
+                            loading.visibility = View.GONE
+                            empty.visibility = View.VISIBLE
+                        } else {
+                            loading.visibility = View.GONE
+                            empty.visibility = View.GONE
+                        }
                         Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
-                        //   loading.visibility = View.GONE
+                        loading.visibility = View.GONE
+                        empty.visibility = View.GONE
                         Utils.logout(activity, true)
                     }
                 }
