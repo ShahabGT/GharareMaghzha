@@ -221,26 +221,28 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
 
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {
-                    val db = Realm.getDefaultInstance()
-                    verify.isEnabled = true
-                    verify.setText(R.string.verify_verify)
-                    dialog.dismiss()
                     if (res.value.message != "empty") {
                         val data: MutableCollection<QuestionModel> = mutableListOf()
                         for ( model in res.value.data) {
                             model.uploaded = model.userAnswer != "-1"
                             data.add(model)
                         }
+                        val db = Realm.getDefaultInstance()
                         db.executeTransaction { it.insertOrUpdate(data) }
-
                         MySharedPreference.getInstance(requireContext()).setUserId(userId)
                         Toast.makeText(requireContext(), getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                         logEvent()
+                        dialog.dismiss()
                         view?.findNavController()?.navigate(R.id.action_verifyFragment_to_mainActivity)
                         requireActivity().finish()
-                    } else
+                    } else {
+                        verify.isEnabled = true
+                        verify.setText(R.string.verify_verify)
+                        dialog.dismiss()
                         Toast.makeText(requireContext(), R.string.general_error, Toast.LENGTH_SHORT).show()
+
+                    }
                 }
 
 

@@ -255,7 +255,7 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="booster_notif_title">پکیج نیترو امتیاز</string>
     <string name="booster_notif_body">اعتبار پکیج نیترو امتیاز شما به پایان رسید.</string>
 
-    <string name="score_helper_title">نیترو امتیاز</string>
+    <string name="score_helper_title">افزایش امتیاز</string>
     <string name="score1_title">پاسخ به سوالات</string>
     <string name="score1_subtitle">با پاسخ درست به هر سوال میزان امتیاز شما بسته به امتیاز هر سوال افزایش می یابد. در ابتدا تمامی سوالات به صورت رایگان برای شما فعال می باشد.</string>
     <string name="score1_button">ورود به صفحه سوالات</string>
@@ -322,6 +322,6 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="contacts_title1">مخاطبین فعال در قرار مغزها</string>
     <string name="contacts_title2">بقیه مخاطبین</string>
     <string name="contacts_empty">مخاطبی پیدا نشد</string>
-    <string name="contacts_empty_retry">تلاش مجدد!</string>
+    <string name="contacts_empty_retry">تلاش مجدد</string>
 
 </resources>

@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/start_info_card"
         app:rb_color="#ffb504"
         app:rb_duration="3000"
-        app:rb_radius="37dp"
+        app:rb_radius="30dp"
         app:rb_rippleAmount="3"
         app:rb_scale="5">
 

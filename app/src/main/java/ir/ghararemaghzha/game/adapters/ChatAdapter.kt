@@ -57,7 +57,7 @@ class ChatAdapter(private val ctx: FragmentActivity, data: OrderedRealmCollectio
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             if (viewType == typeMe) MeViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_chat_me, parent, false))
             else
-                ChatAdapter.OtherViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_chat_other, parent, false))
+                OtherViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_chat_other, parent, false))
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -72,7 +72,7 @@ class ChatAdapter(private val ctx: FragmentActivity, data: OrderedRealmCollectio
                 val dateConverter = DateConverter()
                 dateConverter.gregorianToPersian(date.substring(0, 4).toInt(), date.substring(5, 7).toInt(), date.substring(8, 10).toInt())
                 h.time.text = date.substring(11, 16)
-                h.date.text = "${dateConverter.year}/${dateConverter.month}/${dateConverter.day}"
+                h.date.text = "${dateConverter.year.toString().substring(2,4)}/${dateConverter.month}/${dateConverter.day}"
                 when (model.stat) {
                     0 -> h.stat.setImageResource(R.drawable.vector_sending)
                     1 -> h.stat.setImageResource(R.drawable.vector_sent)
@@ -97,7 +97,7 @@ class ChatAdapter(private val ctx: FragmentActivity, data: OrderedRealmCollectio
                 val dateConverter = DateConverter()
                 dateConverter.gregorianToPersian(date.substring(0, 4).toInt(), date.substring(5, 7).toInt(), date.substring(8, 10).toInt())
                 h.time.text = date.substring(11, 16)
-                h.date.text = "${dateConverter.year}/${dateConverter.month}/${dateConverter.day}"
+                h.date.text = "${dateConverter.year.toString().substring(2,4)}/${dateConverter.month}/${dateConverter.day}"
             }
 
     }

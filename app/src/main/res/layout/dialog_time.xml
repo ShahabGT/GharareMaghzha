@@ -46,7 +46,8 @@
             android:layout_marginTop="15dp"
             android:fontFamily="@font/vazir"
             android:textColor="@color/black"
-
+            android:drawableTint="@color/black"
+            android:drawableLeft="@drawable/vector_setting"
             android:padding="8dp"
             android:text="@string/time_set"
             app:layout_constraintBottom_toBottomOf="parent"
