@@ -15,6 +15,7 @@ import com.google.android.material.textview.MaterialTextView
 import com.skyfishjy.library.RippleBackground
 import com.tmall.ultraviewpager.UltraViewPager
 import io.realm.Realm
+import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.activities.QuestionsActivity
 import ir.ghararemaghzha.game.adapters.MainViewPager
@@ -67,7 +68,7 @@ class StartFragment : Fragment(R.layout.fragment_start) {
     private fun updateInfo() {
         val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
         when {
-            passed in 0..6 -> info.text = requireContext().getString(R.string.start_info, db.where(QuestionModel::class.java)
+            passed in 0..6 -> info.text = requireContext().getString(R.string.start_info, db.where<QuestionModel>()
                     .equalTo("userAnswer", "-1")
                     .findAll().size.toString())
             passed < 0 -> info.setText(R.string.start_info_notstarted)
@@ -102,7 +103,7 @@ class StartFragment : Fragment(R.layout.fragment_start) {
         highscore.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_highscore) }
         start.setOnClickListener {
             val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
-            val remaining = db.where(QuestionModel::class.java).equalTo("userAnswer", "-1").findAll().size
+            val remaining = db.where<QuestionModel>().equalTo("userAnswer", "-1").findAll().size
             when {
                 passed < 0 -> Toast.makeText(context, requireContext().getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show()
                 passed > 6 -> Toast.makeText(context, requireContext().getString(R.string.start_info_passed), Toast.LENGTH_LONG).show()

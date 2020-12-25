@@ -80,6 +80,7 @@ class IncomingDialog(context: Context, navController: NavController, private val
                     dismiss()
                 }
 
+                @Suppress("deprecation")
                 override fun updateDrawState(ds: TextPaint) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                         ds.color = context.resources.getColor(R.color.red, null)

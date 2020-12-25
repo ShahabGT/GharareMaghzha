@@ -45,7 +45,6 @@ class BuyHistoryFragment : Fragment(R.layout.fragment_buy_history) {
 
         CoroutineScope(Dispatchers.IO).launch {
             getData()
-
         }
     }
 
@@ -92,7 +91,6 @@ class BuyHistoryFragment : Fragment(R.layout.fragment_buy_history) {
                         Utils.logout(requireActivity(), true)
                     }
                 }
-
             }
         }
     }

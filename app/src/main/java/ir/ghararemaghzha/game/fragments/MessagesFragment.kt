@@ -13,6 +13,7 @@ import com.google.android.material.textview.MaterialTextView
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
+import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.IncomingAdapter
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST
@@ -34,10 +35,10 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
         (act.findViewById<View>(R.id.toolbar_title) as MaterialTextView).setText(R.string.message_incoming)
         val db = Realm.getDefaultInstance()
         db.executeTransaction {
-            val results: RealmResults<MessageModel> = it.where(MessageModel::class.java).equalTo("sender", "admin").equalTo("read", "0".toInt()).findAll()
+            val results: RealmResults<MessageModel> = it.where<MessageModel>().equalTo("sender", "admin").equalTo("read", "0".toInt()).findAll()
             results.setInt("read", 1)
         }
-        val data = db.where(MessageModel::class.java).equalTo("sender", "admin").sort("date", Sort.DESCENDING).findAll()
+        val data = db.where<MessageModel>().equalTo("sender", "admin").sort("date", Sort.DESCENDING).findAll()
         val intent = Intent()
         intent.action = GHARAREHMAGHZHA_BROADCAST
         ctx.sendBroadcast(intent)

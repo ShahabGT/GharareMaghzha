@@ -56,7 +56,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 db.insert(model)
                 db.commitTransaction()
 
-
             } else {
                 MySharedPreference.getInstance(this).setUnreadChats(MySharedPreference.getInstance(this).getUnreadChats() + 1)
             }

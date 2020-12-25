@@ -54,7 +54,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:background="@drawable/buybg2"
+            android:background="@drawable/buybg"
             android:layout_height="150dp">
 
 

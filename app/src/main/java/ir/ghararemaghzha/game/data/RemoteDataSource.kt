@@ -13,7 +13,6 @@ class RemoteDataSource {
         private const val BASE_URL = "https://ghararehmaghzha.ir/api/"
     }
 
-
     fun <Api> getApi(
             api: Class<Api>
     ): Api {
@@ -33,6 +32,4 @@ class RemoteDataSource {
                 .build()
                 .create(api)
     }
-
-
 }

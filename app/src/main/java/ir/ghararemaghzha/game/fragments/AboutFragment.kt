@@ -58,6 +58,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
                 startActivity(intent)
             }
 
+            @Suppress("deprecation")
             override fun updateDrawState(ds: TextPaint) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     ds.color = resources.getColor(R.color.red, null)
@@ -81,6 +82,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
                 startActivity(intent)
             }
 
+            @Suppress("deprecation")
             override fun updateDrawState(ds: TextPaint) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     ds.color = resources.getColor(R.color.red, null)
@@ -128,7 +130,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
         v.findViewById<ImageView>(R.id.about_email).setOnClickListener {
             val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                     "mailto", "support@ghararehmaghzha.ir", null))
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("ghararehmaghzha@radical-app.ir"))
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, "support@ghararehmaghzha.ir")
             startActivity(Intent.createChooser(emailIntent, "ارسال ایمیل از طریق"))
         }
         v.findViewById<ImageView>(R.id.about_telegram).setOnClickListener { intentAction("https://t.me/ghararehmaghzha") }

@@ -6,14 +6,6 @@ import retrofit2.http.*
 
 interface NetworkApi {
 
-
-    @FormUrlEncoded
-    @POST("validate")
-    suspend fun validate(
-            @Header("Authorization") Token: String,
-            @Field("number") number: String
-    ): VerifyResponse
-
     @FormUrlEncoded
     @POST("appopen")
     suspend fun appOpen(
@@ -50,14 +42,6 @@ interface NetworkApi {
     ): GeneralResponse
 
     @FormUrlEncoded
-    @POST("time")
-    suspend fun getServerTime(
-            @Header("Authorization") Token: String,
-            @Field("number") number: String
-    ): TimeResponse
-
-
-    @FormUrlEncoded
     @POST("chat")
     suspend fun sendMessage(
             @Header("Authorization") Token: String,
@@ -72,7 +56,6 @@ interface NetworkApi {
             @Field("number") number: String,
             @Field("date") lastUpdate: String
     ): ChatResponse
-
 
     @FormUrlEncoded
     @POST("questions")
@@ -107,14 +90,6 @@ interface NetworkApi {
     ): GeneralResponse
 
     @FormUrlEncoded
-    @POST("influencer")
-    suspend fun searchInfluencer(
-            @Header("Authorization") Token: String,
-            @Field("number") number: String,
-            @Field("influencer_code") code: String
-    ): GeneralResponse
-
-    @FormUrlEncoded
     @POST("answer")
     suspend fun answerQuestion(
             @Header("Authorization") Token: String,
@@ -132,14 +107,6 @@ interface NetworkApi {
             @Field("number") number: String,
             @Field("score") score: String,
             @Field("season") season: Int
-    ): GeneralResponse
-
-    @FormUrlEncoded
-    @POST("serverquestions")
-    suspend fun sendQuestionCount(
-            @Header("Authorization") Token: String,
-            @Field("number") number: String,
-            @Field("count") count: String
     ): GeneralResponse
 
     @FormUrlEncoded
@@ -163,13 +130,6 @@ interface NetworkApi {
             @Field("user_sex") userSex: String,
             @Field("invite") invite: String
     ): GeneralResponse
-
-    @FormUrlEncoded
-    @POST("plans")
-    suspend fun getPlans(
-            @Header("Authorization") Token: String,
-            @Field("number") number: String
-    ): PlanResponse
 
     @FormUrlEncoded
     @POST("nitro")

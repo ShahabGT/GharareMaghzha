@@ -18,14 +18,11 @@ class ScoreHelperFragment : Fragment(R.layout.fragment_score_helper) {
 
     private lateinit var navController:NavController
 
-
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
          super.onViewCreated(view, savedInstanceState)
          navController = Navigation.findNavController(view)
          init(view)
      }
-
-
 
     private fun init( v:View) {
         requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).text=getText(R.string.score_helper_title)

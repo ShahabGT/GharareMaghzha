@@ -48,7 +48,6 @@ class Utils {
     companion object {
 
         @Suppress("DEPRECATION")
-        @JvmStatic
         fun checkInternet(ctx: Context): Boolean {
             var result = false
             val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -74,10 +73,8 @@ class Utils {
             return result
         }
 
-        @JvmStatic
         fun currentDate(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(Date())
 
-        @JvmStatic
         fun isTimeAcceptable(serverDate: String): Boolean {
             var res = false
             val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
@@ -139,10 +136,8 @@ class Utils {
             return formatter.format(date)
         }
 
-        @JvmStatic
         fun removeNotification(ctx: Context) = (ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(Const.NOTIFICATION_ID)
 
-        @JvmStatic
         fun showTimeError(ctx: Context): TimeDialog {
             val dialog = TimeDialog(ctx)
             dialog.setCanceledOnTouchOutside(false)
@@ -156,7 +151,6 @@ class Utils {
             return dialog
         }
 
-        @JvmStatic
         fun showGetDataLoading(ctx: Context): GetDataDialog {
             val dialog = GetDataDialog(ctx)
             dialog.setCanceledOnTouchOutside(false)
@@ -170,7 +164,6 @@ class Utils {
             return dialog
         }
 
-        @JvmStatic
         fun showInternetError(ctx: Context, retry: RetryInterface) {
             val dialog = NoInternetDialog(ctx, retry)
             dialog.setCanceledOnTouchOutside(false)
@@ -183,10 +176,8 @@ class Utils {
             window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         }
 
-        @JvmStatic
         fun getVersionCode(ctx: Context) = PackageInfoCompat.getLongVersionCode(ctx.packageManager.getPackageInfo(ctx.packageName, 0)).toInt()
 
-        @JvmStatic
         fun logout(act: Activity, showMessage: Boolean) {
             if (showMessage) Toast.makeText(act, act.getString(R.string.access_error), Toast.LENGTH_LONG).show()
             MySharedPreference.getInstance(act).clear()
@@ -207,7 +198,6 @@ class Utils {
                 0
         }
 
-        @JvmStatic
         fun isEmailValid(email: String): Boolean {
             var email = email
             var res = false

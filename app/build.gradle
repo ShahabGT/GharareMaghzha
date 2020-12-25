@@ -14,8 +14,8 @@ android {
         applicationId "ir.ghararemaghzha.game"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 33
-        versionName "4.1.0"
+        versionCode 34
+        versionName "5.0.0"
     }
 
     buildTypes {
@@ -72,19 +72,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
     implementation 'com.google.firebase:firebase-perf:19.0.11'
 
-
     implementation 'com.github.ShahabGT:InstagramPicker:2.1.1'
 
     implementation 'com.daimajia.easing:library:2.4@aar'
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
+
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
 
-
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'androidx.preference:preference-ktx:1.1.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
 
