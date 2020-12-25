@@ -12,6 +12,9 @@ import ir.ghararemaghzha.game.R
      override fun onCreate(savedInstanceState: Bundle?) {
          super.onCreate(savedInstanceState)
          setContentView(R.layout.dialog_time)
-         findViewById<MaterialButton>(R.id.alert_dialog_set).setOnClickListener{context.startActivity(Intent(android.provider.Settings.ACTION_DATE_SETTINGS))}
+         findViewById<MaterialButton>(R.id.alert_dialog_set).setOnClickListener{
+             context.startActivity(Intent(android.provider.Settings.ACTION_DATE_SETTINGS))
+             dismiss()
+         }
      }
 }

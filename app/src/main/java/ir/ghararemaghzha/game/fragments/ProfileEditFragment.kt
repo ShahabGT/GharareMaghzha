@@ -280,7 +280,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                                 .placeholder(R.drawable.placeholder)
                                 .into(avatar)
                         avatarRemove.visibility = View.VISIBLE
-                        MainActivity.setAvatars(activity)
+                        MainActivity().setAvatars(requireActivity())
                     } else {
                         Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
@@ -324,7 +324,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                                 .placeholder(R.drawable.placeholder)
                                 .into(avatar)
                         avatarRemove.visibility = View.VISIBLE
-                        MainActivity.setAvatars(activity)
+                        MainActivity().setAvatars(requireActivity())
                     } else {
                         Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
