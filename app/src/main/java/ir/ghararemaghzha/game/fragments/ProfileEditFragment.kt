@@ -45,7 +45,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
     private lateinit var bday: TextInputEditText
     private lateinit var invite: TextInputEditText
     private lateinit var inviteLayout: TextInputLayout
-    private lateinit var bdayView: View
+    private lateinit var bithdayView: View
     private lateinit var avatarChange: MaterialTextView
     private lateinit var avatarRemove: MaterialTextView
     private lateinit var save: MaterialButton
@@ -79,7 +79,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
         val number: TextInputEditText = v.findViewById(R.id.profile_number)
         email = v.findViewById(R.id.profile_email)
         bday = v.findViewById(R.id.profile_bday)
-        bdayView = v.findViewById(R.id.profile_bday_view)
+        bithdayView = v.findViewById(R.id.profile_bday_view)
         avatar = v.findViewById(R.id.profile_avatar)
         avatarChange = v.findViewById(R.id.profile_avatar_change)
         avatarRemove = v.findViewById(R.id.profile_avatar_remove)
@@ -116,7 +116,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
     private fun onClicks() {
         avatarChange.setOnClickListener {
             val picker = InstagramPicker(requireActivity())
-            picker.show('1'.toInt(), '1'.toInt()) { address: String? ->
+            picker.show(1, 1) { address: String ->
                 if (Utils.checkInternet(requireContext())) {
                     if (!uploading) {
                         save.isEnabled = false
@@ -141,7 +141,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                 }
             } else Toast.makeText(requireContext(), getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
         }
-        bdayView.setOnClickListener { selectDate() }
+        bithdayView.setOnClickListener { selectDate() }
         male.setOnCheckedChangeListener { _, b: Boolean -> if (b) female.isChecked = false }
         female.setOnCheckedChangeListener { _, b: Boolean -> if (b) male.isChecked = false }
         save.setOnClickListener {
@@ -203,18 +203,6 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
         val bytes = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
-
-//    private fun getOrientation2(photoUri: Uri): Int {
-//        val cursor = requireActivity().contentResolver.query(photoUri, arrayOf(MediaStore.MediaColumns.ORIENTATION), null, null, null)
-//        return if (cursor != null) {
-//            if (cursor.count != 1) {
-//                cursor.close()
-//                return -1
-//            }
-//            cursor.moveToFirst()
-//            cursor.getInt(0)
-//        } else -1
-//    }
 
     private fun getOrientation(filepath: Uri): Int =
             when (ExifInterface(filepath.path

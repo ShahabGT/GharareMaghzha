@@ -16,8 +16,8 @@ class NoInternetDialog(ctx: Context,private val retryInterface: RetryInterface) 
         setContentView(R.layout.dialog_nointernet)
         findViewById<MaterialButton>(R.id.alert_dialog_set).setOnClickListener {
             if (Utils.checkInternet(context)) {
-                dismiss()
                 retryInterface.retry()
+                dismiss()
             } else {
                 Toast.makeText(context, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
             }
