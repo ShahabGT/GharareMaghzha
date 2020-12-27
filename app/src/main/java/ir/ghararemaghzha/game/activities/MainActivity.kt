@@ -81,10 +81,11 @@ class MainActivity : AppCompatActivity() {
         val newIntent = intent
         if (newIntent != null && newIntent.extras != null) {
             val st = intent.extras?.getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE, "default")
-            if (st != null && st == "new")
-                bnv.selectedItemId = R.id.menu_message
-            else if (st != null && st == "chat") {
-                startActivity(Intent(this, SupportActivity::class.java))
+            if(st!=null) {
+                if (st == "new")
+                    bnv.selectedItemId = R.id.menu_message
+                else if (st == "chat")
+                    startActivity(Intent(this, SupportActivity::class.java))
             }
         }
     }
@@ -439,13 +440,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetForNewSeason(newSeason: Int) {
+        dataDialog = Utils.showGetDataLoading(this@MainActivity)
         MySharedPreference.getInstance(this).setScore(0)
         MySharedPreference.getInstance(this).clearCounter(false)
         MySharedPreference.getInstance(this).setBoosterValue(1f)
         MySharedPreference.getInstance(this).setSeason(newSeason)
         val results = db.where<QuestionModel>().findAll()
         db.executeTransaction { results.deleteAllFromRealm() }
-        dataDialog = Utils.showGetDataLoading(this@MainActivity)
         CoroutineScope(Dispatchers.IO).launch {
             getData()
         }

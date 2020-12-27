@@ -213,7 +213,7 @@ class QuestionsActivity : AppCompatActivity() {
                 progress -= 6.6
                 timeText.text = time.toString()
                 progressBar.progress = progress.toInt()
-                if (l < 6000) setViewTextColor(timeText, R.color.random1)//timeText.setTextColor(resources.getColor(R.color.random1))
+                if (l < 6000) setViewTextColor(timeText, R.color.random1)
             }
 
             override fun onFinish() {
@@ -296,7 +296,6 @@ class QuestionsActivity : AppCompatActivity() {
         }
         if (button.text.toString() == correctAnswer) {
             setViewColor(buttonCard, R.color.green)
-            //  buttonCard.setCardBackgroundColor(resources.getColor(R.color.green))
             YoYo.with(Techniques.Tada).duration(500).playOn(buttonCard)
             playSound(correctSound)
             val qPoint = model.questionPoints.toInt()
@@ -309,11 +308,10 @@ class QuestionsActivity : AppCompatActivity() {
             }
         } else {
             setViewColor(buttonCard, R.color.red)
-            //  buttonCard.setCardBackgroundColor(resources.getColor(R.color.red))
             YoYo.with(Techniques.Shake).duration(500).playOn(buttonCard)
             playSound(wrongSound)
         }
-        Handler(Looper.getMainLooper()).postDelayed({ nextQuestion() }, 1500)
+        Handler(Looper.getMainLooper()).postDelayed({ nextQuestion() }, 2000)
     }
 
     private fun enterAnimations() {
@@ -344,20 +342,15 @@ class QuestionsActivity : AppCompatActivity() {
             enterAnimations()
             answer1c.isEnabled = true
             setViewColor(answer1c, R.color.white)
-            //answer1c.setCardBackgroundColor(resources.getColor(R.color.white))
             answer2c.isEnabled = true
             setViewColor(answer2c, R.color.white)
-            //  answer2c.setCardBackgroundColor(resources.getColor(R.color.white))
             answer3c.isEnabled = true
             setViewColor(answer3c, R.color.white)
-            //  answer3c.setCardBackgroundColor(resources.getColor(R.color.white))
             answer4c.isEnabled = true
             setViewColor(answer4c, R.color.white)
-            //  answer4c.setCardBackgroundColor(resources.getColor(R.color.white))
             time = 15
             progress = 100.0
             timeText.text = time.toString()
-            //timeText.setTextColor(resources.getColor(R.color.black))
             setViewTextColor(timeText, R.color.black)
             progressBar.progress = 100
             randomAnswers = randomNumbers()
@@ -412,8 +405,7 @@ class QuestionsActivity : AppCompatActivity() {
     }
 
     private fun setAnswer(userAnswer: String) {
-        var b = "0"
-        if (hasBooster) b = "1"
+        val b =  if (hasBooster) "1" else "0"
         db.executeTransaction {
             val result = it.where<QuestionModel>().equalTo("questionId", model.questionId).findFirst()
             result?.userAnswer = userAnswer
@@ -481,8 +473,7 @@ class QuestionsActivity : AppCompatActivity() {
     }
 
     private suspend fun uploadAnswer(userAnswer: String, questionId: String) {
-        var b = "0"
-        if (hasBooster) b = "1"
+        val b = if (hasBooster)  "1" else "0"
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).answerQuestion("Bearer $token", number, questionId, userAnswer, b, season)) {
             is Resource.Success -> {

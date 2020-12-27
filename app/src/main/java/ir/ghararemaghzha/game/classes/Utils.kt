@@ -199,14 +199,17 @@ class Utils {
         }
 
         fun isEmailValid(email: String): Boolean {
-            var email = email
             var res = false
             val emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
             val pattern = Pattern.compile(emailPattern)
             val matcher = pattern.matcher(email)
             if (matcher.matches()) {
-                email = email.toLowerCase(Locale.ROOT)
-                res = email.contains("@yahoo.") || email.contains("@gmail.") || email.contains("@aol.") || email.contains("@hotmail.") || email.contains("@ymail.") || email.contains("@live.")
+                res = email.toLowerCase(Locale.ROOT).contains("@yahoo.")
+                        || email.toLowerCase(Locale.ROOT).contains("@gmail.")
+                        || email.toLowerCase(Locale.ROOT).contains("@aol.")
+                        || email.toLowerCase(Locale.ROOT).contains("@hotmail.")
+                        || email.toLowerCase(Locale.ROOT).contains("@ymail.")
+                        || email.toLowerCase(Locale.ROOT).contains("@live.")
             }
             return res
         }
