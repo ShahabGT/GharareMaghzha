@@ -18,7 +18,7 @@ import ir.ghararemaghzha.game.activities.SupportActivity
 import ir.ghararemaghzha.game.classes.DateConverter
 import ir.ghararemaghzha.game.models.MessageModel
 
-class IncomingDialog(context: Context, navController: NavController, private val model: MessageModel) : Dialog(context) {
+class IncomingDialog(ctx: Context, navController: NavController, private val model: MessageModel) : Dialog(ctx) {
     private lateinit var title: MaterialTextView
     private lateinit var body: MaterialTextView
     private lateinit var date: MaterialTextView

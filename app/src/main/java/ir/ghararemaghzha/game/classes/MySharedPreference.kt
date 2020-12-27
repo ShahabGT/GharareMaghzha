@@ -40,6 +40,7 @@ class MySharedPreference private constructor(ctx: Context) {
         setFirstTime()
         setFirstTimeQuestion()
         setCounter(counter)
+        setSlides()
     }
 
     fun setCounter(counter: Int) = sp.edit { putInt("counter", counter) }
@@ -108,6 +109,9 @@ class MySharedPreference private constructor(ctx: Context) {
 
     fun setFbToken(fbToken: String) = sp.edit { putString("fbToken", fbToken) }
     fun getFbToken() = sp.getString("fbToken", "") ?: ""
+
+    fun setSlides() = sp.edit { putBoolean("slides", true) }
+    fun getSlides() = sp.getBoolean("slides", false)
 
     fun setScore(score: Int) = sp.edit { putInt("score", score) }
     fun getScore() = sp.getInt("score", 0)

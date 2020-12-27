@@ -8,7 +8,6 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import ir.ghararemaghzha.game.R
 
-
 class MyApplication : Application() {
 
     override fun onCreate() {
@@ -16,7 +15,7 @@ class MyApplication : Application() {
         Realm.init(this)
         val config = RealmConfiguration.Builder()
                 .name("myRealm.realm")
-                .schemaVersion(7)
+                .schemaVersion(10)
                 .allowWritesOnUiThread(true)
                 .deleteRealmIfMigrationNeeded()
                 .build()

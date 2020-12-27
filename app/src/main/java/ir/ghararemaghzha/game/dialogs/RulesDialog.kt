@@ -2,6 +2,7 @@ package ir.ghararemaghzha.game.dialogs
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
@@ -15,7 +16,7 @@ import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
 import kotlinx.coroutines.*
 
-class RulesDialog(context: Activity) : Dialog(context) {
+class RulesDialog(ctx: Context) : Dialog(ctx) {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

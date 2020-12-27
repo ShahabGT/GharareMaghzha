@@ -4,6 +4,8 @@
     <string name="en_digits">abcdefghijklmnopqrstuvwxyz1234567890</string>
     <string name="numbers">1234567980</string>
 
+    <string name="lets_go">بزن بریم!</string>
+
     <string name="access_error">لطفا دوباره وارد حساب کاربری خود شوید!</string>
     <string name="general_error">خطا! لطفا دوباره امتحان کنید</string>
     <string name="general_send">با موفقیت ارسال شد</string>
@@ -323,5 +325,6 @@ https://play.google.com/store/apps/details?id=ir.ghararemaghzha.game
     <string name="contacts_title2">بقیه مخاطبین</string>
     <string name="contacts_empty">مخاطبی پیدا نشد</string>
     <string name="contacts_empty_retry">تلاش مجدد</string>
+    <string name="contacts_refresh">بارگزاری مجدد</string>
 
 </resources>

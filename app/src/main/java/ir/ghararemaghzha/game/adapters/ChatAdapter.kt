@@ -1,5 +1,7 @@
 package ir.ghararemaghzha.game.adapters
 
+import android.app.Activity
+import android.content.Context
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.nio.charset.StandardCharsets
 
-class ChatAdapter(private val ctx: FragmentActivity, data: OrderedRealmCollection<MessageModel>) : RealmRecyclerViewAdapter<MessageModel, RecyclerView.ViewHolder>(data, true) {
+class ChatAdapter(private val ctx: Context, data: OrderedRealmCollection<MessageModel>) : RealmRecyclerViewAdapter<MessageModel, RecyclerView.ViewHolder>(data, true) {
     private val typeMe = 1
     private val typeOther = 2
 
@@ -106,7 +108,7 @@ class ChatAdapter(private val ctx: FragmentActivity, data: OrderedRealmCollectio
         val number = MySharedPreference.getInstance(ctx).getNumber()
         val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(ctx, true)
+            Utils.logout(ctx as Activity, true)
             return
         }
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).sendMessage("Bearer $token", number, message)) {
@@ -139,7 +141,7 @@ class ChatAdapter(private val ctx: FragmentActivity, data: OrderedRealmCollectio
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
-                        Utils.logout(ctx, true)
+                        Utils.logout(ctx as Activity, true)
                     }
                 }
             }

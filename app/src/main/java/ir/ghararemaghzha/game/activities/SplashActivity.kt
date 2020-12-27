@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.transition.Slide
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -55,9 +56,12 @@ class SplashActivity : AppCompatActivity() {
         super.onResume()
         Handler(Looper.getMainLooper()).postDelayed({
             val userId = MySharedPreference.getInstance(this).getUserId()
+            val slides = MySharedPreference.getInstance(this).getSlides()
 
             if (userId.isEmpty())
                 startActivity(Intent(this, RegisterActivity::class.java))
+            else if(!slides)
+                startActivity(Intent(this, SlidesActivity::class.java))
             else
                 startActivity(Intent(this, MainActivity::class.java))
 

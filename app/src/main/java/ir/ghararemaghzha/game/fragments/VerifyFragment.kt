@@ -231,17 +231,15 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                         db.executeTransaction { it.insertOrUpdate(data) }
                         MySharedPreference.getInstance(requireContext()).setUserId(userId)
                         Toast.makeText(requireContext(), getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
-                        dialog.dismiss()
                         logEvent()
                         dialog.dismiss()
-                        view?.findNavController()?.navigate(R.id.action_verifyFragment_to_mainActivity)
+                        view?.findNavController()?.navigate(R.id.action_verifyFragment_to_slidesActivity)
                         requireActivity().finish()
                     } else {
                         verify.isEnabled = true
                         verify.setText(R.string.verify_verify)
                         dialog.dismiss()
                         Toast.makeText(requireContext(), R.string.general_error, Toast.LENGTH_SHORT).show()
-
                     }
                 }
 

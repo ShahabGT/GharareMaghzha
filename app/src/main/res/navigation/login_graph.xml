@@ -43,19 +43,13 @@
         android:name="ir.ghararemaghzha.game.fragments.VerifyFragment"
         android:label="fragment_verify"
         tools:layout="@layout/fragment_verify">
-
-
         <action
-            android:id="@+id/action_verifyFragment_to_mainActivity"
-            app:destination="@id/mainActivity"
-            app:enterAnim="@anim/enter_left"
-            app:exitAnim="@anim/exit_right"
-            app:popEnterAnim="@anim/enter_right"
-            app:popExitAnim="@anim/exit_left" />
+            android:id="@+id/action_verifyFragment_to_slidesActivity"
+            app:destination="@id/slidesActivity" />
     </fragment>
     <activity
-        android:id="@+id/mainActivity"
-        android:name="ir.ghararemaghzha.game.activities.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+        android:id="@+id/slidesActivity"
+        android:name="ir.ghararemaghzha.game.activities.SlidesActivity"
+        android:label="activity_slides"
+        tools:layout="@layout/activity_slides" />
 </navigation>

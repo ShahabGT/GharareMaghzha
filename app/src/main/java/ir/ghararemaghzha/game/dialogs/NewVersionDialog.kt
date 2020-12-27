@@ -1,6 +1,7 @@
 package ir.ghararemaghzha.game.dialogs
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +9,7 @@ import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import ir.ghararemaghzha.game.R
 
-class NewVersionDialog(ctx: FragmentActivity) : Dialog(ctx) {
+class NewVersionDialog(ctx: Context) : Dialog(ctx) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

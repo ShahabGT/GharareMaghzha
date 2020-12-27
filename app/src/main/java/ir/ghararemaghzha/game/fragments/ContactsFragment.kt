@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textview.MaterialTextView
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -49,6 +50,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     private lateinit var db: Realm
     private lateinit var loading: ConstraintLayout
     private lateinit var empty: LinearLayout
+    private lateinit var refresh: ExtendedFloatingActionButton
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +62,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.contacts_title)
         db = Realm.getDefaultInstance()
 
+        refresh = v.findViewById(R.id.contacts_fab)
         loading = v.findViewById(R.id.contacts_loading)
         empty = v.findViewById(R.id.contacts_empty)
         v.findViewById<MaterialButton>(R.id.contacts_empty_retry).setOnClickListener {
@@ -71,12 +74,26 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         val data = db.where<ContactsModel>().findAll()
         adapter = ContactsAdapter(requireActivity(), data)
         recyclerView.adapter = adapter
-        if (data.size == 0)
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy<0 && !refresh.isShown)
+                    refresh.show()
+                else if(dy>0 && refresh.isShown)
+                    refresh.hide()
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
+        refresh.setOnClickListener { requestContacts() }
+
+        if (data.size == 0) {
             requestContacts()
-        else {
+            refresh.hide()
+        } else {
+            refresh.show()
             loading.visibility = View.GONE
             empty.visibility = View.GONE
         }
+
     }
 
     private fun requestContacts() =
@@ -227,6 +244,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                         db.executeTransaction { it.insertOrUpdate(co) }
                         loading.visibility = View.GONE
                         empty.visibility = View.GONE
+                        refresh.show()
                     }
                 } else {
                     withContext(Dispatchers.Main) {
