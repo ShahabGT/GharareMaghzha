@@ -6,12 +6,15 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.button.MaterialButton
@@ -46,24 +49,31 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     private lateinit var accessToken: String
     private var number: String = ""
     private lateinit var userId: String
-
     private lateinit var dialog: GetDataDialog
+    private lateinit var act: FragmentActivity
+    private lateinit var ctx: Context
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v= super.onCreateView(inflater, container, savedInstanceState)
+        act=requireActivity()
+        ctx = requireContext()
+        return v
+    }
 
     private val rec = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val c = intent?.extras?.getString("code")
             if (c?.length == 6) {
                 code.setText(c)
-                if (Utils.checkInternet(requireContext())) {
+                if (Utils.checkInternet(ctx)) {
                     verify.isEnabled = false
                     verify.text = "..."
-                    Utils.hideKeyboard(requireActivity())
+                    Utils.hideKeyboard(act)
                     CoroutineScope(Dispatchers.IO).launch {
                         doVerify(c)
                     }
                 } else
-                    Toast.makeText(requireContext(), R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
 
             }
         }
@@ -71,17 +81,17 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(ctx)
 
         if (arguments != null)
             number = requireArguments().getString("number", "")
-        requireContext().registerReceiver(rec, IntentFilter("codeReceived"))
+       ctx.registerReceiver(rec, IntentFilter("codeReceived"))
         init(view)
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {}
         }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        act.onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
 
@@ -90,15 +100,15 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
         resend.isEnabled = false
         code = v.findViewById(R.id.verify_code)
         verify = v.findViewById(R.id.verify_verify)
-        SmsRetriever.getClient(requireActivity()).startSmsUserConsent(null)
+        SmsRetriever.getClient(act).startSmsUserConsent(null)
         initTimer()
         onClicks()
 
         code.doAfterTextChanged {
-            if (it?.length == 6) Utils.hideKeyboard(requireActivity())
+            if (it?.length == 6) Utils.hideKeyboard(act)
         }
         code.doOnTextChanged { s, _, _, _ ->
-            if (s?.length == 6) Utils.hideKeyboard(requireActivity())
+            if (s?.length == 6) Utils.hideKeyboard(act)
         }
     }
 
@@ -107,17 +117,17 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
         verify.setOnClickListener {
             val c = code.text.toString()
             if (c.length < 6 || c.startsWith("0")) {
-                Toast.makeText(requireContext(), R.string.verify_wrong_code, Toast.LENGTH_SHORT).show()
+                Toast.makeText(ctx, R.string.verify_wrong_code, Toast.LENGTH_SHORT).show()
             } else {
-                if (Utils.checkInternet(requireContext())) {
-                    Utils.hideKeyboard(requireActivity())
+                if (Utils.checkInternet(ctx)) {
+                    Utils.hideKeyboard(act)
                     verify.isEnabled = false
                     verify.text = "..."
                     CoroutineScope(Dispatchers.IO).launch {
                         doVerify(c)
                     }
                 } else
-                    Toast.makeText(requireContext(), R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -142,7 +152,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 .resend(number)) {
             is Resource.Success -> {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), R.string.general_send, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(ctx, R.string.general_send, Toast.LENGTH_SHORT).show()
                     timerTime *= 2
                     timer.cancel()
                     initTimer()
@@ -151,12 +161,12 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
                     }
 
                 } else {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), R.string.general_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -164,7 +174,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
     }
 
     private suspend fun doVerify(code: String) {
-        val fbToken = Utils.getFbToken(requireContext())
+        val fbToken = Utils.getFbToken(ctx)
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).verification(number, code, fbToken)) {
             is Resource.Success -> {
                 FirebaseMessaging.getInstance().subscribeToTopic(FCM_TOPIC)
@@ -175,21 +185,21 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                 val userCode = res.value.userCode
                 val score = res.value.userScore.toInt()
 
-                MySharedPreference.getInstance(requireContext()).setNumber(number)
-                MySharedPreference.getInstance(requireContext()).setUsername(userName)
-                MySharedPreference.getInstance(requireContext()).setAccessToken(accessToken)
-                MySharedPreference.getInstance(requireContext()).setUserCode(userCode)
-                MySharedPreference.getInstance(requireContext()).setScore(score)
+                MySharedPreference.getInstance(ctx).setNumber(number)
+                MySharedPreference.getInstance(ctx).setUsername(userName)
+                MySharedPreference.getInstance(ctx).setAccessToken(accessToken)
+                MySharedPreference.getInstance(ctx).setUserCode(userCode)
+                MySharedPreference.getInstance(ctx).setScore(score)
 
-                MySharedPreference.getInstance(requireContext()).setUserSex(res.value.userSex ?: "")
-                MySharedPreference.getInstance(requireContext()).setUserBirthday(res.value.userBday ?: "")
-                MySharedPreference.getInstance(requireContext()).setUserEmail(res.value.userEmail ?: "")
-                MySharedPreference.getInstance(requireContext()).setUserInvite(res.value.userInvite ?: "")
+                MySharedPreference.getInstance(ctx).setUserSex(res.value.userSex ?: "")
+                MySharedPreference.getInstance(ctx).setUserBirthday(res.value.userBday ?: "")
+                MySharedPreference.getInstance(ctx).setUserEmail(res.value.userEmail ?: "")
+                MySharedPreference.getInstance(ctx).setUserInvite(res.value.userInvite ?: "")
                 if (!res.value.userAvatar.isNullOrEmpty())
-                    MySharedPreference.getInstance(requireContext()).setUserAvatar(res.value.userAvatar)
+                    MySharedPreference.getInstance(ctx).setUserAvatar(res.value.userAvatar)
 
                 withContext(Dispatchers.Main) {
-                    dialog = Utils.showGetDataLoading(requireContext())
+                    dialog = Utils.showGetDataLoading(ctx)
                 }
                 getQuestions()
 
@@ -200,14 +210,14 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     verify.isEnabled = true
                     verify.setText(R.string.verify_verify)
                     if (res.isNetworkError) {
-                        Toast.makeText(requireContext(), R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
                     } else {
                         when (res.errorCode) {
                             401 -> {
-                                Toast.makeText(requireContext(), R.string.verify_wrong_code, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(ctx, R.string.verify_wrong_code, Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-                                Toast.makeText(requireContext(), R.string.general_error, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -229,17 +239,17 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                         }
                         val db = Realm.getDefaultInstance()
                         db.executeTransaction { it.insertOrUpdate(data) }
-                        MySharedPreference.getInstance(requireContext()).setUserId(userId)
-                        Toast.makeText(requireContext(), getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
+                        MySharedPreference.getInstance(ctx).setUserId(userId)
+                        Toast.makeText(ctx, getString(R.string.verify_welcome, userName), Toast.LENGTH_SHORT).show()
                         logEvent()
                         dialog.dismiss()
                         view?.findNavController()?.navigate(R.id.action_verifyFragment_to_slidesActivity)
-                        requireActivity().finish()
+                        act.finish()
                     } else {
                         verify.isEnabled = true
                         verify.setText(R.string.verify_verify)
                         dialog.dismiss()
-                        Toast.makeText(requireContext(), R.string.general_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -251,9 +261,9 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
                     verify.setText(R.string.verify_verify)
                     dialog.dismiss()
                     if (res.isNetworkError)
-                        Toast.makeText(requireContext(), R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
                     else
-                        Toast.makeText(requireContext(), R.string.general_error, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -261,7 +271,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
 
     override fun onDestroy() {
         super.onDestroy()
-        requireContext().unregisterReceiver(rec)
+        ctx.unregisterReceiver(rec)
     }
 
     private fun logEvent() {

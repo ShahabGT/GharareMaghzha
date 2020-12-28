@@ -1,10 +1,14 @@
 package ir.ghararemaghzha.game.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
@@ -29,6 +33,15 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
     private lateinit var progressBar: RoundCornerProgressBar
     private lateinit var loading: ConstraintLayout
     private lateinit var navController: NavController
+    private lateinit var act: FragmentActivity
+    private lateinit var ctx: Context
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
+        act = requireActivity()
+        ctx = requireContext()
+        return v
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,14 +50,14 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
     }
 
     private fun init(v: View) {
-        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.invite_title)
+        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.invite_title)
         loading = v.findViewById(R.id.invite_loading)
         count = v.findViewById(R.id.invite_count)
         value = v.findViewById(R.id.invite_info_text1)
         progressBar = v.findViewById(R.id.invite_progress)
-        v.findViewById<MaterialTextView>(R.id.invite_code).text = MySharedPreference.getInstance(requireContext()).getUserCode()
+        v.findViewById<MaterialTextView>(R.id.invite_code).text = MySharedPreference.getInstance(ctx).getUserCode()
         v.findViewById<MaterialButton>(R.id.invite_share).setOnClickListener {
-              Utils.shareCode(requireContext(), getString(R.string.invite_share, MySharedPreference.getInstance(requireContext()).getUserCode()),"")
+            Utils.shareCode(ctx, getString(R.string.invite_share, MySharedPreference.getInstance(ctx).getUserCode()), "")
         }
         v.findViewById<MaterialButton>(R.id.invite_contacts).setOnClickListener {
             navController.navigate(R.id.action_inviteFragment_to_contactsFragment)
@@ -56,10 +69,10 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
     }
 
     private suspend fun getData() {
-        val number = MySharedPreference.getInstance(requireContext()).getNumber()
-        val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
+        val number = MySharedPreference.getInstance(ctx).getNumber()
+        val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(requireActivity(), true)
+            Utils.logout(act, true)
             return
         }
 
@@ -76,33 +89,33 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(requireContext(), object : RetryInterface {
+                        Utils.showInternetError(ctx, object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
                                 }
                             }
                         })
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(requireContext(), object : RetryInterface {
+                        Utils.showInternetError(ctx, object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
                                 }
                             }
                         })
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Utils.logout(requireActivity(), true)
+                        Utils.logout(act, true)
                     }
                 }
             }

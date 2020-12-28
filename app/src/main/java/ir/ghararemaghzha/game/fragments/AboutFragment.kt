@@ -10,7 +10,9 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -33,11 +35,16 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
     private lateinit var act: FragmentActivity
     private lateinit var text: MaterialTextView
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v= super.onCreateView(inflater, container, savedInstanceState)
+        act=requireActivity()
+        ctx = requireContext()
+        return v
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ctx = requireContext()
-        act = requireActivity()
         init(view)
     }
 

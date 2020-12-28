@@ -3,6 +3,7 @@ package ir.ghararemaghzha.game.fragments
 import android.Manifest
 import android.app.AlertDialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,13 +12,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -51,6 +55,15 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     private lateinit var loading: ConstraintLayout
     private lateinit var empty: LinearLayout
     private lateinit var refresh: ExtendedFloatingActionButton
+    private lateinit var act: FragmentActivity
+    private lateinit var ctx: Context
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
+        act = requireActivity()
+        ctx = requireContext()
+        return v
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,7 +72,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     }
 
     private fun init(v: View) {
-        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.contacts_title)
+        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.contacts_title)
         db = Realm.getDefaultInstance()
 
         refresh = v.findViewById(R.id.contacts_fab)
@@ -70,15 +83,15 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         }
 
         recyclerView = v.findViewById(R.id.contacts_recycler)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(ctx)
         val data = db.where<ContactsModel>().findAll()
-        adapter = ContactsAdapter(requireActivity(), data)
+        adapter = ContactsAdapter(act, data)
         recyclerView.adapter = adapter
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy<0 && !refresh.isShown)
+                if (dy < 0 && !refresh.isShown)
                     refresh.show()
-                else if(dy>0 && refresh.isShown)
+                else if (dy > 0 && refresh.isShown)
                     refresh.hide()
                 super.onScrolled(recyclerView, dx, dy)
             }
@@ -98,28 +111,28 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
     private fun requestContacts() =
             if (checkPermission() != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+                if (ActivityCompat.shouldShowRequestPermissionRationale(act,
                                 Manifest.permission.READ_CONTACTS)) {
                     showExplanation()
-                } else if (!MySharedPreference.getInstance(requireContext()).getContactsPermission()) {
+                } else if (!MySharedPreference.getInstance(ctx).getContactsPermission()) {
                     requestPermission()
-                    MySharedPreference.getInstance(requireContext()).setContactsPermission()
+                    MySharedPreference.getInstance(ctx).setContactsPermission()
                 } else {
-                    Toast.makeText(requireContext(), getString(R.string.permission_contacts_toast), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(ctx, getString(R.string.permission_contacts_toast), Toast.LENGTH_SHORT).show()
                     val intent = Intent()
                     intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    intent.data = Uri.fromParts("package", requireActivity().packageName, null)
+                    intent.data = Uri.fromParts("package", act.packageName, null)
                     startActivity(intent)
                 }
             } else
                 showContacts()
 
-    private fun checkPermission() = checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
+    private fun checkPermission() = checkSelfPermission(ctx, Manifest.permission.READ_CONTACTS)
 
     private fun requestPermission() = requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), readContactsRequestCode)
 
     private fun showExplanation() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        val builder: AlertDialog.Builder = AlertDialog.Builder(ctx)
         builder.setTitle(getString(R.string.permission_contacts))
         builder.setMessage(getString(R.string.permission_contacts_message))
         builder.setPositiveButton(getString(R.string.permission_allow)
@@ -160,7 +173,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
     private fun getContacts(): ArrayList<Contacts> {
         val data = mutableListOf<Contacts>()
-        val cr: ContentResolver = requireActivity().contentResolver
+        val cr: ContentResolver = act.contentResolver
         val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
                 null, null, null)
         if (cur != null && cur.count > 0) {
@@ -208,10 +221,10 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
 
 
     private suspend fun getData(data: ArrayList<Contacts>) {
-        val number = MySharedPreference.getInstance(requireContext()).getNumber()
-        val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
+        val number = MySharedPreference.getInstance(ctx).getNumber()
+        val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(requireActivity(), true)
+            Utils.logout(act, true)
             return
         }
         val contacts = mutableListOf<ContactBodyModel>()
@@ -263,13 +276,13 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                             loading.visibility = View.GONE
                             empty.visibility = View.GONE
                         }
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
                         empty.visibility = View.GONE
-                        Utils.logout(requireActivity(), true)
+                        Utils.logout(act, true)
                     }
                 }
             }

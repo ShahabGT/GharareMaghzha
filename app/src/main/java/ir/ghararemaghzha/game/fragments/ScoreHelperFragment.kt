@@ -3,8 +3,11 @@ package ir.ghararemaghzha.game.fragments
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.material.textview.MaterialTextView
@@ -13,10 +16,16 @@ import com.tmall.ultraviewpager.transformer.UltraScaleTransformer
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ScoreHelperViewPager
 
-
 class ScoreHelperFragment : Fragment(R.layout.fragment_score_helper) {
 
     private lateinit var navController:NavController
+    private lateinit var act: FragmentActivity
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v= super.onCreateView(inflater, container, savedInstanceState)
+        act=requireActivity()
+        return v
+    }
 
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
          super.onViewCreated(view, savedInstanceState)
@@ -25,7 +34,7 @@ class ScoreHelperFragment : Fragment(R.layout.fragment_score_helper) {
      }
 
     private fun init( v:View) {
-        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).text=getText(R.string.score_helper_title)
+        act.findViewById<MaterialTextView>(R.id.toolbar_title).text=getText(R.string.score_helper_title)
 
         val ultraViewPager = v.findViewById<UltraViewPager>(R.id.score_helper_slider)
         ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL)

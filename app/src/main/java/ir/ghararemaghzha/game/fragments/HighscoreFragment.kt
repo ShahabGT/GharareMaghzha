@@ -1,10 +1,14 @@
 package ir.ghararemaghzha.game.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
@@ -26,6 +30,15 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
     private lateinit var loading: ConstraintLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HighscoreAdapter
+    private lateinit var act: FragmentActivity
+    private lateinit var ctx: Context
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v= super.onCreateView(inflater, container, savedInstanceState)
+        act=requireActivity()
+        ctx = requireContext()
+        return v
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,9 +46,9 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
     }
 
     private fun init(v: View) {
-        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.highscore_title)
+        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.highscore_title)
         recyclerView = v.findViewById(R.id.highscore_recycler)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = LinearLayoutManager(ctx)
         loading = v.findViewById(R.id.highscore_loading)
         loading.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
@@ -44,10 +57,10 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
     }
 
     private suspend fun getData() {
-        val number = MySharedPreference.getInstance(requireContext()).getNumber()
-        val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
+        val number = MySharedPreference.getInstance(ctx).getNumber()
+        val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(requireActivity(), true)
+            Utils.logout(act, true)
             return
         }
 
@@ -64,21 +77,21 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
                         }
                     }
                     withContext(Dispatchers.Main) {
-                        adapter = HighscoreAdapter(requireActivity(), data, user, showUser)
+                        adapter = HighscoreAdapter(act, data, user, showUser)
                         recyclerView.adapter = adapter
                         loading.visibility = View.GONE
                     }
 
                 } else {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(requireContext(), object : RetryInterface {
+                        Utils.showInternetError(ctx, object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
                                 }
                             }
                         })
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -86,19 +99,19 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(requireContext(), object : RetryInterface {
+                        Utils.showInternetError(ctx, object : RetryInterface {
                             override fun retry() {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     getData()
                                 }
                             }
                         })
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
                         loading.visibility = View.GONE
-                        Utils.logout(requireActivity(), true)
+                        Utils.logout(act, true)
                     }
                 }
             }

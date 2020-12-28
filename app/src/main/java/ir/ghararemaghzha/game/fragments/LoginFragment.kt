@@ -4,7 +4,9 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
@@ -39,11 +41,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var number: TextInputEditText
     private lateinit var verify: MaterialButton
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
+        act = requireActivity()
+        ctx = requireContext()
+        return v
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ctx = requireContext()
-        act = requireActivity()
         init(view)
     }
 

@@ -1,5 +1,6 @@
 package ir.ghararemaghzha.game.fragments
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -7,13 +8,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -52,9 +56,16 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
     private lateinit var female: CheckBox
     private lateinit var male: CheckBox
     private lateinit var loading: ConstraintLayout
-
     private var uploading = false
+    private lateinit var act: FragmentActivity
+    private lateinit var ctx: Context
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v= super.onCreateView(inflater, container, savedInstanceState)
+        act=requireActivity()
+        ctx = requireContext()
+        return v
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init(view)
@@ -62,16 +73,16 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().findViewById<ImageView>(R.id.toolbar_avatar).isEnabled = false
+        act.findViewById<ImageView>(R.id.toolbar_avatar).isEnabled = false
     }
 
     override fun onStop() {
         super.onStop()
-        requireActivity().findViewById<ImageView>(R.id.toolbar_avatar).isEnabled = true
+        act.findViewById<ImageView>(R.id.toolbar_avatar).isEnabled = true
     }
 
     private fun init(v: View) {
-        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.profile_edit_subtitle)
+       act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.profile_edit_subtitle)
         uploading = false
         name = v.findViewById(R.id.profile_name)
         invite = v.findViewById(R.id.profile_invite)
@@ -87,11 +98,11 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
         male = v.findViewById(R.id.profile_male)
         female = v.findViewById(R.id.profile_female)
         loading = v.findViewById(R.id.profile_loading)
-        name.setText(MySharedPreference.getInstance(requireContext()).getUsername())
-        number.setText(MySharedPreference.getInstance(requireContext()).getNumber())
-        bday.setText(MySharedPreference.getInstance(requireContext()).getUserBirthday())
-        email.setText(MySharedPreference.getInstance(requireContext()).getUserEmail())
-        val sex = MySharedPreference.getInstance(requireContext()).getUserSex()
+        name.setText(MySharedPreference.getInstance(ctx).getUsername())
+        number.setText(MySharedPreference.getInstance(ctx).getNumber())
+        bday.setText(MySharedPreference.getInstance(ctx).getUserBirthday())
+        email.setText(MySharedPreference.getInstance(ctx).getUserEmail())
+        val sex = MySharedPreference.getInstance(ctx).getUserSex()
         if (sex == "male") {
             male.isChecked = true
             female.isChecked = false
@@ -99,25 +110,25 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
             male.isChecked = false
             female.isChecked = true
         }
-        if (MySharedPreference.getInstance(requireContext()).getUserInvite().isNotEmpty()) {
-            invite.setText(MySharedPreference.getInstance(requireContext()).getUserInvite())
+        if (MySharedPreference.getInstance(ctx).getUserInvite().isNotEmpty()) {
+            invite.setText(MySharedPreference.getInstance(ctx).getUserInvite())
             invite.isEnabled = false
             inviteLayout.isEnabled = false
         }
         Glide.with(this)
-                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(requireContext()).getUserAvatar()))
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(ctx).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
                 .into(avatar)
-        if (MySharedPreference.getInstance(requireContext()).getUserAvatar().isEmpty()) avatarRemove.visibility = View.GONE
+        if (MySharedPreference.getInstance(ctx).getUserAvatar().isEmpty()) avatarRemove.visibility = View.GONE
         onClicks()
     }
 
     private fun onClicks() {
         avatarChange.setOnClickListener {
-            val picker = InstagramPicker(requireActivity())
+            val picker = InstagramPicker(act)
             picker.show(1, 1) { address: String ->
-                if (Utils.checkInternet(requireContext())) {
+                if (Utils.checkInternet(ctx)) {
                     if (!uploading) {
                         save.isEnabled = false
                         loading.visibility = View.VISIBLE
@@ -126,12 +137,12 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                             changeAvatar(Uri.parse(address))
                         }
                     }
-                } else Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(ctx, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
             }
         }
         avatarRemove.setOnClickListener {
-            if (Utils.checkInternet(requireContext())) {
-                val avatarName = MySharedPreference.getInstance(requireContext()).getUserAvatar()
+            if (Utils.checkInternet(ctx)) {
+                val avatarName = MySharedPreference.getInstance(ctx).getUserAvatar()
                 if (avatarName.isNotEmpty()) {
                     save.isEnabled = false
                     loading.visibility = View.VISIBLE
@@ -139,7 +150,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                         removeAvatar(avatarName)
                     }
                 }
-            } else Toast.makeText(requireContext(), getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(ctx, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
         }
         bithdayView.setOnClickListener { selectDate() }
         male.setOnCheckedChangeListener { _, b: Boolean -> if (b) female.isChecked = false }
@@ -157,17 +168,17 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
             else if (male.isChecked && !female.isChecked)
                 s = "male"
             if (n.isEmpty() || n.length < 6)
-                Toast.makeText(context, getString(R.string.general_name_form_error), Toast.LENGTH_SHORT).show()
+                Toast.makeText(ctx, getString(R.string.general_name_form_error), Toast.LENGTH_SHORT).show()
             else if (e.isNotEmpty() && !Utils.isEmailValid(e))
-                Toast.makeText(context, getString(R.string.general_email_form_error), Toast.LENGTH_SHORT).show()
-            else if (Utils.checkInternet(requireContext())) {
+                Toast.makeText(ctx, getString(R.string.general_email_form_error), Toast.LENGTH_SHORT).show()
+            else if (Utils.checkInternet(ctx)) {
                 save.isEnabled = false
                 loading.visibility = View.VISIBLE
                 save.text = "..."
                 CoroutineScope(Dispatchers.IO).launch {
                     updateProfile(n, e, b, s, i)
                 }
-            } else Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(ctx, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -177,7 +188,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
             resources.getColor(R.color.colorPrimary, null)
         else
             resources.getColor(R.color.colorPrimary)
-        PersianDatePickerDialog(context)
+        PersianDatePickerDialog(ctx)
                 .setPositiveButtonString("انتخاب")
                 .setNegativeButton("بستن")
                 .setTodayButton("امروز")
@@ -215,7 +226,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
 
 
     private fun scale(photoUri: Uri): Bitmap {
-        var inputStream = requireActivity().contentResolver.openInputStream(photoUri)
+        var inputStream = act.contentResolver.openInputStream(photoUri)
         val dbo = BitmapFactory.Options()
         dbo.inJustDecodeBounds = true
         BitmapFactory.decodeStream(inputStream, null, dbo)
@@ -232,7 +243,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
         }
         val maxImageDimension = 500
         var srcBitmap: Bitmap
-        inputStream = requireActivity().contentResolver.openInputStream(photoUri)
+        inputStream = act.contentResolver.openInputStream(photoUri)
         if (rotatedWidth > maxImageDimension || rotatedHeight > maxImageDimension) {
             val widthRatio = rotatedWidth.toFloat() / maxImageDimension.toFloat()
             val heightRatio = rotatedHeight.toFloat() / maxImageDimension.toFloat()
@@ -254,15 +265,15 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
     }
 
     private suspend fun changeAvatar(image: Uri) {
-        val number = MySharedPreference.getInstance(requireContext()).getNumber()
-        val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
+        val number = MySharedPreference.getInstance(ctx).getNumber()
+        val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(requireActivity(), true)
+            Utils.logout(act, true)
             return
         }
 
         val pic = toBase64(image)
-        val avatarName = MySharedPreference.getInstance(requireContext()).getUserId() + Utils.currentDate().replace("-", "").replace(":", "").replace(" ", "")
+        val avatarName = MySharedPreference.getInstance(ctx).getUserId() + Utils.currentDate().replace("-", "").replace(":", "").replace(" ", "")
 
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).alterAvatar("Bearer $token", number, "change", pic, avatarName)) {
             is Resource.Success -> {
@@ -272,29 +283,29 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                     uploading = false
                     loading.visibility = View.GONE
                     if (res.value.result == "success") {
-                        Toast.makeText(requireContext(), getString(R.string.general_save), Toast.LENGTH_SHORT).show()
-                        MySharedPreference.getInstance(requireContext()).setUserAvatar(avatarName)
-                        Glide.with(requireContext())
+                        Toast.makeText(ctx, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
+                        MySharedPreference.getInstance(ctx).setUserAvatar(avatarName)
+                        Glide.with(ctx)
                                 .load(getString(R.string.avatar_url, avatarName))
                                 .circleCrop()
                                 .placeholder(R.drawable.placeholder)
                                 .into(avatar)
                         avatarRemove.visibility = View.VISIBLE
-                        MainActivity().setAvatars(requireActivity())
+                        MainActivity().setAvatars(act)
                     } else {
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
             is Resource.Failure -> {
                 withContext(Dispatchers.Main) {
                     if (res.errorCode == 401)
-                        Utils.logout(requireActivity(), true)
+                        Utils.logout(act, true)
                     else {
                         save.isEnabled = true
                         uploading = false
                         loading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -302,10 +313,10 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
     }
 
     private suspend fun removeAvatar(avatarName: String) {
-        val number = MySharedPreference.getInstance(requireContext()).getNumber()
-        val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
+        val number = MySharedPreference.getInstance(ctx).getNumber()
+        val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(requireActivity(), true)
+            Utils.logout(act, true)
             return
         }
 
@@ -316,29 +327,29 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                     uploading = false
                     loading.visibility = View.GONE
                     if (res.value.result == "success") {
-                        Toast.makeText(requireContext(), getString(R.string.general_save), Toast.LENGTH_SHORT).show()
-                        MySharedPreference.getInstance(requireContext()).setUserAvatar("")
-                        Glide.with(requireContext())
-                                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(requireContext()).getUserAvatar()))
+                        Toast.makeText(ctx, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
+                        MySharedPreference.getInstance(ctx).setUserAvatar("")
+                        Glide.with(ctx)
+                                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(ctx).getUserAvatar()))
                                 .circleCrop()
                                 .placeholder(R.drawable.placeholder)
                                 .into(avatar)
                         avatarRemove.visibility = View.VISIBLE
-                        MainActivity().setAvatars(requireActivity())
+                        MainActivity().setAvatars(act)
                     } else {
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
             is Resource.Failure -> {
                 withContext(Dispatchers.Main) {
                     if (res.errorCode == 401)
-                        Utils.logout(requireActivity(), true)
+                        Utils.logout(act, true)
                     else {
                         save.isEnabled = true
                         uploading = false
                         loading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -346,10 +357,10 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
     }
 
     private suspend fun updateProfile(name: String, email: String, bday: String, sex: String, inviteCode: String) {
-        val number = MySharedPreference.getInstance(requireContext()).getNumber()
-        val token = MySharedPreference.getInstance(requireContext()).getAccessToken()
+        val number = MySharedPreference.getInstance(ctx).getNumber()
+        val token = MySharedPreference.getInstance(ctx).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(requireActivity(), true)
+            Utils.logout(act, true)
             return
         }
 
@@ -361,35 +372,35 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
                     save.text = getString(R.string.profile_save)
                     loading.visibility = View.GONE
                     if (res.value.result == "success") {
-                        Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
-                        MySharedPreference.getInstance(requireContext()).setUsername(name)
-                        MySharedPreference.getInstance(requireContext()).setUserEmail(email)
-                        MySharedPreference.getInstance(requireContext()).setUserSex(sex)
-                        MySharedPreference.getInstance(requireContext()).setUserBirthday(bday)
+                        Toast.makeText(ctx, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
+                        MySharedPreference.getInstance(ctx).setUsername(name)
+                        MySharedPreference.getInstance(ctx).setUserEmail(email)
+                        MySharedPreference.getInstance(ctx).setUserSex(sex)
+                        MySharedPreference.getInstance(ctx).setUserBirthday(bday)
 
                         when (res.value.message) {
-                            "invite not found" -> Toast.makeText(context, getString(R.string.profile_invite_notfound), Toast.LENGTH_SHORT).show()
-                            "invite failed" -> Toast.makeText(context, getString(R.string.profile_invite_failed), Toast.LENGTH_SHORT).show()
+                            "invite not found" -> Toast.makeText(ctx, getString(R.string.profile_invite_notfound), Toast.LENGTH_SHORT).show()
+                            "invite failed" -> Toast.makeText(ctx, getString(R.string.profile_invite_failed), Toast.LENGTH_SHORT).show()
                             "invite ok" -> {
-                                MySharedPreference.getInstance(requireContext()).setUserInvite(inviteCode)
+                                MySharedPreference.getInstance(ctx).setUserInvite(inviteCode)
                                 invite.isEnabled = false
                                 inviteLayout.isEnabled = false
                             }
                         }
                     } else {
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
             is Resource.Failure -> {
                 withContext(Dispatchers.Main) {
                     if (res.errorCode == 401)
-                        Utils.logout(requireActivity(), true)
+                        Utils.logout(act, true)
                     else {
                         save.isEnabled = true
                         save.text = getString(R.string.profile_save)
                         loading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

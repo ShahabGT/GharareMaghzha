@@ -7,10 +7,9 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.material.card.MaterialCardView
@@ -36,6 +35,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var scoreHelper: MaterialCardView
     private lateinit var db: Realm
     private lateinit var v: View
+    private lateinit var act: FragmentActivity
+    private lateinit var ctx: Context
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v= super.onCreateView(inflater, container, savedInstanceState)
+        act=requireActivity()
+        ctx = requireContext()
+        return v
+    }
 
     private val br: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -45,12 +53,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onResume() {
         super.onResume()
-        requireContext().registerReceiver(br, IntentFilter(GHARAREHMAGHZHA_BROADCAST_REFRESH))
+        ctx.registerReceiver(br, IntentFilter(GHARAREHMAGHZHA_BROADCAST_REFRESH))
     }
 
     override fun onPause() {
         super.onPause()
-        requireContext().unregisterReceiver(br)
+        ctx.unregisterReceiver(br)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +69,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun init() {
-        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.profile_title)
+        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.profile_title)
         db = Realm.getDefaultInstance()
         buy = v.findViewById(R.id.profile_buy)
         edit = v.findViewById(R.id.profile_edit)
@@ -74,12 +82,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun onClicks() {
         buy.setOnClickListener { navController.navigate(R.id.action_menu_profile_to_menu_buy) }
         edit.setOnClickListener { navController.navigate(R.id.action_global_profileEditFragment) }
-        stat.setOnClickListener { showDetailsDialog(MySharedPreference.getInstance(requireContext()).getUserId()) }
+        stat.setOnClickListener { showDetailsDialog(MySharedPreference.getInstance(ctx).getUserId()) }
         scoreHelper.setOnClickListener { navController.navigate(R.id.action_global_scoreHelperFragment) }
     }
 
     private fun showDetailsDialog(userId: String) {
-        val dialog = UserDetailsDialog(requireActivity(), userId)
+        val dialog = UserDetailsDialog(act, userId)
         dialog.setCanceledOnTouchOutside(true)
         dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -93,22 +101,22 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun updateUI() {
         val data: MutableList<ProfileModel> = ArrayList()
         data.add(ProfileModel(
-                requireContext().getString(R.string.avatar_url, MySharedPreference.getInstance(requireContext()).getUserAvatar()),
-                MySharedPreference.getInstance(requireContext()).getUsername(),
-                "امتیاز من: " + MySharedPreference.getInstance(requireContext()).getScore()))
-        val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
+                getString(R.string.avatar_url, MySharedPreference.getInstance(ctx).getUserAvatar()),
+                MySharedPreference.getInstance(ctx).getUsername(),
+                "امتیاز من: " + MySharedPreference.getInstance(ctx).getScore()))
+        val passed = MySharedPreference.getInstance(ctx).getDaysPassed()
         if (passed < 0) {
             data.add(ProfileModel(R.drawable.profile_time,
-                    requireContext().getString(R.string.profile_time_card_tostart),
-                    requireContext().getString(R.string.profile_time, abs(passed).toString())))
+                    getString(R.string.profile_time_card_tostart),
+                    getString(R.string.profile_time, abs(passed).toString())))
         } else {
-            val model = ProfileModel(R.drawable.profile_time, requireContext().getString(R.string.profile_time_card), "")
+            val model = ProfileModel(R.drawable.profile_time, getString(R.string.profile_time_card), "")
             when {
-                passed == 6 -> model.subtitle = requireContext().getString(R.string.profile_time_lastday)
+                passed == 6 -> model.subtitle = getString(R.string.profile_time_lastday)
 
-                passed >= 7 -> model.subtitle = requireContext().getString(R.string.profile_time_end)
+                passed >= 7 -> model.subtitle = getString(R.string.profile_time_end)
 
-                else -> model.subtitle = requireContext().getString(R.string.profile_time, (7 - passed).toString())
+                else -> model.subtitle = getString(R.string.profile_time, (7 - passed).toString())
             }
 
             data.add(model)
@@ -127,7 +135,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         ultraViewPager.setMultiScreen(0.6f)
         ultraViewPager.setItemRatio(1.0)
         ultraViewPager.setInfiniteLoop(true)
-        ultraViewPager.adapter = ProfileViewPager(requireContext(), data)
+        ultraViewPager.adapter = ProfileViewPager(ctx, data)
         ultraViewPager.setAutoScroll(4000)
     }
 

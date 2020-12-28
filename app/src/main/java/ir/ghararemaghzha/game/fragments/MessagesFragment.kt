@@ -3,7 +3,9 @@ package ir.ghararemaghzha.game.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
@@ -22,12 +24,15 @@ import ir.ghararemaghzha.game.models.MessageModel
 class MessagesFragment : Fragment(R.layout.fragment_messages) {
     private lateinit var ctx: Context
     private lateinit var act: FragmentActivity
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v= super.onCreateView(inflater, container, savedInstanceState)
+        act=requireActivity()
+        ctx = requireContext()
+        return v
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ctx = requireContext()
-        act = requireActivity()
         init(view)
     }
 

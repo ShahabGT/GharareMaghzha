@@ -1,13 +1,17 @@
 package ir.ghararemaghzha.game.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.viewpager.widget.PagerAdapter
@@ -38,6 +42,15 @@ class StartFragment : Fragment(R.layout.fragment_start) {
     private lateinit var ultraViewPager: UltraViewPager
     private lateinit var navController: NavController
     private lateinit var db: Realm
+    private lateinit var act: FragmentActivity
+    private lateinit var ctx: Context
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
+        act = requireActivity()
+        ctx = requireContext()
+        return v
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +65,7 @@ class StartFragment : Fragment(R.layout.fragment_start) {
     }
 
     private fun init(v: View) {
-        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.start_title)
+        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.start_title)
         db = Realm.getDefaultInstance()
         info = v.findViewById(R.id.start_info)
         profile = v.findViewById(R.id.start_profile)
@@ -66,14 +79,14 @@ class StartFragment : Fragment(R.layout.fragment_start) {
     }
 
     private fun updateInfo() {
-        val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
+        val passed = MySharedPreference.getInstance(ctx).getDaysPassed()
         when {
-            passed in 0..6 -> info.text = requireContext().getString(R.string.start_info, db.where<QuestionModel>()
+            passed in 0..6 -> info.text = getString(R.string.start_info, db.where<QuestionModel>()
                     .equalTo("userAnswer", "-1")
                     .findAll().size.toString())
             passed < 0 -> info.setText(R.string.start_info_notstarted)
             else -> {
-                info.text = requireContext().getString(R.string.start_info_passed)
+                info.text = getString(R.string.start_info_passed)
                 start.isEnabled = false
             }
         }
@@ -91,7 +104,7 @@ class StartFragment : Fragment(R.layout.fragment_start) {
                     .setMargin(0, 0, 0, 16)
                     .setFocusColor(-0x328ca)
                     .setNormalColor(-0x13100f)
-                    .setRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, requireContext().resources.displayMetrics).toInt())
+                    .setRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, ctx.resources.displayMetrics).toInt())
                     .build()
             ultraViewPager.setInfiniteLoop(true)
             ultraViewPager.setAutoScroll(5000)
@@ -102,12 +115,12 @@ class StartFragment : Fragment(R.layout.fragment_start) {
         profile.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_profile) }
         highscore.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_highscore) }
         start.setOnClickListener {
-            val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
+            val passed = MySharedPreference.getInstance(ctx).getDaysPassed()
             val remaining = db.where<QuestionModel>().equalTo("userAnswer", "-1").findAll().size
             when {
-                passed < 0 -> Toast.makeText(context, requireContext().getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show()
-                passed > 6 -> Toast.makeText(context, requireContext().getString(R.string.start_info_passed), Toast.LENGTH_LONG).show()
-                remaining == 0 -> Toast.makeText(context, requireContext().getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show()
+                passed < 0 -> Toast.makeText(ctx, getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show()
+                passed > 6 -> Toast.makeText(ctx, getString(R.string.start_info_passed), Toast.LENGTH_LONG).show()
+                remaining == 0 -> Toast.makeText(ctx, getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show()
                 remaining > 0 -> startActivity(Intent(activity, QuestionsActivity::class.java))
             }
         }
@@ -118,7 +131,7 @@ class StartFragment : Fragment(R.layout.fragment_start) {
             is Resource.Success -> {
                 if (res.value.result == "success" && res.value.message != "empty")
                     withContext(Dispatchers.Main) {
-                        initViewPager(MainViewPager(requireActivity(), res.value.data), res.value.data.size)
+                        initViewPager(MainViewPager(act, res.value.data), res.value.data.size)
                     }
                 else
                     withContext(Dispatchers.Main) {
