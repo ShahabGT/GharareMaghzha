@@ -8,23 +8,22 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.transition.Slide
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.MySharedPreference
-
+import ir.ghararemaghzha.game.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var b: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
+        b = ActivitySplashBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -32,23 +31,22 @@ class SplashActivity : AppCompatActivity() {
         } else {
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
-        setContentView(R.layout.activity_splash)
+        setContentView(b.root)
         anim()
-
 
         mediaPlayer = MediaPlayer.create(this, R.raw.intro)
         mediaPlayer.start()
     }
 
-    private fun anim(){
-        val scaleX=ObjectAnimator.ofFloat(findViewById(R.id.splash_logo), "scaleX", 0f, 1.5f,1f)
-        val scaleY=ObjectAnimator.ofFloat(findViewById(R.id.splash_logo), "scaleY", 0f, 1.5f,1f)
-        val alpha=ObjectAnimator.ofFloat(findViewById(R.id.splash_text), "Alpha", 0f,1f)
+    private fun anim() {
+        val scaleX = ObjectAnimator.ofFloat(b.splashLogo, "scaleX", 0f, 1.5f, 1f)
+        val scaleY = ObjectAnimator.ofFloat(b.splashLogo, "scaleY", 0f, 1.5f, 1f)
+        val alpha = ObjectAnimator.ofFloat(b.splashText, "Alpha", 0f, 1f)
         scaleX.duration = 1500
         scaleY.duration = 1500
-        alpha.duration=1500
+        alpha.duration = 1500
         val x = AnimatorSet()
-        x.playTogether(scaleX,scaleY,alpha)
+        x.playTogether(scaleX, scaleY, alpha)
         x.start()
     }
 
@@ -57,15 +55,19 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             val userId = MySharedPreference.getInstance(this).getUserId()
             val slides = MySharedPreference.getInstance(this).getSlides()
+            val intent: Intent
 
-            if (userId.isEmpty())
-                startActivity(Intent(this, RegisterActivity::class.java))
-            else if(!slides)
-                startActivity(Intent(this, SlidesActivity::class.java))
+            intent = if (userId.isEmpty())
+                Intent(this, RegisterActivity::class.java)
+            else if (!slides)
+                Intent(this, SlidesActivity::class.java)
             else
-                startActivity(Intent(this, MainActivity::class.java))
+                Intent(this, MainActivity::class.java)
 
-            this@SplashActivity.finish()
+
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+
         }, 2000)
 
     }

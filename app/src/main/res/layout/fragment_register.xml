@@ -7,7 +7,7 @@
     android:background="@color/light_background"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".fragments.RegisterFragment">
+    tools:context=".fragments.register.RegisterFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/reg_guide"

@@ -1,4 +1,4 @@
-package ir.ghararemaghzha.game.fragments
+package ir.ghararemaghzha.game.fragments.register
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -23,6 +23,7 @@ import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.data.Resource
 import ir.ghararemaghzha.game.databinding.FragmentVerifyBinding
 import ir.ghararemaghzha.game.dialogs.GetDataDialog
+import ir.ghararemaghzha.game.fragments.BaseFragment
 import ir.ghararemaghzha.game.models.QuestionModel
 import ir.ghararemaghzha.game.viewmodels.VerifyViewModel
 

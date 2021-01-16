@@ -1,4 +1,4 @@
-package ir.ghararemaghzha.game.fragments
+package ir.ghararemaghzha.game.fragments.register
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -24,9 +24,10 @@ import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.data.Resource
 import ir.ghararemaghzha.game.databinding.FragmentRegisterBinding
 import ir.ghararemaghzha.game.dialogs.RulesDialog
+import ir.ghararemaghzha.game.fragments.BaseFragment
 import ir.ghararemaghzha.game.viewmodels.RegisterViewModel
 
-class RegisterFragment : BaseFragment<RegisterViewModel,FragmentRegisterBinding>() {
+class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding>() {
 
     private val resolveHint = 521
     private  var loginNumber:String=""

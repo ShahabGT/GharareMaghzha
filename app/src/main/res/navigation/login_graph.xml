@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="ir.ghararemaghzha.game.fragments.LoginFragment"
+        android:name="ir.ghararemaghzha.game.fragments.register.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="ir.ghararemaghzha.game.fragments.RegisterFragment"
+        android:name="ir.ghararemaghzha.game.fragments.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register">
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/verifyFragment"
-        android:name="ir.ghararemaghzha.game.fragments.VerifyFragment"
+        android:name="ir.ghararemaghzha.game.fragments.register.VerifyFragment"
         android:label="fragment_verify"
         tools:layout="@layout/fragment_verify" />
 
