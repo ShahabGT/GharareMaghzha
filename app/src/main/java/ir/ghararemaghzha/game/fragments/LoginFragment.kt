@@ -1,127 +1,90 @@
 package ir.ghararemaghzha.game.fragments
 
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.Utils
-import ir.ghararemaghzha.game.data.ApiRepository
-import ir.ghararemaghzha.game.data.NetworkApi
-import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import ir.ghararemaghzha.game.databinding.FragmentLoginBinding
+import ir.ghararemaghzha.game.viewmodels.LoginViewModel
 
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class LoginFragment : BaseFragment<LoginViewModel,FragmentLoginBinding>() {
 
     private val resolveHint = 521
+    private lateinit var number:String
 
-    private lateinit var ctx: Context
-    private lateinit var act: FragmentActivity
-    private lateinit var register: MaterialTextView
-    private lateinit var number: TextInputEditText
-    private lateinit var verify: MaterialButton
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        init()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = super.onCreateView(inflater, container, savedInstanceState)
-        act = requireActivity()
-        ctx = requireContext()
-        return v
+        viewModel.loginResponse.observe(viewLifecycleOwner, { res->
+            when(res){
+                is Resource.Success -> {
+                        SmsRetriever.getClient(requireActivity()).startSmsRetriever()
+                        val b = Bundle()
+                        b.putString("number", number)
+                        requireView().findNavController().navigate(R.id.action_loginFragment_to_verifyFragment,b)
+                }
+                is Resource.Failure -> {
+                        b.loginVerify.isEnabled = true
+                        b.loginVerify.setText(R.string.loginfragment_verify)
+                        b.loginRegister.isEnabled = true
+                        if (res.isNetworkError) {
+                            Toast.makeText(context, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                        } else {
+                            when (res.errorCode) {
+                                401 -> {
+                                    Toast.makeText(context, R.string.loginfragment_nouser, Toast.LENGTH_SHORT).show()
+                                    val b = Bundle()
+                                    b.putString("number", number)
+                                    view?.findNavController()?.navigate(R.id.action_loginFragment_to_registerFragment,b)
+
+                                }
+                                403 -> Toast.makeText(context, R.string.loginfragment_blocked, Toast.LENGTH_LONG).show()
+                                else -> Toast.makeText(context, R.string.general_error, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                }
+                Resource.Loading -> {}
+            }
+        })
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        init(view)
-    }
-
-    private fun init(v: View) {
-        register = v.findViewById(R.id.login_register)
-        number = v.findViewById(R.id.login_number)
-        verify = v.findViewById(R.id.login_verify)
-
-        number.doOnTextChanged { s, _, _, _ ->  if (s?.length == 11) Utils.hideKeyboard(act)  }
-        number.doAfterTextChanged { if (it?.length == 11) Utils.hideKeyboard(act) }
-
+    private fun init() {
+        b.loginNumber.doOnTextChanged { s, _, _, _ ->  if (s?.length == 11) Utils.hideKeyboard(requireActivity())  }
         requestHint()
         onClicks()
     }
 
     private fun onClicks() {
-        verify.setOnClickListener {
-            val n = number.text.toString()
-            if (n.length < 11 || !n.startsWith("09")) {
-                Toast.makeText(ctx, R.string.general_number_error, Toast.LENGTH_SHORT).show()
+        b.loginVerify.setOnClickListener {
+            number = b.loginNumber.text.toString()
+            if (number.length < 11 || !number.startsWith("09")) {
+                Toast.makeText(context, R.string.general_number_error, Toast.LENGTH_SHORT).show()
             } else {
-                if (Utils.checkInternet(ctx)) {
-                    verify.isEnabled = false
-                    verify.text = "..."
-                    register.isEnabled = false
-                    Utils.hideKeyboard(act)
-                    CoroutineScope(Dispatchers.IO).launch {
-                        doLogin(n)
-                    }
+                if (Utils.checkInternet(requireContext())) {
+                    b.loginVerify.isEnabled = false
+                    b.loginVerify.text = "..."
+                    b.loginRegister.isEnabled = false
+                    Utils.hideKeyboard(requireActivity())
+                    viewModel.login(number)
                 }else
-                    Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
             }
         }
 
-        register.setOnClickListener {
-            view?.findNavController()!!.navigate(R.id.action_loginFragment_to_registerFragment)
-        }
-    }
-
-    private suspend fun doLogin(number: String) {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).login(number)) {
-            is Resource.Success -> {
-                withContext(Dispatchers.Main) {
-                    SmsRetriever.getClient(act).startSmsRetriever()
-                    val b = Bundle()
-                    b.putString("number", number)
-                    view?.findNavController()?.navigate(R.id.action_loginFragment_to_verifyFragment,b)
-                }
-            }
-            is Resource.Failure -> {
-                withContext(Dispatchers.Main) {
-                    verify.isEnabled = true
-                    verify.setText(R.string.loginfragment_verify)
-                    register.isEnabled = true
-                    if (res.isNetworkError) {
-                        Toast.makeText(ctx, R.string.general_internet_error, Toast.LENGTH_SHORT).show()
-                    } else {
-                        when (res.errorCode) {
-                            401 -> {
-                                Toast.makeText(ctx, R.string.loginfragment_nouser, Toast.LENGTH_SHORT).show()
-                                val b = Bundle()
-                                b.putString("number", number)
-                                view?.findNavController()?.navigate(R.id.action_loginFragment_to_registerFragment,b)
-
-                            }
-                            403 -> Toast.makeText(ctx, R.string.loginfragment_blocked, Toast.LENGTH_LONG).show()
-                            else -> Toast.makeText(ctx, R.string.general_error, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
+        b.loginRegister.setOnClickListener {
+            requireView().findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
 
@@ -129,7 +92,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val hintRequest = HintRequest.Builder()
                 .setPhoneNumberIdentifierSupported(true)
                 .build()
-        val intent = Credentials.getClient(ctx).getHintPickerIntent(hintRequest)
+        val intent = Credentials.getClient(requireContext()).getHintPickerIntent(hintRequest)
         startIntentSenderForResult(intent.intentSender,
                 resolveHint, null, 0, 0, 0, null)
     }
@@ -145,9 +108,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         n = "0" + n.substring(3)
                     else if (n.startsWith("0098"))
                         n = "0" + n.substring(4)
-                    number.setText(n)
+                    b.loginNumber.setText(n)
                 }
             }
         }
     }
+
+    override fun getViewModel() = LoginViewModel::class.java
+
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLoginBinding.inflate(inflater, container, false)
+
 }

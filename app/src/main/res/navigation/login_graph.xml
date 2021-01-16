@@ -42,14 +42,6 @@
         android:id="@+id/verifyFragment"
         android:name="ir.ghararemaghzha.game.fragments.VerifyFragment"
         android:label="fragment_verify"
-        tools:layout="@layout/fragment_verify">
-        <action
-            android:id="@+id/action_verifyFragment_to_slidesActivity"
-            app:destination="@id/slidesActivity" />
-    </fragment>
-    <activity
-        android:id="@+id/slidesActivity"
-        android:name="ir.ghararemaghzha.game.activities.SlidesActivity"
-        android:label="activity_slides"
-        tools:layout="@layout/activity_slides" />
+        tools:layout="@layout/fragment_verify" />
+
 </navigation>
