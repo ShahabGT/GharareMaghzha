@@ -34,8 +34,8 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
     private lateinit var ctx: Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v= super.onCreateView(inflater, container, savedInstanceState)
-        act=requireActivity()
+        val v = super.onCreateView(inflater, container, savedInstanceState)
+        act = requireActivity()
         ctx = requireContext()
         return v
     }
@@ -43,7 +43,9 @@ class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init(view)
+
     }
+
 
     private fun init(v: View) {
         act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.highscore_title)

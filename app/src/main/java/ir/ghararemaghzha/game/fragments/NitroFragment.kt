@@ -48,10 +48,10 @@ class NitroFragment : Fragment(R.layout.fragment_nito) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         init(view)
 
     }
+
 
     private fun init(v: View) {
         act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.buy_title)

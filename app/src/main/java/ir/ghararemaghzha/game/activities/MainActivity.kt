@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         val newIntent = intent
         if (newIntent != null && newIntent.extras != null) {
             val st = intent.extras?.getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE, "default")
-            if(st!=null) {
+            if (st != null) {
                 if (st == "new")
                     bnv.selectedItemId = R.id.menu_message
                 else if (st == "chat")
@@ -472,10 +472,11 @@ class MainActivity : AppCompatActivity() {
         val season = MySharedPreference.getInstance(this).getSeason()
         if (passed in 0..6) {
             val models = db.where<QuestionModel>().notEqualTo("userAnswer", "-1").and().equalTo("uploaded", false).findAll()
-            for (model in models)
-                CoroutineScope(Dispatchers.IO).launch {
+            for (model in models) {
+                CoroutineScope(Dispatchers.Main).launch {
                     uploadAnswer(model.questionId, model.userAnswer, model.userBooster, season)
                 }
+            }
         }
     }
 
