@@ -1,122 +1,84 @@
 package ir.ghararemaghzha.game.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.HighscoreAdapter
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.RetryInterface
 import ir.ghararemaghzha.game.classes.Utils
-import ir.ghararemaghzha.game.data.ApiRepository
-import ir.ghararemaghzha.game.data.NetworkApi
-import ir.ghararemaghzha.game.data.RemoteDataSource
+import ir.ghararemaghzha.game.classes.Utils.Companion.showInternetError
 import ir.ghararemaghzha.game.data.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import ir.ghararemaghzha.game.databinding.FragmentHighscoreBinding
+import ir.ghararemaghzha.game.viewmodels.HighscoreViewModel
 
-class HighscoreFragment : Fragment(R.layout.fragment_highscore) {
-    private lateinit var loading: ConstraintLayout
-    private lateinit var recyclerView: RecyclerView
+class HighscoreFragment : BaseFragment<HighscoreViewModel, FragmentHighscoreBinding>() {
+
     private lateinit var adapter: HighscoreAdapter
-    private lateinit var act: FragmentActivity
-    private lateinit var ctx: Context
+    private lateinit var number: String
+    private lateinit var token: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = super.onCreateView(inflater, container, savedInstanceState)
-        act = requireActivity()
-        ctx = requireContext()
-        return v
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        init()
+
+        viewModel.highscoreResponse.observe(viewLifecycleOwner, { res ->
+            when (res) {
+                is Resource.Success -> {
+                    if (res.value.result == "success") {
+                        val data = res.value.data
+                        val user = res.value.user
+                        var showUser = true
+                        for (i in data)
+                            if (i.userId == user.userId) {
+                                showUser = false
+                                break
+                            }
+
+                        adapter = HighscoreAdapter(requireActivity(), data, user, showUser)
+                        b.highscoreRecycler.adapter = adapter
+                        b.highscoreLoading.visibility = View.GONE
+
+                    } else {
+                        showInternetError(requireContext(), object : RetryInterface { override fun retry() { viewModel.getHighscoreList("Bearer $token", number) } })
+                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                is Resource.Failure -> {
+                    if (res.isNetworkError) {
+                        showInternetError(requireContext(), object : RetryInterface { override fun retry() { viewModel.getHighscoreList("Bearer $token", number) } })
+                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                    } else if (res.errorCode == 401) {
+                        b.highscoreLoading.visibility = View.GONE
+                        Utils.logout(requireActivity(), true)
+                    }
+                }
+                is Resource.Loading -> { }
+            }
+        })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        init(view)
+    private fun init() {
+        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.highscore_title)
+        b.highscoreRecycler.layoutManager = LinearLayoutManager(context)
+        b.highscoreLoading.visibility = View.VISIBLE
 
-    }
-
-
-    private fun init(v: View) {
-        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.highscore_title)
-        recyclerView = v.findViewById(R.id.highscore_recycler)
-        recyclerView.layoutManager = LinearLayoutManager(ctx)
-        loading = v.findViewById(R.id.highscore_loading)
-        loading.visibility = View.VISIBLE
-        CoroutineScope(Dispatchers.IO).launch {
-            getData()
-        }
-    }
-
-    private suspend fun getData() {
-        val number = MySharedPreference.getInstance(ctx).getNumber()
-        val token = MySharedPreference.getInstance(ctx).getAccessToken()
+        number = MySharedPreference.getInstance(requireContext()).getNumber()
+        token = MySharedPreference.getInstance(requireContext()).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(act, true)
+            Utils.logout(requireActivity(), true)
             return
         }
 
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getHighscoreList("Bearer $token", number)) {
-            is Resource.Success -> {
-                if (res.value.result == "success") {
-                    val data = res.value.data
-                    val user = res.value.user
-                    var showUser = true
-                    for (i in data) {
-                        if (i.userId == user.userId) {
-                            showUser = false
-                            break
-                        }
-                    }
-                    withContext(Dispatchers.Main) {
-                        adapter = HighscoreAdapter(act, data, user, showUser)
-                        recyclerView.adapter = adapter
-                        loading.visibility = View.GONE
-                    }
-
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Utils.showInternetError(ctx, object : RetryInterface {
-                            override fun retry() {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    getData()
-                                }
-                            }
-                        })
-                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-            is Resource.Failure -> {
-                if (res.isNetworkError) {
-                    withContext(Dispatchers.Main) {
-                        Utils.showInternetError(ctx, object : RetryInterface {
-                            override fun retry() {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    getData()
-                                }
-                            }
-                        })
-                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                } else if (res.errorCode == 401) {
-                    withContext(Dispatchers.Main) {
-                        loading.visibility = View.GONE
-                        Utils.logout(act, true)
-                    }
-                }
-            }
-        }
+        viewModel.getHighscoreList("Bearer $token", number)
     }
+
+    override fun getViewModel() = HighscoreViewModel::class.java
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentHighscoreBinding.inflate(inflater, container, false)
 }
