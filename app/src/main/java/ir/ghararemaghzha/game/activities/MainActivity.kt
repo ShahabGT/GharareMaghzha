@@ -16,16 +16,12 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -39,6 +35,7 @@ import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
+import ir.ghararemaghzha.game.databinding.ActivityMainBinding
 import ir.ghararemaghzha.game.dialogs.GetDataDialog
 import ir.ghararemaghzha.game.dialogs.NewVersionDialog
 import ir.ghararemaghzha.game.dialogs.RulesDialog
@@ -51,18 +48,15 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var b: ActivityMainBinding
     private var number: String = ""
     private var token: String = ""
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var dataDialog: GetDataDialog
-    private lateinit var newChat: ImageView
-    private lateinit var newToolbar: ImageView
     private var doubleBackToExitPressedOnce = false
     private lateinit var db: Realm
-    private lateinit var bnv: BottomNavigationView
-    private lateinit var avatar: ImageView
     private lateinit var refreshIntent: Intent
-    private lateinit var motionLayout: MotionLayout
     private lateinit var navController: NavController
     private val notificationBroadCast: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -82,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             val st = intent.extras?.getString(GHARAREHMAGHZHA_BROADCAST_MESSAGE, "default")
             if (st != null) {
                 if (st == "new")
-                    bnv.selectedItemId = R.id.menu_message
+                    b.mainBnv.selectedItemId = R.id.menu_message
                 else if (st == "chat")
                     startActivity(Intent(this, SupportActivity::class.java))
             }
@@ -95,8 +89,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (motionLayout.currentState == R.id.end) {
-            motionLayout.transitionToStart()
+        if (b.mainMotion.currentState == R.id.end) {
+            b.mainMotion.transitionToStart()
             return
         }
         if (navController.popBackStack()) return
@@ -110,16 +104,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
+        b = ActivityMainBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
+        else
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        }
-        setContentView(R.layout.activity_main)
+
+        setContentView(b.root)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         db = Realm.getDefaultInstance()
 
@@ -134,9 +128,11 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         getExtraIntent()
         if (db.isEmpty) {
-            MySharedPreference.getInstance(this).clearCounter(false)
-            MySharedPreference.getInstance(this).setScore(0)
-            MySharedPreference.getInstance(this).setBoosterValue(1f)
+            MySharedPreference.getInstance(this).also {
+                it.clearCounter(false)
+                it.setScore(0)
+                it.setBoosterValue(1f)
+            }.clearCounter(false)
             dataDialog = Utils.showGetDataLoading(this@MainActivity)
             CoroutineScope(Dispatchers.IO).launch {
                 getData()
@@ -154,17 +150,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         getUserDetails()
-        bnv = findViewById(R.id.main_bnv)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_container) as NavHostFragment
         navController = navHostFragment.navController
-        NavigationUI.setupWithNavController(bnv, navController)
-        bnv.setOnNavigationItemReselectedListener { }
-        motionLayout = findViewById(R.id.main_motion)
+        NavigationUI.setupWithNavController(b.mainBnv, navController)
+        b.mainBnv.setOnNavigationItemReselectedListener { }
         refreshIntent = Intent(GHARAREHMAGHZHA_BROADCAST_REFRESH)
         doubleBackToExitPressedOnce = false
-        newChat = findViewById(R.id.main_chat_new)
-        newToolbar = findViewById(R.id.toolbar_new)
-        avatar = findViewById(R.id.toolbar_avatar)
         onClicks()
         navigationDrawer()
         registerReceiver(notificationBroadCast, IntentFilter(GHARAREHMAGHZHA_BROADCAST))
@@ -185,47 +176,48 @@ class MainActivity : AppCompatActivity() {
             intent.data = Uri.parse(getString(R.string.instagram_url))
             startActivity(intent)
         }
-        avatar.setOnClickListener { navController.navigate(R.id.action_global_profileEditFragment) }
+        b.mainToolbar.toolbarAvatar.setOnClickListener { navController.navigate(R.id.action_global_profileEditFragment) }
     }
 
     private fun navigationDrawer() {
-        findViewById<MaterialTextView>(R.id.navigation_name).text = MySharedPreference.getInstance(this).getUsername()
-        findViewById<MaterialTextView>(R.id.navigation_code).text = getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode())
-        findViewById<MaterialTextView>(R.id.navigation_score).text = getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore())
-        findViewById<MaterialTextView>(R.id.navigation_exit).setOnClickListener { Utils.logout(this, false) }
-        findViewById<MaterialTextView>(R.id.navigation_buyhistory).setOnClickListener {
+        b.mainDrawer.navigationName.text = MySharedPreference.getInstance(this).getUsername()
+        b.mainDrawer.navigationCode.text = getString(R.string.profile_code, MySharedPreference.getInstance(this).getUserCode())
+        b.mainDrawer.navigationScore.text = getString(R.string.highscore_score, MySharedPreference.getInstance(this).getScore())
+        b.mainDrawer.navigationExit.setOnClickListener { Utils.logout(this, false) }
+        b.mainDrawer.navigationBuyhistory.setOnClickListener {
             navController.navigate(R.id.action_global_buyHistoryFragment)
-            motionLayout.transitionToStart()
+            b.mainMotion.transitionToStart()
         }
-        findViewById<MaterialTextView>(R.id.navigation_support).setOnClickListener {
+        b.mainDrawer.navigationSupport.setOnClickListener {
             startActivity(Intent(this, SupportActivity::class.java))
-            motionLayout.transitionToStart()
+            b.mainMotion.transitionToStart()
         }
-        findViewById<MaterialTextView>(R.id.navigation_invite).setOnClickListener {
+        b.mainDrawer.navigationInvite.setOnClickListener {
             navController.navigate(R.id.action_global_inviteFragment)
-            motionLayout.transitionToStart()
+            b.mainMotion.transitionToStart()
         }
-        findViewById<MaterialTextView>(R.id.navigation_setting).setOnClickListener {
+        b.mainDrawer.navigationSetting.setOnClickListener {
             navController.navigate(R.id.action_global_settingsFragment)
-            motionLayout.transitionToStart()
+            b.mainMotion.transitionToStart()
         }
-        findViewById<MaterialTextView>(R.id.navigation_instagram).setOnClickListener {
-            val intent = Intent()
-            intent.action = Intent.ACTION_VIEW
-            intent.data = Uri.parse(getString(R.string.instagram_url))
+        b.mainDrawer.navigationInstagram.setOnClickListener {
+            val intent = Intent().also {
+                it.action=Intent.ACTION_VIEW
+                it.data=Uri.parse(getString(R.string.instagram_url))
+            }
             startActivity(intent)
-            motionLayout.transitionToStart()
+            b.mainMotion.transitionToStart()
         }
-        findViewById<MaterialTextView>(R.id.navigation_rule).setOnClickListener {
+        b.mainDrawer.navigationRule.setOnClickListener {
             showRulesDialog()
-            motionLayout.transitionToStart()
+            b.mainMotion.transitionToStart()
         }
-        findViewById<MaterialTextView>(R.id.navigation_about).setOnClickListener {
+        b.mainDrawer.navigationAbout.setOnClickListener {
             navController.navigate(R.id.action_global_aboutFragment)
-            motionLayout.transitionToStart()
+            b.mainMotion.transitionToStart()
         }
-        findViewById<MaterialTextView>(R.id.navigation_help).setOnClickListener {
-            motionLayout.transitionToStart()
+        b.mainDrawer.navigationHelp.setOnClickListener {
+            b.mainMotion.transitionToStart()
             helpInfo()
         }
     }
@@ -235,48 +227,48 @@ class MainActivity : AppCompatActivity() {
                 .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
-                .into(activity.findViewById(R.id.navigation_avatar))
+                .into(b.mainDrawer.navigationAvatar)
         Glide.with(activity)
                 .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
-                .into(activity.findViewById(R.id.toolbar_avatar))
+                .into(b.mainDrawer.navigationAvatar)
     }
 
     private fun helpInfo() {
         TapTargetSequence(this)
                 .targets(
-                        TapTarget.forView(bnv.rootView.findViewById(R.id.menu_profile), getString(R.string.tap_target_profile_title), getString(R.string.tap_target_profile_des))
+                        TapTarget.forView(b.mainBnv.rootView.findViewById(R.id.menu_profile), getString(R.string.tap_target_profile_title), getString(R.string.tap_target_profile_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(bnv.rootView.findViewById(R.id.menu_highscore), getString(R.string.tap_target_highscore_title), getString(R.string.tap_target_highscore_des))
+                        TapTarget.forView(b.mainBnv.rootView.findViewById(R.id.menu_highscore), getString(R.string.tap_target_highscore_title), getString(R.string.tap_target_highscore_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(bnv.rootView.findViewById(R.id.menu_start), getString(R.string.tap_target_start_title), getString(R.string.tap_target_start_des))
+                        TapTarget.forView(b.mainBnv.rootView.findViewById(R.id.menu_start), getString(R.string.tap_target_start_title), getString(R.string.tap_target_start_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(bnv.rootView.findViewById(R.id.menu_buy), getString(R.string.tap_target_buy_title), getString(R.string.tap_target_buy_des))
+                        TapTarget.forView(b.mainBnv.rootView.findViewById(R.id.menu_buy), getString(R.string.tap_target_buy_title), getString(R.string.tap_target_buy_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(bnv.rootView.findViewById(R.id.menu_message), getString(R.string.tap_target_message_title), getString(R.string.tap_target_message_des))
+                        TapTarget.forView(b.mainBnv.rootView.findViewById(R.id.menu_message), getString(R.string.tap_target_message_title), getString(R.string.tap_target_message_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.toolbar_menu), getString(R.string.tap_target_menu_title), getString(R.string.tap_target_menu_des))
+                        TapTarget.forView(b.mainToolbar.toolbarMenu, getString(R.string.tap_target_menu_title), getString(R.string.tap_target_menu_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
@@ -302,14 +294,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateMessages() {
         val size: Int = db.where<MessageModel>().equalTo("sender", "admin").and().equalTo("read", "0".toInt()).findAll().size
-        val badgeDrawable = bnv.getOrCreateBadge(R.id.menu_message)
+        val badgeDrawable = b.mainBnv.getOrCreateBadge(R.id.menu_message)
         badgeDrawable.isVisible = size > 0
         if (MySharedPreference.getInstance(this@MainActivity).getUnreadChats() > 0) {
-            newChat.visibility = View.VISIBLE
-            newToolbar.visibility = View.VISIBLE
+            b.mainDrawer.mainChatNew.visibility = View.VISIBLE
+            b.mainToolbar.toolbarNew.visibility = View.VISIBLE
         } else {
-            newChat.visibility = View.GONE
-            newToolbar.visibility = View.GONE
+            b.mainDrawer.mainChatNew.visibility = View.GONE
+            b.mainToolbar.toolbarNew.visibility = View.GONE
         }
     }
 

@@ -103,7 +103,7 @@ class VerifyFragment : BaseFragment<VerifyViewModel, FragmentVerifyBinding>() {
                     val score = res.value.userScore.toInt()
                     MySharedPreference.getInstance(requireContext()).also {
                         it.setNumber(number)
-                        it.setUsername(number)
+                        it.setUsername(userName)
                         it.setAccessToken(accessToken)
                         it.setUserCode(userCode)
                         it.setScore(score)
