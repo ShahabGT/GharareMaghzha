@@ -34,7 +34,6 @@ import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_MESSAGE
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH
 import ir.ghararemaghzha.game.classes.MySharedPreference
-import ir.ghararemaghzha.game.classes.RetryInterface
 import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
@@ -410,13 +409,11 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     withContext(Dispatchers.Main) {
                         firebaseDebug("failed")
-                        Utils.showInternetError(this@MainActivity, object : RetryInterface {
-                            override fun retry() {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    appOpen()
-                                }
+                        Utils.showInternetError(this@MainActivity) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                appOpen()
                             }
-                        })
+                        }
                     }
                 }
             }
@@ -426,13 +423,11 @@ class MainActivity : AppCompatActivity() {
                     if (res.errorCode == 401) {
                         Utils.logout(this@MainActivity, true)
                     } else {
-                        Utils.showInternetError(this@MainActivity, object : RetryInterface {
-                            override fun retry() {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    appOpen()
-                                }
+                        Utils.showInternetError(this@MainActivity) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                appOpen()
                             }
-                        })
+                        }
                     }
                 }
             }
@@ -517,14 +512,12 @@ class MainActivity : AppCompatActivity() {
                             dataDialog.dismiss()
                             appOpen()
                         } else {
-                            Utils.showInternetError(this@MainActivity, object : RetryInterface {
-                                override fun retry() {
-                                    dataDialog = Utils.showGetDataLoading(this@MainActivity)
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        getData()
-                                    }
+                            Utils.showInternetError(this@MainActivity) {
+                                dataDialog = Utils.showGetDataLoading(this@MainActivity)
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    getData()
                                 }
-                            })
+                            }
                         }
                     }
                 }
@@ -535,14 +528,12 @@ class MainActivity : AppCompatActivity() {
                     if (res.errorCode == 401) {
                         Utils.logout(this@MainActivity, true)
                     } else {
-                        Utils.showInternetError(this@MainActivity, object : RetryInterface {
-                            override fun retry() {
-                                dataDialog = Utils.showGetDataLoading(this@MainActivity)
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    getData()
-                                }
+                        Utils.showInternetError(this@MainActivity) {
+                            dataDialog = Utils.showGetDataLoading(this@MainActivity)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                getData()
                             }
-                        })
+                        }
                     }
                 }
             }

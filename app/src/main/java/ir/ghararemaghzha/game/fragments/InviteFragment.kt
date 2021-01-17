@@ -16,7 +16,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.MySharedPreference
-import ir.ghararemaghzha.game.classes.RetryInterface
 import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
@@ -89,13 +88,11 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(ctx, object : RetryInterface {
-                            override fun retry() {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    getData()
-                                }
+                        Utils.showInternetError(ctx) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                getData()
                             }
-                        })
+                        }
                         Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -103,13 +100,11 @@ class InviteFragment : Fragment(R.layout.fragment_invite) {
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        Utils.showInternetError(ctx, object : RetryInterface {
-                            override fun retry() {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    getData()
-                                }
+                        Utils.showInternetError(ctx) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                getData()
                             }
-                        })
+                        }
                         Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 } else if (res.errorCode == 401) {

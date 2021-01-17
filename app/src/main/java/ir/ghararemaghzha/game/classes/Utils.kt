@@ -164,7 +164,7 @@ class Utils {
             return dialog
         }
 
-        fun showInternetError(ctx: Context, retry: RetryInterface) {
+        fun showInternetError(ctx: Context, retry: ()->Unit) {
             val dialog = NoInternetDialog(ctx, retry)
             dialog.setCanceledOnTouchOutside(false)
             dialog.setCancelable(false)

@@ -10,7 +10,6 @@ import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.HighscoreAdapter
 import ir.ghararemaghzha.game.classes.MySharedPreference
-import ir.ghararemaghzha.game.classes.RetryInterface
 import ir.ghararemaghzha.game.classes.Utils
 import ir.ghararemaghzha.game.classes.Utils.Companion.showInternetError
 import ir.ghararemaghzha.game.data.Resource
@@ -45,21 +44,22 @@ class HighscoreFragment : BaseFragment<HighscoreViewModel, FragmentHighscoreBind
                         b.highscoreLoading.visibility = View.GONE
 
                     } else {
-                        showInternetError(requireContext(), object : RetryInterface { override fun retry() { viewModel.getHighscoreList("Bearer $token", number) } })
+                        showInternetError(requireContext()) { viewModel.getHighscoreList("Bearer $token", number) }
                         Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 is Resource.Failure -> {
                     if (res.isNetworkError) {
-                        showInternetError(requireContext(), object : RetryInterface { override fun retry() { viewModel.getHighscoreList("Bearer $token", number) } })
+                        showInternetError(requireContext()) { viewModel.getHighscoreList("Bearer $token", number) }
                         Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                     } else if (res.errorCode == 401) {
                         b.highscoreLoading.visibility = View.GONE
                         Utils.logout(requireActivity(), true)
                     }
                 }
-                is Resource.Loading -> { }
+                is Resource.Loading -> {
+                }
             }
         })
     }
