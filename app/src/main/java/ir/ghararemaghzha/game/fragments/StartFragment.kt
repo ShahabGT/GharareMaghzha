@@ -1,6 +1,5 @@
 package ir.ghararemaghzha.game.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
@@ -8,15 +7,11 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.viewpager.widget.PagerAdapter
 import com.google.android.material.textview.MaterialTextView
-import com.skyfishjy.library.RippleBackground
 import com.tmall.ultraviewpager.UltraViewPager
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -24,39 +19,39 @@ import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.activities.QuestionsActivity
 import ir.ghararemaghzha.game.adapters.MainViewPager
 import ir.ghararemaghzha.game.classes.MySharedPreference
-import ir.ghararemaghzha.game.data.ApiRepository
-import ir.ghararemaghzha.game.data.NetworkApi
-import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
+import ir.ghararemaghzha.game.databinding.FragmentStartBinding
 import ir.ghararemaghzha.game.models.QuestionModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import ir.ghararemaghzha.game.viewmodels.StartViewModel
 
-class StartFragment : Fragment(R.layout.fragment_start) {
-    private lateinit var info: MaterialTextView
-    private lateinit var profile: LinearLayout
-    private lateinit var highscore: LinearLayout
-    private lateinit var start: LinearLayout
-    private lateinit var ultraViewPager: UltraViewPager
+class StartFragment : BaseFragment<StartViewModel, FragmentStartBinding>() {
+
     private lateinit var navController: NavController
     private lateinit var db: Realm
-    private lateinit var act: FragmentActivity
-    private lateinit var ctx: Context
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = super.onCreateView(inflater, container, savedInstanceState)
-        act = requireActivity()
-        ctx = requireContext()
-        return v
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        init()
+
+        viewModel.sliderResponse.observe(viewLifecycleOwner, { res ->
+            when (res) {
+                is Resource.Success -> {
+                    if (res.value.result == "success" && res.value.message != "empty")
+                        initViewPager(MainViewPager(requireActivity(), res.value.data), res.value.data.size)
+                    else
+                        b.startSlider.visibility = View.GONE
+                }
+                is Resource.Failure -> {
+                    b.startSlider.visibility = View.GONE
+                }
+                is Resource.Loading->{}
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        view.findViewById<RippleBackground>(R.id.start_start_ripple).startRippleAnimation()
-        init(view)
     }
 
     override fun onResume() {
@@ -64,85 +59,63 @@ class StartFragment : Fragment(R.layout.fragment_start) {
         updateInfo()
     }
 
-    private fun init(v: View) {
-        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.start_title)
+    private fun init() {
+        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.start_title)
+        b.startStartRipple.startRippleAnimation()
         db = Realm.getDefaultInstance()
-        info = v.findViewById(R.id.start_info)
-        profile = v.findViewById(R.id.start_profile)
-        highscore = v.findViewById(R.id.start_highscore)
-        start = v.findViewById(R.id.start_start)
-        ultraViewPager = v.findViewById(R.id.start_slider)
         onClicks()
-        CoroutineScope(Dispatchers.IO).launch {
-            getSlider()
-        }
+        viewModel.getSlider()
     }
 
     private fun updateInfo() {
-        val passed = MySharedPreference.getInstance(ctx).getDaysPassed()
+        val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
         when {
-            passed in 0..6 -> info.text = getString(R.string.start_info, db.where<QuestionModel>()
+            passed in 0..6 -> b.startInfo.text = getString(R.string.start_info, db.where<QuestionModel>()
                     .equalTo("userAnswer", "-1")
                     .findAll().size.toString())
-            passed < 0 -> info.setText(R.string.start_info_notstarted)
+            passed < 0 -> b.startInfo.setText(R.string.start_info_notstarted)
             else -> {
-                info.text = getString(R.string.start_info_passed)
-                start.isEnabled = false
+                b.startInfo.text = getString(R.string.start_info_passed)
+                b.startStart.isEnabled = false
             }
         }
     }
 
     private fun initViewPager(pagerAdapter: PagerAdapter, count: Int) {
-        ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL)
-        ultraViewPager.adapter = pagerAdapter
-        ultraViewPager.setAutoMeasureHeight(true)
+        b.startSlider.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL)
+        b.startSlider.adapter = pagerAdapter
+        b.startSlider.setAutoMeasureHeight(true)
         if (count > 1) {
-            ultraViewPager.initIndicator()
-            ultraViewPager.indicator
+            b.startSlider.initIndicator()
+            b.startSlider.indicator
                     .setOrientation(UltraViewPager.Orientation.HORIZONTAL)
                     .setGravity(Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
                     .setMargin(0, 0, 0, 16)
                     .setFocusColor(-0x328ca)
                     .setNormalColor(-0x13100f)
-                    .setRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, ctx.resources.displayMetrics).toInt())
+                    .setRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, requireContext().resources.displayMetrics).toInt())
                     .build()
-            ultraViewPager.setInfiniteLoop(true)
-            ultraViewPager.setAutoScroll(5000)
+            b.startSlider.setInfiniteLoop(true)
+            b.startSlider.setAutoScroll(5000)
         }
     }
 
     private fun onClicks() {
-        profile.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_profile) }
-        highscore.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_highscore) }
-        start.setOnClickListener {
-            val passed = MySharedPreference.getInstance(ctx).getDaysPassed()
+        b.startProfile.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_profile) }
+        b.startHighscore.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_highscore) }
+        b.startStart.setOnClickListener {
+            val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
             val remaining = db.where<QuestionModel>().equalTo("userAnswer", "-1").findAll().size
             when {
-                passed < 0 -> Toast.makeText(ctx, getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show()
-                passed > 6 -> Toast.makeText(ctx, getString(R.string.start_info_passed), Toast.LENGTH_LONG).show()
-                remaining == 0 -> Toast.makeText(ctx, getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show()
+                passed < 0 -> Toast.makeText(context, getString(R.string.start_info_notstarted), Toast.LENGTH_LONG).show()
+                passed > 6 -> Toast.makeText(context, getString(R.string.start_info_passed), Toast.LENGTH_LONG).show()
+                remaining == 0 -> Toast.makeText(context, getString(R.string.general_noquestions_at_all), Toast.LENGTH_LONG).show()
                 remaining > 0 -> startActivity(Intent(activity, QuestionsActivity::class.java))
             }
         }
     }
 
-    private suspend fun getSlider() {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getSlider()) {
-            is Resource.Success -> {
-                if (res.value.result == "success" && res.value.message != "empty")
-                    withContext(Dispatchers.Main) {
-                        initViewPager(MainViewPager(act, res.value.data), res.value.data.size)
-                    }
-                else
-                    withContext(Dispatchers.Main) {
-                        ultraViewPager.visibility = View.GONE
-                    }
-            }
-            is Resource.Failure -> {
-                withContext(Dispatchers.Main) {
-                    ultraViewPager.visibility = View.GONE
-                }
-            }
-        }
-    }
+    override fun getViewModel() = StartViewModel::class.java
+
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentStartBinding.inflate(inflater, container, false)
 }
