@@ -21,6 +21,7 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(NitroViewModel::class.java)-> NitroViewModel(baseRepository as ApiRepository) as T
             modelClass.isAssignableFrom(BuyHistoryViewModel::class.java)-> BuyHistoryViewModel(baseRepository as ApiRepository) as T
             modelClass.isAssignableFrom(ContactsViewModel::class.java)-> ContactsViewModel(baseRepository as ApiRepository) as T
+            modelClass.isAssignableFrom(InviteViewModel::class.java)-> InviteViewModel(baseRepository as ApiRepository) as T
             else -> throw IllegalArgumentException("ViewModel Not Found")
         }
     }
