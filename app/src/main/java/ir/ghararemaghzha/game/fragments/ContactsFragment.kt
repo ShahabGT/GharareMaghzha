@@ -3,7 +3,6 @@ package ir.ghararemaghzha.game.fragments
 import android.Manifest
 import android.app.AlertDialog
 import android.content.ContentResolver
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,17 +14,11 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textview.MaterialTextView
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -33,106 +26,146 @@ import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ContactsAdapter
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.Utils
-import ir.ghararemaghzha.game.data.ApiRepository
-import ir.ghararemaghzha.game.data.NetworkApi
-import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
+import ir.ghararemaghzha.game.databinding.FragmentContactsBinding
 import ir.ghararemaghzha.game.models.ContactBody
 import ir.ghararemaghzha.game.models.ContactBodyModel
 import ir.ghararemaghzha.game.models.ContactsModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import ir.ghararemaghzha.game.viewmodels.ContactsViewModel
 
 
-class ContactsFragment : Fragment(R.layout.fragment_contacts) {
+class ContactsFragment : BaseFragment<ContactsViewModel, FragmentContactsBinding>() {
 
     private val readContactsRequestCode = 5162
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ContactsAdapter
     private lateinit var db: Realm
-    private lateinit var loading: ConstraintLayout
-    private lateinit var empty: LinearLayout
-    private lateinit var refresh: ExtendedFloatingActionButton
-    private lateinit var act: FragmentActivity
-    private lateinit var ctx: Context
+    private lateinit var adapter: ContactsAdapter
+    private lateinit var number: String
+    private lateinit var token: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = super.onCreateView(inflater, container, savedInstanceState)
-        act = requireActivity()
-        ctx = requireContext()
-        return v
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        init()
+
+        viewModel.syncContactsResponse.observe(viewLifecycleOwner, { res ->
+            when (res) {
+                is Resource.Success -> {
+                    if (res.value.result == "success" && res.value.data.isNotEmpty()) {
+                        val results = db.where<ContactsModel>().findAll()
+                        db.executeTransaction { results.deleteAllFromRealm() }
+                        adapter.notifyDataSetChanged()
+                        val networkData = res.value.data.sortedByDescending { it.id }
+
+                        networkData.forEach { it.type = 1 }
+                        val co = mutableListOf<ContactsModel>()
+                        var index = 0
+                        co.add(0, ContactsModel(id = getString(R.string.contacts_title1), type = 0))
+                        for (model in networkData) {
+                            co.add(model)
+                        }
+                        val firstIndex = networkData.indexOfFirst { it.id == "0" }
+                        co.add(firstIndex + 1, ContactsModel(id = getString(R.string.contacts_title2), type = 0))
+
+                        for (model in co) model.contactId = index++
+
+                        db.executeTransaction { it.insertOrUpdate(co) }
+                        b.contactsLoading.visibility = View.GONE
+                        b.contactsEmpty.visibility = View.GONE
+                        b.contactsFab.show()
+
+                    } else {
+                        b.contactsLoading.visibility = View.GONE
+                        b.contactsEmpty.visibility = View.VISIBLE
+                    }
+                }
+                is Resource.Failure -> {
+                    if (res.isNetworkError) {
+                        if (db.where<ContactsModel>().findAll().size == 0) {
+                            b.contactsLoading.visibility = View.GONE
+                            b.contactsEmpty.visibility = View.VISIBLE
+                        } else {
+                            b.contactsLoading.visibility = View.GONE
+                            b.contactsEmpty.visibility = View.GONE
+                        }
+                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+
+                    } else if (res.errorCode == 401) {
+                        b.contactsLoading.visibility = View.GONE
+                        b.contactsEmpty.visibility = View.GONE
+                        Utils.logout(requireActivity(), true)
+                    }
+                }
+                is Resource.Loading -> {
+                }
+            }
+
+        })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        init(view)
-
-    }
-
-    private fun init(v: View) {
-        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.contacts_title)
+    private fun init() {
+        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.contacts_title)
         db = Realm.getDefaultInstance()
 
-        refresh = v.findViewById(R.id.contacts_fab)
-        loading = v.findViewById(R.id.contacts_loading)
-        empty = v.findViewById(R.id.contacts_empty)
-        v.findViewById<MaterialButton>(R.id.contacts_empty_retry).setOnClickListener {
+        number = MySharedPreference.getInstance(requireContext()).getNumber()
+        token = MySharedPreference.getInstance(requireContext()).getAccessToken()
+        if (number.isEmpty() || token.isEmpty()) {
+            Utils.logout(requireActivity(), true)
+            return
+        }
+
+        b.contactsEmptyRetry.setOnClickListener {
             requestContacts()
         }
 
-        recyclerView = v.findViewById(R.id.contacts_recycler)
-        recyclerView.layoutManager = LinearLayoutManager(ctx)
+        b.contactsRecycler.layoutManager = LinearLayoutManager(requireContext())
         val data = db.where<ContactsModel>().findAll()
-        adapter = ContactsAdapter(act, data)
-        recyclerView.adapter = adapter
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        adapter = ContactsAdapter(requireActivity(), data)
+        b.contactsRecycler.adapter = adapter
+        b.contactsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy < 0 && !refresh.isShown)
-                    refresh.show()
-                else if (dy > 0 && refresh.isShown)
-                    refresh.hide()
+                if (dy < 0 && !b.contactsFab.isShown)
+                    b.contactsFab.show()
+                else if (dy > 0 && b.contactsFab.isShown)
+                    b.contactsFab.hide()
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
-        refresh.setOnClickListener { requestContacts() }
+        b.contactsFab.setOnClickListener { requestContacts() }
 
         if (data.size == 0) {
             requestContacts()
-            refresh.hide()
+            b.contactsFab.hide()
         } else {
-            refresh.show()
-            loading.visibility = View.GONE
-            empty.visibility = View.GONE
+            b.contactsFab.show()
+            b.contactsLoading.visibility = View.GONE
+            b.contactsEmpty.visibility = View.GONE
         }
 
     }
 
     private fun requestContacts() =
             if (checkPermission() != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(act,
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
                                 Manifest.permission.READ_CONTACTS)) {
                     showExplanation()
-                } else if (!MySharedPreference.getInstance(ctx).getContactsPermission()) {
+                } else if (!MySharedPreference.getInstance(requireContext()).getContactsPermission()) {
                     requestPermission()
-                    MySharedPreference.getInstance(ctx).setContactsPermission()
+                    MySharedPreference.getInstance(requireContext()).setContactsPermission()
                 } else {
-                    Toast.makeText(ctx, getString(R.string.permission_contacts_toast), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.permission_contacts_toast), Toast.LENGTH_SHORT).show()
                     val intent = Intent()
                     intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    intent.data = Uri.fromParts("package", act.packageName, null)
+                    intent.data = Uri.fromParts("package", requireActivity().packageName, null)
                     startActivity(intent)
                 }
             } else
                 showContacts()
 
-    private fun checkPermission() = checkSelfPermission(ctx, Manifest.permission.READ_CONTACTS)
+    private fun checkPermission() = checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
 
     private fun requestPermission() = requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), readContactsRequestCode)
 
     private fun showExplanation() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(ctx)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.permission_contacts))
         builder.setMessage(getString(R.string.permission_contacts_message))
         builder.setPositiveButton(getString(R.string.permission_allow)
@@ -151,8 +184,8 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 showContacts()
             } else {
-                loading.visibility = View.GONE
-                empty.visibility = View.VISIBLE
+                b.contactsLoading.visibility = View.GONE
+                b.contactsEmpty.visibility = View.VISIBLE
             }
         }
     }
@@ -166,14 +199,13 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                 element.number = element.number.replaceFirst("0098", "0")
             if (!newList.any { it.number == element.number })
                 newList.add(element)
-
         }
         return newList
     }
 
     private fun getContacts(): ArrayList<Contacts> {
         val data = mutableListOf<Contacts>()
-        val cr: ContentResolver = act.contentResolver
+        val cr: ContentResolver = requireActivity().contentResolver
         val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
                 null, null, null)
         if (cur != null && cur.count > 0) {
@@ -210,84 +242,24 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
     }
 
     private fun showContacts() {
-        loading.visibility = View.VISIBLE
-        empty.visibility = View.GONE
+        b.contactsLoading.visibility = View.VISIBLE
+        b.contactsEmpty.visibility = View.GONE
         val c = getContacts()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            getData(c)
-        }
-    }
 
-
-    private suspend fun getData(data: ArrayList<Contacts>) {
-        val number = MySharedPreference.getInstance(ctx).getNumber()
-        val token = MySharedPreference.getInstance(ctx).getAccessToken()
-        if (number.isEmpty() || token.isEmpty()) {
-            Utils.logout(act, true)
-            return
-        }
         val contacts = mutableListOf<ContactBodyModel>()
-        data.forEach {
+        c.forEach {
             contacts.add(ContactBodyModel(it.number, it.name))
         }
         val body = ContactBody(number, contacts)
 
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).syncContacts("Bearer $token", body)) {
-            is Resource.Success -> {
-                if (res.value.result == "success" && res.value.data.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        val results = db.where<ContactsModel>().findAll()
-                        db.executeTransaction { results.deleteAllFromRealm() }
-                        adapter.notifyDataSetChanged()
-                        val networkData = res.value.data.sortedByDescending { it.id }
+        viewModel.syncContacts("Bearer $token", body)
 
-                        networkData.forEach { it.type = 1 }
-                        val co = mutableListOf<ContactsModel>()
-                        var index = 0
-                        co.add(0, ContactsModel(id = getString(R.string.contacts_title1), type = 0))
-                        for (model in networkData) {
-                            co.add(model)
-                        }
-                        val firstIndex = networkData.indexOfFirst { it.id == "0" }
-                        co.add(firstIndex + 1, ContactsModel(id = getString(R.string.contacts_title2), type = 0))
-
-                        for (model in co) model.contactId = index++
-
-                        db.executeTransaction { it.insertOrUpdate(co) }
-                        loading.visibility = View.GONE
-                        empty.visibility = View.GONE
-                        refresh.show()
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        loading.visibility = View.GONE
-                        empty.visibility = View.VISIBLE
-                    }
-                }
-            }
-            is Resource.Failure -> {
-                if (res.isNetworkError) {
-                    withContext(Dispatchers.Main) {
-                        if (db.where<ContactsModel>().findAll().size == 0) {
-                            loading.visibility = View.GONE
-                            empty.visibility = View.VISIBLE
-                        } else {
-                            loading.visibility = View.GONE
-                            empty.visibility = View.GONE
-                        }
-                        Toast.makeText(ctx, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                } else if (res.errorCode == 401) {
-                    withContext(Dispatchers.Main) {
-                        loading.visibility = View.GONE
-                        empty.visibility = View.GONE
-                        Utils.logout(act, true)
-                    }
-                }
-            }
-        }
     }
 
     data class Contacts(val name: String, var number: String)
+
+    override fun getViewModel() = ContactsViewModel::class.java
+
+    override fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentContactsBinding.inflate(inflater, container, false)
 }

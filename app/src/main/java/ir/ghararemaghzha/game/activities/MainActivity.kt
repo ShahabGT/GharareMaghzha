@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity() {
                 .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
-                .into(b.mainDrawer.navigationAvatar)
+                .into(b.mainToolbar.toolbarAvatar)
     }
 
     private fun helpInfo() {
