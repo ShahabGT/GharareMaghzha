@@ -12,8 +12,6 @@ import android.view.View
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -35,6 +33,7 @@ import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
+import ir.ghararemaghzha.game.databinding.ActivityQuestionBinding
 import ir.ghararemaghzha.game.models.QuestionModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,25 +42,11 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class QuestionsActivity : AppCompatActivity() {
+
+    private lateinit var b: ActivityQuestionBinding
     private var progress: Double = 100.0
     private var time = 15
     private lateinit var downTimer: CountDownTimer
-    private lateinit var progressBar: ProgressBar
-    private lateinit var booster: ImageView
-    private lateinit var timeText: MaterialTextView
-    private lateinit var question: MaterialTextView
-    private lateinit var answer1: MaterialTextView
-    private lateinit var answer2: MaterialTextView
-    private lateinit var answer3: MaterialTextView
-    private lateinit var answer4: MaterialTextView
-    private lateinit var score: MaterialTextView
-    private lateinit var questionPoints: MaterialTextView
-    private lateinit var questionRemain: MaterialTextView
-    private lateinit var answer1c: MaterialCardView
-    private lateinit var answer2c: MaterialCardView
-    private lateinit var answer3c: MaterialCardView
-    private lateinit var answer4c: MaterialCardView
-    private lateinit var questionCard: MaterialCardView
     private lateinit var data: RealmResults<QuestionModel>
     private lateinit var randomAnswers: List<Int>
     private var correctAnswer = ""
@@ -73,13 +58,14 @@ class QuestionsActivity : AppCompatActivity() {
     private var wrongSound: Int = 0
     private var gameScore = 0
     private var shouldRandomize = false
-    private lateinit var music: ImageView
     private var musicSetting = false
     private var hasBooster = false
     private var foreground = false
-    private var number: String = ""
-    private var token: String = ""
+    private lateinit var number: String
+    private lateinit var token: String
     private var season: Int = 0
+    private lateinit var nextQuestionHandler: Handler
+    private lateinit var nextQuestionRunnable: Runnable
     private val br: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Toast.makeText(this@QuestionsActivity, R.string.general_end, Toast.LENGTH_LONG).show()
@@ -87,9 +73,9 @@ class QuestionsActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        b = ActivityQuestionBinding.inflate(layoutInflater)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         val window = window
@@ -100,7 +86,7 @@ class QuestionsActivity : AppCompatActivity() {
         else
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        setContentView(R.layout.activity_question)
+        setContentView(b.root)
 
         if (MySharedPreference.getInstance(this).isFirstTimeQuestion())
             helpInfo()
@@ -111,49 +97,49 @@ class QuestionsActivity : AppCompatActivity() {
     private fun helpInfo() {
         TapTargetSequence(this)
                 .targets(
-                        TapTarget.forView(findViewById(R.id.question_score_card), getString(R.string.tap_target_question_score_title), getString(R.string.tap_target_question_score_des))
+                        TapTarget.forView(b.questionScoreCard, getString(R.string.tap_target_question_score_title), getString(R.string.tap_target_question_score_des))
                                 .cancelable(false)
                                 .tintTarget(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_music), getString(R.string.tap_target_question_music_title), getString(R.string.tap_target_question_music_des))
+                        TapTarget.forView(b.questionMusic, getString(R.string.tap_target_question_music_title), getString(R.string.tap_target_question_music_des))
                                 .cancelable(false)
                                 .dimColor(R.color.black)
                                 .tintTarget(false)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_booster), getString(R.string.tap_target_question_booster_title), getString(R.string.tap_target_question_booster_des))
+                        TapTarget.forView(b.questionBooster, getString(R.string.tap_target_question_booster_title), getString(R.string.tap_target_question_booster_des))
                                 .cancelable(false)
                                 .tintTarget(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_progress_text), getString(R.string.tap_target_question_time_title), getString(R.string.tap_target_question_time_des))
+                        TapTarget.forView(b.questionProgressText, getString(R.string.tap_target_question_time_title), getString(R.string.tap_target_question_time_des))
                                 .cancelable(false)
                                 .tintTarget(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_points), getString(R.string.tap_target_question_point_title), getString(R.string.tap_target_question_point_des))
+                        TapTarget.forView(b.questionPoints, getString(R.string.tap_target_question_point_title), getString(R.string.tap_target_question_point_des))
                                 .cancelable(false)
                                 .tintTarget(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_remaining), getString(R.string.tap_target_question_question_title), getString(R.string.tap_target_question_question_des))
+                        TapTarget.forView(b.questionRemaining, getString(R.string.tap_target_question_question_title), getString(R.string.tap_target_question_question_des))
                                 .cancelable(false)
                                 .tintTarget(false)
                                 .dimColor(R.color.black)
                                 .outerCircleColor(R.color.colorPrimary)
                                 .targetCircleColor(R.color.white)
                                 .textColor(android.R.color.black),
-                        TapTarget.forView(findViewById(R.id.question_report), getString(R.string.tap_target_question_next_report_title), getString(R.string.tap_target_question_next_report_des))
+                        TapTarget.forView(b.questionReport, getString(R.string.tap_target_question_next_report_title), getString(R.string.tap_target_question_next_report_des))
                                 .cancelable(false)
                                 .tintTarget(false)
                                 .dimColor(R.color.black)
@@ -181,48 +167,32 @@ class QuestionsActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        nextQuestionHandler = Handler(Looper.getMainLooper())
+        nextQuestionRunnable = Runnable { nextQuestion() }
         getUserDetails()
         db = Realm.getDefaultInstance()
         data = db.where(QuestionModel::class.java).equalTo("userAnswer", "-1").findAll()
-        music = findViewById(R.id.question_music)
         musicSetting = MySettingsPreference.getInstance(this).getMusic()
-        music.setImageResource(if (musicSetting) R.drawable.vector_music_on else R.drawable.vector_music_off)
-        questionPoints = findViewById(R.id.question_points)
-        questionRemain = findViewById(R.id.question_remaining)
-        booster = findViewById(R.id.question_booster)
-
-        question = findViewById(R.id.question_question)
-        questionCard = findViewById(R.id.question_question_card)
-        answer1 = findViewById(R.id.question_answer1)
-        answer1c = findViewById(R.id.question_answer1_card)
-        answer2 = findViewById(R.id.question_answer2)
-        answer2c = findViewById(R.id.question_answer2_card)
-        answer3 = findViewById(R.id.question_answer3)
-        answer3c = findViewById(R.id.question_answer3_card)
-        answer4 = findViewById(R.id.question_answer4)
-        answer4c = findViewById(R.id.question_answer4_card)
-        score = findViewById(R.id.question_score)
+        b.questionMusic.setImageResource(if (musicSetting) R.drawable.vector_music_on else R.drawable.vector_music_off)
         gameScore = MySharedPreference.getInstance(this).getScore()
-        score.text = gameScore.toString()
-        progressBar = findViewById(R.id.question_progress_bar)
-        progressBar.progress = progress.toInt()
-        timeText = findViewById(R.id.question_progress_text)
+        b.questionScore.text = gameScore.toString()
+        b.questionProgressBar.progress = progress.toInt()
         downTimer = object : CountDownTimer(15000, 1000) {
             override fun onTick(l: Long) {
                 time -= 1
                 progress -= 6.6
-                timeText.text = time.toString()
-                progressBar.progress = progress.toInt()
-                if (l < 6000) setViewTextColor(timeText, R.color.random1)
+                b.questionProgressText.text = time.toString()
+                b.questionProgressBar.progress = progress.toInt()
+                if (l < 6000) setViewTextColor(b.questionProgressText, R.color.random1)
             }
 
             override fun onFinish() {
-                timeText.text = 0.toString()
-                progressBar.progress = 0
-                answer1c.isEnabled = false
-                answer2c.isEnabled = false
-                answer3c.isEnabled = false
-                answer4c.isEnabled = false
+                b.questionProgressText.text = 0.toString()
+                b.questionProgressBar.progress = 0
+                b.questionAnswer1Card.isEnabled = false
+                b.questionAnswer2Card.isEnabled = false
+                b.questionAnswer3Card.isEnabled = false
+                b.questionAnswer4Card.isEnabled = false
                 if (foreground) nextQuestion()
             }
         }
@@ -238,8 +208,7 @@ class QuestionsActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer.create(this, R.raw.game)
         mediaPlayer.isLooping = true
 
-
-        findViewById<View>(R.id.question_report).setOnClickListener {
+        b.questionReport.setOnClickListener {
             val qId = model.questionId
             CoroutineScope(Dispatchers.IO).launch {
                 report(qId)
@@ -252,9 +221,9 @@ class QuestionsActivity : AppCompatActivity() {
     }
 
     private fun onClicks() {
-        music.setOnClickListener {
+        b.questionMusic.setOnClickListener {
             musicSetting = !musicSetting
-            music.setImageResource(if (musicSetting) R.drawable.vector_music_on else R.drawable.vector_music_off)
+            b.questionMusic.setImageResource(if (musicSetting) R.drawable.vector_music_on else R.drawable.vector_music_off)
             if (musicSetting) {
                 mediaPlayer = MediaPlayer.create(this, R.raw.game)
                 mediaPlayer.isLooping = true
@@ -264,30 +233,30 @@ class QuestionsActivity : AppCompatActivity() {
                 mediaPlayer.stop()
             }
         }
-        answer1c.setOnClickListener {
-            answer(0, answer1, answer1c)
+        b.questionAnswer1Card.setOnClickListener {
+            answer(0, b.questionAnswer1, b.questionAnswer1Card)
         }
-        answer2c.setOnClickListener {
-            answer(1, answer2, answer2c)
+        b.questionAnswer2Card.setOnClickListener {
+            answer(1, b.questionAnswer2, b.questionAnswer2Card)
         }
-        answer3c.setOnClickListener {
-            answer(2, answer3, answer3c)
+        b.questionAnswer3Card.setOnClickListener {
+            answer(2,  b.questionAnswer3, b.questionAnswer3Card)
         }
-        answer4c.setOnClickListener {
-            answer(3, answer4, answer4c)
+        b.questionAnswer4Card.setOnClickListener {
+            answer(3,  b.questionAnswer4, b.questionAnswer4Card)
         }
-        findViewById<View>(R.id.question_close).setOnClickListener { this@QuestionsActivity.finish() }
+        b.questionClose.setOnClickListener { this@QuestionsActivity.finish() }
     }
 
     private fun answer(which: Int, button: MaterialTextView, buttonCard: MaterialCardView) {
         if (MySharedPreference.getInstance(this).getBoosterValue() != 1f) MySharedPreference.getInstance(this@QuestionsActivity).counterIncrease()
         downTimer.cancel()
-        timeText.text = 0.toString()
-        progressBar.progress = 0
-        answer1c.isEnabled = false
-        answer2c.isEnabled = false
-        answer3c.isEnabled = false
-        answer4c.isEnabled = false
+        b.questionProgressText.text = 0.toString()
+        b.questionProgressBar.progress = 0
+        b.questionAnswer1Card.isEnabled = false
+        b.questionAnswer2Card.isEnabled = false
+        b.questionAnswer3Card.isEnabled = false
+        b.questionAnswer4Card.isEnabled = false
         val answerId: String = if (shouldRandomize) (randomAnswers[which] + 1).toString() else which.toString()
         setAnswer(answerId)
         val qId = model.questionId
@@ -299,9 +268,9 @@ class QuestionsActivity : AppCompatActivity() {
             YoYo.with(Techniques.Tada).duration(500).playOn(buttonCard)
             playSound(correctSound)
             val qPoint = model.questionPoints.toInt()
-            YoYo.with(Techniques.Bounce).duration(500).playOn(score)
+            YoYo.with(Techniques.Bounce).duration(500).playOn(b.questionScore)
             gameScore += (qPoint * MySharedPreference.getInstance(this).getBoosterValue()).toInt()
-            score.text = gameScore.toString()
+            b.questionScore.text = gameScore.toString()
             MySharedPreference.getInstance(this@QuestionsActivity).setScore(gameScore)
             CoroutineScope(Dispatchers.IO).launch {
                 uploadScore(gameScore.toString())
@@ -311,15 +280,15 @@ class QuestionsActivity : AppCompatActivity() {
             YoYo.with(Techniques.Shake).duration(500).playOn(buttonCard)
             playSound(wrongSound)
         }
-        Handler(Looper.getMainLooper()).postDelayed({ nextQuestion() }, 2000)
+        nextQuestionHandler.postDelayed({ nextQuestionRunnable }, 2000)
     }
 
     private fun enterAnimations() {
-        YoYo.with(Techniques.Landing).duration(1500).playOn(questionCard)
-        YoYo.with(Techniques.Landing).duration(1500).playOn(answer1c)
-        YoYo.with(Techniques.Landing).duration(1500).playOn(answer2c)
-        YoYo.with(Techniques.Landing).duration(1500).playOn(answer3c)
-        YoYo.with(Techniques.Landing).duration(1500).playOn(answer4c)
+        YoYo.with(Techniques.Landing).duration(1500).playOn(b.questionQuestionCard)
+        YoYo.with(Techniques.Landing).duration(1500).playOn(b.questionAnswer1Card)
+        YoYo.with(Techniques.Landing).duration(1500).playOn(b.questionAnswer2Card)
+        YoYo.with(Techniques.Landing).duration(1500).playOn(b.questionAnswer3Card)
+        YoYo.with(Techniques.Landing).duration(1500).playOn(b.questionAnswer4Card)
     }
 
     private fun nextQuestion() {
@@ -331,30 +300,30 @@ class QuestionsActivity : AppCompatActivity() {
         }
         if (Utils.checkInternet(this)) {
             if (MySharedPreference.getInstance(this).getBoosterValue() == 1f) {
-                booster.visibility = View.GONE
+                b.questionBooster.visibility = View.GONE
                 hasBooster = false
             } else {
                 hasBooster = true
             }
-            questionRemain.text = getString(R.string.question_remaining, (data.size - 1).toString())
+            b.questionRemaining.text = getString(R.string.question_remaining, (data.size - 1).toString())
             model = getRandom()
             downTimer.cancel()
             enterAnimations()
-            answer1c.isEnabled = true
-            setViewColor(answer1c, R.color.white)
-            answer2c.isEnabled = true
-            setViewColor(answer2c, R.color.white)
-            answer3c.isEnabled = true
-            setViewColor(answer3c, R.color.white)
-            answer4c.isEnabled = true
-            setViewColor(answer4c, R.color.white)
+            b.questionAnswer1Card.isEnabled = true
+            setViewColor(b.questionAnswer1Card, R.color.white)
+            b.questionAnswer2Card.isEnabled = true
+            setViewColor(b.questionAnswer2Card, R.color.white)
+            b.questionAnswer3Card.isEnabled = true
+            setViewColor(b.questionAnswer3Card, R.color.white)
+            b.questionAnswer4Card.isEnabled = true
+            setViewColor(b.questionAnswer4Card, R.color.white)
             time = 15
             progress = 100.0
-            timeText.text = time.toString()
-            setViewTextColor(timeText, R.color.black)
-            progressBar.progress = 100
+            b.questionProgressText.text = time.toString()
+            setViewTextColor(b.questionProgressText, R.color.black)
+            b.questionProgressBar.progress = 100
             randomAnswers = randomNumbers()
-            question.text = model.questionText
+            b.questionQuestion.text = model.questionText
             val answers = listOf(model.questionA1, model.questionA2, model.questionA3, model.questionA4)
             correctAnswer = answers[model.questionCorrect.toInt() - 1]
             shouldRandomize = true
@@ -365,17 +334,17 @@ class QuestionsActivity : AppCompatActivity() {
                 }
             }
             if (shouldRandomize) {
-                answer1.text = answers[randomAnswers[0]]
-                answer2.text = answers[randomAnswers[1]]
-                answer3.text = answers[randomAnswers[2]]
-                answer4.text = answers[randomAnswers[3]]
+                b.questionAnswer1.text = answers[randomAnswers[0]]
+                b.questionAnswer2.text = answers[randomAnswers[1]]
+                b.questionAnswer3.text = answers[randomAnswers[2]]
+                b.questionAnswer4.text = answers[randomAnswers[3]]
             } else {
-                answer1.text = answers[0]
-                answer2.text = answers[1]
-                answer3.text = answers[2]
-                answer4.text = answers[3]
+                b.questionAnswer1.text = answers[0]
+                b.questionAnswer2.text = answers[1]
+                b.questionAnswer3.text = answers[2]
+                b.questionAnswer4.text = answers[3]
             }
-            questionPoints.text = getString(R.string.question_points, model.questionPoints)
+            b.questionPoints.text = getString(R.string.question_points, model.questionPoints)
             downTimer.start()
             setAnswer("0")
             val qId = model.questionId
@@ -456,6 +425,7 @@ class QuestionsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        nextQuestionHandler.removeCallbacks { nextQuestionRunnable }
         downTimer.cancel()
         soundPool.release()
         mediaPlayer.release()

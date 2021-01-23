@@ -12,14 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayoutMediator
-import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.SlideAdapter
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.ZoomOutPageTransformer
 import ir.ghararemaghzha.game.databinding.ActivitySlidesBinding
 
 class SlidesActivity : AppCompatActivity() {
-    private lateinit var viewPager: ViewPager2
     private lateinit var b: ActivitySlidesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,17 +32,16 @@ class SlidesActivity : AppCompatActivity() {
 
         setContentView(b.root)
 
-        viewPager = findViewById(R.id.slides_viewpager)
-        viewPager.setPageTransformer(ZoomOutPageTransformer())
+        b.slidesViewpager.setPageTransformer(ZoomOutPageTransformer())
 
-        viewPager.adapter = SlideAdapter(this)
-        TabLayoutMediator(findViewById(R.id.slides_tab), viewPager) { _, _ -> }.attach()
+        b.slidesViewpager.adapter = SlideAdapter(this)
+        TabLayoutMediator(b.slidesTab,  b.slidesViewpager) { _, _ -> }.attach()
 
         b.slidesNext.setOnClickListener {
-            viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+            b.slidesViewpager.setCurrentItem( b.slidesViewpager.currentItem + 1, true)
         }
         b.slidesPrev.setOnClickListener {
-            viewPager.setCurrentItem(viewPager.currentItem - 1, true)
+            b.slidesViewpager.setCurrentItem( b.slidesViewpager.currentItem - 1, true)
         }
         b.slidesBtn.setOnClickListener {
             MySharedPreference.getInstance(this).setSlides()
@@ -57,12 +54,12 @@ class SlidesActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewPager.registerOnPageChangeCallback(CallBack(b.slidesNext, b.slidesPrev, b.slidesBtn))
+        b.slidesViewpager.registerOnPageChangeCallback(CallBack(b.slidesNext, b.slidesPrev, b.slidesBtn))
     }
 
     override fun onStop() {
         super.onStop()
-        viewPager.unregisterOnPageChangeCallback(CallBack(b.slidesNext, b.slidesPrev, b.slidesBtn))
+        b.slidesViewpager.unregisterOnPageChangeCallback(CallBack(b.slidesNext, b.slidesPrev, b.slidesBtn))
     }
 
     class CallBack(private val next: ImageView, private val prev: ImageView, private val btn: MaterialButton) : ViewPager2.OnPageChangeCallback() {

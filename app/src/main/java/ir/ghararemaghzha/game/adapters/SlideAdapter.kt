@@ -14,7 +14,6 @@ class SlideAdapter(private val ctx: Context): RecyclerView.Adapter<SlideAdapter.
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v){
         val pic: ImageView = v.findViewById(R.id.slide_pic)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =

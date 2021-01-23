@@ -44,7 +44,8 @@ class StartFragment : BaseFragment<StartViewModel, FragmentStartBinding>() {
                 is Resource.Failure -> {
                     b.startSlider.visibility = View.GONE
                 }
-                is Resource.Loading->{}
+                is Resource.Loading -> {
+                }
             }
         })
     }

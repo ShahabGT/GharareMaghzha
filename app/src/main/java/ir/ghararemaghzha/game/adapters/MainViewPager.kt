@@ -12,25 +12,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.models.SliderModel
 
-class MainViewPager(ctx: FragmentActivity, sldr: List<SliderModel>) : PagerAdapter() {
-    private val context = ctx
-    private val slider = sldr
+class MainViewPager(private val ctx: FragmentActivity,private val slider: List<SliderModel>) : PagerAdapter() {
 
-    override fun getCount(): Int {
-        return slider.size
-    }
+    override fun getCount() = slider.size
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object`
-    }
+    override fun isViewFromObject(view: View, `object`: Any) = view == `object`
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val model = slider[position]
-        val imageView = ImageView(context)
+        val imageView = ImageView(ctx)
         imageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
 
-        Glide.with(context)
-                .load(context.getString(R.string.slider_image_url, model.sliderPic))
+        Glide.with(ctx)
+                .load(ctx.getString(R.string.slider_image_url, model.sliderPic))
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imageView)
 
@@ -43,16 +37,12 @@ class MainViewPager(ctx: FragmentActivity, sldr: List<SliderModel>) : PagerAdapt
         return imageView
     }
 
-
     private fun openLinks(link: String) {
         val intent = Intent()
         intent.action = Intent.ACTION_VIEW
         intent.data = Uri.parse(link)
-        context.startActivity(intent)
+        ctx.startActivity(intent)
     }
 
-
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as ImageView)
-    }
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) = container.removeView(`object` as ImageView)
 }

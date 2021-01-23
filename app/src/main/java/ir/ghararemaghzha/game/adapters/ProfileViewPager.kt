@@ -13,13 +13,9 @@ import ir.ghararemaghzha.game.models.ProfileModel
 
 class ProfileViewPager(var context: Context, var data: List<ProfileModel>) : PagerAdapter() {
 
-    override fun getCount(): Int {
-        return data.size
-    }
+    override fun getCount()= data.size
 
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object`
-    }
+    override fun isViewFromObject(view: View, `object`: Any)= view == `object`
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val layout = LayoutInflater.from(container.context).inflate(R.layout.row_profile, null) as MaterialCardView
@@ -46,6 +42,4 @@ class ProfileViewPager(var context: Context, var data: List<ProfileModel>) : Pag
         val layout = `object` as MaterialCardView
         container.removeView(layout)
     }
-
-
 }

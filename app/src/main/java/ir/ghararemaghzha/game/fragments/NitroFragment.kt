@@ -21,7 +21,6 @@ class NitroFragment : BaseFragment<NitroViewModel, FragmentNitoBinding>() {
     private lateinit var number: String
     private lateinit var token: String
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         init()
@@ -80,11 +79,16 @@ class NitroFragment : BaseFragment<NitroViewModel, FragmentNitoBinding>() {
                                 b.nitroBuy.setBackgroundColor(requireContext().resources.getColor(R.color.grey))
                                 b.nitroBuy.isEnabled = false
                             }
-                            passed < 0 || passed > 6 -> {
+                            passed < 0  -> {
                                 b.nitroPrice.text = getString(R.string.nitro_price4)
                                 b.nitroBuy.setBackgroundColor(requireContext().resources.getColor(R.color.grey))
                                 b.nitroBuy.isEnabled = false
                             }
+                            passed > 6 -> {
+                            b.nitroPrice.text = getString(R.string.nitro_price5)
+                            b.nitroBuy.setBackgroundColor(requireContext().resources.getColor(R.color.grey))
+                            b.nitroBuy.isEnabled = false
+                        }
                             else -> {
                                 b.nitroPrice.text = getString(R.string.nitro_price, amount)
                                 b.nitroBuy.isEnabled = true
@@ -96,7 +100,6 @@ class NitroFragment : BaseFragment<NitroViewModel, FragmentNitoBinding>() {
                         Utils.showInternetError(requireContext()){viewModel.getNitro("Bearer $token",number) }
                         b.nitroLoading.visibility = View.GONE
                         Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-
                     }
                 }
                 is Resource.Failure -> {

@@ -181,7 +181,8 @@
     <string name="nitro_price">قیمت: %s تومان</string>
     <string name="nitro_price2">نیترو فعال می باشد</string>
     <string name="nitro_price3">حداکثر نیترو استفاده شده!</string>
-    <string name="nitro_price4">زمان مسابقه به پایان رسیده!</string>
+    <string name="nitro_price4">مسابقه شروع نشده!</string>
+    <string name="nitro_price5">زمان مسابقه به پایان رسیده!</string>
     <string name="nitro_progress_title">تعداد نیترو های خریداری شده</string>
 
     <string name="buy_dialog_text">مبلغ قابل پرداخت:</string>

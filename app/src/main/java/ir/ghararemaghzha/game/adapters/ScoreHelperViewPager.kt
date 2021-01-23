@@ -1,6 +1,6 @@
 package ir.ghararemaghzha.game.adapters
 
-
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,21 +11,13 @@ import com.google.android.material.button.MaterialButton
 import com.skyfishjy.library.RippleBackground
 import ir.ghararemaghzha.game.R
 
+class ScoreHelperViewPager(private val count: Int, private val navController: NavController) : PagerAdapter() {
 
-class ScoreHelperViewPager(count: Int, nv: NavController) : PagerAdapter() {
+    override fun getCount() = count
 
-    private val c: Int = count
-    private val navController: NavController = nv
+    override fun isViewFromObject(view: View, `object`: Any) = view == `object`
 
-
-    override fun getCount(): Int {
-        return c
-    }
-
-    override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object`
-    }
-
+    @SuppressLint("InflateParams")
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val layout = when (position) {
             0 -> LayoutInflater.from(container.context).inflate(R.layout.fragment_score1, null) as ConstraintLayout
@@ -45,9 +37,5 @@ class ScoreHelperViewPager(count: Int, nv: NavController) : PagerAdapter() {
         return layout
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        val layout = `object` as ConstraintLayout
-        container.removeView(layout)
-    }
-
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) = container.removeView(`object` as ConstraintLayout)
 }

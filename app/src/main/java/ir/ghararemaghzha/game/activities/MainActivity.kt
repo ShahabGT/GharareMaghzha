@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -170,7 +169,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onClicks() {
-        findViewById<ImageView>(R.id.toolbar_insta).setOnClickListener {
+        b.mainToolbar.toolbarInsta.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW
             intent.data = Uri.parse(getString(R.string.instagram_url))
@@ -202,8 +201,8 @@ class MainActivity : AppCompatActivity() {
         }
         b.mainDrawer.navigationInstagram.setOnClickListener {
             val intent = Intent().also {
-                it.action=Intent.ACTION_VIEW
-                it.data=Uri.parse(getString(R.string.instagram_url))
+                it.action = Intent.ACTION_VIEW
+                it.data = Uri.parse(getString(R.string.instagram_url))
             }
             startActivity(intent)
             b.mainMotion.transitionToStart()

@@ -26,11 +26,11 @@ class SplashActivity : AppCompatActivity() {
         b = ActivitySplashBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
+        else
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        }
+
         setContentView(b.root)
         anim()
 
@@ -64,13 +64,10 @@ class SplashActivity : AppCompatActivity() {
             else
                 Intent(this, MainActivity::class.java)
 
-
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-            overridePendingTransition(R.anim.fadein,R.anim.fadeout)
-
+            overridePendingTransition(R.anim.fadein, R.anim.fadeout)
         }, 2000)
-
     }
 
     override fun onBackPressed() {}

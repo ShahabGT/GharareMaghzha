@@ -38,12 +38,11 @@ class SupportActivity : AppCompatActivity() {
 
     private lateinit var b: ActivitySupportBinding
     private lateinit var viewModel: SupportViewModel
-
     private lateinit var adapter: ChatAdapter
     private lateinit var db: Realm
     private var isLoading = false
-    private var number: String = ""
-    private var token: String = ""
+    private lateinit var number: String
+    private lateinit var token: String
     private var nowDate: String = ""
 
     private val br = object : BroadcastReceiver() {
