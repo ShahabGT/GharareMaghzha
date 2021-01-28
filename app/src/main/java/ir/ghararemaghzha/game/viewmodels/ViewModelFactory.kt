@@ -24,6 +24,7 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(InviteViewModel::class.java)-> InviteViewModel(baseRepository as ApiRepository) as T
             modelClass.isAssignableFrom(StartViewModel::class.java)-> StartViewModel(baseRepository as ApiRepository) as T
             modelClass.isAssignableFrom(AboutViewModel::class.java)-> AboutViewModel(baseRepository as ApiRepository) as T
+            modelClass.isAssignableFrom(UserDetailsViewModel::class.java)-> UserDetailsViewModel(baseRepository as ApiRepository) as T
             else -> throw IllegalArgumentException("ViewModel Not Found")
         }
     }

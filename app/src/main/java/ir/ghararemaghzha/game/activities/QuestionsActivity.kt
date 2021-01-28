@@ -14,7 +14,6 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.getkeepsafe.taptargetview.TapTarget
@@ -64,8 +63,6 @@ class QuestionsActivity : AppCompatActivity() {
     private lateinit var number: String
     private lateinit var token: String
     private var season: Int = 0
-    private lateinit var nextQuestionHandler: Handler
-    private lateinit var nextQuestionRunnable: Runnable
     private val br: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Toast.makeText(this@QuestionsActivity, R.string.general_end, Toast.LENGTH_LONG).show()
@@ -76,7 +73,6 @@ class QuestionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = ActivityQuestionBinding.inflate(layoutInflater)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         val window = window
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
@@ -167,8 +163,6 @@ class QuestionsActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        nextQuestionHandler = Handler(Looper.getMainLooper())
-        nextQuestionRunnable = Runnable { nextQuestion() }
         getUserDetails()
         db = Realm.getDefaultInstance()
         data = db.where(QuestionModel::class.java).equalTo("userAnswer", "-1").findAll()
@@ -280,7 +274,7 @@ class QuestionsActivity : AppCompatActivity() {
             YoYo.with(Techniques.Shake).duration(500).playOn(buttonCard)
             playSound(wrongSound)
         }
-        nextQuestionHandler.postDelayed({ nextQuestionRunnable }, 2000)
+        Handler(Looper.getMainLooper()).postDelayed({ if (foreground) nextQuestion() }, 2000)
     }
 
     private fun enterAnimations() {
@@ -425,7 +419,6 @@ class QuestionsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        nextQuestionHandler.removeCallbacks { nextQuestionRunnable }
         downTimer.cancel()
         soundPool.release()
         mediaPlayer.release()

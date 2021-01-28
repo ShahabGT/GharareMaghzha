@@ -18,11 +18,10 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding> : Fragment() {
 
     protected lateinit var b: B
     protected lateinit var viewModel: VM
-    private val remoteDataSource = RemoteDataSource()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         b = getFragmentBinding(inflater, container)
-        val factory = ViewModelFactory(getFragmentRepository())
+        val factory = ViewModelFactory(ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)))
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
         return b.root
     }
@@ -30,7 +29,5 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding> : Fragment() {
     abstract fun getViewModel(): Class<VM>
 
     abstract fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): B
-
-    private fun getFragmentRepository() = ApiRepository(remoteDataSource.getApi(NetworkApi::class.java))
 
 }

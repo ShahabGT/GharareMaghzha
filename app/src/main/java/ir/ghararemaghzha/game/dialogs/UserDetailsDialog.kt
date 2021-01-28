@@ -3,17 +3,11 @@ package ir.ghararemaghzha.game.dialogs
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
-import com.google.android.material.textview.MaterialTextView
-import com.willy.ratingbar.ScaleRatingBar
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.MySharedPreference
 import ir.ghararemaghzha.game.classes.Utils
@@ -21,6 +15,9 @@ import ir.ghararemaghzha.game.data.ApiRepository
 import ir.ghararemaghzha.game.data.NetworkApi
 import ir.ghararemaghzha.game.data.RemoteDataSource
 import ir.ghararemaghzha.game.data.Resource
+import ir.ghararemaghzha.game.databinding.DialogUserdetailsBinding
+import ir.ghararemaghzha.game.viewmodels.UserDetailsViewModel
+import ir.ghararemaghzha.game.viewmodels.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,86 +25,81 @@ import kotlinx.coroutines.withContext
 
 class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dialog(ctx) {
 
-    private lateinit var name: MaterialTextView
-    private lateinit var code: MaterialTextView
-    private lateinit var rank: MaterialTextView
-    private lateinit var score: MaterialTextView
-    private lateinit var questions: MaterialTextView
-    private lateinit var answers: MaterialTextView
-    private lateinit var questionsPercent: MaterialTextView
-    private lateinit var answersPercent: MaterialTextView
-    private lateinit var rateText: MaterialTextView
-    private lateinit var answersProgress: ProgressBar
-    private lateinit var questionsProgress: ProgressBar
-    private lateinit var avatar: ImageView
-    private lateinit var ratingBar: ScaleRatingBar
-    private lateinit var loading: ConstraintLayout
+    private lateinit var b: DialogUserdetailsBinding
+    private lateinit var number: String
+    private lateinit var token: String
+    private lateinit var viewModel: UserDetailsViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_userdetails)
-        init()
+        b = DialogUserdetailsBinding.inflate(LayoutInflater.from(context))
+        val factory = ViewModelFactory(ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)))
+        //  viewModel = ViewModelProvider(ctx, factory).get(UserDetailsViewModel::class.java)
+        viewModel = factory.create(UserDetailsViewModel::class.java)
+        setContentView(b.root)
 
+
+
+
+        init()
     }
 
+
     private fun init() {
-        loading = findViewById(R.id.details_loading)
-        ratingBar = findViewById(R.id.details_rate)
-        ratingBar.rating = 0f
-        ratingBar.isClickable = false
-        ratingBar.isScrollable = false
-        ratingBar.starPadding = 8
-        rateText = findViewById(R.id.details_total)
-        name = findViewById(R.id.details_name2)
-        code = findViewById(R.id.details_code)
-        rank = findViewById(R.id.details_rank2)
-        score = findViewById(R.id.details_rate_text)
-        questions = findViewById(R.id.details_questions)
-        questionsPercent = findViewById(R.id.details_questions_percent)
-        answers = findViewById(R.id.details_answers)
-        answersPercent = findViewById(R.id.details_answers_percent)
-        avatar = findViewById(R.id.details_avatar)
-        answersProgress = findViewById(R.id.details_answers_progress)
-        answersProgress.progress = 0
-        answersProgress.max = 100
-        questionsProgress = findViewById(R.id.details_questions_progress)
-        questionsProgress.progress = 0
-        questionsProgress.max = 100
-        findViewById<ImageView>(R.id.details_close).setOnClickListener { dismiss() }
-        loading.visibility = View.VISIBLE
+        getUserDetails()
+        b.detailsRate.rating = 0f
+        b.detailsRate.isClickable = false
+        b.detailsRate.isScrollable = false
+        b.detailsRate.starPadding = 8
+        b.detailsAnswersProgress.progress = 0
+        b.detailsAnswersProgress.max = 100
+        b.detailsQuestionsProgress.progress = 0
+        b.detailsQuestionsProgress.max = 100
+        b.detailsClose.setOnClickListener { dismiss() }
+        b.detailsLoading.visibility = View.VISIBLE
+
+        //  viewModel.getUserDetails("Bearer $token", number, userId)
         CoroutineScope(Dispatchers.IO).launch {
             getData()
         }
     }
 
-    private suspend fun getData() {
-        val number = MySharedPreference.getInstance(context).getNumber()
-        val token = MySharedPreference.getInstance(context).getAccessToken()
+    override fun dismiss() {
+        super.dismiss()
+        b.detailsAnswersProgress.progress = 0
+        b.detailsQuestionsProgress.progress = 0
+    }
+
+    private fun getUserDetails() {
+        number = MySharedPreference.getInstance(context).getNumber()
+        token = MySharedPreference.getInstance(context).getAccessToken()
         if (number.isEmpty() || token.isEmpty()) {
             Utils.logout(context as Activity, true)
-            return
         }
+    }
 
+    private suspend fun getData() {
         when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).getUserDetails("Bearer $token", number, userId)) {
             is Resource.Success -> {
                 if (res.value.result == "success" && res.value.message == "ok") {
                     withContext(Dispatchers.Main) {
-                        name.text = res.value.userData.userName
-                        code.text = context.getString(R.string.details_code, res.value.userData.userCode)
-                        rank.text = res.value.userData.userRank
+                        b.detailsName2.text = res.value.userData.userName
+                        b.detailsCode.text = context.getString(R.string.details_code, res.value.userData.userCode)
+                        b.detailsRank2.text = res.value.userData.userRank
 
                         if (res.value.userData.scoreCount != "-1")
-                            score.text = res.value.userData.scoreCount
+                            b.detailsRateText.text = res.value.userData.scoreCount
                         else
-                            score.text = "0"
+                            b.detailsRateText.text = "0"
 
-                        if (res.value.booster.toInt() < 1000) answers.text = context.getString(R.string.details_nitro2, res.value.booster) else answers.text = context.getString(R.string.details_nitro2, "1000")
+                        if (res.value.booster.toInt() < 1000) b.detailsAnswers.text = context.getString(R.string.details_nitro2, res.value.booster) else b.detailsAnswers.text = context.getString(R.string.details_nitro2, "1000")
 
                         Glide.with(context)
                                 .load(context.getString(R.string.avatar_url, res.value.userData.userAvatar))
                                 .circleCrop()
                                 .placeholder(R.drawable.placeholder)
-                                .into(avatar)
+                                .into(b.detailsAvatar)
 
                         val totalQuestions = 1000
                         val answeredQuestions: Int = res.value.correct + res.value.incorrect
@@ -118,9 +110,9 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                             res.value.booster.toInt()
 
                         if (answeredQuestions <= 1000) {
-                            questions.text = context.getString(R.string.details_questions, answeredQuestions, totalQuestions)
+                            b.detailsQuestions.text = context.getString(R.string.details_questions, answeredQuestions, totalQuestions)
                         } else {
-                            questions.text = context.getString(R.string.details_questions, 1000, totalQuestions)
+                            b.detailsQuestions.text = context.getString(R.string.details_questions, 1000, totalQuestions)
                         }
 
                         val qPercent: Int
@@ -140,28 +132,27 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
                             }
                         }
 
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            answersProgress.progress = nPercent
-                            questionsProgress.progress = qPercent
-                        }, 500)
+                        b.detailsAnswersProgress.progress = nPercent
+                        b.detailsQuestionsProgress.progress = qPercent
 
-                        answersPercent.text = "%$nPercent"
-                        questionsPercent.text = "%$qPercent"
+
+                        b.detailsAnswersPercent.text = "%$nPercent"
+                        b.detailsQuestionsPercent.text = "%$qPercent"
 
                         val rate = res.value.rank.toInt()
                         val level1 = res.value.level1.toInt()
                         val level2 = res.value.level2.toInt()
                         val level3 = res.value.level3.toInt()
                         val level4 = res.value.level4.toInt()
-                        rateText.text = rate.toString()
+                        b.detailsTotal.text = rate.toString()
                         when {
-                            rate < level1 -> ratingBar.rating = 0f
-                            rate < level2 -> ratingBar.rating = 1f
-                            rate < level3 -> ratingBar.rating = 2f
-                            rate < level4 -> ratingBar.rating = 3f
-                            else -> ratingBar.rating = 4f
+                            rate < level1 -> b.detailsRate.rating = 0f
+                            rate < level2 -> b.detailsRate.rating = 1f
+                            rate < level3 -> b.detailsRate.rating = 2f
+                            rate < level4 -> b.detailsRate.rating = 3f
+                            else -> b.detailsRate.rating = 4f
                         }
-                        loading.visibility = View.GONE
+                        b.detailsLoading.visibility = View.GONE
                     }
 
                 } else {
@@ -174,16 +165,18 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
             is Resource.Failure -> {
                 if (res.isNetworkError) {
                     withContext(Dispatchers.Main) {
-                        loading.visibility = View.GONE
+                        b.detailsLoading.visibility = View.GONE
                         Toast.makeText(context, context.getString(R.string.general_error), Toast.LENGTH_SHORT).show()
                         dismiss()
                     }
                 } else if (res.errorCode == 401) {
                     withContext(Dispatchers.Main) {
-                        loading.visibility = View.GONE
+                        b.detailsLoading.visibility = View.GONE
                         Utils.logout(context as Activity, true)
                     }
                 }
+            }
+            is Resource.Loading -> {
             }
         }
     }

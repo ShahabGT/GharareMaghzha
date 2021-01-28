@@ -16,7 +16,7 @@
             android:shape="ring"
             android:thicknessRatio="14"
             android:useLevel="false">
-            <solid android:color="@android:color/holo_blue_bright" />
+            <solid android:color="@color/light4" />
         </shape>
 
     </item>
@@ -29,7 +29,7 @@
                 android:thicknessRatio="14"
                 android:useLevel="true">
 
-                <solid android:color="@android:color/holo_blue_dark" />
+                <solid android:color="@color/dark4" />
             </shape>
         </rotate>
     </item>
