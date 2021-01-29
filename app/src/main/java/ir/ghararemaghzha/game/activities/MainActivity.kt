@@ -1,6 +1,5 @@
 package ir.ghararemaghzha.game.activities
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -143,7 +142,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        setAvatars(this)
+        setAvatars()
         Utils.removeNotification(this)
     }
 
@@ -221,14 +220,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setAvatars(activity: Activity) {
-        Glide.with(activity)
-                .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
+    private fun setAvatars() {
+        Glide.with(this)
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
                 .into(b.mainDrawer.navigationAvatar)
-        Glide.with(activity)
-                .load(activity.getString(R.string.avatar_url, MySharedPreference.getInstance(activity).getUserAvatar()))
+        Glide.with(this)
+                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(this).getUserAvatar()))
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
                 .into(b.mainToolbar.toolbarAvatar)

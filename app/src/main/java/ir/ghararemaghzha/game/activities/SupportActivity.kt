@@ -38,7 +38,6 @@ class SupportActivity : AppCompatActivity() {
 
     private lateinit var b: ActivitySupportBinding
     private lateinit var viewModel: SupportViewModel
-    private lateinit var adapter: ChatAdapter
     private lateinit var db: Realm
     private var isLoading = false
     private lateinit var number: String
@@ -89,9 +88,8 @@ class SupportActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
         b.chatRecycler.layoutManager = layoutManager
-
-        adapter = ChatAdapter(this, db.where<MessageModel>().notEqualTo("sender", "admin").sort("date", Sort.DESCENDING).findAll())
-        b.chatRecycler.adapter = adapter
+        
+        b.chatRecycler.adapter = ChatAdapter(this, db.where<MessageModel>().notEqualTo("sender", "admin").sort("date", Sort.DESCENDING).findAll())
         b.chatRecycler.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {
                 b.chatRecycler.post {
