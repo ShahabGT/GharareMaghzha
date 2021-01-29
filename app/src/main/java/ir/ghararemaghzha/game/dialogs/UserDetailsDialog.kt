@@ -39,9 +39,6 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
         viewModel = factory.create(UserDetailsViewModel::class.java)
         setContentView(b.root)
 
-
-
-
         init()
     }
 
