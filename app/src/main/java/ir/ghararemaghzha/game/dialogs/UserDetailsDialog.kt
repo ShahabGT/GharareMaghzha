@@ -18,10 +18,7 @@ import ir.ghararemaghzha.game.data.Resource
 import ir.ghararemaghzha.game.databinding.DialogUserdetailsBinding
 import ir.ghararemaghzha.game.viewmodels.UserDetailsViewModel
 import ir.ghararemaghzha.game.viewmodels.ViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dialog(ctx) {
 
@@ -29,13 +26,13 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
     private lateinit var number: String
     private lateinit var token: String
     private lateinit var viewModel: UserDetailsViewModel
+    private lateinit var job: Job
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = DialogUserdetailsBinding.inflate(LayoutInflater.from(context))
         val factory = ViewModelFactory(ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)))
-        //  viewModel = ViewModelProvider(ctx, factory).get(UserDetailsViewModel::class.java)
         viewModel = factory.create(UserDetailsViewModel::class.java)
         setContentView(b.root)
 
@@ -56,14 +53,14 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
         b.detailsClose.setOnClickListener { dismiss() }
         b.detailsLoading.visibility = View.VISIBLE
 
-        //  viewModel.getUserDetails("Bearer $token", number, userId)
-        CoroutineScope(Dispatchers.IO).launch {
+        job = CoroutineScope(Dispatchers.IO).launch {
             getData()
         }
     }
 
     override fun dismiss() {
         super.dismiss()
+        job.cancel()
         b.detailsAnswersProgress.progress = 0
         b.detailsQuestionsProgress.progress = 0
     }
@@ -177,4 +174,6 @@ class UserDetailsDialog(ctx: FragmentActivity, private val userId: String) : Dia
             }
         }
     }
+
+
 }

@@ -57,10 +57,10 @@ class AboutFragment : BaseFragment<AboutViewModel, FragmentAboutBinding>() {
         val spannableString = SpannableString(tradeMarkText)
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val intent = Intent()
-                intent.action = Intent.ACTION_VIEW
-                intent.data = Uri.parse("http://tajrannoyan.com")
-                startActivity(intent)
+                startActivity(Intent().also {
+                    it.action = Intent.ACTION_VIEW
+                    it.data = Uri.parse("http://tajrannoyan.com")
+                })
             }
 
             @Suppress("deprecation")
@@ -81,10 +81,10 @@ class AboutFragment : BaseFragment<AboutViewModel, FragmentAboutBinding>() {
         val spannableString2 = SpannableString(tradeMarkText2)
         val clickableSpan2: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val intent = Intent()
-                intent.action = Intent.ACTION_VIEW
-                intent.data = Uri.parse("https://shahabazimi.ir")
-                startActivity(intent)
+                startActivity(Intent().also {
+                    it.action = Intent.ACTION_VIEW
+                    it.data = Uri.parse("https://shahabazimi.ir")
+                })
             }
 
             @Suppress("deprecation")
@@ -113,8 +113,9 @@ class AboutFragment : BaseFragment<AboutViewModel, FragmentAboutBinding>() {
     private fun onClicks() {
         b.aboutEmail.setOnClickListener {
             val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                    "mailto", "support@ghararehmaghzha.ir", null))
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, "support@ghararehmaghzha.ir")
+                    "mailto", "support@ghararehmaghzha.ir", null)).also {
+                it.putExtra(Intent.EXTRA_EMAIL, "support@ghararehmaghzha.ir")
+            }
             startActivity(Intent.createChooser(emailIntent, "ارسال ایمیل از طریق"))
         }
         b.aboutTelegram.setOnClickListener { intentAction("https://t.me/ghararehmaghzha") }
@@ -122,12 +123,11 @@ class AboutFragment : BaseFragment<AboutViewModel, FragmentAboutBinding>() {
         b.aboutWebsite.setOnClickListener { intentAction("https://ghararehmaghzha.ir") }
     }
 
-    private fun intentAction(id: String) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_VIEW
-        intent.data = Uri.parse(id)
-        startActivity(intent)
-    }
+    private fun intentAction(id: String) =
+            startActivity(Intent().also {
+                it.action = Intent.ACTION_VIEW
+                it.data = Uri.parse(id)
+            })
 
     override fun getViewModel() = AboutViewModel::class.java
 
