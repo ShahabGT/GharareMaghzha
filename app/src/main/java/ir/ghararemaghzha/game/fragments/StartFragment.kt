@@ -8,8 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.viewpager.widget.PagerAdapter
 import com.google.android.material.textview.MaterialTextView
 import com.tmall.ultraviewpager.UltraViewPager
@@ -26,7 +25,6 @@ import ir.ghararemaghzha.game.viewmodels.StartViewModel
 
 class StartFragment : BaseFragment<StartViewModel, FragmentStartBinding>() {
 
-    private lateinit var navController: NavController
     private lateinit var db: Realm
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,11 +46,6 @@ class StartFragment : BaseFragment<StartViewModel, FragmentStartBinding>() {
                 }
             }
         })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
     }
 
     override fun onResume() {
@@ -102,8 +95,8 @@ class StartFragment : BaseFragment<StartViewModel, FragmentStartBinding>() {
     }
 
     private fun onClicks() {
-        b.startProfile.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_profile) }
-        b.startHighscore.setOnClickListener { navController.navigate(R.id.action_menu_start_to_menu_highscore) }
+        b.startProfile.setOnClickListener { requireView().findNavController().navigate(R.id.action_menu_start_to_menu_profile) }
+        b.startHighscore.setOnClickListener { requireView().findNavController().navigate(R.id.action_menu_start_to_menu_highscore) }
         b.startStart.setOnClickListener {
             val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
             val remaining = db.where<QuestionModel>().equalTo("userAnswer", "-1").findAll().size

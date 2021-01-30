@@ -64,7 +64,7 @@ class SplashActivity : AppCompatActivity() {
             else
                 Intent(this, MainActivity::class.java)
 
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            finish()
             startActivity(intent)
             overridePendingTransition(R.anim.fadein, R.anim.fadeout)
         }, 2000)

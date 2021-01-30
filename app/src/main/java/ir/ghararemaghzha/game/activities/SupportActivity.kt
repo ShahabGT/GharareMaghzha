@@ -42,7 +42,7 @@ class SupportActivity : AppCompatActivity() {
     private var isLoading = false
     private lateinit var number: String
     private lateinit var token: String
-    private var nowDate: String = ""
+    private lateinit var nowDate: String
 
     private val br = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

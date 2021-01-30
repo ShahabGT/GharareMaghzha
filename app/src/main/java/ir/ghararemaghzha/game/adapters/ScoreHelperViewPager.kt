@@ -11,9 +11,9 @@ import com.google.android.material.button.MaterialButton
 import com.skyfishjy.library.RippleBackground
 import ir.ghararemaghzha.game.R
 
-class ScoreHelperViewPager(private val count: Int, private val navController: NavController) : PagerAdapter() {
+class ScoreHelperViewPager(private val navController: NavController) : PagerAdapter() {
 
-    override fun getCount() = count
+    override fun getCount() = 3
 
     override fun isViewFromObject(view: View, `object`: Any) = view == `object`
 
