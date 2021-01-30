@@ -33,16 +33,137 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ProfileEditFragment : BaseFragment<ProfileEditViewModel,FragmentProfileEditBinding>() {
 
     private var uploading = false
-    private var number: String = ""
-    private var token: String = ""
+    private lateinit var number: String
+    private lateinit var token: String
+    private lateinit var avatarName: String
+    private lateinit var name: String
+    private lateinit var email: String
+    private lateinit var bday: String
+    private lateinit var sex: String
+    private lateinit var inviteCode: String
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         init()
+
+        viewModel.removeAvatarResponse.observe(viewLifecycleOwner,{res->
+            when(res){
+                is Resource.Success -> {
+                        b.profileSave.isEnabled = true
+                        uploading = false
+                        b.profileLoading.visibility = View.GONE
+                        if (res.value.result == "success") {
+                            Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
+                            MySharedPreference.getInstance(requireContext()).setUserAvatar("")
+                            Glide.with(requireContext())
+                                    .load(getString(R.string.avatar_url, MySharedPreference.getInstance(requireContext()).getUserAvatar()))
+                                    .circleCrop()
+                                    .placeholder(R.drawable.placeholder)
+                                    .into(b.profileAvatar)
+                            b.profileAvatarRemove.visibility = View.VISIBLE
+                            setAvatars()
+                        } else {
+                            Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        }
+                }
+                is Resource.Failure -> {
+                        if (res.errorCode == 401)
+                            Utils.logout(requireActivity(), true)
+                        else {
+                            b.profileSave.isEnabled = true
+                            uploading = false
+                            b.profileLoading.visibility = View.GONE
+                            Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        }
+                }
+                is Resource.Loading->{}
+            }
+
+
+        })
+
+        viewModel.changeAvatarResponse.observe(viewLifecycleOwner,{res->
+            when(res){
+                is Resource.Success -> {
+                        b.profileSave.isEnabled = true
+                        uploading = false
+                        b.profileLoading.visibility = View.GONE
+                        if (res.value.result == "success") {
+                            Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
+                            MySharedPreference.getInstance(requireContext()).setUserAvatar(avatarName)
+                            Glide.with(requireContext())
+                                    .load(getString(R.string.avatar_url, avatarName))
+                                    .circleCrop()
+                                    .placeholder(R.drawable.placeholder)
+                                    .into(b.profileAvatar)
+                            b.profileAvatarRemove.visibility = View.VISIBLE
+                            setAvatars()
+                        } else {
+                            Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        }
+
+                }
+                is Resource.Failure -> {
+                        if (res.errorCode == 401)
+                            Utils.logout(requireActivity(), true)
+                        else {
+                            b.profileSave.isEnabled = true
+                            uploading = false
+                            b.profileLoading.visibility = View.GONE
+                            Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        }
+                }
+                is Resource.Loading->{}
+            }
+        })
+
+        viewModel.updateProfileResponse.observe(viewLifecycleOwner,{res->
+            when(res){
+                is Resource.Success -> {
+                        b.profileSave.isEnabled = true
+                        b.profileSave.text = getString(R.string.profile_save)
+                        b.profileLoading.visibility = View.GONE
+                        if (res.value.result == "success") {
+                            Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
+                            MySharedPreference.getInstance(requireContext()).also {
+                                it.setUsername(name)
+                                it.setUserEmail(email)
+                                it.setUserSex(sex)
+                                it.setUserBirthday(bday)
+                            }
+
+                            when (res.value.message) {
+                                "invite not found" -> Toast.makeText(context, getString(R.string.profile_invite_notfound), Toast.LENGTH_SHORT).show()
+                                "invite failed" -> Toast.makeText(context, getString(R.string.profile_invite_failed), Toast.LENGTH_SHORT).show()
+                                "invite ok" -> {
+                                    MySharedPreference.getInstance(requireContext()).setUserInvite(inviteCode)
+                                    b.profileInvite.isEnabled = false
+                                    b.profileInviteLayout.isEnabled = false
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        }
+
+                }
+                is Resource.Failure -> {
+                        if (res.errorCode == 401)
+                            Utils.logout(requireActivity(), true)
+                        else {
+                            b.profileSave.isEnabled = true
+                            b.profileSave.text = getString(R.string.profile_save)
+                            b.profileLoading.visibility = View.GONE
+                            Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+        })
     }
     private fun getUserDetails() {
         number = MySharedPreference.getInstance(requireContext()).getNumber()
@@ -101,9 +222,9 @@ class ProfileEditFragment : BaseFragment<ProfileEditViewModel,FragmentProfileEdi
                         b.profileSave.isEnabled = false
                         b.profileLoading.visibility = View.VISIBLE
                         uploading = true
-                        CoroutineScope(Dispatchers.IO).launch {
-                            changeAvatar(Uri.parse(address))
-                        }
+                        avatarName = MySharedPreference.getInstance(requireContext()).getUserId()+ SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH).format(Date())
+                        val pic  = toBase64(Uri.parse(address))
+                        viewModel.changeAvatar("Bearer $token", number, pic, avatarName)
                     }
                 } else Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
             }
@@ -114,9 +235,7 @@ class ProfileEditFragment : BaseFragment<ProfileEditViewModel,FragmentProfileEdi
                 if (avatarName.isNotEmpty()) {
                     b.profileSave.isEnabled = false
                     b.profileLoading.visibility = View.VISIBLE
-                    CoroutineScope(Dispatchers.IO).launch {
-                        removeAvatar(avatarName)
-                    }
+                    viewModel.removeAvatar("Bearer $token", number, avatarName)
                 }
             } else Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
         }
@@ -143,9 +262,12 @@ class ProfileEditFragment : BaseFragment<ProfileEditViewModel,FragmentProfileEdi
                 b.profileSave.isEnabled = false
                 b.profileLoading.visibility = View.VISIBLE
                 b.profileSave.text = "..."
-                CoroutineScope(Dispatchers.IO).launch {
-                    updateProfile(n, e, bd, s, i)
-                }
+                name=n
+                email=e
+                bday=bd
+                sex=s
+                inviteCode=i
+                viewModel.updateProfile("Bearer $token", number,n, e, bd, s, i)
             } else Toast.makeText(context, getString(R.string.internet_error), Toast.LENGTH_SHORT).show()
         }
     }
@@ -192,7 +314,6 @@ class ProfileEditFragment : BaseFragment<ProfileEditViewModel,FragmentProfileEdi
                 else -> 0
             }
 
-
     private fun scale(photoUri: Uri): Bitmap {
         var inputStream = requireActivity().contentResolver.openInputStream(photoUri)
         val dbo = BitmapFactory.Options()
@@ -232,46 +353,6 @@ class ProfileEditFragment : BaseFragment<ProfileEditViewModel,FragmentProfileEdi
         return srcBitmap
     }
 
-    private suspend fun changeAvatar(image: Uri) {
-        val pic = toBase64(image)
-        val avatarName = MySharedPreference.getInstance(requireContext()).getUserId() + Utils.currentDate().replace("-", "").replace(":", "").replace(" ", "")
-
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).alterAvatar("Bearer $token", number, "change", pic, avatarName)) {
-            is Resource.Success -> {
-                withContext(Dispatchers.Main) {
-                    b.profileSave.isEnabled = true
-                    uploading = false
-                    b.profileLoading.visibility = View.GONE
-                    if (res.value.result == "success") {
-                        Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
-                        MySharedPreference.getInstance(requireContext()).setUserAvatar(avatarName)
-                        Glide.with(requireContext())
-                                .load(getString(R.string.avatar_url, avatarName))
-                                .circleCrop()
-                                .placeholder(R.drawable.placeholder)
-                                .into(b.profileAvatar)
-                        b.profileAvatarRemove.visibility = View.VISIBLE
-                        setAvatars()
-                    } else {
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            is Resource.Failure -> {
-                withContext(Dispatchers.Main) {
-                    if (res.errorCode == 401)
-                        Utils.logout(requireActivity(), true)
-                    else {
-                        b.profileSave.isEnabled = true
-                        uploading = false
-                        b.profileLoading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
-
     private fun setAvatars() {
         Glide.with(requireContext())
                 .load(getString(R.string.avatar_url, MySharedPreference.getInstance(requireContext()).getUserAvatar()))
@@ -283,87 +364,6 @@ class ProfileEditFragment : BaseFragment<ProfileEditViewModel,FragmentProfileEdi
                 .circleCrop()
                 .placeholder(R.drawable.placeholder)
                 .into(requireActivity().findViewById(R.id.toolbar_avatar))
-    }
-
-    private suspend fun removeAvatar(avatarName: String) {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java)).alterAvatar("Bearer $token", number, "remove", "", avatarName)) {
-            is Resource.Success -> {
-                withContext(Dispatchers.Main) {
-                    b.profileSave.isEnabled = true
-                    uploading = false
-                    b.profileLoading.visibility = View.GONE
-                    if (res.value.result == "success") {
-                        Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
-                        MySharedPreference.getInstance(requireContext()).setUserAvatar("")
-                        Glide.with(requireContext())
-                                .load(getString(R.string.avatar_url, MySharedPreference.getInstance(requireContext()).getUserAvatar()))
-                                .circleCrop()
-                                .placeholder(R.drawable.placeholder)
-                                .into(b.profileAvatar)
-                        b.profileAvatarRemove.visibility = View.VISIBLE
-                        setAvatars()
-                    } else {
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            is Resource.Failure -> {
-                withContext(Dispatchers.Main) {
-                    if (res.errorCode == 401)
-                        Utils.logout(requireActivity(), true)
-                    else {
-                        b.profileSave.isEnabled = true
-                        uploading = false
-                        b.profileLoading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun updateProfile(name: String, email: String, bday: String, sex: String, inviteCode: String) {
-        when (val res = ApiRepository(RemoteDataSource().getApi(NetworkApi::class.java))
-                .updateProfile("Bearer $token", number, name, email, bday, sex, inviteCode)) {
-            is Resource.Success -> {
-                withContext(Dispatchers.Main) {
-                    b.profileSave.isEnabled = true
-                    b.profileSave.text = getString(R.string.profile_save)
-                    b.profileLoading.visibility = View.GONE
-                    if (res.value.result == "success") {
-                        Toast.makeText(context, getString(R.string.general_save), Toast.LENGTH_SHORT).show()
-                        MySharedPreference.getInstance(requireContext()).setUsername(name)
-                        MySharedPreference.getInstance(requireContext()).setUserEmail(email)
-                        MySharedPreference.getInstance(requireContext()).setUserSex(sex)
-                        MySharedPreference.getInstance(requireContext()).setUserBirthday(bday)
-
-                        when (res.value.message) {
-                            "invite not found" -> Toast.makeText(context, getString(R.string.profile_invite_notfound), Toast.LENGTH_SHORT).show()
-                            "invite failed" -> Toast.makeText(context, getString(R.string.profile_invite_failed), Toast.LENGTH_SHORT).show()
-                            "invite ok" -> {
-                                MySharedPreference.getInstance(requireContext()).setUserInvite(inviteCode)
-                                b.profileInvite.isEnabled = false
-                                b.profileInviteLayout.isEnabled = false
-                            }
-                        }
-                    } else {
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            is Resource.Failure -> {
-                withContext(Dispatchers.Main) {
-                    if (res.errorCode == 401)
-                        Utils.logout(requireActivity(), true)
-                    else {
-                        b.profileSave.isEnabled = true
-                        b.profileSave.text = getString(R.string.profile_save)
-                        b.profileLoading.visibility = View.GONE
-                        Toast.makeText(context, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
     }
 
     override fun getViewModel()=ProfileEditViewModel::class.java

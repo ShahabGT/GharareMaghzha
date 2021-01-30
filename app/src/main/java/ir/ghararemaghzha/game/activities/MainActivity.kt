@@ -48,8 +48,8 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var b: ActivityMainBinding
-    private var number: String = ""
-    private var token: String = ""
+    private lateinit var number: String
+    private lateinit var token: String
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var dataDialog: GetDataDialog
     private var doubleBackToExitPressedOnce = false
