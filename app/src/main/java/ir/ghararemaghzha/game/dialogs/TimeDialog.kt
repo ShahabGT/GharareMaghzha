@@ -4,15 +4,16 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.button.MaterialButton
-import ir.ghararemaghzha.game.R
+import android.view.LayoutInflater
+import ir.ghararemaghzha.game.databinding.DialogTimeBinding
 
- class TimeDialog(ctx:Context) : Dialog(ctx) {
+class TimeDialog(ctx:Context) : Dialog(ctx) {
 
      override fun onCreate(savedInstanceState: Bundle?) {
          super.onCreate(savedInstanceState)
-         setContentView(R.layout.dialog_time)
-         findViewById<MaterialButton>(R.id.alert_dialog_set).setOnClickListener{
+         val b = DialogTimeBinding.inflate(LayoutInflater.from(context))
+         setContentView(b.root)
+         b.alertDialogSet.setOnClickListener{
              context.startActivity(Intent(android.provider.Settings.ACTION_DATE_SETTINGS))
              dismiss()
          }

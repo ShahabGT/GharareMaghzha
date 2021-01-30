@@ -3,17 +3,19 @@ package ir.ghararemaghzha.game.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
-import com.google.android.material.button.MaterialButton
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.classes.Utils
+import ir.ghararemaghzha.game.databinding.DialogNointernetBinding
 
 class NoInternetDialog(ctx: Context,private val retry:()->Unit) : Dialog(ctx) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_nointernet)
-        findViewById<MaterialButton>(R.id.alert_dialog_set).setOnClickListener {
+        val b = DialogNointernetBinding.inflate(LayoutInflater.from(context))
+        setContentView(b.root)
+       b.alertDialogSet.setOnClickListener {
             if (Utils.checkInternet(context)) {
                 retry()
                 dismiss()

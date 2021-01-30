@@ -11,7 +11,7 @@ import com.google.android.material.textview.MaterialTextView
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.models.ProfileModel
 
-class ProfileViewPager(var context: Context, var data: List<ProfileModel>) : PagerAdapter() {
+class ProfileViewPager(private val context: Context,private val data: List<ProfileModel>) : PagerAdapter() {
 
     override fun getCount()= data.size
 
