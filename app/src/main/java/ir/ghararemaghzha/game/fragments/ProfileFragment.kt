@@ -9,18 +9,17 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.google.android.material.card.MaterialCardView
+import androidx.navigation.findNavController
 import com.google.android.material.textview.MaterialTextView
 import com.tmall.ultraviewpager.UltraViewPager
 import com.tmall.ultraviewpager.transformer.UltraDepthScaleTransformer
 import io.realm.Realm
+import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.ProfileViewPager
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST_REFRESH
 import ir.ghararemaghzha.game.classes.MySharedPreference
+import ir.ghararemaghzha.game.databinding.FragmentProfileBinding
 import ir.ghararemaghzha.game.dialogs.UserDetailsDialog
 import ir.ghararemaghzha.game.models.ProfileModel
 import ir.ghararemaghzha.game.models.QuestionModel
@@ -28,21 +27,12 @@ import java.util.*
 import kotlin.math.abs
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
-    private lateinit var navController: NavController
-    private lateinit var buy: MaterialCardView
-    private lateinit var edit: MaterialCardView
-    private lateinit var stat: MaterialCardView
-    private lateinit var scoreHelper: MaterialCardView
-    private lateinit var db: Realm
-    private lateinit var v: View
-    private lateinit var act: FragmentActivity
-    private lateinit var ctx: Context
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v= super.onCreateView(inflater, container, savedInstanceState)
-        act=requireActivity()
-        ctx = requireContext()
-        return v
+    private lateinit var b: FragmentProfileBinding
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        b = FragmentProfileBinding.inflate(layoutInflater, container, false)
+        return b.root
     }
 
     private val br: BroadcastReceiver = object : BroadcastReceiver() {
@@ -53,41 +43,34 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onResume() {
         super.onResume()
-        ctx.registerReceiver(br, IntentFilter(GHARAREHMAGHZHA_BROADCAST_REFRESH))
+        requireContext().registerReceiver(br, IntentFilter(GHARAREHMAGHZHA_BROADCAST_REFRESH))
     }
 
     override fun onPause() {
         super.onPause()
-        ctx.unregisterReceiver(br)
+        requireContext().unregisterReceiver(br)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        v = view
-        navController = Navigation.findNavController(view)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         init()
     }
 
     private fun init() {
-        act.findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.profile_title)
-        db = Realm.getDefaultInstance()
-        buy = v.findViewById(R.id.profile_buy)
-        edit = v.findViewById(R.id.profile_edit)
-        stat = v.findViewById(R.id.profile_stat)
-        scoreHelper = v.findViewById(R.id.profile_scorehelper)
+        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.profile_title)
         updateUI()
         onClicks()
     }
 
     private fun onClicks() {
-        buy.setOnClickListener { navController.navigate(R.id.action_menu_profile_to_menu_buy) }
-        edit.setOnClickListener { navController.navigate(R.id.action_global_profileEditFragment) }
-        stat.setOnClickListener { showDetailsDialog(MySharedPreference.getInstance(ctx).getUserId()) }
-        scoreHelper.setOnClickListener { navController.navigate(R.id.action_global_scoreHelperFragment) }
+        b.profileBuy.setOnClickListener { requireView().findNavController().navigate(R.id.action_menu_profile_to_menu_buy) }
+        b.profileEdit.setOnClickListener { requireView().findNavController().navigate(R.id.action_global_profileEditFragment) }
+        b.profileStat.setOnClickListener { showDetailsDialog(MySharedPreference.getInstance(requireContext()).getUserId()) }
+        b.profileScorehelper.setOnClickListener { requireView().findNavController().navigate(R.id.action_global_scoreHelperFragment) }
     }
 
     private fun showDetailsDialog(userId: String) {
-        val dialog = UserDetailsDialog(act, userId)
+        val dialog = UserDetailsDialog(requireActivity(), userId)
         dialog.setCanceledOnTouchOutside(true)
         dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -99,12 +82,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun updateUI() {
+        val db = Realm.getDefaultInstance()
         val data: MutableList<ProfileModel> = ArrayList()
         data.add(ProfileModel(
-                getString(R.string.avatar_url, MySharedPreference.getInstance(ctx).getUserAvatar()),
-                MySharedPreference.getInstance(ctx).getUsername(),
-                "امتیاز من: " + MySharedPreference.getInstance(ctx).getScore()))
-        val passed = MySharedPreference.getInstance(ctx).getDaysPassed()
+                getString(R.string.avatar_url, MySharedPreference.getInstance(requireContext()).getUserAvatar()),
+                MySharedPreference.getInstance(requireContext()).getUsername(),
+                "امتیاز من: " + MySharedPreference.getInstance(requireContext()).getScore()))
+        val passed = MySharedPreference.getInstance(requireContext()).getDaysPassed()
         if (passed < 0) {
             data.add(ProfileModel(R.drawable.profile_time,
                     getString(R.string.profile_time_card_tostart),
@@ -121,22 +105,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
             data.add(model)
         }
-        data.add(ProfileModel(R.drawable.profile_total, "سوالات این دوره", db.where(QuestionModel::class.java).findAll().size.toString()))
-        data.add(ProfileModel(R.drawable.profile_remain, "سوالات من", db.where(QuestionModel::class.java)
-                .equalTo("userAnswer", "-1").findAll().size.toString()))
+        data.add(ProfileModel(R.drawable.profile_total, "سوالات این دوره", db.where<QuestionModel>().findAll().size.toString()))
+        data.add(ProfileModel(R.drawable.profile_remain, "سوالات من", db.where<QuestionModel>().equalTo("userAnswer", "-1").findAll().size.toString()))
         initViewPager(data)
     }
 
-
     private fun initViewPager(data: List<ProfileModel>) {
-        val ultraViewPager: UltraViewPager = v.findViewById(R.id.profile_recycler)
-        ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL)
-        ultraViewPager.setPageTransformer(true, UltraDepthScaleTransformer())
-        ultraViewPager.setMultiScreen(0.6f)
-        ultraViewPager.setItemRatio(1.0)
-        ultraViewPager.setInfiniteLoop(true)
-        ultraViewPager.adapter = ProfileViewPager(ctx, data)
-        ultraViewPager.setAutoScroll(4000)
+        b.profileRecycler.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL)
+        b.profileRecycler.setPageTransformer(true, UltraDepthScaleTransformer())
+        b.profileRecycler.setMultiScreen(0.6f)
+        b.profileRecycler.setItemRatio(1.0)
+        b.profileRecycler.setInfiniteLoop(true)
+        b.profileRecycler.adapter = ProfileViewPager(requireContext(), data)
+        b.profileRecycler.setAutoScroll(4000)
     }
 
 }

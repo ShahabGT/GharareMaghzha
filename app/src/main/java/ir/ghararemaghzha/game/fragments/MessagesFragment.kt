@@ -1,16 +1,13 @@
 package ir.ghararemaghzha.game.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import io.realm.Realm
 import io.realm.RealmResults
@@ -19,25 +16,24 @@ import io.realm.kotlin.where
 import ir.ghararemaghzha.game.R
 import ir.ghararemaghzha.game.adapters.IncomingAdapter
 import ir.ghararemaghzha.game.classes.Const.GHARAREHMAGHZHA_BROADCAST
+import ir.ghararemaghzha.game.databinding.FragmentMessagesBinding
 import ir.ghararemaghzha.game.models.MessageModel
 
 class MessagesFragment : Fragment(R.layout.fragment_messages) {
-    private lateinit var ctx: Context
-    private lateinit var act: FragmentActivity
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v= super.onCreateView(inflater, container, savedInstanceState)
-        act=requireActivity()
-        ctx = requireContext()
-        return v
+    private lateinit var b: FragmentMessagesBinding
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        b = FragmentMessagesBinding.inflate(layoutInflater, container, false)
+        return b.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        init(view)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        init()
     }
 
-    private fun init(v: View) {
-        (act.findViewById<View>(R.id.toolbar_title) as MaterialTextView).setText(R.string.message_incoming)
+    private fun init() {
+        requireActivity().findViewById<MaterialTextView>(R.id.toolbar_title).setText(R.string.message_incoming)
         val db = Realm.getDefaultInstance()
         db.executeTransaction {
             val results: RealmResults<MessageModel> = it.where<MessageModel>().equalTo("sender", "admin").equalTo("read", "0".toInt()).findAll()
@@ -46,14 +42,13 @@ class MessagesFragment : Fragment(R.layout.fragment_messages) {
         val data = db.where<MessageModel>().equalTo("sender", "admin").sort("date", Sort.DESCENDING).findAll()
         val intent = Intent()
         intent.action = GHARAREHMAGHZHA_BROADCAST
-        ctx.sendBroadcast(intent)
-        val recyclerView: RecyclerView = v.findViewById(R.id.message_recycler)
-        recyclerView.layoutManager = LinearLayoutManager(ctx)
+        requireContext().sendBroadcast(intent)
+        b.messageRecycler.layoutManager = LinearLayoutManager(requireContext())
         if (data.isEmpty())
-            v.findViewById<View>(R.id.message_empty).visibility = View.VISIBLE
+            b.messageEmpty.visibility = View.VISIBLE
         else {
-            val adapter = IncomingAdapter(ctx,view?.findNavController()!!, data)
-            recyclerView.adapter = adapter
+            val adapter = IncomingAdapter(requireContext(), requireView().findNavController(), data)
+            b.messageRecycler.adapter = adapter
             adapter.notifyDataSetChanged()
         }
     }
